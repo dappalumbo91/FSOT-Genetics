@@ -139,7 +139,7 @@ def homolog_ids(sequence: str) -> list[str]:
     return ids
 
 
-def best_template(sequence: str, exclude_pdb: str) -> dict | None:
+def best_template(sequence: str, exclude_pdb: str, identity_cap: float = IDENTITY_CAP) -> dict | None:
     best = None
     # Candidates from sequence search AND the query's Pfam family (remote homologs).
     candidates, seen = [], set()
@@ -164,7 +164,7 @@ def best_template(sequence: str, exclude_pdb: str) -> dict | None:
                 continue
             identity = sum(1 for qi, ti in pairs if sequence[qi] == tseq[ti]) / len(pairs)
             coverage = len(pairs) / len(sequence)
-            if identity > IDENTITY_CAP or identity < MIN_IDENTITY or coverage < MIN_COVERAGE:
+            if identity > identity_cap or identity < MIN_IDENTITY or coverage < MIN_COVERAGE:
                 continue
             score = coverage * identity
             if best is not None and score <= best["score"]:
