@@ -160,6 +160,26 @@ $$
 
 Peaks at the canonical CASP contact separation, suppresses sterically forbidden short loops.
 
+### F19 — Oriented backbone handedness
+
+A symmetric distance matrix determines coordinates only up to reflection. For
+four consecutive C-alpha positions in a predicted helix, define the normalized
+signed volume
+
+$$
+\chi_i =
+\frac{((b_i \times b_{i+1}) \cdot b_{i+2})}
+{\lVert b_i\rVert\lVert b_{i+1}\rVert\lVert b_{i+2}\rVert},
+\qquad b_i = x_{i+1}-x_i.
+$$
+
+The L-amino-acid alpha-helix convention selects the enantiomer with
+$\sum_i \chi_i \ge 0$. If the sum is negative, reflect one coordinate axis.
+This operation preserves every pair distance and therefore introduces no
+interaction magnitude, threshold, or fitted coefficient. The Python runtime
+exposes F19 as the development-only `canonicalize_chirality` option pending a
+fresh coordinate holdout.
+
 ---
 
 ## v7 benchmark (5 proteins, zero free parameters)

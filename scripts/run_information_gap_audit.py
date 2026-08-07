@@ -111,6 +111,13 @@ def audit_sample(pdb_id: str) -> dict:
     )
     baseline_fold = predict_ca_coords(sequence)
     cooperative_fold = predict_ca_coords(sequence, cooperative_regions=True)
+    oriented_fold = predict_ca_coords(
+        sequence,
+        cooperative_regions=True,
+        canonicalize_chirality=True,
+    )
+    cooperative_distances = distance_matrix(cooperative_fold["ca_coords"])
+    oriented_distances = distance_matrix(oriented_fold["ca_coords"])
     return {
         "pdb_id": pdb_id,
         "length": len(sequence),
@@ -123,6 +130,13 @@ def audit_sample(pdb_id: str) -> dict:
         "baseline_fold_rmsd_A": kabsch_rmsd(baseline_fold["ca_coords"], native),
         "cooperative_f12c_fold_rmsd_A": kabsch_rmsd(
             cooperative_fold["ca_coords"], native
+        ),
+        "oriented_f12c_fold_rmsd_A": kabsch_rmsd(
+            oriented_fold["ca_coords"], native
+        ),
+        "chirality_reflected": oriented_fold["chirality_reflected"],
+        "chirality_pair_distance_max_delta_A": float(
+            np.max(np.abs(cooperative_distances - oriented_distances))
         ),
         "predicted_distance_mae_A": float(
             np.mean(np.abs(predicted_distances[upper] - native_distances[upper]))
@@ -153,6 +167,12 @@ def main() -> None:
         ),
         "median_cooperative_f12c_fold_rmsd_A": float(
             np.median([sample["cooperative_f12c_fold_rmsd_A"] for sample in samples])
+        ),
+        "median_oriented_f12c_fold_rmsd_A": float(
+            np.median([sample["oriented_f12c_fold_rmsd_A"] for sample in samples])
+        ),
+        "max_chirality_pair_distance_delta_A": max(
+            sample["chirality_pair_distance_max_delta_A"] for sample in samples
         ),
         "median_predicted_distance_mae_A": float(
             np.median([sample["predicted_distance_mae_A"] for sample in samples])

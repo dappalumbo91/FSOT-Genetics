@@ -649,6 +649,37 @@ def radius_of_gyration(X: np.ndarray) -> float:
     return float(np.sqrt(((X - c) ** 2).sum(axis=1).mean()))
 
 
+def helix_signed_volume(X: np.ndarray, regions: list[Region]) -> float:
+    """Reflection-sensitive C-alpha volume over predicted helical quadruplets."""
+    total = 0.0
+    for region in regions:
+        if region.kind != "H" or region.length() < 4:
+            continue
+        for i in range(region.start, region.end - 2):
+            if i + 3 >= len(X):
+                continue
+            first = X[i + 1] - X[i]
+            second = X[i + 2] - X[i + 1]
+            third = X[i + 3] - X[i + 2]
+            scale = float(
+                np.linalg.norm(first)
+                * np.linalg.norm(second)
+                * np.linalg.norm(third)
+            )
+            if scale > 0.0:
+                total += float(np.dot(np.cross(first, second), third) / scale)
+    return total
+
+
+def canonicalize_l_amino_acid_handedness(
+    X: np.ndarray, regions: list[Region]
+) -> tuple[np.ndarray, bool]:
+    """Choose the right-handed alpha-helical enantiomer for L-amino acids."""
+    if helix_signed_volume(X, regions) < 0.0:
+        return X * np.array([1.0, 1.0, -1.0]), True
+    return X, False
+
+
 def scale_to_target_rg(X: np.ndarray, n: int | None = None) -> np.ndarray:
     """Isotropic scale so R_g matches FSOT target (topology lever)."""
     n = int(n if n is not None else X.shape[0])
@@ -901,6 +932,7 @@ def predict_ca_coords(
     routing: str | None = None,
     *,
     cooperative_regions: bool = False,
+    canonicalize_chirality: bool = False,
 ) -> dict[str, Any]:
     """Full-law fold: S=K(T1+T2+T3) per pair + observer refine + F15/MDS.
 
@@ -959,6 +991,10 @@ def predict_ca_coords(
         if stc < st:
             X, st, best_name = Xc, stc, cname
 
+    chirality_reflected = False
+    if canonicalize_chirality:
+        X, chirality_reflected = canonicalize_l_amino_acid_handedness(X, regions)
+
     # Final observation scalar (full law snapshot of finished fold)
     final_obs = refine_observation_scalar(n_rounds, n_rounds, len(seq), mean_stress_proxy=st / max(len(seq), 1))
     rg = radius_of_gyration(X)
@@ -999,6 +1035,10 @@ def predict_ca_coords(
         "D_eff_packing": iface["packing"]["D_eff"],
         "embed_start": best_name,
         "embed_stress": st,
+        "chirality_model": (
+            "l_amino_acid_helix_signed_volume" if canonicalize_chirality else "none"
+        ),
+        "chirality_reflected": chirality_reflected,
         "rg_A": rg,
         "rg_target_fsot_A": trg,
         "rg_err_to_target_A": abs(rg - trg),
