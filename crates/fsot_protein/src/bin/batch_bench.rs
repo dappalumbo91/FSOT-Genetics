@@ -1,7 +1,7 @@
 use std::fs;
 use std::fs::File;
 use std::io::Write;
-use std::path::{Path, PathBuf};
+use std::path::Path;
 use fsot_protein::distogram::Distogram;
 
 /// Represents a 3D coordinate from a PDB file.
@@ -118,7 +118,7 @@ fn contact_precision(pred: &[f64], actual_dist: &[f64], top_n: usize) -> f64 {
     hits as f64 / top.len() as f64
 }
 
-fn benchmark_protein(name: &str, pdb_path: &str) -> (f64, f64, f64, f64) {
+fn benchmark_protein(_name: &str, pdb_path: &str) -> (f64, f64, f64, f64) {
     // 1. Parse observed reality from PDB
     let (sequence, true_coords) = parse_pdb_ca_trace(pdb_path);
     let size = sequence.len();

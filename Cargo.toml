@@ -7,5 +7,5 @@ members = [
 ]
 
 [workspace.package]
-license = "MIT"
+license = "Apache-2.0"
 edition = "2021"

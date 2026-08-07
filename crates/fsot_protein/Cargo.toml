@@ -2,6 +2,7 @@
 name = "fsot_protein"
 version = "0.1.0"
 edition = "2021"
+license.workspace = true
 
 [dependencies]
 fsot_core = { path = "../fsot_core" }

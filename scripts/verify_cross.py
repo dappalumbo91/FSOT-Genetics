@@ -195,8 +195,7 @@ def main() -> int:
             sep, 7, aa1=a, aa2=b, p_alpha_i=pa, p_alpha_j=paj, p_beta_i=pb, p_beta_j=pbj
         )
         if link != expect_link:
-            # still require D matches lean table for the *returned* link
-            pass
+            fail(f"chem-link route mismatch: got {link}, expected {expect_link}")
         if link not in lean_D:
             fail(f"unknown chem link {link}")
         if sc.D_eff != lean_D[link]:

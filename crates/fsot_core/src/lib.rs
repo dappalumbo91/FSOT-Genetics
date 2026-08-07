@@ -35,11 +35,7 @@ mod m {
     #[cfg(feature = "std")]
     pub fn sqrt(x: f64) -> f64 { x.sqrt() }
     #[cfg(feature = "std")]
-    pub fn acos(x: f64) -> f64 { x.acos() }
-    #[cfg(feature = "std")]
     pub fn powf(b: f64, e: f64) -> f64 { b.powf(e) }
-    #[cfg(feature = "std")]
-    pub fn fabs(x: f64) -> f64 { x.abs() }
 
     #[cfg(not(feature = "std"))]
     pub fn sin(x: f64) -> f64  { libm::sin(x) }
@@ -52,11 +48,7 @@ mod m {
     #[cfg(not(feature = "std"))]
     pub fn sqrt(x: f64) -> f64 { libm::sqrt(x) }
     #[cfg(not(feature = "std"))]
-    pub fn acos(x: f64) -> f64 { libm::acos(x) }
-    #[cfg(not(feature = "std"))]
     pub fn powf(b: f64, e: f64) -> f64 { libm::pow(b, e) }
-    #[cfg(not(feature = "std"))]
-    pub fn fabs(x: f64) -> f64 { libm::fabs(x) }
 }
 
 // =========================================================================
@@ -417,7 +409,7 @@ mod tests {
 
         let s_quant = domain_scalar(&c, "Quantum_Mechanics").unwrap();
         // baryon density: |S_cosm|·(1 - S_quant) ≈ 0.02237
-        let omega_b_h2 = m::fabs(s_cosm) * (1.0 - s_quant);
+        let omega_b_h2 = s_cosm.abs() * (1.0 - s_quant);
         assert!((omega_b_h2 - 0.02237).abs() / 0.02237 < 0.10, "Ω_b·h² = {}", omega_b_h2);
     }
 

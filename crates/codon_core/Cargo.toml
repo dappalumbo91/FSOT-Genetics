@@ -3,7 +3,7 @@ name = "codon_core"
 version = "0.1.0"
 edition = "2021"
 description = "FSOT codon trinary core — no_std, zero-allocation, bare-metal-ready"
-license = "MIT"
+license.workspace = true
 
 [lib]
 name = "codon_core"

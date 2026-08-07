@@ -205,6 +205,9 @@ pub fn beta_register_multiplier(
     a_start: usize, a_end: usize,
     b_start: usize, b_end: usize,
 ) -> f64 {
+    debug_assert!(a_start <= i && i <= a_end);
+    debug_assert!(b_start <= j && j <= b_end);
+
     // Local strand positions
     let a = i as isize - a_start as isize;
     let b = j as isize - b_start as isize;

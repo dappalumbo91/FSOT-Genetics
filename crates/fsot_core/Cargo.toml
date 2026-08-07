@@ -3,7 +3,7 @@ name = "fsot_core"
 version = "0.1.0"
 edition = "2021"
 description = "FSOT 2.0 scalar engine + 35-domain table + bond library — no_std-clean Rust port"
-license = "MIT"
+license.workspace = true
 
 [lib]
 name = "fsot_core"

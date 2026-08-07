@@ -7,6 +7,8 @@ Zero free parameters. No neural-network claim path.
 **Authority pin:** `D1D38A` (`vendor/fsot_compute.py`)  
 **Law:** \(S = K(T_1+T_2+T_3)\)
 
+**Mathematical authority:** [FSOT-2.1-Lean](https://github.com/dappalumbo91/FSOT-2.1-Lean). This repository derives its genetics and protein formulas from that formal hub and carries a byte-identical `D1D38A` scalar engine pin.
+
 ---
 
 ## Why this repo exists
@@ -30,6 +32,7 @@ We are **not** training nets. We are **solving** with math and publishing honest
 ```powershell
 git clone https://github.com/dappalumbo91/FSOT-Genetics.git
 cd FSOT-Genetics
+python -m pip install -r requirements.txt
 
 # Cross-verification (must pass — Lean-style gate)
 python scripts/verify_cross.py
@@ -129,7 +132,7 @@ CI: `.github/workflows/ci.yml`
 
 ## License
 
-MIT (unless otherwise noted in subcrates).
+Apache License 2.0. See [LICENSE](LICENSE).
 
 ## Author
 
