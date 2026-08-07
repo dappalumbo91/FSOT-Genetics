@@ -1,0 +1,69 @@
+{
+  "generated_at": "2026-08-07T16:15:52.192444+00:00",
+  "role": "frozen_external_validation_result",
+  "git_commit": "5bcaf26587fc71972e2cf2003a3bffd2298717b8",
+  "manifest_sha256": "4e9670ce1eb98bc34780ebcc5f0b1a8fbff66915e604e4a333722640679d3ebc",
+  "dataset_sha256": "67bb55d2b7d44b0ba3ab11e92328a0011d65d522be94e4d67b25c2f271769a2e",
+  "evaluated_chains": 6483,
+  "evaluated_residues": 1590170,
+  "skipped": {
+    "nonstandard": 1830
+  },
+  "baseline": {
+    "accuracy": 0.3629222032864411,
+    "recall": {
+      "H": 0.39526751037900093,
+      "E": 0.030745156043590918,
+      "C": 0.5318109852440153
+    },
+    "macro_recall": 0.3192745505555357,
+    "confusion": {
+      "H->H": 236117,
+      "H->E": 9669,
+      "H->C": 351574,
+      "E->H": 148486,
+      "E->E": 11474,
+      "E->C": 213237,
+      "C->H": 274875,
+      "C->E": 15221,
+      "C->C": 329517
+    }
+  },
+  "candidate": {
+    "accuracy": 0.5052283718093034,
+    "recall": {
+      "H": 0.5366629837953663,
+      "E": 0.27945830218356527,
+      "C": 0.6109055168306669
+    },
+    "macro_recall": 0.4756756009365328,
+    "confusion": {
+      "H->H": 320581,
+      "H->E": 81724,
+      "H->C": 195055,
+      "E->H": 133680,
+      "E->E": 104293,
+      "E->C": 135224,
+      "C->H": 200358,
+      "C->E": 40730,
+      "C->C": 378525
+    }
+  },
+  "per_chain": {
+    "baseline_mean_accuracy": 0.36079331747627724,
+    "candidate_mean_accuracy": 0.5071329783252805,
+    "mean_paired_accuracy_delta": 0.14633966084900332,
+    "paired_accuracy_delta_95pct_bootstrap": [
+      0.14411637927002155,
+      0.1484548693011806
+    ],
+    "baseline_mean_beta_recall": 0.03153548941423615,
+    "candidate_mean_beta_recall": 0.2850395416128311
+  },
+  "success_gates": {
+    "aggregate_macro_recall": true,
+    "aggregate_beta_recall": true,
+    "aggregate_accuracy": true
+  },
+  "passed": true
+}
