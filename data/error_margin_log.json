@@ -1,0 +1,832 @@
+{
+  "generated_at": "2026-08-07T01:56:11.148229+00:00",
+  "doctrine": "Error margin log: localize residual by structural mode, map literature, fix one mode at a time under full S=K(T1+T2+T3). Same residual discipline as multi-domain / MPCORB campaigns. Zero free parameters.",
+  "protocol": {
+    "sequence_source": "experimental PDB chain (not UniProt polyprotein)",
+    "metric": "Kabsch C\u03b1 RMSD + distance residual bins + contacts",
+    "contact_cutoff_A": 8.539734222673566
+  },
+  "summary": {
+    "n_proteins": 5,
+    "median_rmsd_A": 9.57944664512565,
+    "wall_s": 0.33064569998532534,
+    "primary_modes_seen": [
+      "global_topology"
+    ]
+  },
+  "proteins": [
+    {
+      "name": "Ubiquitin",
+      "pdb": "1UBQ.pdb",
+      "n": 76,
+      "pred_len": 76,
+      "exp_len": 76,
+      "seq_match": true,
+      "rmsd_A": 10.753267378169655,
+      "per_res_mean_A": 10.033357727340562,
+      "per_res_median_A": 9.640240210085608,
+      "per_res_p90_A": 14.495525289973383,
+      "per_res_max_A": 23.26911305287261,
+      "distance_bins": [
+        {
+          "mode": "backbone_sep1_2",
+          "sep_lo": 1,
+          "sep_hi": 3,
+          "n_pairs": 149,
+          "mean_abs_dA": 1.2979482240058975,
+          "median_abs_dA": 0.05361622475272654,
+          "p90_abs_dA": 3.72998768536915,
+          "contribution_proxy": 0.03348239012757596
+        },
+        {
+          "mode": "helix_period_3_4_7",
+          "sep_lo": 3,
+          "sep_hi": 5,
+          "n_pairs": 214,
+          "mean_abs_dA": 6.633995860132093,
+          "median_abs_dA": 5.948404262619794,
+          "p90_abs_dA": 11.888320207111883,
+          "contribution_proxy": 0.24578862778190233
+        },
+        {
+          "mode": "mid_range_5_12",
+          "sep_lo": 5,
+          "sep_hi": 13,
+          "n_pairs": 540,
+          "mean_abs_dA": 10.288808278231432,
+          "median_abs_dA": 9.519337832768091,
+          "p90_abs_dA": 18.171052467975215,
+          "contribution_proxy": 0.9619038210257917
+        },
+        {
+          "mode": "long_range_contacts",
+          "sep_lo": 13,
+          "sep_hi": 76,
+          "n_pairs": 2016,
+          "mean_abs_dA": 10.047383036542856,
+          "median_abs_dA": 9.702471122438645,
+          "p90_abs_dA": 17.04864613900152,
+          "contribution_proxy": 3.506842832699168
+        }
+      ],
+      "native_contacts": 143,
+      "contact_mae_A": 2.1722651549146472,
+      "top_L_precision": 0.06578947368421052,
+      "rg_exp_A": 11.49289487620769,
+      "rg_pred_A": 4.505442669928014,
+      "rg_err_A": 6.987452206279675,
+      "end_to_end_err_A": 32.92883050546415,
+      "hotspots": [
+        {
+          "i": 75,
+          "aa": "G",
+          "err_A": 23.26911305287261
+        },
+        {
+          "i": 74,
+          "aa": "G",
+          "err_A": 21.854453704772094
+        },
+        {
+          "i": 61,
+          "aa": "Q",
+          "err_A": 17.634782033035048
+        },
+        {
+          "i": 72,
+          "aa": "L",
+          "err_A": 17.630796764175418
+        },
+        {
+          "i": 73,
+          "aa": "R",
+          "err_A": 16.911793981460313
+        },
+        {
+          "i": 62,
+          "aa": "K",
+          "err_A": 16.634567198130355
+        },
+        {
+          "i": 19,
+          "aa": "S",
+          "err_A": 16.44240950610686
+        },
+        {
+          "i": 46,
+          "aa": "G",
+          "err_A": 14.62609799315582
+        },
+        {
+          "i": 59,
+          "aa": "N",
+          "err_A": 14.364952586790945
+        },
+        {
+          "i": 63,
+          "aa": "E",
+          "err_A": 13.833854316573872
+        },
+        {
+          "i": 17,
+          "aa": "E",
+          "err_A": 13.647621540957756
+        },
+        {
+          "i": 36,
+          "aa": "P",
+          "err_A": 13.619758631946366
+        },
+        {
+          "i": 34,
+          "aa": "G",
+          "err_A": 13.2826141925915
+        },
+        {
+          "i": 45,
+          "aa": "A",
+          "err_A": 12.802431399176278
+        },
+        {
+          "i": 21,
+          "aa": "T",
+          "err_A": 12.6647786950599
+        }
+      ],
+      "mode_scores": {
+        "backbone_sep1_2": 0.03348239012757596,
+        "helix_period_3_4_7": 0.24578862778190233,
+        "mid_range_5_12": 0.9619038210257917,
+        "long_range_contacts": 5.679107987613815,
+        "per_residue_hotspots": 1.483084270631075,
+        "global_topology": 27.3385886684409
+      },
+      "primary_error_mode": "global_topology",
+      "ranked_modes": [
+        "global_topology",
+        "long_range_contacts",
+        "per_residue_hotspots",
+        "mid_range_5_12",
+        "helix_period_3_4_7",
+        "backbone_sep1_2"
+      ],
+      "engine": "fsot_protein_FULL_SCALAR_v12",
+      "full_law": true,
+      "S_final": 21.865529077410095,
+      "predict_ms": 96.20319999521598,
+      "note": "all-alpha/beta mixed, classic contact test"
+    },
+    {
+      "name": "Crambin",
+      "pdb": "1CRN.pdb",
+      "n": 46,
+      "pred_len": 46,
+      "exp_len": 46,
+      "seq_match": true,
+      "rmsd_A": 7.819361663650961,
+      "per_res_mean_A": 7.24859360885891,
+      "per_res_median_A": 7.665623484085106,
+      "per_res_p90_A": 10.350548936746026,
+      "per_res_max_A": 15.140216005259816,
+      "distance_bins": [
+        {
+          "mode": "backbone_sep1_2",
+          "sep_lo": 1,
+          "sep_hi": 3,
+          "n_pairs": 89,
+          "mean_abs_dA": 0.9683881858141515,
+          "median_abs_dA": 0.057441899461295964,
+          "p90_abs_dA": 2.9906854395384914,
+          "contribution_proxy": 0.040730883051729436
+        },
+        {
+          "mode": "helix_period_3_4_7",
+          "sep_lo": 3,
+          "sep_hi": 5,
+          "n_pairs": 124,
+          "mean_abs_dA": 4.616548180953371,
+          "median_abs_dA": 4.4345640384448,
+          "p90_abs_dA": 8.532635880285062,
+          "contribution_proxy": 0.27053495956437523
+        },
+        {
+          "mode": "mid_range_5_12",
+          "sep_lo": 5,
+          "sep_hi": 13,
+          "n_pairs": 300,
+          "mean_abs_dA": 6.890728712109182,
+          "median_abs_dA": 6.758523072690051,
+          "p90_abs_dA": 11.767645565818981,
+          "contribution_proxy": 0.976946414760281
+        },
+        {
+          "mode": "long_range_contacts",
+          "sep_lo": 13,
+          "sep_hi": 46,
+          "n_pairs": 561,
+          "mean_abs_dA": 6.925997246299208,
+          "median_abs_dA": 6.4158560072722315,
+          "p90_abs_dA": 13.403427421791662,
+          "contribution_proxy": 1.8362402907248847
+        }
+      ],
+      "native_contacts": 72,
+      "contact_mae_A": 2.6140807512782214,
+      "top_L_precision": 0.10869565217391304,
+      "rg_exp_A": 9.67550126933248,
+      "rg_pred_A": 5.335865154986351,
+      "rg_err_A": 4.3396361143461295,
+      "end_to_end_err_A": 2.9353119183707665,
+      "hotspots": [
+        {
+          "i": 0,
+          "aa": "T",
+          "err_A": 15.140216005259816
+        },
+        {
+          "i": 18,
+          "aa": "P",
+          "err_A": 13.843891294116336
+        },
+        {
+          "i": 1,
+          "aa": "T",
+          "err_A": 13.064874046607544
+        },
+        {
+          "i": 28,
+          "aa": "Y",
+          "err_A": 12.039097066727907
+        },
+        {
+          "i": 15,
+          "aa": "C",
+          "err_A": 10.414584434853698
+        },
+        {
+          "i": 29,
+          "aa": "T",
+          "err_A": 10.286513438638357
+        },
+        {
+          "i": 17,
+          "aa": "L",
+          "err_A": 9.356985128167135
+        },
+        {
+          "i": 37,
+          "aa": "A",
+          "err_A": 9.25580415583771
+        },
+        {
+          "i": 20,
+          "aa": "T",
+          "err_A": 9.131815242989914
+        }
+      ],
+      "mode_scores": {
+        "backbone_sep1_2": 0.040730883051729436,
+        "helix_period_3_4_7": 0.27053495956437523,
+        "mid_range_5_12": 0.976946414760281,
+        "long_range_contacts": 4.450321042003106,
+        "per_residue_hotspots": 1.4569785620145148,
+        "global_topology": 6.15375864748192
+      },
+      "primary_error_mode": "global_topology",
+      "ranked_modes": [
+        "global_topology",
+        "long_range_contacts",
+        "per_residue_hotspots",
+        "mid_range_5_12",
+        "helix_period_3_4_7",
+        "backbone_sep1_2"
+      ],
+      "engine": "fsot_protein_FULL_SCALAR_v12",
+      "full_law": true,
+      "S_final": 13.397738518952414,
+      "predict_ms": 44.260700000450015,
+      "note": "small SS-rich, disulfide"
+    },
+    {
+      "name": "Villin headpiece",
+      "pdb": "1VII.pdb",
+      "n": 36,
+      "pred_len": 36,
+      "exp_len": 36,
+      "seq_match": true,
+      "rmsd_A": 6.991435671091424,
+      "per_res_mean_A": 6.552219844564636,
+      "per_res_median_A": 6.421029961185788,
+      "per_res_p90_A": 9.38868697926224,
+      "per_res_max_A": 13.015057182880499,
+      "distance_bins": [
+        {
+          "mode": "backbone_sep1_2",
+          "sep_lo": 1,
+          "sep_hi": 3,
+          "n_pairs": 69,
+          "mean_abs_dA": 0.973032218846747,
+          "median_abs_dA": 0.03959242728574175,
+          "p90_abs_dA": 2.9425135699937353,
+          "contribution_proxy": 0.05180495609600736
+        },
+        {
+          "mode": "helix_period_3_4_7",
+          "sep_lo": 3,
+          "sep_hi": 5,
+          "n_pairs": 94,
+          "mean_abs_dA": 3.2360142561000367,
+          "median_abs_dA": 2.4829714618009966,
+          "p90_abs_dA": 6.3407290221778005,
+          "contribution_proxy": 0.2347109105504656
+        },
+        {
+          "mode": "mid_range_5_12",
+          "sep_lo": 5,
+          "sep_hi": 13,
+          "n_pairs": 220,
+          "mean_abs_dA": 5.9462857630427814,
+          "median_abs_dA": 5.728534938741296,
+          "p90_abs_dA": 10.291348294852268,
+          "contribution_proxy": 1.0094003610103486
+        },
+        {
+          "mode": "long_range_contacts",
+          "sep_lo": 13,
+          "sep_hi": 36,
+          "n_pairs": 276,
+          "mean_abs_dA": 6.6245757840894965,
+          "median_abs_dA": 6.274863600918607,
+          "p90_abs_dA": 12.298329716439271,
+          "contribution_proxy": 1.4107892873523928
+        }
+      ],
+      "native_contacts": 19,
+      "contact_mae_A": 3.376431111222565,
+      "top_L_precision": 0.05555555555555555,
+      "rg_exp_A": 8.817566839898648,
+      "rg_pred_A": 5.071406880378822,
+      "rg_err_A": 3.746159959519826,
+      "end_to_end_err_A": 3.2966488977935713,
+      "hotspots": [
+        {
+          "i": 23,
+          "aa": "W",
+          "err_A": 13.015057182880499
+        },
+        {
+          "i": 21,
+          "aa": "P",
+          "err_A": 10.809664761805895
+        },
+        {
+          "i": 9,
+          "aa": "V",
+          "err_A": 9.647145921058485
+        },
+        {
+          "i": 24,
+          "aa": "K",
+          "err_A": 9.59208553886558
+        },
+        {
+          "i": 3,
+          "aa": "D",
+          "err_A": 9.1852884196589
+        },
+        {
+          "i": 4,
+          "aa": "E",
+          "err_A": 8.894412814544575
+        },
+        {
+          "i": 10,
+          "aa": "F",
+          "err_A": 8.827376506549703
+        }
+      ],
+      "mode_scores": {
+        "backbone_sep1_2": 0.05180495609600736,
+        "helix_period_3_4_7": 0.2347109105504656,
+        "mid_range_5_12": 1.0094003610103486,
+        "long_range_contacts": 4.7872203985749575,
+        "per_residue_hotspots": 1.4297294665137588,
+        "global_topology": 5.783601027331131
+      },
+      "primary_error_mode": "global_topology",
+      "ranked_modes": [
+        "global_topology",
+        "long_range_contacts",
+        "per_residue_hotspots",
+        "mid_range_5_12",
+        "helix_period_3_4_7",
+        "backbone_sep1_2"
+      ],
+      "engine": "fsot_protein_FULL_SCALAR_v12",
+      "full_law": true,
+      "S_final": 10.575141904246689,
+      "predict_ms": 30.91679999488406,
+      "note": "helical bundle"
+    },
+    {
+      "name": "Protein G B1",
+      "pdb": "2GB1.pdb",
+      "n": 56,
+      "pred_len": 56,
+      "exp_len": 56,
+      "seq_match": true,
+      "rmsd_A": 9.57944664512565,
+      "per_res_mean_A": 8.820128844904364,
+      "per_res_median_A": 8.484627497590877,
+      "per_res_p90_A": 14.072683301970695,
+      "per_res_max_A": 17.145200104756064,
+      "distance_bins": [
+        {
+          "mode": "backbone_sep1_2",
+          "sep_lo": 1,
+          "sep_hi": 3,
+          "n_pairs": 109,
+          "mean_abs_dA": 1.3417821142410085,
+          "median_abs_dA": 0.02621562482451001,
+          "p90_abs_dA": 3.832314605743512,
+          "contribution_proxy": 0.04663719721054526
+        },
+        {
+          "mode": "helix_period_3_4_7",
+          "sep_lo": 3,
+          "sep_hi": 5,
+          "n_pairs": 154,
+          "mean_abs_dA": 6.89527123654017,
+          "median_abs_dA": 6.41295362582027,
+          "p90_abs_dA": 12.717315488197704,
+          "contribution_proxy": 0.3386070696515262
+        },
+        {
+          "mode": "mid_range_5_12",
+          "sep_lo": 5,
+          "sep_hi": 13,
+          "n_pairs": 380,
+          "mean_abs_dA": 10.320591768271258,
+          "median_abs_dA": 9.709504590149109,
+          "p90_abs_dA": 18.868085793525843,
+          "contribution_proxy": 1.2505819106961347
+        },
+        {
+          "mode": "long_range_contacts",
+          "sep_lo": 13,
+          "sep_hi": 56,
+          "n_pairs": 946,
+          "mean_abs_dA": 7.380125323634624,
+          "median_abs_dA": 6.598702028128718,
+          "p90_abs_dA": 14.54611586975478,
+          "contribution_proxy": 2.2262750497953934
+        }
+      ],
+      "native_contacts": 110,
+      "contact_mae_A": 2.171131204130225,
+      "top_L_precision": 0.17857142857142858,
+      "rg_exp_A": 10.135882126035968,
+      "rg_pred_A": 4.570188398508418,
+      "rg_err_A": 5.56569372752755,
+      "end_to_end_err_A": 21.50467870391602,
+      "hotspots": [
+        {
+          "i": 9,
+          "aa": "K",
+          "err_A": 17.145200104756064
+        },
+        {
+          "i": 20,
+          "aa": "V",
+          "err_A": 16.427650282177026
+        },
+        {
+          "i": 47,
+          "aa": "A",
+          "err_A": 15.417966388359208
+        },
+        {
+          "i": 10,
+          "aa": "T",
+          "err_A": 15.303230965356011
+        },
+        {
+          "i": 21,
+          "aa": "D",
+          "err_A": 14.591685374344632
+        },
+        {
+          "i": 35,
+          "aa": "D",
+          "err_A": 14.448079074330225
+        },
+        {
+          "i": 8,
+          "aa": "G",
+          "err_A": 13.697287529611163
+        },
+        {
+          "i": 37,
+          "aa": "G",
+          "err_A": 13.316404810213216
+        },
+        {
+          "i": 0,
+          "aa": "M",
+          "err_A": 13.238764496043702
+        },
+        {
+          "i": 48,
+          "aa": "T",
+          "err_A": 12.696242615793139
+        },
+        {
+          "i": 12,
+          "aa": "K",
+          "err_A": 12.175257205326481
+        }
+      ],
+      "mode_scores": {
+        "backbone_sep1_2": 0.04663719721054526,
+        "helix_period_3_4_7": 0.3386070696515262,
+        "mid_range_5_12": 1.2505819106961347,
+        "long_range_contacts": 4.3974062539256185,
+        "per_residue_hotspots": 1.503766579318115,
+        "global_topology": 18.856316083693688
+      },
+      "primary_error_mode": "global_topology",
+      "ranked_modes": [
+        "global_topology",
+        "long_range_contacts",
+        "per_residue_hotspots",
+        "mid_range_5_12",
+        "helix_period_3_4_7",
+        "backbone_sep1_2"
+      ],
+      "engine": "fsot_protein_FULL_SCALAR_v12",
+      "full_law": true,
+      "S_final": 16.220335295229127,
+      "predict_ms": 58.40380000881851,
+      "note": "\u03b2 hairpin + helix"
+    },
+    {
+      "name": "Engrailed HD",
+      "pdb": "1ENH.pdb",
+      "n": 54,
+      "pred_len": 54,
+      "exp_len": 54,
+      "seq_match": true,
+      "rmsd_A": 9.752728314812344,
+      "per_res_mean_A": 9.20031861555208,
+      "per_res_median_A": 8.839609435977536,
+      "per_res_p90_A": 13.640664324297328,
+      "per_res_max_A": 16.980002790240366,
+      "distance_bins": [
+        {
+          "mode": "backbone_sep1_2",
+          "sep_lo": 1,
+          "sep_hi": 3,
+          "n_pairs": 105,
+          "mean_abs_dA": 0.9327089077358325,
+          "median_abs_dA": 0.05934430781354649,
+          "p90_abs_dA": 3.239593235103211,
+          "contribution_proxy": 0.033585197295014545
+        },
+        {
+          "mode": "helix_period_3_4_7",
+          "sep_lo": 3,
+          "sep_hi": 5,
+          "n_pairs": 148,
+          "mean_abs_dA": 3.973334097116644,
+          "median_abs_dA": 3.060292466102455,
+          "p90_abs_dA": 7.872118947405684,
+          "contribution_proxy": 0.20166441919522063
+        },
+        {
+          "mode": "mid_range_5_12",
+          "sep_lo": 5,
+          "sep_hi": 13,
+          "n_pairs": 364,
+          "mean_abs_dA": 7.340456762283948,
+          "median_abs_dA": 7.065041543505977,
+          "p90_abs_dA": 12.338669752542172,
+          "contribution_proxy": 0.916298443577283
+        },
+        {
+          "mode": "long_range_contacts",
+          "sep_lo": 13,
+          "sep_hi": 54,
+          "n_pairs": 861,
+          "mean_abs_dA": 7.973757864301846,
+          "median_abs_dA": 7.431309900149515,
+          "p90_abs_dA": 14.663326318394962,
+          "contribution_proxy": 2.3543914681631994
+        }
+      ],
+      "native_contacts": 28,
+      "contact_mae_A": 1.9396581592343984,
+      "top_L_precision": 0.018518518518518517,
+      "rg_exp_A": 10.08894278769526,
+      "rg_pred_A": 5.081972322910083,
+      "rg_err_A": 5.0069704647851765,
+      "end_to_end_err_A": 10.29882055957384,
+      "hotspots": [
+        {
+          "i": 1,
+          "aa": "P",
+          "err_A": 16.980002790240366
+        },
+        {
+          "i": 0,
+          "aa": "R",
+          "err_A": 15.769724094773897
+        },
+        {
+          "i": 20,
+          "aa": "N",
+          "err_A": 15.56594708401652
+        },
+        {
+          "i": 21,
+          "aa": "R",
+          "err_A": 14.695440288712954
+        },
+        {
+          "i": 18,
+          "aa": "N",
+          "err_A": 14.459692388314457
+        },
+        {
+          "i": 2,
+          "aa": "R",
+          "err_A": 13.835678322285863
+        },
+        {
+          "i": 19,
+          "aa": "E",
+          "err_A": 13.185631662324072
+        },
+        {
+          "i": 26,
+          "aa": "R",
+          "err_A": 12.97122573171719
+        },
+        {
+          "i": 15,
+          "aa": "R",
+          "err_A": 12.878992468919614
+        },
+        {
+          "i": 8,
+          "aa": "E",
+          "err_A": 12.45953372150416
+        }
+      ],
+      "mode_scores": {
+        "backbone_sep1_2": 0.033585197295014545,
+        "helix_period_3_4_7": 0.20166441919522063,
+        "mid_range_5_12": 0.916298443577283,
+        "long_range_contacts": 4.294049627397598,
+        "per_residue_hotspots": 1.4642248193864178,
+        "global_topology": 11.37199161463802
+      },
+      "primary_error_mode": "global_topology",
+      "ranked_modes": [
+        "global_topology",
+        "long_range_contacts",
+        "per_residue_hotspots",
+        "mid_range_5_12",
+        "helix_period_3_4_7",
+        "backbone_sep1_2"
+      ],
+      "engine": "fsot_protein_FULL_SCALAR_v12",
+      "full_law": true,
+      "S_final": 15.655815931356033,
+      "predict_ms": 55.71290000807494,
+      "note": "helix bundle"
+    }
+  ],
+  "fix_queue": [
+    {
+      "priority": 1,
+      "mode": "global_topology",
+      "votes": 15,
+      "score_sum": 69.50425604158566,
+      "meaning": "Chain topology / domain packing globally wrong after Kabsch",
+      "literature": "Energy landscape funnel; topology from contact order (Onuchic/Wolynes; Baker).",
+      "fsot_handle": "MDS is only as good as D; fix contact D first, then sparse polish; multi-start from SS regions.",
+      "fix_class": "embedding",
+      "status": "open"
+    },
+    {
+      "priority": 2,
+      "mode": "long_range_contacts",
+      "votes": 5,
+      "score_sum": 23.608105309515096,
+      "meaning": "Tertiary native contacts missing or false",
+      "literature": "Contact maps / top-L metrics drive fold quality (CASP; Marks/Sander coevolution; AF distograms).",
+      "fsot_handle": "F13\u2013F15 + observer tertiary S at Biochemistry D=13; top-L caps; residual-at-interface on contact set.",
+      "fix_class": "tertiary_contacts",
+      "status": "open"
+    },
+    {
+      "priority": 3,
+      "mode": "per_residue_hotspots",
+      "votes": 5,
+      "score_sum": 7.337783697863881,
+      "meaning": "Local segments high RMSD after global align",
+      "literature": "Flexible loops, termini disorder; core vs surface (crystallographic B-factors).",
+      "fsot_handle": "Segment-wise residual; coil vs H/E different D_eff; do not over-constrain termini.",
+      "fix_class": "local_segments",
+      "status": "open"
+    },
+    {
+      "priority": 4,
+      "mode": "mid_range_5_12",
+      "votes": 5,
+      "score_sum": 5.115130951069839,
+      "meaning": "Secondary packing / loops at mid separation",
+      "literature": "Secondary structure packing; loop closure; contact order (Plaxco et al.).",
+      "fsot_handle": "F11 sheet + F12 regions; SS amp at Chemistry domain; full scalar residual mid-sep.",
+      "fix_class": "secondary_packing",
+      "status": "open"
+    },
+    {
+      "priority": 5,
+      "mode": "helix_period_3_4_7",
+      "votes": 5,
+      "score_sum": 1.29130598674349,
+      "meaning": "\u03b1-helix i,i+3/4/7 distances wrong",
+      "literature": "\u03b1-helix rise 1.5 \u00c5/res, 3.6 res/turn; C\u03b1 i\u2192i+4 \u2248 6.2 \u00c5 (Pauling).",
+      "fsot_handle": "F10 helix geometry + Chemistry D=8 interface; enforce ideal helix D when p_alpha high.",
+      "fix_class": "secondary_structure",
+      "status": "open"
+    },
+    {
+      "priority": 6,
+      "mode": "backbone_sep1_2",
+      "votes": 5,
+      "score_sum": 0.20624062378087257,
+      "meaning": "Virtual C\u03b1\u2013C\u03b1 bond / local geometry wrong",
+      "literature": "Standard C\u03b1 virtual bond \u2248 3.8 \u00c5; local geometry dominates short-range map (Dill polymer; Flory).",
+      "fsot_handle": "F07 bb + CA_CA seed; do NOT residual-scale sep=1,2 (geometry is hard constraint).",
+      "fix_class": "local_geometry",
+      "status": "open"
+    }
+  ],
+  "error_catalog": {
+    "backbone_sep1_2": {
+      "meaning": "Virtual C\u03b1\u2013C\u03b1 bond / local geometry wrong",
+      "literature": "Standard C\u03b1 virtual bond \u2248 3.8 \u00c5; local geometry dominates short-range map (Dill polymer; Flory).",
+      "fsot_handle": "F07 bb + CA_CA seed; do NOT residual-scale sep=1,2 (geometry is hard constraint).",
+      "fix_class": "local_geometry"
+    },
+    "helix_period_3_4_7": {
+      "meaning": "\u03b1-helix i,i+3/4/7 distances wrong",
+      "literature": "\u03b1-helix rise 1.5 \u00c5/res, 3.6 res/turn; C\u03b1 i\u2192i+4 \u2248 6.2 \u00c5 (Pauling).",
+      "fsot_handle": "F10 helix geometry + Chemistry D=8 interface; enforce ideal helix D when p_alpha high.",
+      "fix_class": "secondary_structure"
+    },
+    "mid_range_5_12": {
+      "meaning": "Secondary packing / loops at mid separation",
+      "literature": "Secondary structure packing; loop closure; contact order (Plaxco et al.).",
+      "fsot_handle": "F11 sheet + F12 regions; SS amp at Chemistry domain; full scalar residual mid-sep.",
+      "fix_class": "secondary_packing"
+    },
+    "long_range_contacts": {
+      "meaning": "Tertiary native contacts missing or false",
+      "literature": "Contact maps / top-L metrics drive fold quality (CASP; Marks/Sander coevolution; AF distograms).",
+      "fsot_handle": "F13\u2013F15 + observer tertiary S at Biochemistry D=13; top-L caps; residual-at-interface on contact set.",
+      "fix_class": "tertiary_contacts"
+    },
+    "global_topology": {
+      "meaning": "Chain topology / domain packing globally wrong after Kabsch",
+      "literature": "Energy landscape funnel; topology from contact order (Onuchic/Wolynes; Baker).",
+      "fsot_handle": "MDS is only as good as D; fix contact D first, then sparse polish; multi-start from SS regions.",
+      "fix_class": "embedding"
+    },
+    "per_residue_hotspots": {
+      "meaning": "Local segments high RMSD after global align",
+      "literature": "Flexible loops, termini disorder; core vs surface (crystallographic B-factors).",
+      "fsot_handle": "Segment-wise residual; coil vs H/E different D_eff; do not over-constrain termini.",
+      "fix_class": "local_segments"
+    },
+    "sequence_alignment_mismatch": {
+      "meaning": "Predicted on wrong sequence length vs crystal (e.g. polyubiquitin)",
+      "literature": "Always score on experimental construct sequence for structure benchmarks.",
+      "fsot_handle": "H2H must use PDB chain sequence for fold input when claiming structure RMSD.",
+      "fix_class": "protocol"
+    }
+  },
+  "next_action": {
+    "priority": 1,
+    "mode": "global_topology",
+    "votes": 15,
+    "score_sum": 69.50425604158566,
+    "meaning": "Chain topology / domain packing globally wrong after Kabsch",
+    "literature": "Energy landscape funnel; topology from contact order (Onuchic/Wolynes; Baker).",
+    "fsot_handle": "MDS is only as good as D; fix contact D first, then sparse polish; multi-start from SS regions.",
+    "fix_class": "embedding",
+    "status": "open"
+  }
+}

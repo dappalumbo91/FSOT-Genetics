@@ -270,17 +270,26 @@ def main() -> int:
     results = []
     for acc, pdb_id, chain, name in BENCHMARK_SET[: args.max_proteins]:
         print(f"\n--- {acc} {name} (PDB {pdb_id}) ---")
-        seq = fetch_uniprot_sequence(acc)
+        # ERROR-LOG protocol: experimental construct sequence is structure ground truth.
+        # UniProt polyproteins (e.g. P0CG47) are NOT the crystal chain — that inflated RMSD.
+        exp = fetch_pdb(pdb_id, chain, cache)
         time.sleep(args.sleep)
-        if not seq:
-            print("  UniProt sequence FAIL")
-            results.append({"accession": acc, "name": name, "error": "uniprot_seq"})
+        if not exp:
+            print("  PDB experimental FAIL")
+            results.append({"accession": acc, "name": name, "error": "pdb_fetch"})
             continue
-        print(f"  sequence length {len(seq)}")
+        exp_seq, exp_xyz = exp
+        print(f"  PDB experimental CA n={len(exp_seq)}")
 
-        # FSOT prediction (formula branch — timed)
+        # Optional UniProt meta only (not fold input for structure RMSD claim)
+        uni = fetch_uniprot_sequence(acc)
+        time.sleep(args.sleep)
+        if uni:
+            print(f"  UniProt length {len(uni)} (meta; fold uses PDB chain seq)")
+
+        # FSOT prediction on experimental sequence
         try:
-            pred = predict_ca_coords(seq, rounds=args.rounds, routing=args.routing)
+            pred = predict_ca_coords(exp_seq, rounds=args.rounds, routing=args.routing)
             fsot_xyz = pred["ca_coords"]
             fsot_seq = pred["sequence"]
             write_ca_pdb(pred_dir / f"FSOT_{acc}.pdb", fsot_seq, fsot_xyz, name=acc)
@@ -294,17 +303,7 @@ def main() -> int:
             results.append({"accession": acc, "name": name, "error": f"fsot:{e}"})
             continue
 
-        # Experimental
-        exp = fetch_pdb(pdb_id, chain, cache)
-        time.sleep(args.sleep)
-        if not exp:
-            print("  PDB experimental FAIL")
-            results.append({"accession": acc, "name": name, "error": "pdb_fetch", "fsot_len": len(fsot_seq)})
-            continue
-        exp_seq, exp_xyz = exp
-        print(f"  PDB experimental CA n={len(exp_seq)}")
-
-        # AlphaFold
+        # AlphaFold (aligned to same experimental chain)
         af = fetch_alphafold_pdb(acc, cache)
         time.sleep(args.sleep)
         af_rmsd = None
@@ -322,7 +321,7 @@ def main() -> int:
         else:
             print("  AlphaFold model FAIL")
 
-        # FSOT vs experimental
+        # FSOT vs experimental (same sequence → full-length align)
         f_pred, f_exp, Ln = align_by_sequence(fsot_seq, fsot_xyz, exp_seq, exp_xyz)
         if Ln < 20:
             print("  FSOT align too short")
@@ -341,7 +340,9 @@ def main() -> int:
             "name": name,
             "pdb_id": pdb_id,
             "chain": chain,
-            "seq_len_uniprot": len(seq),
+            "seq_len_uniprot": len(uni) if uni else None,
+            "seq_len_pdb": len(exp_seq),
+            "seq_source": "pdb_chain",
             "fsot_rmsd_A": fsot_rmsd,
             "fsot_align_n": Ln,
             "af_rmsd_A": af_rmsd,

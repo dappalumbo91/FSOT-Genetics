@@ -304,24 +304,28 @@ def build_distogram(
             if fs["observed"]:
                 s_obs_n += 1
 
-            # F07 backbone — seed, residual-scaled (law, not free weight)
-            bb = (1.0 / (s ** (1.0 / PI))) * res
-            # F08–F09 chemistry · full-law residual + chaos on longer range
+            # ERROR-LOG: never residual-scale backbone (sep≤2) — hard local geometry
+            bb = 1.0 / (s ** (1.0 / PI))
+            if sep <= 2:
+                res_use, chaos_use = 1.0, 1.0
+            else:
+                res_use = res
+                chaos_use = chaos if sep >= gate else 1.0
+
             interaction = fsot_chemical_interaction(chars[i], chars[j], sep=sep)
             chem_env = s / (s + PI * E)
-            chemistry = interaction * chem_env * chem_amp * res * (chaos if sep >= gate else 1.0)
-            # F10 F11 — SS at Chemistry interface, residual-scaled
+            chemistry = interaction * chem_env * chem_amp * res_use * chaos_use
             helix = (
                 helix_periodicity_bonus(props[i], props[j], sep)
                 * (ss_amp / max(chem_amp, 1e-12))
-                * res
+                * res_use
             )
             sheet = (
                 sheet_pair_bonus(props[i], props[j], sep)
                 * (ss_amp / max(chem_amp, 1e-12))
-                * res
+                * res_use
             )
-            # F13 region pair — tertiary observed domain + full residual
+            # F13 same-kind region pairs only (cross-SS false contacts hurt top-L — v11 lesson)
             region_pair = 0.0
             ri, rj = rmap[i], rmap[j]
             if ri is not None and rj is not None and ri != rj and sep >= gate:
@@ -335,15 +339,20 @@ def build_distogram(
                         reg_mult = beta_register_multiplier(
                             i, j, r_i.start, r_i.end, r_j.start, r_j.end
                         )
-                    joint = math.sqrt(pi_v * pj_v)
-                    region_pair = joint * region_amp * reg_mult * res * chaos
+                    joint = math.sqrt(max(pi_v * pj_v, 0.0))
+                    region_pair = joint * region_amp * reg_mult * res_use * chaos_use
             M[i, j] = bb + chemistry + helix + sheet + region_pair
 
     iface = dict(iface)
     iface["full_law"] = True
+    iface["error_log_fixes"] = [
+        "no_residual_on_backbone_sep1_2",
+        "fold_experimental_sequence_protocol",
+        "error_margin_log_required",
+    ]
     iface["mean_abs_S_pairs"] = (s_abs_acc / n_pairs) if n_pairs else 0.0
     iface["observed_pair_fraction"] = (s_obs_n / n_pairs) if n_pairs else 0.0
-    iface["formula"] = "S=K(T1+T2+T3) per pair + residual (1+|S|P_NEW) + observer/chaos"
+    iface["formula"] = "S=K(T1+T2+T3) per pair + residual mid/long + observer refine"
     return M, props, regions, "".join(chars), iface
 
 
@@ -375,7 +384,6 @@ def proximity_to_distance(
     D = np.zeros((n, n), dtype=np.float64)
     contact_scale = PI * E  # F08 ~8.54 Å — standard contact cutoff scale
     d_hard = contact_scale * PHI * PHI
-    # base distances
     for i in range(n):
         for j in range(i + 1, n):
             sep = abs(i - j)
@@ -392,23 +400,21 @@ def proximity_to_distance(
                 bb_only = float(sep) ** (-1.0 / PI)
                 if m > bb_only * PHI:
                     d = min(d, contact_scale / (1.0 + (m - bb_only) * PHI))
-            # F10 local helix geometry (crystallographic periods, seed-weighted)
+            # Ideal helix only soft-min when both α-strong (not hard replace — v11 lesson)
             if props is not None and sep in (3, 4, 7):
                 if props[i].p_alpha > 1.0 / E and props[j].p_alpha > 1.0 / E:
-                    # Ideal α Cα distance from helical rise/radius geometry
                     rise, rad, turn = 1.5, 2.3, 100.0 * PI / 180.0
                     d_h = math.sqrt((sep * rise) ** 2 + (2 * rad * math.sin(sep * turn / 2)) ** 2)
                     d = min(d, d_h)
             D[i, j] = D[j, i] = float(np.clip(d, CA_CA * 0.95, d_hard))
 
-    # Top-L hard contacts: rank long-range pairs by M
+    # Top-L contacts by M (not 2L hard-force — false positives destroy topology)
     L = n
     lr_pairs = []
     for i in range(n):
         for j in range(i + gate, n):
             lr_pairs.append((M[i, j], i, j))
     lr_pairs.sort(reverse=True)
-    # top L/2 → tight contact; packing domain can tighten further by pack_boost
     tight = (contact_scale / PHI) / pack_boost
     for rank, (m, i, j) in enumerate(lr_pairs[: max(L, 1)]):
         if rank < max(L // 2, 1):
@@ -416,18 +422,15 @@ def proximity_to_distance(
         else:
             D[i, j] = D[j, i] = min(D[i, j], contact_scale / math.sqrt(pack_boost))
 
-    # Region–region: same-kind regions get median contact pull
+    # Same-kind region midpoints only
     if regions:
         for a, ra in enumerate(regions):
             for b, rb in enumerate(regions):
                 if b <= a or ra.kind != rb.kind or ra.kind == "C":
                     continue
-                # couple midpoints and a few register pairs
                 for i in range(ra.start, ra.end + 1):
-                    if ra.kind == "H":
-                        # heptad-facing residues
-                        if (i - ra.start) % 7 not in (0, 3):
-                            continue
+                    if ra.kind == "H" and (i - ra.start) % 7 not in (0, 3):
+                        continue
                     for j in range(rb.start, rb.end + 1):
                         if abs(i - j) < gate:
                             continue
@@ -438,7 +441,7 @@ def proximity_to_distance(
 
 
 def classical_mds(D: np.ndarray, dim: int = 3) -> np.ndarray:
-    """Classical multidimensional scaling → coordinates (n, dim)."""
+    """Classical MDS + Cα bond scale only (no free Rg dial — v11 over-collapse lesson)."""
     n = D.shape[0]
     D2 = D ** 2
     J = np.eye(n) - np.ones((n, n)) / n
@@ -732,13 +735,14 @@ def predict_ca_coords(
         "predict_ms": elapsed_ms,
         "n_sparse_pairs": len(pairs),
         "refine_rounds": n_rounds,
-        "engine": "fsot_protein_FULL_SCALAR_v10",
+        "engine": "fsot_protein_FULL_SCALAR_v12",
         "free_parameters": 0,
         "runtime": "python_full_scalar_T1T2T3_observer",
         "full_law": True,
+        "error_margin_fixes": iface.get("error_log_fixes"),
         "authority": (
-            "FULL S=K(T1+T2+T3) per pair (observer/chaos/poof/suction) + residual "
-            "(1+|S|P_NEW) + observer refine rounds + F01–F15 + trinary + MDS — not a frozen |S| slice"
+            "FULL S=K(T1+T2+T3); error-log: no residual on backbone; "
+            "experimental-seq protocol; no false hard contacts (v11 reverted)"
         ),
         "trinary_expansion": "c,p,v,aromatic,branch,hetero,detail",
         "formula": "S=K(T1+T2+T3)",
