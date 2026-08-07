@@ -147,7 +147,7 @@ def best_template(sequence: str, exclude_pdb: str) -> dict | None:
         if pdb != exclude_pdb.upper() and pdb not in seen:
             seen.add(pdb)
             candidates.append(pdb)
-    for pdb in candidates[:45]:
+    for pdb in candidates[:90]:
         try:
             text = fetch_template_pdb(pdb)
         except Exception:
@@ -167,11 +167,14 @@ def best_template(sequence: str, exclude_pdb: str) -> dict | None:
             if identity > IDENTITY_CAP or identity < MIN_IDENTITY or coverage < MIN_COVERAGE:
                 continue
             score = coverage * identity
-            if best is None or score > best["score"]:
-                best = {"score": score, "pdb_id": pdb, "chain": chain,
-                        "tcoords": tcoords, "pairs": pairs,
-                        "identity": identity, "coverage": coverage}
-        if best is not None and best["score"] > 0.6:
+            if best is not None and score <= best["score"]:
+                continue
+            model = build_from_template(len(sequence), tcoords, pairs)
+            if not model_is_sane(model, len(sequence)):
+                continue  # only keep templates whose transferred geometry is physical
+            best = {"score": score, "pdb_id": pdb, "chain": chain, "model": model,
+                    "identity": identity, "coverage": coverage}
+        if best is not None and best["score"] > 0.85:
             break
     return best
 
@@ -220,14 +223,9 @@ def main() -> int:
         bulk_rmsd = kabsch_rmsd(bulk["ca_coords"], native)
         template = best_template(sequence, pdb_id)
         if template is not None:
-            model = build_from_template(len(sequence), template["tcoords"], template["pairs"])
-            if model_is_sane(model, len(sequence)):
-                template_rmsd = kabsch_rmsd(model, native)
-                meta = {"template_pdb": template["pdb_id"], "template_chain": template["chain"],
-                        "identity": template["identity"], "coverage": template["coverage"]}
-            else:
-                template_rmsd = None  # rejected by sanity gate -> bulk fallback
-                meta = None
+            template_rmsd = kabsch_rmsd(template["model"], native)
+            meta = {"template_pdb": template["pdb_id"], "template_chain": template["chain"],
+                    "identity": template["identity"], "coverage": template["coverage"]}
         else:
             template_rmsd = None
             meta = None
