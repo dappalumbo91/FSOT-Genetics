@@ -1,0 +1,266 @@
+{
+  "generated_at": "2026-08-07T16:40:02.845365+00:00",
+  "policy": "Evaluate F19 once. Do not revise F19 from these outcomes.",
+  "candidate": {
+    "name": "f12c_plus_f19_oriented_backbone",
+    "frozen_commit": "3673219",
+    "development_evidence": "data/information_gap_audit.json"
+  },
+  "manifest_sha256": "e9473f68455949876dca015ba87190b5abea2eba46a60560d9dc39bea0bc9385",
+  "git_commit": "9a925a5e29d86a7b2038cae69ad5c6f25d137741",
+  "benchmark_sha256": "c38c0a1600a62c7e1390e347aac14c7e3f0ae86d42d041e0d1831147855456aa",
+  "engine_sha256": "7c87ed9a207fd9bd0566642c35c871f05854c10537b8f2a707888c99307dc7b5",
+  "authority_sha256": "d1d38a185487b452e470ac68ece2eb45aeb1ca9ce25fc9bf9564c19633ffbe70",
+  "summary": {
+    "rmsd_A": {
+      "baseline": {
+        "median": 15.065531392869191,
+        "bootstrap_95_ci": [
+          12.52348795935427,
+          17.05088376542689
+        ],
+        "values": [
+          16.873760038238437,
+          17.07032720130125,
+          28.0288969822476,
+          13.752317665161279,
+          15.554545625875758,
+          8.302653430040595,
+          11.18996681875781,
+          17.031440329552524,
+          28.681840304541424,
+          14.246333364526281,
+          11.294658253547261,
+          14.576517159862625
+        ]
+      },
+      "f12c": {
+        "median": 16.188835873824654,
+        "bootstrap_95_ci": [
+          12.682524431006552,
+          16.71011828846879
+        ],
+        "values": [
+          16.66951737150115,
+          16.716211016674208,
+          16.704025560263375,
+          13.892542093783922,
+          16.33185450327504,
+          8.127598531030795,
+          9.964769229504506,
+          20.594992883647972,
+          19.159927289455847,
+          14.967809296210387,
+          11.472506768229184,
+          16.04581724437427
+        ]
+      },
+      "f12c_f19": {
+        "median": 16.04192433664396,
+        "bootstrap_95_ci": [
+          13.23870600049597,
+          16.686771465882263
+        ],
+        "values": [
+          16.66951737150115,
+          16.038031428913648,
+          16.704025560263375,
+          13.925514428738559,
+          16.33185450327504,
+          8.127598531030795,
+          12.55189757225338,
+          20.594992883647972,
+          19.248359276915973,
+          14.441306642078466,
+          11.472506768229184,
+          16.04581724437427
+        ]
+      }
+    },
+    "f19_reflected_count": 5,
+    "maximum_pair_distance_delta_A": 0.0,
+    "success_gate_passed": true
+  },
+  "results": [
+    {
+      "pdb_id": "22LX",
+      "chain": "A",
+      "length": 146,
+      "release_date": "2026-08-05",
+      "resolution_A": 1.5,
+      "pdb_sha256": "3ce5b662542b0c427b4613568d7b18d21d36da0030d9708e7f0987ea853c9e93",
+      "rmsd_A": {
+        "baseline": 16.873760038238437,
+        "f12c": 16.66951737150115,
+        "f12c_f19": 16.66951737150115
+      },
+      "f19_reflected": false,
+      "f19_pair_distance_max_delta_A": 0.0
+    },
+    {
+      "pdb_id": "9SDC",
+      "chain": "A",
+      "length": 76,
+      "release_date": "2026-07-22",
+      "resolution_A": 1.7,
+      "pdb_sha256": "842e7e2fa7368747597db446eb923793c05daa4486a70438baef378647b698a6",
+      "rmsd_A": {
+        "baseline": 17.07032720130125,
+        "f12c": 16.716211016674208,
+        "f12c_f19": 16.038031428913648
+      },
+      "f19_reflected": true,
+      "f19_pair_distance_max_delta_A": 0.0
+    },
+    {
+      "pdb_id": "9T4K",
+      "chain": "A",
+      "length": 148,
+      "release_date": "2026-06-10",
+      "resolution_A": 1.394,
+      "pdb_sha256": "7644346e3359659c13cd4cf5075ff2dc6c84531e3853e96fd9b347b710af8034",
+      "rmsd_A": {
+        "baseline": 28.0288969822476,
+        "f12c": 16.704025560263375,
+        "f12c_f19": 16.704025560263375
+      },
+      "f19_reflected": false,
+      "f19_pair_distance_max_delta_A": 0.0
+    },
+    {
+      "pdb_id": "9NO5",
+      "chain": "A",
+      "length": 194,
+      "release_date": "2026-04-01",
+      "resolution_A": 1.45,
+      "pdb_sha256": "a29eeda527b86aec4fd13c092bed0a5195e1308a8de66872084470e5add56172",
+      "rmsd_A": {
+        "baseline": 13.752317665161279,
+        "f12c": 13.892542093783922,
+        "f12c_f19": 13.925514428738559
+      },
+      "f19_reflected": true,
+      "f19_pair_distance_max_delta_A": 0.0
+    },
+    {
+      "pdb_id": "9LMB",
+      "chain": "A",
+      "length": 154,
+      "release_date": "2026-01-21",
+      "resolution_A": 1.64,
+      "pdb_sha256": "ab33b37adb7f5cbd5f37f7486ce44db1fe112502a147fd62857739c859ccf1e1",
+      "rmsd_A": {
+        "baseline": 15.554545625875758,
+        "f12c": 16.33185450327504,
+        "f12c_f19": 16.33185450327504
+      },
+      "f19_reflected": false,
+      "f19_pair_distance_max_delta_A": 0.0
+    },
+    {
+      "pdb_id": "9KKD",
+      "chain": "A",
+      "length": 45,
+      "release_date": "2025-11-19",
+      "resolution_A": 1.85,
+      "pdb_sha256": "7a7b2a470c33569847873450aae09094d7bce9ee2a79b2cdcd69dc3c396b644b",
+      "rmsd_A": {
+        "baseline": 8.302653430040595,
+        "f12c": 8.127598531030795,
+        "f12c_f19": 8.127598531030795
+      },
+      "f19_reflected": false,
+      "f19_pair_distance_max_delta_A": 0.0
+    },
+    {
+      "pdb_id": "9DKS",
+      "chain": "C",
+      "length": 77,
+      "release_date": "2025-09-17",
+      "resolution_A": 1.55,
+      "pdb_sha256": "d938a90f4e5bf2fd12de37c109389f37e0b3d9af5b5679a431fdf752ca396b7d",
+      "rmsd_A": {
+        "baseline": 11.18996681875781,
+        "f12c": 9.964769229504506,
+        "f12c_f19": 12.55189757225338
+      },
+      "f19_reflected": true,
+      "f19_pair_distance_max_delta_A": 0.0
+    },
+    {
+      "pdb_id": "9G1F",
+      "chain": "A",
+      "length": 137,
+      "release_date": "2025-07-23",
+      "resolution_A": 1.4,
+      "pdb_sha256": "38fee058998cb7a53d4bc4002bbbed5a404f44e57c3c79afe4150debaef97dc4",
+      "rmsd_A": {
+        "baseline": 17.031440329552524,
+        "f12c": 20.594992883647972,
+        "f12c_f19": 20.594992883647972
+      },
+      "f19_reflected": false,
+      "f19_pair_distance_max_delta_A": 0.0
+    },
+    {
+      "pdb_id": "9D2R",
+      "chain": "A",
+      "length": 180,
+      "release_date": "2025-04-09",
+      "resolution_A": 1.6,
+      "pdb_sha256": "2fb2812a1153f446f0a1c21064315c89c0e31299d67522dd9f0a558ad02c486a",
+      "rmsd_A": {
+        "baseline": 28.681840304541424,
+        "f12c": 19.159927289455847,
+        "f12c_f19": 19.248359276915973
+      },
+      "f19_reflected": true,
+      "f19_pair_distance_max_delta_A": 0.0
+    },
+    {
+      "pdb_id": "9BGH",
+      "chain": "B",
+      "length": 163,
+      "release_date": "2024-11-06",
+      "resolution_A": 1.65,
+      "pdb_sha256": "d49359e84e2f861f40c602e61d41061b918e261696b302c3e10f3d2f4083e847",
+      "rmsd_A": {
+        "baseline": 14.246333364526281,
+        "f12c": 14.967809296210387,
+        "f12c_f19": 14.441306642078466
+      },
+      "f19_reflected": true,
+      "f19_pair_distance_max_delta_A": 0.0
+    },
+    {
+      "pdb_id": "8JVQ",
+      "chain": "A",
+      "length": 44,
+      "release_date": "2024-07-03",
+      "resolution_A": 1.401,
+      "pdb_sha256": "cad26261f6dc661f3f5d910e21b806fa5b4db458608e547d660f27f0a094a6ae",
+      "rmsd_A": {
+        "baseline": 11.294658253547261,
+        "f12c": 11.472506768229184,
+        "f12c_f19": 11.472506768229184
+      },
+      "f19_reflected": false,
+      "f19_pair_distance_max_delta_A": 0.0
+    },
+    {
+      "pdb_id": "8RHR",
+      "chain": "A",
+      "length": 168,
+      "release_date": "2024-04-17",
+      "resolution_A": 1.42,
+      "pdb_sha256": "dba44daf3081c1b383cd48309e9956e5de0ae47401c0b1aae0956ca46a55191e",
+      "rmsd_A": {
+        "baseline": 14.576517159862625,
+        "f12c": 16.04581724437427,
+        "f12c_f19": 16.04581724437427
+      },
+      "f19_reflected": false,
+      "f19_pair_distance_max_delta_A": 0.0
+    }
+  ]
+}
