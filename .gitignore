@@ -38,3 +38,7 @@ _bench_*.py
 .lake/packages/
 *.olean
 
+# Haskell / Cabal
+haskell/dist-newstyle/
+cabal.project.local
+
