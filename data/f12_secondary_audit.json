@@ -1,0 +1,286 @@
+{
+  "generated_at": "2026-08-07T16:08:09.196128+00:00",
+  "role": "development_diagnostic",
+  "ground_truth": "PDB HELIX and SHEET records",
+  "beta_gate": 0.36787944117144233,
+  "amino_acids_crossing_beta_gate": [
+    "I",
+    "L",
+    "M",
+    "F",
+    "W"
+  ],
+  "aggregate_confusion": {
+    "E->C": 30,
+    "E->H": 33,
+    "C->H": 39,
+    "C->C": 49,
+    "H->C": 53,
+    "H->H": 55,
+    "C->E": 8,
+    "H->E": 1
+  },
+  "propensity_table": {
+    "A": {
+      "p_alpha": 0.47572066562214754,
+      "p_beta": 0.26213966718892623,
+      "p_coil": 0.26213966718892623,
+      "crosses_beta_gate": false
+    },
+    "R": {
+      "p_alpha": 0.37315188658082854,
+      "p_beta": 0.2826937193878223,
+      "p_coil": 0.34415439403134923,
+      "crosses_beta_gate": false
+    },
+    "N": {
+      "p_alpha": 0.4033809588584407,
+      "p_beta": 0.2064367770895695,
+      "p_coil": 0.39018226405198975,
+      "crosses_beta_gate": false
+    },
+    "D": {
+      "p_alpha": 0.35473371401422005,
+      "p_beta": 0.19547569100197265,
+      "p_coil": 0.44979059498380736,
+      "crosses_beta_gate": false
+    },
+    "C": {
+      "p_alpha": 0.43493040393211513,
+      "p_beta": 0.19552032067290542,
+      "p_coil": 0.3695492753949794,
+      "crosses_beta_gate": false
+    },
+    "E": {
+      "p_alpha": 0.37315188658082854,
+      "p_beta": 0.2826937193878223,
+      "p_coil": 0.34415439403134923,
+      "crosses_beta_gate": false
+    },
+    "Q": {
+      "p_alpha": 0.4154281933469456,
+      "p_beta": 0.2922859033265272,
+      "p_coil": 0.2922859033265272,
+      "crosses_beta_gate": false
+    },
+    "G": {
+      "p_alpha": 0.10650697891920076,
+      "p_beta": 0.10650697891920076,
+      "p_coil": 0.7869860421615985,
+      "crosses_beta_gate": false
+    },
+    "H": {
+      "p_alpha": 0.37315188658082854,
+      "p_beta": 0.2826937193878223,
+      "p_coil": 0.34415439403134923,
+      "crosses_beta_gate": false
+    },
+    "I": {
+      "p_alpha": 0.4286242115111405,
+      "p_beta": 0.44641407523855214,
+      "p_coil": 0.12496171325030739,
+      "crosses_beta_gate": true
+    },
+    "L": {
+      "p_alpha": 0.4286242115111405,
+      "p_beta": 0.44641407523855214,
+      "p_coil": 0.12496171325030739,
+      "crosses_beta_gate": true
+    },
+    "K": {
+      "p_alpha": 0.37315188658082854,
+      "p_beta": 0.2826937193878223,
+      "p_coil": 0.34415439403134923,
+      "crosses_beta_gate": false
+    },
+    "M": {
+      "p_alpha": 0.4286242115111405,
+      "p_beta": 0.44641407523855214,
+      "p_coil": 0.12496171325030739,
+      "crosses_beta_gate": true
+    },
+    "F": {
+      "p_alpha": 0.4286242115111405,
+      "p_beta": 0.44641407523855214,
+      "p_coil": 0.12496171325030739,
+      "crosses_beta_gate": true
+    },
+    "P": {
+      "p_alpha": 0.21654236465910043,
+      "p_beta": 0.21654236465910043,
+      "p_coil": 0.566915270681799,
+      "crosses_beta_gate": false
+    },
+    "S": {
+      "p_alpha": 0.37008723052825315,
+      "p_beta": 0.13776393829989905,
+      "p_coil": 0.4921488311718478,
+      "crosses_beta_gate": false
+    },
+    "T": {
+      "p_alpha": 0.4033809588584407,
+      "p_beta": 0.2064367770895695,
+      "p_coil": 0.39018226405198975,
+      "crosses_beta_gate": false
+    },
+    "W": {
+      "p_alpha": 0.4286242115111405,
+      "p_beta": 0.44641407523855214,
+      "p_coil": 0.12496171325030739,
+      "crosses_beta_gate": true
+    },
+    "Y": {
+      "p_alpha": 0.4154281933469456,
+      "p_beta": 0.2922859033265272,
+      "p_coil": 0.2922859033265272,
+      "crosses_beta_gate": false
+    },
+    "V": {
+      "p_alpha": 0.4633107391051832,
+      "p_beta": 0.3509888496144107,
+      "p_coil": 0.18570041128040615,
+      "crosses_beta_gate": false
+    }
+  },
+  "results": [
+    {
+      "pdb_id": "1UBQ",
+      "chain": "A",
+      "length": 76,
+      "observed_counts": {
+        "E": 33,
+        "C": 27,
+        "H": 16
+      },
+      "predicted_counts": {
+        "C": 49,
+        "H": 27
+      },
+      "recall": {
+        "H": 0.375,
+        "E": 0.0,
+        "C": 0.7037037037037037
+      },
+      "accuracy": 0.32894736842105265,
+      "confusion": {
+        "E->C": 20,
+        "E->H": 13,
+        "C->H": 8,
+        "C->C": 19,
+        "H->C": 10,
+        "H->H": 6
+      }
+    },
+    {
+      "pdb_id": "1CRN",
+      "chain": "A",
+      "length": 46,
+      "observed_counts": {
+        "E": 8,
+        "C": 17,
+        "H": 21
+      },
+      "predicted_counts": {
+        "H": 27,
+        "C": 19
+      },
+      "recall": {
+        "H": 0.8095238095238095,
+        "E": 0.0,
+        "C": 0.7058823529411765
+      },
+      "accuracy": 0.6304347826086957,
+      "confusion": {
+        "E->H": 5,
+        "C->H": 5,
+        "H->H": 17,
+        "H->C": 4,
+        "C->C": 12,
+        "E->C": 3
+      }
+    },
+    {
+      "pdb_id": "1VII",
+      "chain": "A",
+      "length": 36,
+      "observed_counts": {
+        "C": 17,
+        "H": 19
+      },
+      "predicted_counts": {
+        "C": 19,
+        "E": 6,
+        "H": 11
+      },
+      "recall": {
+        "H": 0.42105263157894735,
+        "E": 0.0,
+        "C": 0.5294117647058824
+      },
+      "accuracy": 0.4722222222222222,
+      "confusion": {
+        "C->C": 9,
+        "H->C": 10,
+        "C->E": 5,
+        "C->H": 3,
+        "H->H": 8,
+        "H->E": 1
+      }
+    },
+    {
+      "pdb_id": "2GB1",
+      "chain": "A",
+      "length": 56,
+      "observed_counts": {
+        "C": 19,
+        "E": 22,
+        "H": 15
+      },
+      "predicted_counts": {
+        "C": 19,
+        "H": 37
+      },
+      "recall": {
+        "H": 0.6666666666666666,
+        "E": 0.0,
+        "C": 0.3684210526315789
+      },
+      "accuracy": 0.30357142857142855,
+      "confusion": {
+        "C->C": 7,
+        "E->C": 7,
+        "C->H": 12,
+        "E->H": 15,
+        "H->C": 5,
+        "H->H": 10
+      }
+    },
+    {
+      "pdb_id": "1ENH",
+      "chain": "A",
+      "length": 54,
+      "observed_counts": {
+        "C": 16,
+        "H": 38
+      },
+      "predicted_counts": {
+        "H": 25,
+        "C": 26,
+        "E": 3
+      },
+      "recall": {
+        "H": 0.3684210526315789,
+        "E": 0.0,
+        "C": 0.125
+      },
+      "accuracy": 0.2962962962962963,
+      "confusion": {
+        "C->H": 11,
+        "H->H": 14,
+        "H->C": 24,
+        "C->C": 2,
+        "C->E": 3
+      }
+    }
+  ]
+}
