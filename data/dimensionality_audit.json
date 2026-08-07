@@ -1,0 +1,247 @@
+{
+  "generated_at": "2026-08-07T17:01:13.515477+00:00",
+  "purpose": "Intrinsic-dimensionality audit; no production formula selection",
+  "manifest_sha256": "e9473f68455949876dca015ba87190b5abea2eba46a60560d9dc39bea0bc9385",
+  "aggregate": {
+    "chem_link_d_eff_ladder": {
+      "backbone": 8,
+      "disulfide": 7,
+      "salt_bridge": 9,
+      "hydrophobic_pack": 14,
+      "hbond_secondary": 8,
+      "molecular_sidechain": 9,
+      "tertiary_biochem": 13
+    },
+    "base_law_d_eff": 25,
+    "native_participation_dimension_median": 2.5275252185562547,
+    "fsot_participation_dimension_median": 9.095037744331682,
+    "native_top3_variance_fraction_median": 0.9999999999999978,
+    "fsot_top3_variance_fraction_median": 0.4512534427730978,
+    "fsot_negative_eigenvalue_mass_median": 0.20237783552580038,
+    "rg_relative_error_median": 0.07054072501840343,
+    "native_contact_recall_median_by_dim": {
+      "3": 0.009947561960984778,
+      "9": 0.02086295447291298,
+      "25": 0.022684632440730004
+    },
+    "finding": "FSOT proximity participation dimension 9.10 tracks the D_eff ladder [7, 14]; native structures sit at 2.53. Forcing the FSOT object into 3 axes discards most variance and ignores 0.202 non-Euclidean mass."
+  },
+  "results": [
+    {
+      "pdb_id": "22LX",
+      "chain": "A",
+      "length": 146,
+      "native_participation_dimension": 2.529242560441586,
+      "fsot_participation_dimension": 9.501277475461439,
+      "native_top3_variance_fraction": 0.9999999999999976,
+      "fsot_top3_variance_fraction": 0.44419033844735123,
+      "fsot_negative_eigenvalue_mass": 0.21436985771493033,
+      "fsot_target_rg_A": 15.34916603193497,
+      "native_rg_A": 14.542988352669704,
+      "rg_relative_error": 0.05543411434536929,
+      "native_contact_recall_by_dim": {
+        "3": 0.004149377593360996,
+        "9": 0.02074688796680498,
+        "25": 0.012448132780082987
+      }
+    },
+    {
+      "pdb_id": "9SDC",
+      "chain": "A",
+      "length": 76,
+      "native_participation_dimension": 1.2611828901927644,
+      "fsot_participation_dimension": 7.39604531701484,
+      "native_top3_variance_fraction": 0.9999999999999984,
+      "fsot_top3_variance_fraction": 0.5172335282624771,
+      "fsot_negative_eigenvalue_mass": 0.19436964010135696,
+      "fsot_target_rg_A": 12.468994494611536,
+      "native_rg_A": 23.23759686358796,
+      "rg_relative_error": 0.46341290935510776,
+      "native_contact_recall_by_dim": {
+        "3": 0.05555555555555555,
+        "9": 0.05555555555555555,
+        "25": 0.2222222222222222
+      }
+    },
+    {
+      "pdb_id": "9T4K",
+      "chain": "A",
+      "length": 148,
+      "native_participation_dimension": 2.9058168175278025,
+      "fsot_participation_dimension": 8.878271101983133,
+      "native_top3_variance_fraction": 0.9999999999999979,
+      "fsot_top3_variance_fraction": 0.45187970656922755,
+      "fsot_negative_eigenvalue_mass": 0.1968099362862826,
+      "fsot_target_rg_A": 15.41578456036843,
+      "native_rg_A": 14.438810117537368,
+      "rg_relative_error": 0.06766308545358793,
+      "native_contact_recall_by_dim": {
+        "3": 0.017482517482517484,
+        "9": 0.02097902097902098,
+        "25": 0.02097902097902098
+      }
+    },
+    {
+      "pdb_id": "9NO5",
+      "chain": "A",
+      "length": 194,
+      "native_participation_dimension": 2.842157818620988,
+      "fsot_participation_dimension": 9.311804386680231,
+      "native_top3_variance_fraction": 0.9999999999999976,
+      "fsot_top3_variance_fraction": 0.4506271789769681,
+      "fsot_negative_eigenvalue_mass": 0.2021433255588809,
+      "fsot_target_rg_A": 16.80272737349294,
+      "native_rg_A": 15.034927253660072,
+      "rg_relative_error": 0.1175795592494481,
+      "native_contact_recall_by_dim": {
+        "3": 0.009828009828009828,
+        "9": 0.004914004914004914,
+        "25": 0.0171990171990172
+      }
+    },
+    {
+      "pdb_id": "9LMB",
+      "chain": "A",
+      "length": 154,
+      "native_participation_dimension": 2.525807876670923,
+      "fsot_participation_dimension": 9.372214035991268,
+      "native_top3_variance_fraction": 0.9999999999999978,
+      "fsot_top3_variance_fraction": 0.4502943407086466,
+      "fsot_negative_eigenvalue_mass": 0.21216988042241428,
+      "fsot_target_rg_A": 15.612028821628035,
+      "native_rg_A": 15.119659871668079,
+      "rg_relative_error": 0.03256481654607725,
+      "native_contact_recall_by_dim": {
+        "3": 0.017094017094017096,
+        "9": 0.042735042735042736,
+        "25": 0.042735042735042736
+      }
+    },
+    {
+      "pdb_id": "9KKD",
+      "chain": "A",
+      "length": 45,
+      "native_participation_dimension": 2.4017423304743875,
+      "fsot_participation_dimension": 6.693246040186021,
+      "native_top3_variance_fraction": 0.999999999999999,
+      "fsot_top3_variance_fraction": 0.5507868823526912,
+      "fsot_negative_eigenvalue_mass": 0.20261234549271986,
+      "fsot_target_rg_A": 10.553190061445624,
+      "native_rg_A": 11.981358130976473,
+      "rg_relative_error": 0.11919918041999579,
+      "native_contact_recall_by_dim": {
+        "3": 0.0,
+        "9": 0.0,
+        "25": 0.25
+      }
+    },
+    {
+      "pdb_id": "9DKS",
+      "chain": "C",
+      "length": 77,
+      "native_participation_dimension": 2.5237905028854972,
+      "fsot_participation_dimension": 7.540149668118018,
+      "native_top3_variance_fraction": 0.9999999999999983,
+      "fsot_top3_variance_fraction": 0.5050659652502296,
+      "fsot_negative_eigenvalue_mass": 0.1950013496760459,
+      "fsot_target_rg_A": 12.520985733547779,
+      "native_rg_A": 11.37235262759597,
+      "rg_relative_error": 0.10100224145042377,
+      "native_contact_recall_by_dim": {
+        "3": 0.015625,
+        "9": 0.015625,
+        "25": 0.0
+      }
+    },
+    {
+      "pdb_id": "9G1F",
+      "chain": "A",
+      "length": 137,
+      "native_participation_dimension": 2.397925079467697,
+      "fsot_participation_dimension": 8.544164196310218,
+      "native_top3_variance_fraction": 0.999999999999998,
+      "fsot_top3_variance_fraction": 0.4651740125422639,
+      "fsot_negative_eigenvalue_mass": 0.19820603834451736,
+      "fsot_target_rg_A": 15.041430911315755,
+      "native_rg_A": 16.23324954476358,
+      "rg_relative_error": 0.07341836458321893,
+      "native_contact_recall_by_dim": {
+        "3": 0.0,
+        "9": 0.04790419161676647,
+        "25": 0.041916167664670656
+      }
+    },
+    {
+      "pdb_id": "9D2R",
+      "chain": "A",
+      "length": 180,
+      "native_participation_dimension": 2.536910987665399,
+      "fsot_participation_dimension": 9.553186289496189,
+      "native_top3_variance_fraction": 0.9999999999999971,
+      "fsot_top3_variance_fraction": 0.4338900478911893,
+      "fsot_negative_eigenvalue_mass": 0.2069102697472323,
+      "fsot_target_rg_A": 16.40685753832337,
+      "native_rg_A": 15.971063999198096,
+      "rg_relative_error": 0.027286443730183154,
+      "native_contact_recall_by_dim": {
+        "3": 0.0,
+        "9": 0.013157894736842105,
+        "25": 0.009868421052631578
+      }
+    },
+    {
+      "pdb_id": "9BGH",
+      "chain": "B",
+      "length": 163,
+      "native_participation_dimension": 2.8458008485413595,
+      "fsot_participation_dimension": 9.53475819569622,
+      "native_top3_variance_fraction": 0.9999999999999976,
+      "fsot_top3_variance_fraction": 0.44030238357894014,
+      "fsot_negative_eigenvalue_mass": 0.21493833863865966,
+      "fsot_target_rg_A": 15.896849302529485,
+      "native_rg_A": 13.963005993631354,
+      "rg_relative_error": 0.13849763509234142,
+      "native_contact_recall_by_dim": {
+        "3": 0.01707317073170732,
+        "9": 0.024390243902439025,
+        "25": 0.024390243902439025
+      }
+    },
+    {
+      "pdb_id": "8JVQ",
+      "chain": "A",
+      "length": 44,
+      "native_participation_dimension": 2.1612586444542328,
+      "fsot_participation_dimension": 6.4987987824361335,
+      "native_top3_variance_fraction": 0.999999999999999,
+      "fsot_top3_variance_fraction": 0.5664879676519999,
+      "fsot_negative_eigenvalue_mass": 0.2016646357901962,
+      "fsot_target_rg_A": 10.477968948846899,
+      "native_rg_A": 11.072060640852303,
+      "rg_relative_error": 0.05365683148567662,
+      "native_contact_recall_by_dim": {
+        "3": 0.0,
+        "9": 0.038461538461538464,
+        "25": 0.038461538461538464
+      }
+    },
+    {
+      "pdb_id": "8RHR",
+      "chain": "A",
+      "length": 168,
+      "native_participation_dimension": 2.5918383851993716,
+      "fsot_participation_dimension": 9.503919476630246,
+      "native_top3_variance_fraction": 0.9999999999999974,
+      "fsot_top3_variance_fraction": 0.4346199526989388,
+      "fsot_negative_eigenvalue_mass": 0.20773170545259104,
+      "fsot_target_rg_A": 16.050472316190948,
+      "native_rg_A": 15.429847522392162,
+      "rg_relative_error": 0.040222354297287814,
+      "native_contact_recall_by_dim": {
+        "3": 0.010067114093959731,
+        "9": 0.016778523489932886,
+        "25": 0.020134228187919462
+      }
+    }
+  ]
+}
