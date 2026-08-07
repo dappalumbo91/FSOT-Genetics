@@ -125,6 +125,21 @@ class SsPropensity:
         return SsPropensity._norm(raw_alpha, raw_beta, raw_coil)
 
     @staticmethod
+    def from_expanded_amino_acid(aa: str) -> "SsPropensity":
+        aa = aa.upper()
+        if aa in ("P", "G"):
+            return SsPropensity.from_amino_acid(aa)
+        op = aa_opcode(aa)
+        charge, polarity, volume = float(op.c), float(op.p), float(op.v)
+        beta_topology = (
+            max(op.branch, 0) + abs(op.aromatic) + abs(op.hetero) / PHI
+        )
+        raw_alpha = PHI - polarity / (PI * PHI) - abs(charge) / (PI * PI)
+        raw_beta = math.exp((volume - polarity + beta_topology) / PI)
+        raw_coil = math.exp((polarity - volume + abs(charge) / PHI) / PI)
+        return SsPropensity._norm(raw_alpha, raw_beta, raw_coil)
+
+    @staticmethod
     def _norm(a: float, b: float, c: float) -> "SsPropensity":
         s = a + b + c
         return SsPropensity(a / s, b / s, c / s)
@@ -213,6 +228,58 @@ def detect_regions(props: list[SsPropensity]) -> list[Region]:
     min_len = min_helix if run_kind == "H" else (min_strand if run_kind == "E" else 10**9)
     if run_kind != "C" and length >= min_len:
         out.append(Region(run_kind, run_start, n - 1))
+    return out
+
+
+def detect_regions_cooperative(props: list[SsPropensity]) -> list[Region]:
+    """Decode H/E/C states with a seed-derived backbone continuity factor."""
+    if not props:
+        return []
+    states = ("H", "E", "C")
+    continuity_log = math.log(PHI) / PHI
+    scores = [{state: 0.0 for state in states} for _ in props]
+    previous = [{state: "" for state in states} for _ in props]
+
+    def emission(prop: SsPropensity, state: str) -> float:
+        return {
+            "H": prop.p_alpha,
+            "E": prop.p_beta,
+            "C": prop.p_coil,
+        }[state]
+
+    for state in states:
+        scores[0][state] = math.log(emission(props[0], state))
+    for position in range(1, len(props)):
+        for state in states:
+            candidates = [
+                (
+                    scores[position - 1][prior]
+                    + (continuity_log if prior == state else 0.0),
+                    prior,
+                )
+                for prior in states
+            ]
+            best_score, best_prior = max(candidates)
+            scores[position][state] = best_score + math.log(emission(props[position], state))
+            previous[position][state] = best_prior
+
+    state = max(states, key=lambda candidate: scores[-1][candidate])
+    collapsed = [state]
+    for position in range(len(props) - 1, 0, -1):
+        state = previous[position][state]
+        collapsed.append(state)
+    collapsed.reverse()
+
+    min_helix = int(math.ceil(PI + 1.0 / (PI - 1.0)))
+    out: list[Region] = []
+    run_kind, run_start = collapsed[0], 0
+    for position in range(1, len(collapsed) + 1):
+        if position == len(collapsed) or collapsed[position] != run_kind:
+            minimum = min_helix if run_kind == "H" else (3 if run_kind == "E" else 10**9)
+            if run_kind != "C" and position - run_start >= minimum:
+                out.append(Region(run_kind, run_start, position - 1))
+            if position < len(collapsed):
+                run_kind, run_start = collapsed[position], position
     return out
 
 

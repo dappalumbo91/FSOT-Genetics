@@ -89,6 +89,29 @@ For `sep ≥ 3`: $\text{bonus} = \sqrt{p^\beta_i p^\beta_j}^2 \cdot \frac{1}{1 +
 ## F12 — Region detection (trinary triadic collapse)
 Collapse residue → {H, E, C} using gate `p_dominant > 1/e` (uniform prior + 1 nat). Minimum run length 3 = 3¹ (smallest trinary triad). Yields contiguous regions for F13.
 
+### F12c candidate — expanded topology + cooperative backbone
+
+Development-only candidate; production F15 remains on baseline F12 until a
+frozen external validation is recorded.
+
+The expanded trinary syntax contributes side-chain topology to beta propensity:
+
+$$
+x_\beta = \max(b,0)+|a|+|h|/\varphi,
+\qquad
+p_\beta^\mathrm{raw}=e^{(v-p+x_\beta)/\pi}
+$$
+
+where $b$, $a$, and $h$ are branch, aromatic, and heteroatom trits. A three-state
+Viterbi collapse models cooperative backbone hydrogen bonding by multiplying a
+same-state transition by $\varphi^{1/\varphi}$. The factor is seed-derived and
+not fitted per amino acid. Minimum helix and strand lengths remain 4 and 3.
+
+The disclosed development family used continuity exponents
+$\{1/\pi,1/\varphi,1,\varphi\}$; $1/\varphi$ maximized mean per-protein H/E/C
+macro recall while retaining nonzero beta recall on every beta-containing
+development protein.
+
 ## F13 — Region-pair contact (long-range coupling)
 For same-kind regions, different regions, `sep ≥ ⌈η_eff·D_biochem⌉ = ⌈0.467·13⌉ = 7`:
 
