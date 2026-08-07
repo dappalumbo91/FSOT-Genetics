@@ -317,6 +317,7 @@ def build_distogram(
     routing: str | None = None,
     *,
     collect_channels: bool = False,
+    cooperative_regions: bool = False,
 ) -> tuple[np.ndarray, list[SsPropensity], list[Region], str, dict]:
     """Build F15 proximity matrix under a named multi-scale D_eff routing.
 
@@ -332,7 +333,11 @@ def build_distogram(
     chars = [c for c in sequence.upper() if c in "ARNDCEQGHILKMFPSTWYV"]
     n = len(chars)
     props = [SsPropensity.from_amino_acid(c) for c in chars]
-    regions = detect_regions(props)
+    if cooperative_regions:
+        region_props = [SsPropensity.from_expanded_amino_acid(c) for c in chars]
+        regions = detect_regions_cooperative(region_props)
+    else:
+        regions = detect_regions(props)
     rmap = residue_to_region(n, regions)
 
     # Precompute trinary spin/charge for full-law pair scalars
@@ -453,6 +458,7 @@ def build_distogram(
     iface["full_law"] = True
     iface["smiles_chemistry"] = True
     iface["sequence"] = "".join(chars)
+    iface["region_model"] = "f12c_cooperative" if cooperative_regions else "f12_baseline"
     iface["chem_link_histogram"] = link_hist
     iface["domain_D_eff_histogram"] = domain_hist
     iface["error_log_fixes"] = [
@@ -893,6 +899,8 @@ def predict_ca_coords(
     sequence: str,
     rounds: int = 24,
     routing: str | None = None,
+    *,
+    cooperative_regions: bool = False,
 ) -> dict[str, Any]:
     """Full-law fold: S=K(T1+T2+T3) per pair + observer refine + F15/MDS.
 
@@ -908,7 +916,11 @@ def predict_ca_coords(
     if len(seq) > max_n:
         seq = seq[:max_n]
 
-    M, props, regions, chars, iface = build_distogram(seq, routing=routing)
+    M, props, regions, chars, iface = build_distogram(
+        seq,
+        routing=routing,
+        cooperative_regions=cooperative_regions,
+    )
     assert chars == seq
     D = proximity_to_distance(M, props=props, regions=regions, iface=iface)
     gate = int(iface["long_range_gate"])

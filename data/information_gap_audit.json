@@ -1,0 +1,112 @@
+{
+  "purpose": "Localize missing information before further FSOT tuning",
+  "production_fold_modified": false,
+  "samples": [
+    {
+      "pdb_id": "1UBQ",
+      "length": 76,
+      "oracle_mds_rmsd_A": 0.028016418753357357,
+      "oracle_mds_best_enantiomer_rmsd_A": 0.028016418753357357,
+      "predicted_mds_rmsd_A": 11.592926190206091,
+      "baseline_fold_rmsd_A": 11.178260800840947,
+      "cooperative_f12c_fold_rmsd_A": 11.69826850394053,
+      "predicted_distance_mae_A": 6.165424776503953,
+      "predicted_distance_pearson": 0.38815043243286407,
+      "negative_eigen_mass_fraction": 0.19976790587039664,
+      "mirror_stress_delta": 0.0,
+      "cooperative_region_edges": {
+        "candidate_edges": 9,
+        "native_edges": 4,
+        "precision": 0.4444444444444444,
+        "mean_edge_score": 0.5758780768207624
+      }
+    },
+    {
+      "pdb_id": "1CRN",
+      "length": 46,
+      "oracle_mds_rmsd_A": 0.040749169567759556,
+      "oracle_mds_best_enantiomer_rmsd_A": 0.040749169567759556,
+      "predicted_mds_rmsd_A": 9.179564161592223,
+      "baseline_fold_rmsd_A": 8.58994132311432,
+      "cooperative_f12c_fold_rmsd_A": 8.432344756993855,
+      "predicted_distance_mae_A": 5.2516053481765494,
+      "predicted_distance_pearson": 0.4163643625422234,
+      "negative_eigen_mass_fraction": 0.17145643312765818,
+      "mirror_stress_delta": 0.0,
+      "cooperative_region_edges": {
+        "candidate_edges": 3,
+        "native_edges": 1,
+        "precision": 0.3333333333333333,
+        "mean_edge_score": 0.27169713123328015
+      }
+    },
+    {
+      "pdb_id": "1VII",
+      "length": 36,
+      "oracle_mds_rmsd_A": 0.042052104786652326,
+      "oracle_mds_best_enantiomer_rmsd_A": 0.042052104786652326,
+      "predicted_mds_rmsd_A": 5.969174027493134,
+      "baseline_fold_rmsd_A": 5.699369978917372,
+      "cooperative_f12c_fold_rmsd_A": 5.667380227379325,
+      "predicted_distance_mae_A": 4.37512151945414,
+      "predicted_distance_pearson": 0.61720079041103,
+      "negative_eigen_mass_fraction": 0.19381668662034607,
+      "mirror_stress_delta": 0.0,
+      "cooperative_region_edges": {
+        "candidate_edges": 1,
+        "native_edges": 1,
+        "precision": 1.0,
+        "mean_edge_score": 0.06516411281783756
+      }
+    },
+    {
+      "pdb_id": "2GB1",
+      "length": 56,
+      "oracle_mds_rmsd_A": 0.026379308418544665,
+      "oracle_mds_best_enantiomer_rmsd_A": 0.026379308418544665,
+      "predicted_mds_rmsd_A": 10.443528678879064,
+      "baseline_fold_rmsd_A": 10.169333783620258,
+      "cooperative_f12c_fold_rmsd_A": 10.171934488098854,
+      "predicted_distance_mae_A": 5.287659508337511,
+      "predicted_distance_pearson": 0.2979016123370678,
+      "negative_eigen_mass_fraction": 0.21421859143021768,
+      "mirror_stress_delta": 0.0,
+      "cooperative_region_edges": {
+        "candidate_edges": 2,
+        "native_edges": 0,
+        "precision": 0.0,
+        "mean_edge_score": 0.17344687409950216
+      }
+    },
+    {
+      "pdb_id": "1ENH",
+      "length": 54,
+      "oracle_mds_rmsd_A": 10.589306091052189,
+      "oracle_mds_best_enantiomer_rmsd_A": 0.009215873300197236,
+      "predicted_mds_rmsd_A": 8.350558539428413,
+      "baseline_fold_rmsd_A": 8.28825848975758,
+      "cooperative_f12c_fold_rmsd_A": 10.750852742998966,
+      "predicted_distance_mae_A": 5.080659196728246,
+      "predicted_distance_pearson": 0.49939943192910535,
+      "negative_eigen_mass_fraction": 0.21573871108916365,
+      "mirror_stress_delta": 0.0,
+      "cooperative_region_edges": {
+        "candidate_edges": 3,
+        "native_edges": 2,
+        "precision": 0.6666666666666666,
+        "mean_edge_score": 0.21565709186715246
+      }
+    }
+  ],
+  "aggregate": {
+    "median_predicted_mds_rmsd_A": 9.179564161592223,
+    "median_baseline_fold_rmsd_A": 8.58994132311432,
+    "median_cooperative_f12c_fold_rmsd_A": 10.171934488098854,
+    "median_predicted_distance_mae_A": 5.2516053481765494,
+    "median_predicted_distance_pearson": 0.4163643625422234,
+    "median_negative_eigen_mass_fraction": 0.19976790587039664,
+    "total_region_candidate_edges": 18,
+    "total_region_native_edges": 8,
+    "all_mirror_stress_deltas_zero": true
+  }
+}
