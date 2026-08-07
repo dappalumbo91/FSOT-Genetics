@@ -128,7 +128,7 @@ def main() -> int:
         n = min(len(use_seq), len(exp_xyz))
         use_seq = use_seq[:n]
         exp_xyz = exp_xyz[:n]
-        M, _, regions, _ = build_distogram(use_seq)
+        M, _, regions, _, _iface = build_distogram(use_seq)
         D = exp_distance_matrix(exp_xyz)
         met = contact_metrics(M, D, n)
         print(

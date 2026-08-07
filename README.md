@@ -75,6 +75,27 @@ codon → PRIMARY/SECONDARY trits → AA → 7-trit opcode → spin/charge → F
 
 F01 alone collides 6 AA groups. Expanded opcodes are **20/20 unique** (still zero free params).
 
+### Runtime honesty
+
+| Layer | Status |
+|-------|--------|
+| Trinary **syntax / law** | Yes — opcodes + pair geometry |
+| Python H2H runner | **Floats emulating** the law (lab path) |
+| Zig / trit bare metal | Twin sources under `zig/` — **not** yet the H2H claim runtime |
+
+See `docs/RUNTIME_STACK.md`. Bare metal is the direction; Python is the current formula lab.
+
+### D_eff interfaces
+
+Protein fold is multi-scale. We route **named pin domains** only (no free D):
+
+```powershell
+python scripts/domain_interface.py
+python scripts/run_deff_interface_probe.py
+```
+
+Docs: `docs/DOMAIN_INTERFACE_FOLD.md`
+
 ---
 
 ## Cross-verification (required)

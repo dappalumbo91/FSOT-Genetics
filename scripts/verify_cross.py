@@ -79,7 +79,9 @@ def main() -> int:
 
     if pred.get("free_parameters") != 0:
         fail(f"free_parameters={pred.get('free_parameters')} (must be 0)")
-    ok(f"free_parameters=0  engine={pred.get('engine')}")
+    ok(f"free_parameters=0  engine={pred.get('engine')}  routing={pred.get('routing')}")
+    if pred.get("runtime"):
+        ok(f"runtime={pred.get('runtime')}  (trinary law emulated in Python floats)")
 
     xyz = pred["ca_coords"]
     if xyz.shape != (len(seq), 3):

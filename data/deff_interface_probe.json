@@ -1,0 +1,430 @@
+{
+  "generated_at": "2026-08-07T01:43:18.934852+00:00",
+  "doctrine": "named pin domains only; residual-at-interface; not free D search",
+  "free_parameters": 0,
+  "default_routing": "multi_scale_v9",
+  "domains": [
+    {
+      "name": "Atomic_Physics",
+      "D_eff": 7,
+      "hits": 0,
+      "delta_psi": 0.85,
+      "observed": true,
+      "S": 0.7358238658627416,
+      "abs_S": 0.7358238658627416
+    },
+    {
+      "name": "Physical_Chemistry",
+      "D_eff": 8,
+      "hits": 0,
+      "delta_psi": 0.5,
+      "observed": true,
+      "S": 0.33401327040170914,
+      "abs_S": 0.33401327040170914
+    },
+    {
+      "name": "Chemistry",
+      "D_eff": 8,
+      "hits": 0,
+      "delta_psi": 0.6,
+      "observed": true,
+      "S": 0.4078840642307454,
+      "abs_S": 0.4078840642307454
+    },
+    {
+      "name": "Molecular_Chemistry",
+      "D_eff": 9,
+      "hits": 0,
+      "delta_psi": 0.5,
+      "observed": true,
+      "S": 0.3345733830778106,
+      "abs_S": 0.3345733830778106
+    },
+    {
+      "name": "Materials_Science",
+      "D_eff": 10,
+      "hits": 0,
+      "delta_psi": 0.5,
+      "observed": true,
+      "S": 0.33525988073638374,
+      "abs_S": 0.33525988073638374
+    },
+    {
+      "name": "Biology",
+      "D_eff": 12,
+      "hits": 0,
+      "delta_psi": 0.08,
+      "observed": false,
+      "S": 0.4447250077038459,
+      "abs_S": 0.4447250077038459
+    },
+    {
+      "name": "Biochemistry",
+      "D_eff": 13,
+      "hits": 1,
+      "delta_psi": 0.35,
+      "observed": true,
+      "S": 0.3062212293865662,
+      "abs_S": 0.3062212293865662
+    },
+    {
+      "name": "Condensed_Matter",
+      "D_eff": 14,
+      "hits": 0,
+      "delta_psi": 0.5,
+      "observed": true,
+      "S": 0.3384059955797751,
+      "abs_S": 0.3384059955797751
+    },
+    {
+      "name": "Neuroscience",
+      "D_eff": 14,
+      "hits": 1,
+      "delta_psi": 0.7,
+      "observed": true,
+      "S": 0.5143619629083619,
+      "abs_S": 0.5143619629083619
+    }
+  ],
+  "results": [
+    {
+      "routing": "legacy_v7",
+      "notes": "Original protein derivations: chem+SS \u2192 molchem; region \u2192 biochem D=13",
+      "median_rmsd_A": 8.287219159497216,
+      "mean_rmsd_A": 8.428599069393282,
+      "n_proteins": 5,
+      "wall_s": 0.25689970000530593,
+      "per_protein": [
+        {
+          "pdb": "1UBQ.pdb",
+          "name": "Ubiquitin",
+          "n": 76,
+          "rmsd_A": 10.61776476566925,
+          "predict_ms": 86.99409998371266,
+          "gate": 7,
+          "D_eff_region": 13
+        },
+        {
+          "pdb": "1CRN.pdb",
+          "name": "Crambin",
+          "n": 46,
+          "rmsd_A": 7.417514905268107,
+          "predict_ms": 46.946699992986396,
+          "gate": 7,
+          "D_eff_region": 13
+        },
+        {
+          "pdb": "1VII.pdb",
+          "name": "Villin",
+          "n": 36,
+          "rmsd_A": 6.6740158976153925,
+          "predict_ms": 26.00220000022091,
+          "gate": 7,
+          "D_eff_region": 13
+        },
+        {
+          "pdb": "2GB1.pdb",
+          "name": "Protein G B1",
+          "n": 56,
+          "rmsd_A": 9.146480618916456,
+          "predict_ms": 46.73579998780042,
+          "gate": 7,
+          "D_eff_region": 13
+        },
+        {
+          "pdb": "1ENH.pdb",
+          "name": "Engrailed HD",
+          "n": 54,
+          "rmsd_A": 8.287219159497216,
+          "predict_ms": 46.014999999897555,
+          "gate": 7,
+          "D_eff_region": 13
+        }
+      ]
+    },
+    {
+      "routing": "multi_scale_v9",
+      "notes": "Residue chem D=9; H-bond SS D=8; tertiary D=13; packing D=14",
+      "median_rmsd_A": 9.408386154684132,
+      "mean_rmsd_A": 8.93875658225088,
+      "n_proteins": 5,
+      "wall_s": 0.23526389998733066,
+      "per_protein": [
+        {
+          "pdb": "1UBQ.pdb",
+          "name": "Ubiquitin",
+          "n": 76,
+          "rmsd_A": 10.721188155242116,
+          "predict_ms": 80.20230001420714,
+          "gate": 7,
+          "D_eff_region": 13
+        },
+        {
+          "pdb": "1CRN.pdb",
+          "name": "Crambin",
+          "n": 46,
+          "rmsd_A": 7.672173668588082,
+          "predict_ms": 34.222999995108694,
+          "gate": 7,
+          "D_eff_region": 13
+        },
+        {
+          "pdb": "1VII.pdb",
+          "name": "Villin",
+          "n": 36,
+          "rmsd_A": 6.683741261052782,
+          "predict_ms": 24.800100014545023,
+          "gate": 7,
+          "D_eff_region": 13
+        },
+        {
+          "pdb": "2GB1.pdb",
+          "name": "Protein G B1",
+          "n": 56,
+          "rmsd_A": 9.408386154684132,
+          "predict_ms": 47.92589999851771,
+          "gate": 7,
+          "D_eff_region": 13
+        },
+        {
+          "pdb": "1ENH.pdb",
+          "name": "Engrailed HD",
+          "n": 54,
+          "rmsd_A": 10.20829367168729,
+          "predict_ms": 44.61750001064502,
+          "gate": 7,
+          "D_eff_region": 13
+        }
+      ]
+    },
+    {
+      "routing": "polymer_physchem",
+      "notes": "Backbone/polymer-leaning interfaces; packing condensed",
+      "median_rmsd_A": 9.147131622581599,
+      "mean_rmsd_A": 8.72504230109964,
+      "n_proteins": 5,
+      "wall_s": 0.23149020000710152,
+      "per_protein": [
+        {
+          "pdb": "1UBQ.pdb",
+          "name": "Ubiquitin",
+          "n": 76,
+          "rmsd_A": 10.681318611843531,
+          "predict_ms": 78.06739999796264,
+          "gate": 5,
+          "D_eff_region": 10
+        },
+        {
+          "pdb": "1CRN.pdb",
+          "name": "Crambin",
+          "n": 46,
+          "rmsd_A": 7.3349705835001995,
+          "predict_ms": 33.95259997341782,
+          "gate": 5,
+          "D_eff_region": 10
+        },
+        {
+          "pdb": "1VII.pdb",
+          "name": "Villin",
+          "n": 36,
+          "rmsd_A": 6.3733856533912725,
+          "predict_ms": 24.39599999343045,
+          "gate": 5,
+          "D_eff_region": 10
+        },
+        {
+          "pdb": "2GB1.pdb",
+          "name": "Protein G B1",
+          "n": 56,
+          "rmsd_A": 9.147131622581599,
+          "predict_ms": 46.7130999895744,
+          "gate": 5,
+          "D_eff_region": 10
+        },
+        {
+          "pdb": "1ENH.pdb",
+          "name": "Engrailed HD",
+          "n": 54,
+          "rmsd_A": 10.088405034181601,
+          "predict_ms": 44.93260002345778,
+          "gate": 5,
+          "D_eff_region": 10
+        }
+      ]
+    },
+    {
+      "routing": "bio_context",
+      "notes": "Region gate at Biology D=12 (cellular context); packing biochem",
+      "median_rmsd_A": 9.757763884338498,
+      "mean_rmsd_A": 8.868835516385138,
+      "n_proteins": 5,
+      "wall_s": 0.2298793000227306,
+      "per_protein": [
+        {
+          "pdb": "1UBQ.pdb",
+          "name": "Ubiquitin",
+          "n": 76,
+          "rmsd_A": 10.737655485434594,
+          "predict_ms": 77.57459999993443,
+          "gate": 6,
+          "D_eff_region": 12
+        },
+        {
+          "pdb": "1CRN.pdb",
+          "name": "Crambin",
+          "n": 46,
+          "rmsd_A": 7.346038000847394,
+          "predict_ms": 33.975500002270564,
+          "gate": 6,
+          "D_eff_region": 12
+        },
+        {
+          "pdb": "1VII.pdb",
+          "name": "Villin",
+          "n": 36,
+          "rmsd_A": 6.470533352770481,
+          "predict_ms": 23.67470000172034,
+          "gate": 6,
+          "D_eff_region": 12
+        },
+        {
+          "pdb": "2GB1.pdb",
+          "name": "Protein G B1",
+          "n": 56,
+          "rmsd_A": 9.757763884338498,
+          "predict_ms": 47.18010002397932,
+          "gate": 6,
+          "D_eff_region": 12
+        },
+        {
+          "pdb": "1ENH.pdb",
+          "name": "Engrailed HD",
+          "n": 54,
+          "rmsd_A": 10.032186858534732,
+          "predict_ms": 44.03230000752956,
+          "gate": 6,
+          "D_eff_region": 12
+        }
+      ]
+    },
+    {
+      "routing": "packing_dense",
+      "notes": "Tertiary+packing both Condensed_Matter D=14",
+      "median_rmsd_A": 9.377307387947031,
+      "mean_rmsd_A": 8.886847520894298,
+      "n_proteins": 5,
+      "wall_s": 0.2311119000078179,
+      "per_protein": [
+        {
+          "pdb": "1UBQ.pdb",
+          "name": "Ubiquitin",
+          "n": 76,
+          "rmsd_A": 10.725992067285132,
+          "predict_ms": 76.21869997819886,
+          "gate": 7,
+          "D_eff_region": 14
+        },
+        {
+          "pdb": "1CRN.pdb",
+          "name": "Crambin",
+          "n": 46,
+          "rmsd_A": 7.405077836920373,
+          "predict_ms": 33.99379999609664,
+          "gate": 7,
+          "D_eff_region": 14
+        },
+        {
+          "pdb": "1VII.pdb",
+          "name": "Villin",
+          "n": 36,
+          "rmsd_A": 6.6880237409004275,
+          "predict_ms": 25.10270001948811,
+          "gate": 7,
+          "D_eff_region": 14
+        },
+        {
+          "pdb": "2GB1.pdb",
+          "name": "Protein G B1",
+          "n": 56,
+          "rmsd_A": 9.377307387947031,
+          "predict_ms": 47.738000022945926,
+          "gate": 7,
+          "D_eff_region": 14
+        },
+        {
+          "pdb": "1ENH.pdb",
+          "name": "Engrailed HD",
+          "n": 54,
+          "rmsd_A": 10.237836571418526,
+          "predict_ms": 44.71180000109598,
+          "gate": 7,
+          "D_eff_region": 14
+        }
+      ]
+    },
+    {
+      "routing": "atomic_to_biochem",
+      "notes": "Local bond-scale chem; global biochem regions",
+      "median_rmsd_A": 8.843692202922142,
+      "mean_rmsd_A": 8.773119320281243,
+      "n_proteins": 5,
+      "wall_s": 0.23192629998084158,
+      "per_protein": [
+        {
+          "pdb": "1UBQ.pdb",
+          "name": "Ubiquitin",
+          "n": 76,
+          "rmsd_A": 10.510183981369144,
+          "predict_ms": 77.51900001312606,
+          "gate": 7,
+          "D_eff_region": 13
+        },
+        {
+          "pdb": "1CRN.pdb",
+          "name": "Crambin",
+          "n": 46,
+          "rmsd_A": 7.681182413596707,
+          "predict_ms": 35.02700000535697,
+          "gate": 7,
+          "D_eff_region": 13
+        },
+        {
+          "pdb": "1VII.pdb",
+          "name": "Villin",
+          "n": 36,
+          "rmsd_A": 7.308107524925258,
+          "predict_ms": 23.72619998641312,
+          "gate": 7,
+          "D_eff_region": 13
+        },
+        {
+          "pdb": "2GB1.pdb",
+          "name": "Protein G B1",
+          "n": 56,
+          "rmsd_A": 9.522430478592964,
+          "predict_ms": 47.25280002458021,
+          "gate": 7,
+          "D_eff_region": 13
+        },
+        {
+          "pdb": "1ENH.pdb",
+          "name": "Engrailed HD",
+          "n": 54,
+          "rmsd_A": 8.843692202922142,
+          "predict_ms": 44.954200013307855,
+          "gate": 7,
+          "D_eff_region": 13
+        }
+      ]
+    }
+  ],
+  "ranked_by_median_rmsd": [
+    "legacy_v7",
+    "atomic_to_biochem",
+    "polymer_physchem",
+    "packing_dense",
+    "multi_scale_v9",
+    "bio_context"
+  ],
+  "literature_note": "Folding free-energy landscapes are often low-dimensional in reaction coordinates (Onuchic/Wolynes/Dill) while configuration space is high-D. FSOT D_eff is the domain interface in the 35-domain table \u2014 not PCA dim."
+}

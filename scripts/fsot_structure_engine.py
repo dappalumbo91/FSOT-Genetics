@@ -41,19 +41,25 @@ P_NEW = float(fc.P_NEW)
 C_EFF = float(fc.C_EFF)
 ETA_EFF = float(fc.ETA_EFF)
 
-# Domain scalars — Biochemistry D=13, Molecular_Chemistry D=9 (protein derivations)
+# Legacy single-interface scalars (kept for compare / docs)
 S_BIOCHEM = abs(float(domain_scalar("Biochemistry")))
 try:
     S_MOLCHEM = abs(float(domain_scalar("Molecular_Chemistry")))
 except Exception:
-    # fallback name if domain table differs
     S_MOLCHEM = abs(float(domain_scalar("Physical_Chemistry")))
 
 CHEM_AMP = S_MOLCHEM * P_NEW
 REGION_AMP = S_BIOCHEM * P_NEW * C_EFF
-LONG_RANGE_GATE = int(math.ceil(ETA_EFF * 13.0))  # = 7
+LONG_RANGE_GATE = int(math.ceil(ETA_EFF * 13.0))  # legacy = 7
 
 CA_CA = 3.8  # Å crystallographic virtual bond (geometry constant, not fitted weight)
+
+# Multi-scale D_eff routing (named pin domains only — see domain_interface.py)
+from domain_interface import DEFAULT_ROUTING, get_routing  # noqa: E402
+
+
+def _iface(routing: str | None = None) -> dict:
+    return get_routing(routing or DEFAULT_ROUTING)
 
 
 # ── F01 trinary + expanded syntax (trinary_syntax / neuron-zig) ───────────
@@ -235,14 +241,22 @@ def beta_register_multiplier(
 
 
 # ── F15 distogram ─────────────────────────────────────────────────────────
-def build_distogram(sequence: str) -> tuple[np.ndarray, list[SsPropensity], list[Region], str]:
-    chars = [c for c in sequence.upper() if c.isalpha() and trinary_phase(c) != (0.0, 0.0, 0.0) or c in "ARNDCEQGHILKMFPSTWYV"]
+def build_distogram(
+    sequence: str,
+    routing: str | None = None,
+) -> tuple[np.ndarray, list[SsPropensity], list[Region], str, dict]:
+    """Build F15 proximity matrix under a named multi-scale D_eff routing."""
+    iface = _iface(routing)
+    chem_amp = float(iface["chem_amp"])
+    ss_amp = float(iface["ss_amp"])
+    region_amp = float(iface["region_amp"])
+    gate = int(iface["long_range_gate"])
+
     chars = [c for c in sequence.upper() if c in "ARNDCEQGHILKMFPSTWYV"]
     n = len(chars)
     props = [SsPropensity.from_amino_acid(c) for c in chars]
     regions = detect_regions(props)
     rmap = residue_to_region(n, regions)
-    ss = "".join(p.dominant() for p in props)
 
     M = np.zeros((n, n), dtype=np.float64)
     for i in range(n):
@@ -251,19 +265,19 @@ def build_distogram(sequence: str) -> tuple[np.ndarray, list[SsPropensity], list
                 continue
             sep = abs(i - j)
             s = float(sep)
-            # F07 backbone
+            # F07 backbone — seed only (no domain dial)
             bb = 1.0 / (s ** (1.0 / PI))
-            # F08–F09 chemistry (expanded trinary syntax + Zig pair law)
+            # F08–F09 chemistry @ chem domain
             interaction = fsot_chemical_interaction(chars[i], chars[j], sep=sep)
             chem_env = s / (s + PI * E)
-            chemistry = interaction * chem_env * CHEM_AMP
-            # F10 F11
-            helix = helix_periodicity_bonus(props[i], props[j], sep)
-            sheet = sheet_pair_bonus(props[i], props[j], sep)
-            # F13 region pair
+            chemistry = interaction * chem_env * chem_amp
+            # F10 F11 — secondary / H-bond scale domain
+            helix = helix_periodicity_bonus(props[i], props[j], sep) * (ss_amp / max(chem_amp, 1e-12))
+            sheet = sheet_pair_bonus(props[i], props[j], sep) * (ss_amp / max(chem_amp, 1e-12))
+            # F13 region pair @ region domain D_eff gate
             region_pair = 0.0
             ri, rj = rmap[i], rmap[j]
-            if ri is not None and rj is not None and ri != rj and sep >= LONG_RANGE_GATE:
+            if ri is not None and rj is not None and ri != rj and sep >= gate:
                 r_i, r_j = regions[ri], regions[rj]
                 if r_i.kind == r_j.kind and r_i.kind != "C":
                     if r_i.kind == "H":
@@ -275,9 +289,9 @@ def build_distogram(sequence: str) -> tuple[np.ndarray, list[SsPropensity], list
                             i, j, r_i.start, r_i.end, r_j.start, r_j.end
                         )
                     joint = math.sqrt(pi_v * pj_v)
-                    region_pair = joint * REGION_AMP * reg_mult
+                    region_pair = joint * region_amp * reg_mult
             M[i, j] = bb + chemistry + helix + sheet + region_pair
-    return M, props, regions, "".join(chars)
+    return M, props, regions, "".join(chars), iface
 
 
 # geometric_scale_dist imported from trinary_syntax (Zig twin)
@@ -287,6 +301,7 @@ def proximity_to_distance(
     M: np.ndarray,
     props: list[SsPropensity] | None = None,
     regions: list[Region] | None = None,
+    iface: dict | None = None,
 ) -> np.ndarray:
     """F15 proximity → Å with hard top-L contact caps (seed scales only).
 
@@ -295,8 +310,15 @@ def proximity_to_distance(
       2) F07 inverse: d ~ CA_CA / M  blended with collapsed polymer s^{1/π}
       3) Top-L and top-2L contact caps at πe/φ and πe (CASP-style 8Å class)
       4) F10 helix i,i+{3,4,7} geometric distances when both α-strong
+      5) Packing domain tightens top contacts when packing |S| > region |S|
     """
     n = M.shape[0]
+    gate = int((iface or {}).get("long_range_gate", LONG_RANGE_GATE))
+    pack_amp = float((iface or {}).get("packing_amp", 0.0))
+    reg_amp = float((iface or {}).get("region_amp", REGION_AMP))
+    # packing pull scale: φ-lawful ratio of amplitudes (not a free dial)
+    pack_boost = 1.0 + (pack_amp / max(reg_amp, 1e-12)) / PHI
+
     D = np.zeros((n, n), dtype=np.float64)
     contact_scale = PI * E  # F08 ~8.54 Å — standard contact cutoff scale
     d_hard = contact_scale * PHI * PHI
@@ -330,17 +352,16 @@ def proximity_to_distance(
     L = n
     lr_pairs = []
     for i in range(n):
-        for j in range(i + LONG_RANGE_GATE, n):
+        for j in range(i + gate, n):
             lr_pairs.append((M[i, j], i, j))
     lr_pairs.sort(reverse=True)
-    # top L/2 → tight contact πe/φ ≈ 5.3 Å
-    # top L → contact scale πe ≈ 8.5 Å
-    tight = contact_scale / PHI
+    # top L/2 → tight contact; packing domain can tighten further by pack_boost
+    tight = (contact_scale / PHI) / pack_boost
     for rank, (m, i, j) in enumerate(lr_pairs[: max(L, 1)]):
         if rank < max(L // 2, 1):
             D[i, j] = D[j, i] = min(D[i, j], tight)
         else:
-            D[i, j] = D[j, i] = min(D[i, j], contact_scale)
+            D[i, j] = D[j, i] = min(D[i, j], contact_scale / math.sqrt(pack_boost))
 
     # Region–region: same-kind regions get median contact pull
     if regions:
@@ -355,7 +376,7 @@ def proximity_to_distance(
                         if (i - ra.start) % 7 not in (0, 3):
                             continue
                     for j in range(rb.start, rb.end + 1):
-                        if abs(i - j) < LONG_RANGE_GATE:
+                        if abs(i - j) < gate:
                             continue
                         if ra.kind == "H" and (j - rb.start) % 7 not in (0, 3):
                             continue
@@ -456,21 +477,25 @@ def initial_from_regions(seq: str, props: list[SsPropensity], regions: list[Regi
     return X
 
 
-def _sparse_pairs(n: int, M: np.ndarray, local: int = 12) -> list[tuple[int, int]]:
+def _sparse_pairs(
+    n: int,
+    M: np.ndarray,
+    local: int = 12,
+    gate: int | None = None,
+) -> list[tuple[int, int]]:
     """Local band + top-2L long-range only — O(n·local + L), not O(n²) grind."""
+    g = int(gate if gate is not None else LONG_RANGE_GATE)
     pairs: list[tuple[int, int]] = []
     for i in range(n):
         for j in range(i + 1, min(n, i + local + 1)):
             pairs.append((i, j))
     L = n
     # Vectorized long-range rank: take top contacts without full nested Python sort of all pairs
-    if n > LONG_RANGE_GATE + 1:
-        # Sample upper triangle long-range scores via flat index
-        ii, jj = np.triu_indices(n, k=LONG_RANGE_GATE)
+    if n > g + 1:
+        ii, jj = np.triu_indices(n, k=g)
         scores = M[ii, jj]
         k = min(2 * L, scores.size)
         if k > 0:
-            # argpartition is O(n) vs full sort O(n log n) on ~n²/2
             if scores.size > k:
                 top_idx = np.argpartition(scores, -k)[-k:]
             else:
@@ -554,11 +579,17 @@ def clean_sequence(seq: str) -> str:
     return "".join(c for c in seq.upper() if c in "ARNDCEQGHILKMFPSTWYV")
 
 
-def predict_ca_coords(sequence: str, rounds: int = 24) -> dict[str, Any]:
+def predict_ca_coords(
+    sequence: str,
+    rounds: int = 24,
+    routing: str | None = None,
+) -> dict[str, Any]:
     """Fast mathematical fold: F15 matrix → D → MDS → sparse polish.
 
     Design goal: seconds per chain on a home PC, not minutes — closed-form
     MDS is the main embed; sparse refine only polishes.
+
+    routing: named multi-scale D_eff interface (default multi_scale_v9).
     """
     import time as _time
 
@@ -570,10 +601,11 @@ def predict_ca_coords(sequence: str, rounds: int = 24) -> dict[str, Any]:
     if len(seq) > max_n:
         seq = seq[:max_n]
 
-    M, props, regions, chars = build_distogram(seq)
+    M, props, regions, chars, iface = build_distogram(seq, routing=routing)
     assert chars == seq
-    D = proximity_to_distance(M, props=props, regions=regions)
-    pairs = _sparse_pairs(len(seq), M, local=int(PI * E) + 3)
+    D = proximity_to_distance(M, props=props, regions=regions, iface=iface)
+    gate = int(iface["long_range_gate"])
+    pairs = _sparse_pairs(len(seq), M, local=int(PI * E) + 3, gate=gate)
     n_rounds = max(8, min(int(rounds), 32))
 
     # Primary: classical MDS (closed-form spectral embed) — the mathematical core
@@ -603,19 +635,32 @@ def predict_ca_coords(sequence: str, rounds: int = 24) -> dict[str, Any]:
         "ca_coords": X,
         "S_biochem": S_BIOCHEM,
         "S_molchem": S_MOLCHEM,
-        "chem_amp": CHEM_AMP,
-        "region_amp": REGION_AMP,
-        "long_range_gate": LONG_RANGE_GATE,
+        "chem_amp": iface["chem_amp"],
+        "ss_amp": iface["ss_amp"],
+        "region_amp": iface["region_amp"],
+        "packing_amp": iface["packing_amp"],
+        "long_range_gate": gate,
+        "routing": iface["routing"],
+        "routing_notes": iface["notes"],
+        "domain_chem": iface["chem"]["name"],
+        "domain_ss": iface["ss"]["name"],
+        "domain_region": iface["region"]["name"],
+        "domain_packing": iface["packing"]["name"],
+        "D_eff_chem": iface["chem"]["D_eff"],
+        "D_eff_ss": iface["ss"]["D_eff"],
+        "D_eff_region": iface["region"]["D_eff"],
+        "D_eff_packing": iface["packing"]["D_eff"],
         "embed_start": best_name,
         "embed_stress": st,
         "predict_ms": elapsed_ms,
         "n_sparse_pairs": len(pairs),
         "refine_rounds": n_rounds,
-        "engine": "fsot_protein_F01_F15_trinary_v8",
+        "engine": "fsot_protein_F01_F15_deff_v9",
         "free_parameters": 0,
+        "runtime": "python_float_emulated_trinary",
         "authority": (
-            "F01–F15 + expanded 6-trit AA syntax + Zig fsotPairWeight "
-            "(φ·dist^{-1/π}); MDS + sparse polish — formula branch, not neural net"
+            "F01–F15 + 7-trit AA syntax + Zig pair law + multi-scale D_eff "
+            "routing (named pin domains only); MDS + sparse polish — not neural net"
         ),
         "trinary_expansion": "c,p,v,aromatic,branch,hetero,detail",
     }

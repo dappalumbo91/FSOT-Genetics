@@ -1,0 +1,363 @@
+{
+  "domains": [
+    {
+      "name": "Atomic_Physics",
+      "D_eff": 7,
+      "hits": 0,
+      "delta_psi": 0.85,
+      "observed": true,
+      "S": 0.7358238658627416,
+      "abs_S": 0.7358238658627416
+    },
+    {
+      "name": "Physical_Chemistry",
+      "D_eff": 8,
+      "hits": 0,
+      "delta_psi": 0.5,
+      "observed": true,
+      "S": 0.33401327040170914,
+      "abs_S": 0.33401327040170914
+    },
+    {
+      "name": "Chemistry",
+      "D_eff": 8,
+      "hits": 0,
+      "delta_psi": 0.6,
+      "observed": true,
+      "S": 0.4078840642307454,
+      "abs_S": 0.4078840642307454
+    },
+    {
+      "name": "Molecular_Chemistry",
+      "D_eff": 9,
+      "hits": 0,
+      "delta_psi": 0.5,
+      "observed": true,
+      "S": 0.3345733830778106,
+      "abs_S": 0.3345733830778106
+    },
+    {
+      "name": "Materials_Science",
+      "D_eff": 10,
+      "hits": 0,
+      "delta_psi": 0.5,
+      "observed": true,
+      "S": 0.33525988073638374,
+      "abs_S": 0.33525988073638374
+    },
+    {
+      "name": "Biology",
+      "D_eff": 12,
+      "hits": 0,
+      "delta_psi": 0.08,
+      "observed": false,
+      "S": 0.4447250077038459,
+      "abs_S": 0.4447250077038459
+    },
+    {
+      "name": "Biochemistry",
+      "D_eff": 13,
+      "hits": 1,
+      "delta_psi": 0.35,
+      "observed": true,
+      "S": 0.3062212293865662,
+      "abs_S": 0.3062212293865662
+    },
+    {
+      "name": "Condensed_Matter",
+      "D_eff": 14,
+      "hits": 0,
+      "delta_psi": 0.5,
+      "observed": true,
+      "S": 0.3384059955797751,
+      "abs_S": 0.3384059955797751
+    },
+    {
+      "name": "Neuroscience",
+      "D_eff": 14,
+      "hits": 1,
+      "delta_psi": 0.7,
+      "observed": true,
+      "S": 0.5143619629083619,
+      "abs_S": 0.5143619629083619
+    }
+  ],
+  "routings": {
+    "legacy_v7": {
+      "routing": "legacy_v7",
+      "notes": "Original protein derivations: chem+SS \u2192 molchem; region \u2192 biochem D=13",
+      "chem": {
+        "name": "Molecular_Chemistry",
+        "D_eff": 9,
+        "hits": 0,
+        "delta_psi": 0.5,
+        "observed": true,
+        "S": 0.3345733830778106,
+        "abs_S": 0.3345733830778106
+      },
+      "ss": {
+        "name": "Molecular_Chemistry",
+        "D_eff": 9,
+        "hits": 0,
+        "delta_psi": 0.5,
+        "observed": true,
+        "S": 0.3345733830778106,
+        "abs_S": 0.3345733830778106
+      },
+      "region": {
+        "name": "Biochemistry",
+        "D_eff": 13,
+        "hits": 1,
+        "delta_psi": 0.35,
+        "observed": true,
+        "S": 0.3062212293865662,
+        "abs_S": 0.3062212293865662
+      },
+      "packing": {
+        "name": "Biochemistry",
+        "D_eff": 13,
+        "hits": 1,
+        "delta_psi": 0.35,
+        "observed": true,
+        "S": 0.3062212293865662,
+        "abs_S": 0.3062212293865662
+      },
+      "chem_amp": 0.10047314865157485,
+      "ss_amp": 0.10047314865157485,
+      "region_amp": 0.0880692720618336,
+      "packing_amp": 0.0919589323495859,
+      "long_range_gate": 7,
+      "free_parameters": 0
+    },
+    "multi_scale_v9": {
+      "routing": "multi_scale_v9",
+      "notes": "Residue chem D=9; H-bond SS D=8; tertiary D=13; packing D=14",
+      "chem": {
+        "name": "Molecular_Chemistry",
+        "D_eff": 9,
+        "hits": 0,
+        "delta_psi": 0.5,
+        "observed": true,
+        "S": 0.3345733830778106,
+        "abs_S": 0.3345733830778106
+      },
+      "ss": {
+        "name": "Chemistry",
+        "D_eff": 8,
+        "hits": 0,
+        "delta_psi": 0.6,
+        "observed": true,
+        "S": 0.4078840642307454,
+        "abs_S": 0.4078840642307454
+      },
+      "region": {
+        "name": "Biochemistry",
+        "D_eff": 13,
+        "hits": 1,
+        "delta_psi": 0.35,
+        "observed": true,
+        "S": 0.3062212293865662,
+        "abs_S": 0.3062212293865662
+      },
+      "packing": {
+        "name": "Condensed_Matter",
+        "D_eff": 14,
+        "hits": 0,
+        "delta_psi": 0.5,
+        "observed": true,
+        "S": 0.3384059955797751,
+        "abs_S": 0.3384059955797751
+      },
+      "chem_amp": 0.10047314865157485,
+      "ss_amp": 0.12248851310605688,
+      "region_amp": 0.0880692720618336,
+      "packing_amp": 0.10162409091151012,
+      "long_range_gate": 7,
+      "free_parameters": 0
+    },
+    "polymer_physchem": {
+      "routing": "polymer_physchem",
+      "notes": "Backbone/polymer-leaning interfaces; packing condensed",
+      "chem": {
+        "name": "Physical_Chemistry",
+        "D_eff": 8,
+        "hits": 0,
+        "delta_psi": 0.5,
+        "observed": true,
+        "S": 0.33401327040170914,
+        "abs_S": 0.33401327040170914
+      },
+      "ss": {
+        "name": "Chemistry",
+        "D_eff": 8,
+        "hits": 0,
+        "delta_psi": 0.6,
+        "observed": true,
+        "S": 0.4078840642307454,
+        "abs_S": 0.4078840642307454
+      },
+      "region": {
+        "name": "Materials_Science",
+        "D_eff": 10,
+        "hits": 0,
+        "delta_psi": 0.5,
+        "observed": true,
+        "S": 0.33525988073638374,
+        "abs_S": 0.33525988073638374
+      },
+      "packing": {
+        "name": "Condensed_Matter",
+        "D_eff": 14,
+        "hits": 0,
+        "delta_psi": 0.5,
+        "observed": true,
+        "S": 0.3384059955797751,
+        "abs_S": 0.3384059955797751
+      },
+      "chem_amp": 0.10030494553974965,
+      "ss_amp": 0.12248851310605688,
+      "region_amp": 0.09642079259866547,
+      "packing_amp": 0.10162409091151012,
+      "long_range_gate": 5,
+      "free_parameters": 0
+    },
+    "bio_context": {
+      "routing": "bio_context",
+      "notes": "Region gate at Biology D=12 (cellular context); packing biochem",
+      "chem": {
+        "name": "Molecular_Chemistry",
+        "D_eff": 9,
+        "hits": 0,
+        "delta_psi": 0.5,
+        "observed": true,
+        "S": 0.3345733830778106,
+        "abs_S": 0.3345733830778106
+      },
+      "ss": {
+        "name": "Chemistry",
+        "D_eff": 8,
+        "hits": 0,
+        "delta_psi": 0.6,
+        "observed": true,
+        "S": 0.4078840642307454,
+        "abs_S": 0.4078840642307454
+      },
+      "region": {
+        "name": "Biology",
+        "D_eff": 12,
+        "hits": 0,
+        "delta_psi": 0.08,
+        "observed": false,
+        "S": 0.4447250077038459,
+        "abs_S": 0.4447250077038459
+      },
+      "packing": {
+        "name": "Biochemistry",
+        "D_eff": 13,
+        "hits": 1,
+        "delta_psi": 0.35,
+        "observed": true,
+        "S": 0.3062212293865662,
+        "abs_S": 0.3062212293865662
+      },
+      "chem_amp": 0.10047314865157485,
+      "ss_amp": 0.12248851310605688,
+      "region_amp": 0.12790297973341383,
+      "packing_amp": 0.0919589323495859,
+      "long_range_gate": 6,
+      "free_parameters": 0
+    },
+    "packing_dense": {
+      "routing": "packing_dense",
+      "notes": "Tertiary+packing both Condensed_Matter D=14",
+      "chem": {
+        "name": "Molecular_Chemistry",
+        "D_eff": 9,
+        "hits": 0,
+        "delta_psi": 0.5,
+        "observed": true,
+        "S": 0.3345733830778106,
+        "abs_S": 0.3345733830778106
+      },
+      "ss": {
+        "name": "Chemistry",
+        "D_eff": 8,
+        "hits": 0,
+        "delta_psi": 0.6,
+        "observed": true,
+        "S": 0.4078840642307454,
+        "abs_S": 0.4078840642307454
+      },
+      "region": {
+        "name": "Condensed_Matter",
+        "D_eff": 14,
+        "hits": 0,
+        "delta_psi": 0.5,
+        "observed": true,
+        "S": 0.3384059955797751,
+        "abs_S": 0.3384059955797751
+      },
+      "packing": {
+        "name": "Condensed_Matter",
+        "D_eff": 14,
+        "hits": 0,
+        "delta_psi": 0.5,
+        "observed": true,
+        "S": 0.3384059955797751,
+        "abs_S": 0.3384059955797751
+      },
+      "chem_amp": 0.10047314865157485,
+      "ss_amp": 0.12248851310605688,
+      "region_amp": 0.0973256157052654,
+      "packing_amp": 0.10162409091151012,
+      "long_range_gate": 7,
+      "free_parameters": 0
+    },
+    "atomic_to_biochem": {
+      "routing": "atomic_to_biochem",
+      "notes": "Local bond-scale chem; global biochem regions",
+      "chem": {
+        "name": "Atomic_Physics",
+        "D_eff": 7,
+        "hits": 0,
+        "delta_psi": 0.85,
+        "observed": true,
+        "S": 0.7358238658627416,
+        "abs_S": 0.7358238658627416
+      },
+      "ss": {
+        "name": "Physical_Chemistry",
+        "D_eff": 8,
+        "hits": 0,
+        "delta_psi": 0.5,
+        "observed": true,
+        "S": 0.33401327040170914,
+        "abs_S": 0.33401327040170914
+      },
+      "region": {
+        "name": "Biochemistry",
+        "D_eff": 13,
+        "hits": 1,
+        "delta_psi": 0.35,
+        "observed": true,
+        "S": 0.3062212293865662,
+        "abs_S": 0.3062212293865662
+      },
+      "packing": {
+        "name": "Condensed_Matter",
+        "D_eff": 14,
+        "hits": 0,
+        "delta_psi": 0.5,
+        "observed": true,
+        "S": 0.3384059955797751,
+        "abs_S": 0.3384059955797751
+      },
+      "chem_amp": 0.22096958214697532,
+      "ss_amp": 0.10030494553974965,
+      "region_amp": 0.0880692720618336,
+      "packing_amp": 0.10162409091151012,
+      "long_range_gate": 7,
+      "free_parameters": 0
+    }
+  }
+}

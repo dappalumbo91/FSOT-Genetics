@@ -243,6 +243,12 @@ def main() -> int:
     ap.add_argument("--max-proteins", type=int, default=8)
     ap.add_argument("--rounds", type=int, default=24, help="sparse polish rounds (capped at 32)")
     ap.add_argument("--sleep", type=float, default=0.2)
+    ap.add_argument(
+        "--routing",
+        type=str,
+        default=None,
+        help="D_eff interface routing name (default multi_scale_v9); see domain_interface.py",
+    )
     args = ap.parse_args()
 
     store = _store()
@@ -274,7 +280,7 @@ def main() -> int:
 
         # FSOT prediction (formula branch — timed)
         try:
-            pred = predict_ca_coords(seq, rounds=args.rounds)
+            pred = predict_ca_coords(seq, rounds=args.rounds, routing=args.routing)
             fsot_xyz = pred["ca_coords"]
             fsot_seq = pred["sequence"]
             write_ca_pdb(pred_dir / f"FSOT_{acc}.pdb", fsot_seq, fsot_xyz, name=acc)
@@ -346,6 +352,11 @@ def main() -> int:
             "fsot_embed_start": pred.get("embed_start"),
             "S_biochem": pred.get("S_biochem"),
             "S_molchem": pred.get("S_molchem"),
+            "routing": pred.get("routing"),
+            "D_eff_region": pred.get("D_eff_region"),
+            "D_eff_chem": pred.get("D_eff_chem"),
+            "long_range_gate": pred.get("long_range_gate"),
+            "runtime": pred.get("runtime"),
             "engine": pred["engine"],
             "free_parameters": 0,
             "authority": pred.get("authority"),
