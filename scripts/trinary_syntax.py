@@ -366,28 +366,29 @@ def aa_pair_weight(aa1: str, aa2: str, dist: int) -> float:
 
 
 def expanded_chemical_interaction(aa1: str, aa2: str, sep: int = 1) -> float:
-    """F03–F06 chemistry + Zig pair geometry (higher precision path).
+    """F03–F06 + SMILES Lab AA chemistry (§36 hydrophobicity, §22 pKa/charge).
 
-    Combines classic F03–F06 terms with fsotPairWeight scaled by 1/(πe)
-    so magnitude stays formula-native (not a free fit weight).
+    SMILES authority: formulas/smiles_protein_chemistry.json (from 1470-record lab).
+    Falls back to trinary-only terms if SMILES bridge unavailable.
     """
+    try:
+        from smiles_aa_chem import smiles_expanded_interaction  # noqa: WPS433
+
+        return smiles_expanded_interaction(aa1, aa2, sep=sep)
+    except Exception:
+        pass
     c1, c2 = aa1.upper(), aa2.upper()
     if c1 == "C" and c2 == "C":
-        return PHI ** 6  # F03 disulfide still dominates
+        return PHI ** 6  # F03 disulfide
     o1, o2 = aa_opcode(c1), aa_opcode(c2)
-    # F04 hydrophobic (expanded h)
     h1 = (o1.hydrophobicity() - 1.0) / PHI
     h2 = (o2.hydrophobicity() - 1.0) / PHI
     hydrophobic = h1 * h2
-    # F05 electrostatic on composite charge
     electrostatic = -o1.charge() * o2.charge() * E
-    # F06 dipole from expanded volume + polarity
     mu1 = GAMMA * math.exp(abs(o1.c) + o1.p + 1.0 + 0.5 * abs(o1.aromatic))
     mu2 = GAMMA * math.exp(abs(o2.c) + o2.p + 1.0 + 0.5 * abs(o2.aromatic))
     dipole = math.sqrt(max(mu1 * mu2, 0.0)) / (GAMMA * PI * E * E)
-    # Zig pair geometry contribution (syntax-level)
     pair = aa_pair_weight(c1, c2, max(sep, 1)) / (PI * E)
-    # aromatic stacking bonus when both aromatic (φ-law)
     stack = 0.0
     if o1.aromatic and o2.aromatic:
         stack = (1.0 / PHI) * env_scale(sep)

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-07T01:56:11.148229+00:00",
+  "generated_at": "2026-08-07T02:03:37.328231+00:00",
   "doctrine": "Error margin log: localize residual by structural mode, map literature, fix one mode at a time under full S=K(T1+T2+T3). Same residual discipline as multi-domain / MPCORB campaigns. Zero free parameters.",
   "protocol": {
     "sequence_source": "experimental PDB chain (not UniProt polyprotein)",
@@ -8,8 +8,8 @@
   },
   "summary": {
     "n_proteins": 5,
-    "median_rmsd_A": 9.57944664512565,
-    "wall_s": 0.33064569998532534,
+    "median_rmsd_A": 8.706532637516103,
+    "wall_s": 0.371585499990033,
     "primary_modes_seen": [
       "global_topology"
     ]
@@ -22,144 +22,144 @@
       "pred_len": 76,
       "exp_len": 76,
       "seq_match": true,
-      "rmsd_A": 10.753267378169655,
-      "per_res_mean_A": 10.033357727340562,
-      "per_res_median_A": 9.640240210085608,
-      "per_res_p90_A": 14.495525289973383,
-      "per_res_max_A": 23.26911305287261,
+      "rmsd_A": 10.9614146064382,
+      "per_res_mean_A": 10.300267258897543,
+      "per_res_median_A": 10.159002904352736,
+      "per_res_p90_A": 15.437436016046028,
+      "per_res_max_A": 19.050972734743528,
       "distance_bins": [
         {
           "mode": "backbone_sep1_2",
           "sep_lo": 1,
           "sep_hi": 3,
           "n_pairs": 149,
-          "mean_abs_dA": 1.2979482240058975,
-          "median_abs_dA": 0.05361622475272654,
-          "p90_abs_dA": 3.72998768536915,
-          "contribution_proxy": 0.03348239012757596
+          "mean_abs_dA": 1.203083102837435,
+          "median_abs_dA": 0.05361622475826566,
+          "p90_abs_dA": 3.4443746006949945,
+          "contribution_proxy": 0.03103521162097954
         },
         {
           "mode": "helix_period_3_4_7",
           "sep_lo": 3,
           "sep_hi": 5,
           "n_pairs": 214,
-          "mean_abs_dA": 6.633995860132093,
-          "median_abs_dA": 5.948404262619794,
-          "p90_abs_dA": 11.888320207111883,
-          "contribution_proxy": 0.24578862778190233
+          "mean_abs_dA": 6.184225692942438,
+          "median_abs_dA": 5.596727917298166,
+          "p90_abs_dA": 11.431062652003485,
+          "contribution_proxy": 0.22912470538256263
         },
         {
           "mode": "mid_range_5_12",
           "sep_lo": 5,
           "sep_hi": 13,
           "n_pairs": 540,
-          "mean_abs_dA": 10.288808278231432,
-          "median_abs_dA": 9.519337832768091,
-          "p90_abs_dA": 18.171052467975215,
-          "contribution_proxy": 0.9619038210257917
+          "mean_abs_dA": 9.760342337887117,
+          "median_abs_dA": 8.834835139409051,
+          "p90_abs_dA": 16.60134090618793,
+          "contribution_proxy": 0.912497379234599
         },
         {
           "mode": "long_range_contacts",
           "sep_lo": 13,
           "sep_hi": 76,
           "n_pairs": 2016,
-          "mean_abs_dA": 10.047383036542856,
-          "median_abs_dA": 9.702471122438645,
-          "p90_abs_dA": 17.04864613900152,
-          "contribution_proxy": 3.506842832699168
+          "mean_abs_dA": 9.173032668395347,
+          "median_abs_dA": 8.672961761678568,
+          "p90_abs_dA": 16.01806515353592,
+          "contribution_proxy": 3.201667911960703
         }
       ],
       "native_contacts": 143,
-      "contact_mae_A": 2.1722651549146472,
-      "top_L_precision": 0.06578947368421052,
+      "contact_mae_A": 2.169883021328888,
+      "top_L_precision": 0.07894736842105263,
       "rg_exp_A": 11.49289487620769,
-      "rg_pred_A": 4.505442669928014,
-      "rg_err_A": 6.987452206279675,
-      "end_to_end_err_A": 32.92883050546415,
+      "rg_pred_A": 5.062359316178667,
+      "rg_err_A": 6.430535560029022,
+      "end_to_end_err_A": 23.95515694734899,
       "hotspots": [
-        {
-          "i": 75,
-          "aa": "G",
-          "err_A": 23.26911305287261
-        },
-        {
-          "i": 74,
-          "aa": "G",
-          "err_A": 21.854453704772094
-        },
-        {
-          "i": 61,
-          "aa": "Q",
-          "err_A": 17.634782033035048
-        },
         {
           "i": 72,
           "aa": "L",
-          "err_A": 17.630796764175418
+          "err_A": 19.050972734743528
         },
         {
           "i": 73,
           "aa": "R",
-          "err_A": 16.911793981460313
+          "err_A": 18.270638203353638
         },
         {
-          "i": 62,
-          "aa": "K",
-          "err_A": 16.634567198130355
-        },
-        {
-          "i": 19,
-          "aa": "S",
-          "err_A": 16.44240950610686
-        },
-        {
-          "i": 46,
+          "i": 74,
           "aa": "G",
-          "err_A": 14.62609799315582
+          "err_A": 17.70275313515248
+        },
+        {
+          "i": 56,
+          "aa": "S",
+          "err_A": 17.33873364529905
+        },
+        {
+          "i": 61,
+          "aa": "Q",
+          "err_A": 17.30858411833446
         },
         {
           "i": 59,
           "aa": "N",
-          "err_A": 14.364952586790945
+          "err_A": 17.064324504831486
         },
         {
-          "i": 63,
-          "aa": "E",
-          "err_A": 13.833854316573872
+          "i": 57,
+          "aa": "D",
+          "err_A": 16.917279290133433
         },
         {
-          "i": 17,
-          "aa": "E",
-          "err_A": 13.647621540957756
+          "i": 19,
+          "aa": "S",
+          "err_A": 15.717958958478642
         },
         {
-          "i": 36,
-          "aa": "P",
-          "err_A": 13.619758631946366
-        },
-        {
-          "i": 34,
+          "i": 75,
           "aa": "G",
-          "err_A": 13.2826141925915
+          "err_A": 15.156913073613415
         },
         {
-          "i": 45,
-          "aa": "A",
-          "err_A": 12.802431399176278
+          "i": 62,
+          "aa": "K",
+          "err_A": 14.854352740848325
         },
         {
-          "i": 21,
+          "i": 54,
           "aa": "T",
-          "err_A": 12.6647786950599
+          "err_A": 14.494583335765546
+        },
+        {
+          "i": 9,
+          "aa": "G",
+          "err_A": 14.296269581921365
+        },
+        {
+          "i": 70,
+          "aa": "L",
+          "err_A": 14.085726599609304
+        },
+        {
+          "i": 7,
+          "aa": "L",
+          "err_A": 13.862466533802897
+        },
+        {
+          "i": 71,
+          "aa": "R",
+          "err_A": 13.676348429455533
         }
       ],
       "mode_scores": {
-        "backbone_sep1_2": 0.03348239012757596,
-        "helix_period_3_4_7": 0.24578862778190233,
-        "mid_range_5_12": 0.9619038210257917,
-        "long_range_contacts": 5.679107987613815,
-        "per_residue_hotspots": 1.483084270631075,
-        "global_topology": 27.3385886684409
+        "backbone_sep1_2": 0.03103521162097954,
+        "helix_period_3_4_7": 0.22912470538256263,
+        "mid_range_5_12": 0.912497379234599,
+        "long_range_contacts": 5.3715509332895905,
+        "per_residue_hotspots": 1.4584364852841625,
+        "global_topology": 21.235636759328873
       },
       "primary_error_mode": "global_topology",
       "ranked_modes": [
@@ -170,10 +170,10 @@
         "helix_period_3_4_7",
         "backbone_sep1_2"
       ],
-      "engine": "fsot_protein_FULL_SCALAR_v12",
+      "engine": "fsot_protein_FULL_SCALAR_v13_smiles",
       "full_law": true,
       "S_final": 21.865529077410095,
-      "predict_ms": 96.20319999521598,
+      "predict_ms": 116.45039997529238,
       "note": "all-alpha/beta mixed, classic contact test"
     },
     {
@@ -183,114 +183,114 @@
       "pred_len": 46,
       "exp_len": 46,
       "seq_match": true,
-      "rmsd_A": 7.819361663650961,
-      "per_res_mean_A": 7.24859360885891,
-      "per_res_median_A": 7.665623484085106,
-      "per_res_p90_A": 10.350548936746026,
-      "per_res_max_A": 15.140216005259816,
+      "rmsd_A": 7.893221436189066,
+      "per_res_mean_A": 7.615649924862986,
+      "per_res_median_A": 7.362295175885789,
+      "per_res_p90_A": 10.109751005168437,
+      "per_res_max_A": 14.506465812947779,
       "distance_bins": [
         {
           "mode": "backbone_sep1_2",
           "sep_lo": 1,
           "sep_hi": 3,
           "n_pairs": 89,
-          "mean_abs_dA": 0.9683881858141515,
-          "median_abs_dA": 0.057441899461295964,
-          "p90_abs_dA": 2.9906854395384914,
-          "contribution_proxy": 0.040730883051729436
+          "mean_abs_dA": 0.8805372779705156,
+          "median_abs_dA": 0.057441899465823454,
+          "p90_abs_dA": 2.8495094986479663,
+          "contribution_proxy": 0.03703583068968615
         },
         {
           "mode": "helix_period_3_4_7",
           "sep_lo": 3,
           "sep_hi": 5,
           "n_pairs": 124,
-          "mean_abs_dA": 4.616548180953371,
-          "median_abs_dA": 4.4345640384448,
-          "p90_abs_dA": 8.532635880285062,
-          "contribution_proxy": 0.27053495956437523
+          "mean_abs_dA": 4.475589440126561,
+          "median_abs_dA": 3.9101059984835453,
+          "p90_abs_dA": 8.021995604908957,
+          "contribution_proxy": 0.26227461747433534
         },
         {
           "mode": "mid_range_5_12",
           "sep_lo": 5,
           "sep_hi": 13,
           "n_pairs": 300,
-          "mean_abs_dA": 6.890728712109182,
-          "median_abs_dA": 6.758523072690051,
-          "p90_abs_dA": 11.767645565818981,
-          "contribution_proxy": 0.976946414760281
+          "mean_abs_dA": 7.125059809558093,
+          "median_abs_dA": 6.938001686303491,
+          "p90_abs_dA": 11.196996663633819,
+          "contribution_proxy": 1.0101691601452871
         },
         {
           "mode": "long_range_contacts",
           "sep_lo": 13,
           "sep_hi": 46,
           "n_pairs": 561,
-          "mean_abs_dA": 6.925997246299208,
-          "median_abs_dA": 6.4158560072722315,
-          "p90_abs_dA": 13.403427421791662,
-          "contribution_proxy": 1.8362402907248847
+          "mean_abs_dA": 7.250880908420217,
+          "median_abs_dA": 7.1628759112543765,
+          "p90_abs_dA": 12.782207319454285,
+          "contribution_proxy": 1.9223743807295564
         }
       ],
       "native_contacts": 72,
-      "contact_mae_A": 2.6140807512782214,
-      "top_L_precision": 0.10869565217391304,
+      "contact_mae_A": 2.87478450467168,
+      "top_L_precision": 0.13043478260869565,
       "rg_exp_A": 9.67550126933248,
-      "rg_pred_A": 5.335865154986351,
-      "rg_err_A": 4.3396361143461295,
-      "end_to_end_err_A": 2.9353119183707665,
+      "rg_pred_A": 5.161043770115087,
+      "rg_err_A": 4.514457499217394,
+      "end_to_end_err_A": 2.2026058744961112,
       "hotspots": [
         {
           "i": 0,
           "aa": "T",
-          "err_A": 15.140216005259816
+          "err_A": 14.506465812947779
         },
         {
-          "i": 18,
-          "aa": "P",
-          "err_A": 13.843891294116336
+          "i": 24,
+          "aa": "I",
+          "err_A": 11.477010760913128
         },
         {
           "i": 1,
           "aa": "T",
-          "err_A": 13.064874046607544
+          "err_A": 11.31830715975502
         },
         {
-          "i": 28,
-          "aa": "Y",
-          "err_A": 12.039097066727907
-        },
-        {
-          "i": 15,
-          "aa": "C",
-          "err_A": 10.414584434853698
-        },
-        {
-          "i": 29,
+          "i": 38,
           "aa": "T",
-          "err_A": 10.286513438638357
+          "err_A": 10.436326129301392
         },
         {
-          "i": 17,
-          "aa": "L",
-          "err_A": 9.356985128167135
-        },
-        {
-          "i": 37,
-          "aa": "A",
-          "err_A": 9.25580415583771
+          "i": 41,
+          "aa": "G",
+          "err_A": 10.170236143749747
         },
         {
           "i": 20,
           "aa": "T",
-          "err_A": 9.131815242989914
+          "err_A": 10.049265866587126
+        },
+        {
+          "i": 18,
+          "aa": "P",
+          "err_A": 9.855234067709505
+        },
+        {
+          "i": 17,
+          "aa": "L",
+          "err_A": 9.816986317655623
+        },
+        {
+          "i": 19,
+          "aa": "G",
+          "err_A": 9.574027301953901
         }
       ],
       "mode_scores": {
-        "backbone_sep1_2": 0.040730883051729436,
-        "helix_period_3_4_7": 0.27053495956437523,
-        "mid_range_5_12": 0.976946414760281,
-        "long_range_contacts": 4.450321042003106,
-        "per_residue_hotspots": 1.4569785620145148,
-        "global_topology": 6.15375864748192
+        "backbone_sep1_2": 0.03703583068968615,
+        "helix_period_3_4_7": 0.26227461747433534,
+        "mid_range_5_12": 1.0101691601452871,
+        "long_range_contacts": 4.797158885401236,
+        "per_residue_hotspots": 1.3683169701214235,
+        "global_topology": 5.875742793476176
       },
       "primary_error_mode": "global_topology",
       "ranked_modes": [
@@ -301,10 +301,10 @@
         "helix_period_3_4_7",
         "backbone_sep1_2"
       ],
-      "engine": "fsot_protein_FULL_SCALAR_v12",
+      "engine": "fsot_protein_FULL_SCALAR_v13_smiles",
       "full_law": true,
       "S_final": 13.397738518952414,
-      "predict_ms": 44.260700000450015,
+      "predict_ms": 52.2548999870196,
       "note": "small SS-rich, disulfide"
     },
     {
@@ -314,104 +314,104 @@
       "pred_len": 36,
       "exp_len": 36,
       "seq_match": true,
-      "rmsd_A": 6.991435671091424,
-      "per_res_mean_A": 6.552219844564636,
-      "per_res_median_A": 6.421029961185788,
-      "per_res_p90_A": 9.38868697926224,
-      "per_res_max_A": 13.015057182880499,
+      "rmsd_A": 6.4935558551530725,
+      "per_res_mean_A": 6.077345968855826,
+      "per_res_median_A": 6.325035167866324,
+      "per_res_p90_A": 9.093064298021432,
+      "per_res_max_A": 10.734237468013424,
       "distance_bins": [
         {
           "mode": "backbone_sep1_2",
           "sep_lo": 1,
           "sep_hi": 3,
           "n_pairs": 69,
-          "mean_abs_dA": 0.973032218846747,
-          "median_abs_dA": 0.03959242728574175,
-          "p90_abs_dA": 2.9425135699937353,
-          "contribution_proxy": 0.05180495609600736
+          "mean_abs_dA": 1.025356266039293,
+          "median_abs_dA": 0.04469348684067631,
+          "p90_abs_dA": 3.4195574913614823,
+          "contribution_proxy": 0.05459072712709199
         },
         {
           "mode": "helix_period_3_4_7",
           "sep_lo": 3,
           "sep_hi": 5,
           "n_pairs": 94,
-          "mean_abs_dA": 3.2360142561000367,
-          "median_abs_dA": 2.4829714618009966,
-          "p90_abs_dA": 6.3407290221778005,
-          "contribution_proxy": 0.2347109105504656
+          "mean_abs_dA": 3.497969216938882,
+          "median_abs_dA": 3.1330638641277324,
+          "p90_abs_dA": 7.2168059140340866,
+          "contribution_proxy": 0.2537107302409374
         },
         {
           "mode": "mid_range_5_12",
           "sep_lo": 5,
           "sep_hi": 13,
           "n_pairs": 220,
-          "mean_abs_dA": 5.9462857630427814,
-          "median_abs_dA": 5.728534938741296,
-          "p90_abs_dA": 10.291348294852268,
-          "contribution_proxy": 1.0094003610103486
+          "mean_abs_dA": 6.054950490708448,
+          "median_abs_dA": 6.063233465394909,
+          "p90_abs_dA": 9.721209502980631,
+          "contribution_proxy": 1.0278465339165574
         },
         {
           "mode": "long_range_contacts",
           "sep_lo": 13,
           "sep_hi": 36,
           "n_pairs": 276,
-          "mean_abs_dA": 6.6245757840894965,
-          "median_abs_dA": 6.274863600918607,
-          "p90_abs_dA": 12.298329716439271,
-          "contribution_proxy": 1.4107892873523928
+          "mean_abs_dA": 6.707809551548831,
+          "median_abs_dA": 6.406021078493373,
+          "p90_abs_dA": 12.348226232127212,
+          "contribution_proxy": 1.4285149970891027
         }
       ],
       "native_contacts": 19,
-      "contact_mae_A": 3.376431111222565,
+      "contact_mae_A": 2.101944789461532,
       "top_L_precision": 0.05555555555555555,
       "rg_exp_A": 8.817566839898648,
-      "rg_pred_A": 5.071406880378822,
-      "rg_err_A": 3.746159959519826,
-      "end_to_end_err_A": 3.2966488977935713,
+      "rg_pred_A": 4.865942223675344,
+      "rg_err_A": 3.951624616223304,
+      "end_to_end_err_A": 5.657570665849736,
       "hotspots": [
         {
-          "i": 23,
-          "aa": "W",
-          "err_A": 13.015057182880499
-        },
-        {
-          "i": 21,
-          "aa": "P",
-          "err_A": 10.809664761805895
-        },
-        {
-          "i": 9,
-          "aa": "V",
-          "err_A": 9.647145921058485
-        },
-        {
-          "i": 24,
-          "aa": "K",
-          "err_A": 9.59208553886558
+          "i": 4,
+          "aa": "E",
+          "err_A": 10.734237468013424
         },
         {
           "i": 3,
           "aa": "D",
-          "err_A": 9.1852884196589
+          "err_A": 9.607745341503044
         },
         {
-          "i": 4,
-          "aa": "E",
-          "err_A": 8.894412814544575
+          "i": 23,
+          "aa": "W",
+          "err_A": 9.477811581087995
         },
         {
-          "i": 10,
+          "i": 35,
           "aa": "F",
-          "err_A": 8.827376506549703
+          "err_A": 9.283298916978442
+        },
+        {
+          "i": 24,
+          "aa": "K",
+          "err_A": 8.90282967906442
+        },
+        {
+          "i": 22,
+          "aa": "L",
+          "err_A": 8.815211299254273
+        },
+        {
+          "i": 20,
+          "aa": "L",
+          "err_A": 8.48496977359281
         }
       ],
       "mode_scores": {
-        "backbone_sep1_2": 0.05180495609600736,
-        "helix_period_3_4_7": 0.2347109105504656,
-        "mid_range_5_12": 1.0094003610103486,
-        "long_range_contacts": 4.7872203985749575,
-        "per_residue_hotspots": 1.4297294665137588,
-        "global_topology": 5.783601027331131
+        "backbone_sep1_2": 0.05459072712709199,
+        "helix_period_3_4_7": 0.2537107302409374,
+        "mid_range_5_12": 1.0278465339165574,
+        "long_range_contacts": 3.530459786550635,
+        "per_residue_hotspots": 1.4367233677780855,
+        "global_topology": 7.448195581472815
       },
       "primary_error_mode": "global_topology",
       "ranked_modes": [
@@ -422,10 +422,10 @@
         "helix_period_3_4_7",
         "backbone_sep1_2"
       ],
-      "engine": "fsot_protein_FULL_SCALAR_v12",
+      "engine": "fsot_protein_FULL_SCALAR_v13_smiles",
       "full_law": true,
       "S_final": 10.575141904246689,
-      "predict_ms": 30.91679999488406,
+      "predict_ms": 35.169499984476715,
       "note": "helical bundle"
     },
     {
@@ -435,124 +435,124 @@
       "pred_len": 56,
       "exp_len": 56,
       "seq_match": true,
-      "rmsd_A": 9.57944664512565,
-      "per_res_mean_A": 8.820128844904364,
-      "per_res_median_A": 8.484627497590877,
-      "per_res_p90_A": 14.072683301970695,
-      "per_res_max_A": 17.145200104756064,
+      "rmsd_A": 9.530036451825602,
+      "per_res_mean_A": 9.005037387933115,
+      "per_res_median_A": 9.075495714085328,
+      "per_res_p90_A": 13.349423546171934,
+      "per_res_max_A": 14.985045231810348,
       "distance_bins": [
         {
           "mode": "backbone_sep1_2",
           "sep_lo": 1,
           "sep_hi": 3,
           "n_pairs": 109,
-          "mean_abs_dA": 1.3417821142410085,
-          "median_abs_dA": 0.02621562482451001,
-          "p90_abs_dA": 3.832314605743512,
-          "contribution_proxy": 0.04663719721054526
+          "mean_abs_dA": 1.0722210065612496,
+          "median_abs_dA": 0.02621562482362272,
+          "p90_abs_dA": 3.5256915518857825,
+          "contribution_proxy": 0.03726788575101282
         },
         {
           "mode": "helix_period_3_4_7",
           "sep_lo": 3,
           "sep_hi": 5,
           "n_pairs": 154,
-          "mean_abs_dA": 6.89527123654017,
-          "median_abs_dA": 6.41295362582027,
-          "p90_abs_dA": 12.717315488197704,
-          "contribution_proxy": 0.3386070696515262
+          "mean_abs_dA": 6.42061700007498,
+          "median_abs_dA": 5.4392273666075255,
+          "p90_abs_dA": 13.045007044964201,
+          "contribution_proxy": 0.315298156253682
         },
         {
           "mode": "mid_range_5_12",
           "sep_lo": 5,
           "sep_hi": 13,
           "n_pairs": 380,
-          "mean_abs_dA": 10.320591768271258,
-          "median_abs_dA": 9.709504590149109,
-          "p90_abs_dA": 18.868085793525843,
-          "contribution_proxy": 1.2505819106961347
+          "mean_abs_dA": 9.511599030717814,
+          "median_abs_dA": 8.742267270604865,
+          "p90_abs_dA": 17.47645654639609,
+          "contribution_proxy": 1.1525534539772861
         },
         {
           "mode": "long_range_contacts",
           "sep_lo": 13,
           "sep_hi": 56,
           "n_pairs": 946,
-          "mean_abs_dA": 7.380125323634624,
-          "median_abs_dA": 6.598702028128718,
-          "p90_abs_dA": 14.54611586975478,
-          "contribution_proxy": 2.2262750497953934
+          "mean_abs_dA": 7.344368128924364,
+          "median_abs_dA": 7.0109291948367165,
+          "p90_abs_dA": 13.812143275143129,
+          "contribution_proxy": 2.2154886001155765
         }
       ],
       "native_contacts": 110,
-      "contact_mae_A": 2.171131204130225,
-      "top_L_precision": 0.17857142857142858,
+      "contact_mae_A": 2.1863939608152356,
+      "top_L_precision": 0.05357142857142857,
       "rg_exp_A": 10.135882126035968,
-      "rg_pred_A": 4.570188398508418,
-      "rg_err_A": 5.56569372752755,
-      "end_to_end_err_A": 21.50467870391602,
+      "rg_pred_A": 4.864333618402556,
+      "rg_err_A": 5.271548507633412,
+      "end_to_end_err_A": 16.214407493446892,
       "hotspots": [
         {
           "i": 9,
           "aa": "K",
-          "err_A": 17.145200104756064
-        },
-        {
-          "i": 20,
-          "aa": "V",
-          "err_A": 16.427650282177026
-        },
-        {
-          "i": 47,
-          "aa": "A",
-          "err_A": 15.417966388359208
-        },
-        {
-          "i": 10,
-          "aa": "T",
-          "err_A": 15.303230965356011
+          "err_A": 14.985045231810348
         },
         {
           "i": 21,
           "aa": "D",
-          "err_A": 14.591685374344632
-        },
-        {
-          "i": 35,
-          "aa": "D",
-          "err_A": 14.448079074330225
-        },
-        {
-          "i": 8,
-          "aa": "G",
-          "err_A": 13.697287529611163
-        },
-        {
-          "i": 37,
-          "aa": "G",
-          "err_A": 13.316404810213216
-        },
-        {
-          "i": 0,
-          "aa": "M",
-          "err_A": 13.238764496043702
+          "err_A": 14.387000087124692
         },
         {
           "i": 48,
           "aa": "T",
-          "err_A": 12.696242615793139
+          "err_A": 14.050386118054794
         },
         {
-          "i": 12,
+          "i": 11,
+          "aa": "L",
+          "err_A": 13.9447511606318
+        },
+        {
+          "i": 10,
+          "aa": "T",
+          "err_A": 13.600006159611409
+        },
+        {
+          "i": 49,
           "aa": "K",
-          "err_A": 12.175257205326481
+          "err_A": 13.536324252425834
+        },
+        {
+          "i": 8,
+          "aa": "G",
+          "err_A": 13.162522839918035
+        },
+        {
+          "i": 35,
+          "aa": "D",
+          "err_A": 13.05891482264878
+        },
+        {
+          "i": 23,
+          "aa": "A",
+          "err_A": 12.637579214468147
+        },
+        {
+          "i": 36,
+          "aa": "N",
+          "err_A": 12.503423569145772
+        },
+        {
+          "i": 20,
+          "aa": "V",
+          "err_A": 12.384934383156457
         }
       ],
       "mode_scores": {
-        "backbone_sep1_2": 0.04663719721054526,
-        "helix_period_3_4_7": 0.3386070696515262,
-        "mid_range_5_12": 1.2505819106961347,
-        "long_range_contacts": 4.3974062539256185,
-        "per_residue_hotspots": 1.503766579318115,
-        "global_topology": 18.856316083693688
+        "backbone_sep1_2": 0.03726788575101282,
+        "helix_period_3_4_7": 0.315298156253682,
+        "mid_range_5_12": 1.1525534539772861,
+        "long_range_contacts": 4.401882560930812,
+        "per_residue_hotspots": 1.414197470076515,
+        "global_topology": 15.292603446024579
       },
       "primary_error_mode": "global_topology",
       "ranked_modes": [
@@ -563,10 +563,10 @@
         "helix_period_3_4_7",
         "backbone_sep1_2"
       ],
-      "engine": "fsot_protein_FULL_SCALAR_v12",
+      "engine": "fsot_protein_FULL_SCALAR_v13_smiles",
       "full_law": true,
       "S_final": 16.220335295229127,
-      "predict_ms": 58.40380000881851,
+      "predict_ms": 66.55679998220876,
       "note": "\u03b2 hairpin + helix"
     },
     {
@@ -576,119 +576,119 @@
       "pred_len": 54,
       "exp_len": 54,
       "seq_match": true,
-      "rmsd_A": 9.752728314812344,
-      "per_res_mean_A": 9.20031861555208,
-      "per_res_median_A": 8.839609435977536,
-      "per_res_p90_A": 13.640664324297328,
-      "per_res_max_A": 16.980002790240366,
+      "rmsd_A": 8.706532637516103,
+      "per_res_mean_A": 8.096741733197492,
+      "per_res_median_A": 7.931216773210583,
+      "per_res_p90_A": 11.412983961883505,
+      "per_res_max_A": 18.12742622018539,
       "distance_bins": [
         {
           "mode": "backbone_sep1_2",
           "sep_lo": 1,
           "sep_hi": 3,
           "n_pairs": 105,
-          "mean_abs_dA": 0.9327089077358325,
-          "median_abs_dA": 0.05934430781354649,
-          "p90_abs_dA": 3.239593235103211,
-          "contribution_proxy": 0.033585197295014545
+          "mean_abs_dA": 0.9631667950371267,
+          "median_abs_dA": 0.06210978711896775,
+          "p90_abs_dA": 2.8753395956952863,
+          "contribution_proxy": 0.034681931920061145
         },
         {
           "mode": "helix_period_3_4_7",
           "sep_lo": 3,
           "sep_hi": 5,
           "n_pairs": 148,
-          "mean_abs_dA": 3.973334097116644,
-          "median_abs_dA": 3.060292466102455,
-          "p90_abs_dA": 7.872118947405684,
-          "contribution_proxy": 0.20166441919522063
+          "mean_abs_dA": 4.157249139687928,
+          "median_abs_dA": 3.6364862663406097,
+          "p90_abs_dA": 8.034851075846543,
+          "contribution_proxy": 0.21099892752874258
         },
         {
           "mode": "mid_range_5_12",
           "sep_lo": 5,
           "sep_hi": 13,
           "n_pairs": 364,
-          "mean_abs_dA": 7.340456762283948,
-          "median_abs_dA": 7.065041543505977,
-          "p90_abs_dA": 12.338669752542172,
-          "contribution_proxy": 0.916298443577283
+          "mean_abs_dA": 7.499553877229082,
+          "median_abs_dA": 7.4262974212456,
+          "p90_abs_dA": 12.300736996765643,
+          "contribution_proxy": 0.9361583029188566
         },
         {
           "mode": "long_range_contacts",
           "sep_lo": 13,
           "sep_hi": 54,
           "n_pairs": 861,
-          "mean_abs_dA": 7.973757864301846,
-          "median_abs_dA": 7.431309900149515,
-          "p90_abs_dA": 14.663326318394962,
-          "contribution_proxy": 2.3543914681631994
+          "mean_abs_dA": 7.8784341052232225,
+          "median_abs_dA": 7.214045039099938,
+          "p90_abs_dA": 14.504944167757333,
+          "contribution_proxy": 2.3262454611101493
         }
       ],
       "native_contacts": 28,
-      "contact_mae_A": 1.9396581592343984,
-      "top_L_precision": 0.018518518518518517,
+      "contact_mae_A": 2.3260135900729204,
+      "top_L_precision": 0.037037037037037035,
       "rg_exp_A": 10.08894278769526,
-      "rg_pred_A": 5.081972322910083,
-      "rg_err_A": 5.0069704647851765,
-      "end_to_end_err_A": 10.29882055957384,
+      "rg_pred_A": 5.059012809831016,
+      "rg_err_A": 5.029929977864244,
+      "end_to_end_err_A": 14.289094840105532,
       "hotspots": [
         {
           "i": 1,
           "aa": "P",
-          "err_A": 16.980002790240366
+          "err_A": 18.12742622018539
         },
         {
           "i": 0,
           "aa": "R",
-          "err_A": 15.769724094773897
+          "err_A": 16.34403837552645
         },
         {
-          "i": 20,
-          "aa": "N",
-          "err_A": 15.56594708401652
+          "i": 53,
+          "aa": "I",
+          "err_A": 12.880386151315834
         },
         {
-          "i": 21,
-          "aa": "R",
-          "err_A": 14.695440288712954
+          "i": 3,
+          "aa": "T",
+          "err_A": 12.617231247302197
         },
         {
-          "i": 18,
-          "aa": "N",
-          "err_A": 14.459692388314457
+          "i": 36,
+          "aa": "G",
+          "err_A": 11.54957771187257
         },
         {
-          "i": 2,
-          "aa": "R",
-          "err_A": 13.835678322285863
+          "i": 33,
+          "aa": "S",
+          "err_A": 11.439373374024424
         },
         {
-          "i": 19,
-          "aa": "E",
-          "err_A": 13.185631662324072
+          "i": 7,
+          "aa": "S",
+          "err_A": 11.351408666888029
         },
         {
-          "i": 26,
-          "aa": "R",
-          "err_A": 12.97122573171719
-        },
-        {
-          "i": 15,
-          "aa": "R",
-          "err_A": 12.878992468919614
+          "i": 24,
+          "aa": "T",
+          "err_A": 11.34751738483137
         },
         {
           "i": 8,
           "aa": "E",
-          "err_A": 12.45953372150416
+          "err_A": 11.202842809238087
+        },
+        {
+          "i": 21,
+          "aa": "R",
+          "err_A": 11.193749360621316
         }
       ],
       "mode_scores": {
-        "backbone_sep1_2": 0.033585197295014545,
-        "helix_period_3_4_7": 0.20166441919522063,
-        "mid_range_5_12": 0.916298443577283,
-        "long_range_contacts": 4.294049627397598,
-        "per_residue_hotspots": 1.4642248193864178,
-        "global_topology": 11.37199161463802
+        "backbone_sep1_2": 0.034681931920061145,
+        "helix_period_3_4_7": 0.21099892752874258,
+        "mid_range_5_12": 0.9361583029188566,
+        "long_range_contacts": 4.652259051183069,
+        "per_residue_hotspots": 1.4707755272176666,
+        "global_topology": 13.861076257520207
       },
       "primary_error_mode": "global_topology",
       "ranked_modes": [
@@ -699,10 +699,10 @@
         "helix_period_3_4_7",
         "backbone_sep1_2"
       ],
-      "engine": "fsot_protein_FULL_SCALAR_v12",
+      "engine": "fsot_protein_FULL_SCALAR_v13_smiles",
       "full_law": true,
       "S_final": 15.655815931356033,
-      "predict_ms": 55.71290000807494,
+      "predict_ms": 61.84079998638481,
       "note": "helix bundle"
     }
   ],
@@ -711,7 +711,7 @@
       "priority": 1,
       "mode": "global_topology",
       "votes": 15,
-      "score_sum": 69.50425604158566,
+      "score_sum": 63.713254837822646,
       "meaning": "Chain topology / domain packing globally wrong after Kabsch",
       "literature": "Energy landscape funnel; topology from contact order (Onuchic/Wolynes; Baker).",
       "fsot_handle": "MDS is only as good as D; fix contact D first, then sparse polish; multi-start from SS regions.",
@@ -722,7 +722,7 @@
       "priority": 2,
       "mode": "long_range_contacts",
       "votes": 5,
-      "score_sum": 23.608105309515096,
+      "score_sum": 22.753311217355343,
       "meaning": "Tertiary native contacts missing or false",
       "literature": "Contact maps / top-L metrics drive fold quality (CASP; Marks/Sander coevolution; AF distograms).",
       "fsot_handle": "F13\u2013F15 + observer tertiary S at Biochemistry D=13; top-L caps; residual-at-interface on contact set.",
@@ -733,7 +733,7 @@
       "priority": 3,
       "mode": "per_residue_hotspots",
       "votes": 5,
-      "score_sum": 7.337783697863881,
+      "score_sum": 7.148449820477853,
       "meaning": "Local segments high RMSD after global align",
       "literature": "Flexible loops, termini disorder; core vs surface (crystallographic B-factors).",
       "fsot_handle": "Segment-wise residual; coil vs H/E different D_eff; do not over-constrain termini.",
@@ -744,7 +744,7 @@
       "priority": 4,
       "mode": "mid_range_5_12",
       "votes": 5,
-      "score_sum": 5.115130951069839,
+      "score_sum": 5.039224830192587,
       "meaning": "Secondary packing / loops at mid separation",
       "literature": "Secondary structure packing; loop closure; contact order (Plaxco et al.).",
       "fsot_handle": "F11 sheet + F12 regions; SS amp at Chemistry domain; full scalar residual mid-sep.",
@@ -755,7 +755,7 @@
       "priority": 5,
       "mode": "helix_period_3_4_7",
       "votes": 5,
-      "score_sum": 1.29130598674349,
+      "score_sum": 1.27140713688026,
       "meaning": "\u03b1-helix i,i+3/4/7 distances wrong",
       "literature": "\u03b1-helix rise 1.5 \u00c5/res, 3.6 res/turn; C\u03b1 i\u2192i+4 \u2248 6.2 \u00c5 (Pauling).",
       "fsot_handle": "F10 helix geometry + Chemistry D=8 interface; enforce ideal helix D when p_alpha high.",
@@ -766,7 +766,7 @@
       "priority": 6,
       "mode": "backbone_sep1_2",
       "votes": 5,
-      "score_sum": 0.20624062378087257,
+      "score_sum": 0.19461158710883164,
       "meaning": "Virtual C\u03b1\u2013C\u03b1 bond / local geometry wrong",
       "literature": "Standard C\u03b1 virtual bond \u2248 3.8 \u00c5; local geometry dominates short-range map (Dill polymer; Flory).",
       "fsot_handle": "F07 bb + CA_CA seed; do NOT residual-scale sep=1,2 (geometry is hard constraint).",
@@ -822,7 +822,7 @@
     "priority": 1,
     "mode": "global_topology",
     "votes": 15,
-    "score_sum": 69.50425604158566,
+    "score_sum": 63.713254837822646,
     "meaning": "Chain topology / domain packing globally wrong after Kabsch",
     "literature": "Energy landscape funnel; topology from contact order (Onuchic/Wolynes; Baker).",
     "fsot_handle": "MDS is only as good as D; fix contact D first, then sparse polish; multi-start from SS regions.",

@@ -153,6 +153,21 @@ def main() -> int:
         fail("missing zig/src/genetic_pair.zig (neuron twin)")
     ok("neuron-zig genetics sources present under zig/")
 
+    # SMILES Lab protein chemistry bridge
+    smiles_json = ROOT / "formulas" / "smiles_protein_chemistry.json"
+    if not smiles_json.is_file():
+        fail("missing formulas/smiles_protein_chemistry.json (SMILES AA chemistry)")
+    from smiles_aa_chem import summary as smiles_summary, hydrophobicity_kd, formal_charge  # noqa: E402
+
+    ss = smiles_summary()
+    if ss.get("n_hydrophobicity", 0) < 20:
+        fail(f"SMILES hydrophobicity table incomplete: {ss.get('n_hydrophobicity')}")
+    ok(f"SMILES protein chemistry records={ss.get('n_smiles_protein_records')} hydro={ss.get('n_hydrophobicity')}/20")
+    # sanity: Ile more hydrophobic than Arg
+    if hydrophobicity_kd("I") <= hydrophobicity_kd("R"):
+        fail("SMILES KD ordering broken (Ile should be > Arg)")
+    ok(f"KD Ile={hydrophobicity_kd('I'):+.3f} Arg={hydrophobicity_kd('R'):+.3f}  charge D={formal_charge('D')}")
+
     print("=" * 64)
     print("ALL CROSS-VERIFICATION GATES PASSED")
     print("  law: S=K(T1+T2+T3)  pin: D1D38A  free_parameters: 0")

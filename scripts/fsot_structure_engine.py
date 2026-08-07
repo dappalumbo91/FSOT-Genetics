@@ -325,7 +325,8 @@ def build_distogram(
                 * (ss_amp / max(chem_amp, 1e-12))
                 * res_use
             )
-            # F13 same-kind region pairs only (cross-SS false contacts hurt top-L — v11 lesson)
+            # F13 same-kind region pairs + length term from derivations:
+            # bonus ∝ √(p_i p_j) · max(0, ln√(L_i L_j)) · region_amp · register
             region_pair = 0.0
             ri, rj = rmap[i], rmap[j]
             if ri is not None and rj is not None and ri != rj and sep >= gate:
@@ -340,19 +341,25 @@ def build_distogram(
                             i, j, r_i.start, r_i.end, r_j.start, r_j.end
                         )
                     joint = math.sqrt(max(pi_v * pj_v, 0.0))
-                    region_pair = joint * region_amp * reg_mult * res_use * chaos_use
+                    len_term = max(0.0, math.log(math.sqrt(r_i.length() * r_j.length())))
+                    region_pair = joint * len_term * region_amp * reg_mult * res_use * chaos_use
             M[i, j] = bb + chemistry + helix + sheet + region_pair
 
     iface = dict(iface)
     iface["full_law"] = True
+    iface["smiles_chemistry"] = True
+    iface["sequence"] = "".join(chars)
     iface["error_log_fixes"] = [
         "no_residual_on_backbone_sep1_2",
         "fold_experimental_sequence_protocol",
         "error_margin_log_required",
+        "smiles_lab_hydrophobicity_pka_F18",
+        "F13_length_term",
+        "smiles_hydrophobic_core_contact_rank",
     ]
     iface["mean_abs_S_pairs"] = (s_abs_acc / n_pairs) if n_pairs else 0.0
     iface["observed_pair_fraction"] = (s_obs_n / n_pairs) if n_pairs else 0.0
-    iface["formula"] = "S=K(T1+T2+T3) per pair + residual mid/long + observer refine"
+    iface["formula"] = "S=K(T1+T2+T3) + SMILES AA chem + residual mid/long + observer refine"
     return M, props, regions, "".join(chars), iface
 
 
@@ -408,12 +415,25 @@ def proximity_to_distance(
                     d = min(d, d_h)
             D[i, j] = D[j, i] = float(np.clip(d, CA_CA * 0.95, d_hard))
 
-    # Top-L contacts by M (not 2L hard-force — false positives destroy topology)
+    # Top-L contacts: rank by M but prefer SMILES hydrophobic-core pairs (KD>0 both)
+    # Consensus score reduces false long-range clamps (error mode long_range_contacts)
+    from smiles_aa_chem import hydrophobicity_kd  # noqa: WPS433
+
     L = n
     lr_pairs = []
+    seq_chars = None
+    # recover sequence from props length only — hydrophobicity needs AA letters
+    # caller passes props; we need sequence on iface if present
+    seq_chars = (iface or {}).get("sequence")
     for i in range(n):
         for j in range(i + gate, n):
-            lr_pairs.append((M[i, j], i, j))
+            score = float(M[i, j])
+            if seq_chars and len(seq_chars) == n:
+                h1 = hydrophobicity_kd(seq_chars[i])
+                h2 = hydrophobicity_kd(seq_chars[j])
+                if h1 > 0 and h2 > 0:
+                    score += PHI * math.sqrt(h1 * h2)  # SMILES core boost (seed φ)
+            lr_pairs.append((score, i, j))
     lr_pairs.sort(reverse=True)
     tight = (contact_scale / PHI) / pack_boost
     for rank, (m, i, j) in enumerate(lr_pairs[: max(L, 1)]):
@@ -440,8 +460,12 @@ def proximity_to_distance(
     return D
 
 
-def classical_mds(D: np.ndarray, dim: int = 3) -> np.ndarray:
-    """Classical MDS + Cα bond scale only (no free Rg dial — v11 over-collapse lesson)."""
+def classical_mds(D: np.ndarray, dim: int = 3, gate: int = 7) -> np.ndarray:
+    """Classical MDS: bond scale, then long-range median scale to D (topology).
+
+    Error log: bond-only scale left Rg far from experiment. Rescaling so that
+    median long-range ||Xi-Xj|| matches median D_ij is seed-lawful (uses D only).
+    """
     n = D.shape[0]
     D2 = D ** 2
     J = np.eye(n) - np.ones((n, n)) / n
@@ -457,6 +481,18 @@ def classical_mds(D: np.ndarray, dim: int = 3) -> np.ndarray:
         adj = np.linalg.norm(X[1:] - X[:-1], axis=1).mean()
         if adj > 1e-9:
             X *= CA_CA / adj
+        # long-range scale to D (fixes global_topology over/under collapse)
+        ratios = []
+        for i in range(n):
+            for j in range(i + gate, n):
+                dij = float(np.linalg.norm(X[i] - X[j]))
+                if dij > 1e-6 and D[i, j] > 1e-6:
+                    ratios.append(D[i, j] / dij)
+        if ratios:
+            med = float(np.median(ratios))
+            # keep scale finite
+            med = float(np.clip(med, 1.0 / PHI, PHI))
+            X *= med
     X -= X.mean(axis=0)
     return X
 
@@ -679,7 +715,7 @@ def predict_ca_coords(
     n_rounds = max(8, min(int(rounds), 32))
 
     # Primary: classical MDS (closed-form spectral embed) — the mathematical core
-    X_mds = classical_mds(D, dim=3)
+    X_mds = classical_mds(D, dim=3, gate=gate)
     candidates: list[tuple[str, np.ndarray]] = [
         ("mds", X_mds),
         ("mds_mirror", X_mds * np.array([1.0, 1.0, -1.0])),
@@ -735,14 +771,15 @@ def predict_ca_coords(
         "predict_ms": elapsed_ms,
         "n_sparse_pairs": len(pairs),
         "refine_rounds": n_rounds,
-        "engine": "fsot_protein_FULL_SCALAR_v12",
+        "engine": "fsot_protein_FULL_SCALAR_v13_smiles",
         "free_parameters": 0,
         "runtime": "python_full_scalar_T1T2T3_observer",
         "full_law": True,
+        "smiles_chemistry": True,
         "error_margin_fixes": iface.get("error_log_fixes"),
         "authority": (
-            "FULL S=K(T1+T2+T3); error-log: no residual on backbone; "
-            "experimental-seq protocol; no false hard contacts (v11 reverted)"
+            "FULL S=K(T1+T2+T3) + SMILES Lab AA chemistry (§36 KD hydro, §22 pKa charge, "
+            "F18 disulfide gate) + F13 length term; 0 free params"
         ),
         "trinary_expansion": "c,p,v,aromatic,branch,hetero,detail",
         "formula": "S=K(T1+T2+T3)",
