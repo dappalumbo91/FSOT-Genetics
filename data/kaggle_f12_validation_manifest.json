@@ -1,0 +1,25 @@
+{
+  "role": "frozen_external_validation_protocol",
+  "candidate_commit": "d1909b3",
+  "dataset": {
+    "kaggle_slug": "kirkdco/protein-secondary-structure-2022",
+    "file": "2022-12-17-pdb-intersect-pisces_pc25_r2.0.csv",
+    "sha256": "67bb55d2b7d44b0ba3ab11e92328a0011d65d522be94e4d67b25c2f271769a2e",
+    "license": "DbCL-1.0",
+    "selection": "PISCES <=25% sequence identity, X-ray resolution <=2.0 A",
+    "labels": "DSSP SST3"
+  },
+  "excluded_development_pdb_ids": [
+    "1CRN",
+    "1ENH",
+    "1UBQ",
+    "1VII",
+    "2GB1"
+  ],
+  "success_gates": {
+    "aggregate_macro_recall": "candidate > baseline",
+    "aggregate_beta_recall": "candidate > baseline",
+    "aggregate_accuracy": "candidate >= baseline - 0.01"
+  },
+  "no_tuning_policy": "Record the first complete run; do not revise this candidate from its outcome."
+}
