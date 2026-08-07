@@ -45,6 +45,30 @@ def _post(url: str, body: dict, timeout: int = 60) -> dict:
         return json.loads(response.read())
 
 
+def _get(url: str, timeout: int = 40) -> dict:
+    request = urllib.request.Request(url, headers={"User-Agent": "fsot", "Accept": "application/json"})
+    with urllib.request.urlopen(request, timeout=timeout) as response:
+        return json.loads(response.read())
+
+
+def pfam_family_pdbs(query_pdb: str) -> list[str]:
+    """PDB structures in the query's Pfam family (remote structural homologs)."""
+    try:
+        u = _get(f"https://data.rcsb.org/rest/v1/core/uniprot/{query_pdb}/1")
+        acc = u[0]["rcsb_uniprot_container_identifiers"]["uniprot_id"]
+        fd = _get(f"https://www.ebi.ac.uk/interpro/api/entry/pfam/protein/uniprot/{acc}/")
+        fam = fd["results"][0]["metadata"]["accession"]
+        sd = _get(f"https://www.ebi.ac.uk/interpro/api/structure/PDB/entry/pfam/{fam}/?page_size=100")
+        out = []
+        for row in sd.get("results", []):
+            acc_pdb = row.get("metadata", {}).get("accession")
+            if acc_pdb:
+                out.append(acc_pdb.upper())
+        return out
+    except Exception:
+        return []
+
+
 def fetch_template_pdb(pdb_id: str) -> str:
     path = TCACHE / f"{pdb_id}.pdb"
     if path.exists():
@@ -117,9 +141,13 @@ def homolog_ids(sequence: str) -> list[str]:
 
 def best_template(sequence: str, exclude_pdb: str) -> dict | None:
     best = None
-    for pdb in homolog_ids(sequence):
-        if pdb == exclude_pdb.upper():
-            continue
+    # Candidates from sequence search AND the query's Pfam family (remote homologs).
+    candidates, seen = [], set()
+    for pdb in homolog_ids(sequence) + pfam_family_pdbs(exclude_pdb):
+        if pdb != exclude_pdb.upper() and pdb not in seen:
+            seen.add(pdb)
+            candidates.append(pdb)
+    for pdb in candidates[:45]:
         try:
             text = fetch_template_pdb(pdb)
         except Exception:
