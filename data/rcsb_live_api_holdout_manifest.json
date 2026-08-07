@@ -1,0 +1,358 @@
+{
+  "query": {
+    "query": {
+      "type": "group",
+      "logical_operator": "and",
+      "nodes": [
+        {
+          "type": "terminal",
+          "service": "text",
+          "parameters": {
+            "attribute": "exptl.method",
+            "operator": "exact_match",
+            "value": "X-RAY DIFFRACTION"
+          }
+        },
+        {
+          "type": "terminal",
+          "service": "text",
+          "parameters": {
+            "attribute": "rcsb_entry_info.resolution_combined",
+            "operator": "less",
+            "value": 1.5
+          }
+        },
+        {
+          "type": "terminal",
+          "service": "text",
+          "parameters": {
+            "attribute": "rcsb_entry_info.deposited_polymer_monomer_count",
+            "operator": "range",
+            "value": {
+              "from": 50,
+              "to": 150
+            }
+          }
+        }
+      ]
+    },
+    "return_type": "entry",
+    "request_options": {
+      "paginate": {
+        "start": 0,
+        "rows": 600
+      },
+      "sort": [
+        {
+          "sort_by": "rcsb_id",
+          "direction": "asc"
+        }
+      ],
+      "results_content_type": [
+        "experimental"
+      ]
+    }
+  },
+  "entries": [
+    {
+      "pdb_id": "10XA",
+      "chain": "A",
+      "length": 92
+    },
+    {
+      "pdb_id": "10XC",
+      "chain": "A",
+      "length": 90
+    },
+    {
+      "pdb_id": "11CG",
+      "chain": "A",
+      "length": 139
+    },
+    {
+      "pdb_id": "12FA",
+      "chain": "A",
+      "length": 97
+    },
+    {
+      "pdb_id": "12IS",
+      "chain": "A",
+      "length": 119
+    },
+    {
+      "pdb_id": "12LO",
+      "chain": "A",
+      "length": 56
+    },
+    {
+      "pdb_id": "135L",
+      "chain": "A",
+      "length": 129
+    },
+    {
+      "pdb_id": "193L",
+      "chain": "A",
+      "length": 129
+    },
+    {
+      "pdb_id": "194L",
+      "chain": "A",
+      "length": 129
+    },
+    {
+      "pdb_id": "1AAC",
+      "chain": "A",
+      "length": 105
+    },
+    {
+      "pdb_id": "1ABA",
+      "chain": "A",
+      "length": 87
+    },
+    {
+      "pdb_id": "1AHO",
+      "chain": "A",
+      "length": 64
+    },
+    {
+      "pdb_id": "1AWD",
+      "chain": "A",
+      "length": 94
+    },
+    {
+      "pdb_id": "1B0B",
+      "chain": "A",
+      "length": 141
+    },
+    {
+      "pdb_id": "1B0Y",
+      "chain": "A",
+      "length": 85
+    },
+    {
+      "pdb_id": "1B67",
+      "chain": "A",
+      "length": 68
+    },
+    {
+      "pdb_id": "1B9O",
+      "chain": "A",
+      "length": 123
+    },
+    {
+      "pdb_id": "1BGF",
+      "chain": "A",
+      "length": 124
+    },
+    {
+      "pdb_id": "1BKR",
+      "chain": "A",
+      "length": 108
+    },
+    {
+      "pdb_id": "1BPI",
+      "chain": "A",
+      "length": 58
+    },
+    {
+      "pdb_id": "1BQ8",
+      "chain": "A",
+      "length": 54
+    },
+    {
+      "pdb_id": "1BQ9",
+      "chain": "A",
+      "length": 53
+    },
+    {
+      "pdb_id": "1BQK",
+      "chain": "A",
+      "length": 124
+    },
+    {
+      "pdb_id": "1BRF",
+      "chain": "A",
+      "length": 53
+    },
+    {
+      "pdb_id": "1BX7",
+      "chain": "A",
+      "length": 51
+    },
+    {
+      "pdb_id": "1BXA",
+      "chain": "A",
+      "length": 105
+    },
+    {
+      "pdb_id": "1C52",
+      "chain": "A",
+      "length": 131
+    },
+    {
+      "pdb_id": "1C75",
+      "chain": "A",
+      "length": 71
+    },
+    {
+      "pdb_id": "1C7K",
+      "chain": "A",
+      "length": 132
+    },
+    {
+      "pdb_id": "1C8C",
+      "chain": "A",
+      "length": 64
+    },
+    {
+      "pdb_id": "1C9O",
+      "chain": "A",
+      "length": 66
+    },
+    {
+      "pdb_id": "1CC7",
+      "chain": "A",
+      "length": 72
+    },
+    {
+      "pdb_id": "1CC8",
+      "chain": "A",
+      "length": 72
+    },
+    {
+      "pdb_id": "1CTJ",
+      "chain": "A",
+      "length": 89
+    },
+    {
+      "pdb_id": "1CY5",
+      "chain": "A",
+      "length": 92
+    },
+    {
+      "pdb_id": "1D06",
+      "chain": "A",
+      "length": 130
+    },
+    {
+      "pdb_id": "1D4T",
+      "chain": "A",
+      "length": 104
+    },
+    {
+      "pdb_id": "1D7E",
+      "chain": "A",
+      "length": 119
+    },
+    {
+      "pdb_id": "1DF4",
+      "chain": "A",
+      "length": 57
+    },
+    {
+      "pdb_id": "1DJT",
+      "chain": "A",
+      "length": 64
+    },
+    {
+      "pdb_id": "1E29",
+      "chain": "A",
+      "length": 135
+    },
+    {
+      "pdb_id": "1E85",
+      "chain": "A",
+      "length": 124
+    },
+    {
+      "pdb_id": "1EAZ",
+      "chain": "A",
+      "length": 103
+    },
+    {
+      "pdb_id": "1ECA",
+      "chain": "A",
+      "length": 136
+    },
+    {
+      "pdb_id": "1ECD",
+      "chain": "A",
+      "length": 136
+    },
+    {
+      "pdb_id": "1ECN",
+      "chain": "A",
+      "length": 136
+    },
+    {
+      "pdb_id": "1ECO",
+      "chain": "A",
+      "length": 136
+    },
+    {
+      "pdb_id": "1EIC",
+      "chain": "A",
+      "length": 124
+    },
+    {
+      "pdb_id": "1EID",
+      "chain": "A",
+      "length": 124
+    },
+    {
+      "pdb_id": "1EIE",
+      "chain": "A",
+      "length": 124
+    },
+    {
+      "pdb_id": "1EN2",
+      "chain": "A",
+      "length": 85
+    },
+    {
+      "pdb_id": "1EW0",
+      "chain": "A",
+      "length": 130
+    },
+    {
+      "pdb_id": "1EW4",
+      "chain": "A",
+      "length": 106
+    },
+    {
+      "pdb_id": "1F4P",
+      "chain": "A",
+      "length": 147
+    },
+    {
+      "pdb_id": "1F94",
+      "chain": "A",
+      "length": 63
+    },
+    {
+      "pdb_id": "1F98",
+      "chain": "A",
+      "length": 125
+    },
+    {
+      "pdb_id": "1F9I",
+      "chain": "A",
+      "length": 125
+    },
+    {
+      "pdb_id": "1FAZ",
+      "chain": "A",
+      "length": 122
+    },
+    {
+      "pdb_id": "1FK5",
+      "chain": "A",
+      "length": 93
+    },
+    {
+      "pdb_id": "1FS3",
+      "chain": "A",
+      "length": 124
+    }
+  ]
+}
