@@ -23,7 +23,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install numpy mpmath
 
-      - name: Cross-verification gate
+      - name: Cross-verification gate (Python; lake optional)
         run: python scripts/verify_cross.py
 
       - name: Authority pin file present
@@ -31,6 +31,28 @@ jobs:
           test -f vendor/fsot_compute.py
           test -f vendor/fsot_compute_AUTHORITY_PIN.json
           test -f formulas/FSOT_PROTEIN_DERIVATIONS.md
+          test -f lakefile.lean
+          test -f FSOTGenetics/ChemLink.lean
+
+  lean-mathlib:
+    name: Lean + Mathlib (chem-link + residual)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install elan / Lean
+        run: |
+          curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> $GITHUB_PATH
+
+      - name: lake update (Mathlib)
+        run: lake update
+        timeout-minutes: 120
+
+      - name: lake build (typecheck Mathlib gates)
+        run: lake build
+        timeout-minutes: 180
+        # Note: no lean_exe on Windows-scale Mathlib (PE export limit); library build is the gate.
 
   rust-formula-crates:
     name: Rust formula crates (optional build)
