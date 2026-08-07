@@ -1,6 +1,6 @@
 # Error margin log
 
-*Generated 2026-08-07T02:09:05.466877+00:00*
+*Generated 2026-08-07T02:28:07.574688+00:00*
 
 ## Protocol
 
@@ -9,32 +9,32 @@
 - Rank modes → **fix queue** with literature + FSOT handle.
 - Full law \(S=K(T_1+T_2+T_3)\) only; **0 free parameters**.
 
-**Median RMSD (this set):** 8.648739803513388 Å
+**Median RMSD (this set):** 8.58994132311432 Å
 
 ## Per protein
 
 | Protein | n | RMSD Å | Primary mode | Contact MAE Å | Top-L prec |
 |---------|--:|-------:|:-------------|--------------:|-----------:|
-| Ubiquitin | 76 | 10.34 | `global_topology` | 2.183221706690797 | 0.09210526315789473 |
-| Crambin | 46 | 8.18 | `global_topology` | 2.790680808604157 | 0.043478260869565216 |
-| Villin headpiece | 36 | 6.73 | `global_topology` | 2.0126869714718767 | 0.1111111111111111 |
-| Protein G B1 | 56 | 9.65 | `global_topology` | 2.361859166644939 | 0.08928571428571429 |
-| Engrailed HD | 54 | 8.65 | `global_topology` | 2.2965144643325712 | 0.018518518518518517 |
+| Ubiquitin | 76 | 11.18 | `global_topology` | 6.1877596880348715 | 0.07894736842105263 |
+| Crambin | 46 | 8.59 | `long_range_contacts` | 12.535356432737489 | 0.043478260869565216 |
+| Villin headpiece | 36 | 5.70 | `global_topology` | 3.140972230571936 | 0.08333333333333333 |
+| Protein G B1 | 56 | 10.17 | `global_topology` | 5.59237534380693 | 0.05357142857142857 |
+| Engrailed HD | 54 | 8.35 | `long_range_contacts` | 8.012722371619954 | 0.0 |
 
 ## Fix queue (priority)
 
-### 1. `global_topology` (votes=15)
-
-- **Meaning:** Chain topology / domain packing globally wrong after Kabsch
-- **Literature:** Energy landscape funnel; topology from contact order (Onuchic/Wolynes; Baker).
-- **FSOT handle:** MDS is only as good as D; fix contact D first, then sparse polish; multi-start from SS regions.
-- **Status:** open
-
-### 2. `long_range_contacts` (votes=5)
+### 1. `long_range_contacts` (votes=9)
 
 - **Meaning:** Tertiary native contacts missing or false
 - **Literature:** Contact maps / top-L metrics drive fold quality (CASP; Marks/Sander coevolution; AF distograms).
 - **FSOT handle:** F13–F15 + observer tertiary S at Biochemistry D=13; top-L caps; residual-at-interface on contact set.
+- **Status:** open
+
+### 2. `global_topology` (votes=11)
+
+- **Meaning:** Chain topology / domain packing globally wrong after Kabsch
+- **Literature:** Energy landscape funnel; topology from contact order (Onuchic/Wolynes; Baker).
+- **FSOT handle:** MDS is only as good as D; fix contact D first, then sparse polish; multi-start from SS regions.
 - **Status:** open
 
 ### 3. `per_residue_hotspots` (votes=5)
@@ -67,8 +67,8 @@
 
 ## Next solve (do not skip)
 
-**Mode:** `global_topology`
+**Mode:** `long_range_contacts`
 
-MDS is only as good as D; fix contact D first, then sparse polish; multi-start from SS regions.
+F13–F15 + observer tertiary S at Biochemistry D=13; top-L caps; residual-at-interface on contact set.
 
 Full JSON: `data\error_margin_log.json`
