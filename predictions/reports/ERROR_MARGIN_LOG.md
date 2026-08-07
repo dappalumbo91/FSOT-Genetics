@@ -1,6 +1,6 @@
 # Error margin log
 
-*Generated 2026-08-07T02:03:37.328231+00:00*
+*Generated 2026-08-07T02:09:05.466877+00:00*
 
 ## Protocol
 
@@ -9,17 +9,17 @@
 - Rank modes → **fix queue** with literature + FSOT handle.
 - Full law \(S=K(T_1+T_2+T_3)\) only; **0 free parameters**.
 
-**Median RMSD (this set):** 8.706532637516103 Å
+**Median RMSD (this set):** 8.648739803513388 Å
 
 ## Per protein
 
 | Protein | n | RMSD Å | Primary mode | Contact MAE Å | Top-L prec |
 |---------|--:|-------:|:-------------|--------------:|-----------:|
-| Ubiquitin | 76 | 10.96 | `global_topology` | 2.169883021328888 | 0.07894736842105263 |
-| Crambin | 46 | 7.89 | `global_topology` | 2.87478450467168 | 0.13043478260869565 |
-| Villin headpiece | 36 | 6.49 | `global_topology` | 2.101944789461532 | 0.05555555555555555 |
-| Protein G B1 | 56 | 9.53 | `global_topology` | 2.1863939608152356 | 0.05357142857142857 |
-| Engrailed HD | 54 | 8.71 | `global_topology` | 2.3260135900729204 | 0.037037037037037035 |
+| Ubiquitin | 76 | 10.34 | `global_topology` | 2.183221706690797 | 0.09210526315789473 |
+| Crambin | 46 | 8.18 | `global_topology` | 2.790680808604157 | 0.043478260869565216 |
+| Villin headpiece | 36 | 6.73 | `global_topology` | 2.0126869714718767 | 0.1111111111111111 |
+| Protein G B1 | 56 | 9.65 | `global_topology` | 2.361859166644939 | 0.08928571428571429 |
+| Engrailed HD | 54 | 8.65 | `global_topology` | 2.2965144643325712 | 0.018518518518518517 |
 
 ## Fix queue (priority)
 

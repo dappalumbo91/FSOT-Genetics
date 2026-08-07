@@ -274,6 +274,8 @@ def build_distogram(
     s_abs_acc = 0.0
     s_obs_n = 0
     n_pairs = 0
+    link_hist: dict[str, int] = {}
+    domain_hist: dict[str, int] = {}
 
     for i in range(n):
         for j in range(n):
@@ -281,7 +283,7 @@ def build_distogram(
                 continue
             sep = abs(i - j)
             s = float(sep)
-            # ── FULL S = K(T1+T2+T3) for this pair / interface ──
+            # ── FULL S at chemically correct D_eff (connecting systems) ──
             fs = pair_full_scalar(
                 sep,
                 spins[i],
@@ -295,26 +297,38 @@ def build_distogram(
                 long_range_gate=gate,
                 chain_len=n,
                 recent_hits=0.0,
+                aa1=chars[i],
+                aa2=chars[j],
+                p_alpha_i=props[i].p_alpha,
+                p_alpha_j=props[j].p_alpha,
+                p_beta_i=props[i].p_beta,
+                p_beta_j=props[j].p_beta,
             )
             S = float(fs["S"])
-            res = float(fs["residual"])  # (1 + |S|·P_NEW)
+            res = float(fs["residual"])  # (1 + |S|·P_NEW) at *this* interface
             chaos = float(fs["chaos_factor"])
+            link = str(fs.get("chem_link") or "unknown")
+            dom = str(fs.get("domain") or "?")
+            link_hist[link] = link_hist.get(link, 0) + 1
+            domain_hist[dom] = domain_hist.get(dom, 0) + 1
             s_abs_acc += abs(S)
             n_pairs += 1
             if fs["observed"]:
                 s_obs_n += 1
 
-            # ERROR-LOG: never residual-scale backbone (sep≤2) — hard local geometry
+            # Backbone: geometry only — no residual (wrong interface would distort bonds)
             bb = 1.0 / (s ** (1.0 / PI))
-            if sep <= 2:
+            if link == "backbone_covalent_geometry" or sep <= 2:
                 res_use, chaos_use = 1.0, 1.0
             else:
                 res_use = res
-                chaos_use = chaos if sep >= gate else 1.0
+                chaos_use = chaos
 
+            # Chemistry term residual uses the *pair's* S (correct D_eff)
             interaction = fsot_chemical_interaction(chars[i], chars[j], sep=sep)
             chem_env = s / (s + PI * E)
             chemistry = interaction * chem_env * chem_amp * res_use * chaos_use
+            # SS bonuses residual-scale under H-bond interface S when link is hbond
             helix = (
                 helix_periodicity_bonus(props[i], props[j], sep)
                 * (ss_amp / max(chem_amp, 1e-12))
@@ -349,17 +363,21 @@ def build_distogram(
     iface["full_law"] = True
     iface["smiles_chemistry"] = True
     iface["sequence"] = "".join(chars)
+    iface["chem_link_histogram"] = link_hist
+    iface["domain_D_eff_histogram"] = domain_hist
     iface["error_log_fixes"] = [
-        "no_residual_on_backbone_sep1_2",
-        "fold_experimental_sequence_protocol",
-        "error_margin_log_required",
+        "chem_link_D_eff_routing",
+        "observer_by_chemical_system",
+        "no_residual_on_backbone",
         "smiles_lab_hydrophobicity_pka_F18",
         "F13_length_term",
-        "smiles_hydrophobic_core_contact_rank",
     ]
     iface["mean_abs_S_pairs"] = (s_abs_acc / n_pairs) if n_pairs else 0.0
     iface["observed_pair_fraction"] = (s_obs_n / n_pairs) if n_pairs else 0.0
-    iface["formula"] = "S=K(T1+T2+T3) + SMILES AA chem + residual mid/long + observer refine"
+    iface["formula"] = (
+        "S=K(T1+T2+T3) at chem-link D_eff "
+        "(backbone/disulfide/salt/hydrophobic/H-bond/tertiary) + SMILES AA"
+    )
     return M, props, regions, "".join(chars), iface
 
 
@@ -372,25 +390,43 @@ def proximity_to_distance(
     regions: list[Region] | None = None,
     iface: dict | None = None,
 ) -> np.ndarray:
-    """F15 proximity → Å with hard top-L contact caps (seed scales only).
+    """F15 proximity → Å with consensus top-L caps + SS geometry (error-log levers).
 
     Layer stack:
-      1) Local backbone (sep 1–2) fixed by seed geometry
-      2) F07 inverse: d ~ CA_CA / M  blended with collapsed polymer s^{1/π}
-      3) Top-L and top-2L contact caps at πe/φ and πe (CASP-style 8Å class)
-      4) F10 helix i,i+{3,4,7} geometric distances when both α-strong
-      5) Packing domain tightens top contacts when packing |S| > region |S|
+      1) Local backbone (sep 1–2) hard CA geometry
+      2) F07 inverse blended with polymer s^{1/π}
+      3) Helix ideal D inside detected H regions (sep 3,4,7) — error mode helix_period
+      4) Sheet Cα target for register-matched E–E pairs — mid_range / topology
+      5) Consensus top-L: M + SMILES hydro + salt bridge + disulfide + polarizability
+      6) SMILES §25 vdW floor so contacts cannot collapse below side-chain scale
     """
+    from smiles_aa_chem import (  # noqa: WPS433
+        contact_consensus_score,
+        vdw_radius_aa,
+    )
+
     n = M.shape[0]
     gate = int((iface or {}).get("long_range_gate", LONG_RANGE_GATE))
     pack_amp = float((iface or {}).get("packing_amp", 0.0))
     reg_amp = float((iface or {}).get("region_amp", REGION_AMP))
-    # packing pull scale: φ-lawful ratio of amplitudes (not a free dial)
     pack_boost = 1.0 + (pack_amp / max(reg_amp, 1e-12)) / PHI
+    seq_chars = (iface or {}).get("sequence") or ""
+    rmap = residue_to_region(n, regions or [])
 
     D = np.zeros((n, n), dtype=np.float64)
-    contact_scale = PI * E  # F08 ~8.54 Å — standard contact cutoff scale
+    contact_scale = PI * E  # F08 ~8.54 Å
     d_hard = contact_scale * PHI * PHI
+    # Ideal helix geometry constants (Pauling; not free params)
+    rise, rad, turn = 1.5, 2.3, 100.0 * PI / 180.0
+    # Ideal inter-strand Cα for H-bonded β partners ≈ π + e/φ ≈ 4.82 Å
+    d_sheet = PI + E / PHI
+
+    def _in_kind_region(idx: int, kind: str) -> bool:
+        ri = rmap[idx] if idx < len(rmap) else None
+        if ri is None or not regions:
+            return False
+        return regions[ri].kind == kind
+
     for i in range(n):
         for j in range(i + 1, n):
             sep = abs(i - j)
@@ -407,42 +443,84 @@ def proximity_to_distance(
                 bb_only = float(sep) ** (-1.0 / PI)
                 if m > bb_only * PHI:
                     d = min(d, contact_scale / (1.0 + (m - bb_only) * PHI))
-            # Ideal helix only soft-min when both α-strong (not hard replace — v11 lesson)
-            if props is not None and sep in (3, 4, 7):
-                if props[i].p_alpha > 1.0 / E and props[j].p_alpha > 1.0 / E:
-                    rise, rad, turn = 1.5, 2.3, 100.0 * PI / 180.0
+
+            # Helix periods (error mode helix_period): soft-min toward ideal
+            # Stronger pull when both residues sit in a detected H region
+            if sep in (3, 4, 7):
+                in_h = _in_kind_region(i, "H") and _in_kind_region(j, "H")
+                alpha_ok = (
+                    props is not None
+                    and props[i].p_alpha > 1.0 / E
+                    and props[j].p_alpha > 1.0 / E
+                )
+                if in_h or alpha_ok:
                     d_h = math.sqrt((sep * rise) ** 2 + (2 * rad * math.sin(sep * turn / 2)) ** 2)
-                    d = min(d, d_h)
+                    if in_h:
+                        # blend toward ideal (not hard replace — v14 hard hurt median)
+                        d = (d + PHI * d_h) / (1.0 + PHI)
+                    else:
+                        d = min(d, d_h)
+
+            # β register: soft toward sheet Cα only for high register (reg ≥ 1)
+            if sep >= gate and regions and _in_kind_region(i, "E") and _in_kind_region(j, "E"):
+                ri, rj = rmap[i], rmap[j]
+                if ri is not None and rj is not None and ri != rj:
+                    ra, rb = regions[ri], regions[rj]
+                    reg = beta_register_multiplier(i, j, ra.start, ra.end, rb.start, rb.end)
+                    if reg >= 1.0:  # on-register only
+                        d = min(d, d_sheet)
+
+            # SMILES §25: soft upper clamp on over-long mid contacts using vdW scale
+            # (do NOT floor Cα distances — that expanded false geometry in v14)
+            if 3 <= sep < gate and seq_chars and len(seq_chars) == n:
+                span = (vdw_radius_aa(seq_chars[i]) + vdw_radius_aa(seq_chars[j])) * E
+                d = min(d, max(span, CA_CA * PHI))
+
             D[i, j] = D[j, i] = float(np.clip(d, CA_CA * 0.95, d_hard))
 
-    # Top-L contacts: rank by M but prefer SMILES hydrophobic-core pairs (KD>0 both)
-    # Consensus score reduces false long-range clamps (error mode long_range_contacts)
-    from smiles_aa_chem import hydrophobicity_kd  # noqa: WPS433
-
+    # Consensus top-L long-range contacts
     L = n
-    lr_pairs = []
-    seq_chars = None
-    # recover sequence from props length only — hydrophobicity needs AA letters
-    # caller passes props; we need sequence on iface if present
-    seq_chars = (iface or {}).get("sequence")
+    lr_pairs: list[tuple[float, int, int]] = []
     for i in range(n):
         for j in range(i + gate, n):
-            score = float(M[i, j])
+            region_same = False
+            reg_mult = 1.0
+            ri, rj = rmap[i], rmap[j]
+            if (
+                regions
+                and ri is not None
+                and rj is not None
+                and ri != rj
+                and regions[ri].kind == regions[rj].kind
+                and regions[ri].kind != "C"
+            ):
+                region_same = True
+                ra, rb = regions[ri], regions[rj]
+                if ra.kind == "H":
+                    reg_mult = helix_heptad_multiplier(i, j, ra.start, rb.start)
+                else:
+                    reg_mult = beta_register_multiplier(i, j, ra.start, ra.end, rb.start, rb.end)
             if seq_chars and len(seq_chars) == n:
-                h1 = hydrophobicity_kd(seq_chars[i])
-                h2 = hydrophobicity_kd(seq_chars[j])
-                if h1 > 0 and h2 > 0:
-                    score += PHI * math.sqrt(h1 * h2)  # SMILES core boost (seed φ)
+                score = contact_consensus_score(
+                    seq_chars[i],
+                    seq_chars[j],
+                    float(M[i, j]),
+                    abs(i - j),
+                    region_same=region_same,
+                    register_mult=reg_mult,
+                )
+            else:
+                score = float(M[i, j])
             lr_pairs.append((score, i, j))
     lr_pairs.sort(reverse=True)
     tight = (contact_scale / PHI) / pack_boost
-    for rank, (m, i, j) in enumerate(lr_pairs[: max(L, 1)]):
+    for rank, (_sc, i, j) in enumerate(lr_pairs[: max(L, 1)]):
         if rank < max(L // 2, 1):
             D[i, j] = D[j, i] = min(D[i, j], tight)
         else:
             D[i, j] = D[j, i] = min(D[i, j], contact_scale / math.sqrt(pack_boost))
 
-    # Same-kind region midpoints only
+    # Same-kind region packing (heptad / register)
     if regions:
         for a, ra in enumerate(regions):
             for b, rb in enumerate(regions):
@@ -456,7 +534,10 @@ def proximity_to_distance(
                             continue
                         if ra.kind == "H" and (j - rb.start) % 7 not in (0, 3):
                             continue
-                        D[i, j] = D[j, i] = min(D[i, j], contact_scale)
+                        if ra.kind == "E":
+                            D[i, j] = D[j, i] = min(D[i, j], d_sheet)
+                        else:
+                            D[i, j] = D[j, i] = min(D[i, j], contact_scale)
     return D
 
 
@@ -771,15 +852,18 @@ def predict_ca_coords(
         "predict_ms": elapsed_ms,
         "n_sparse_pairs": len(pairs),
         "refine_rounds": n_rounds,
-        "engine": "fsot_protein_FULL_SCALAR_v13_smiles",
+        "engine": "fsot_protein_FULL_SCALAR_v15_chemD",
         "free_parameters": 0,
         "runtime": "python_full_scalar_T1T2T3_observer",
         "full_law": True,
         "smiles_chemistry": True,
+        "chem_link_histogram": iface.get("chem_link_histogram"),
+        "domain_D_eff_histogram": iface.get("domain_D_eff_histogram"),
         "error_margin_fixes": iface.get("error_log_fixes"),
         "authority": (
-            "FULL S=K(T1+T2+T3) + SMILES Lab AA chemistry (§36 KD hydro, §22 pKa charge, "
-            "F18 disulfide gate) + F13 length term; 0 free params"
+            "FULL S at chemical-connection D_eff: backbone PhysChem, disulfide Atomic, "
+            "salt Electromagnetism, hydro Condensed_Matter, H-bond Chemistry, "
+            "tertiary Biochemistry; SMILES AA; observer per system"
         ),
         "trinary_expansion": "c,p,v,aromatic,branch,hetero,detail",
         "formula": "S=K(T1+T2+T3)",

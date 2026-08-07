@@ -53,12 +53,29 @@ All domains are **pre-registered** in `vendor/fsot_compute.py`. No continuous D 
 If the wrong domain is used, residual vs experiment grows.  
 Probe (`scripts/run_deff_interface_probe.py`) **reports** RMSD/contact under lawful routings for diagnosis — it does **not** auto-pick the winner as a trained dial. Default routing stays theory-first (table above).
 
+## Chemical connection → D_eff (v15 — primary pair routing)
+
+Pair residual now uses **connecting chemical system**, not separation alone:
+
+| Chem link | Domain | D_eff | Observed |
+|-----------|--------|------:|:--------:|
+| Backbone Cα geometry | Physical_Chemistry | 8 | no |
+| Disulfide C–C | Atomic_Physics | 7 | yes |
+| Salt bridge (opp. charge) | Electromagnetism | 9 | yes |
+| Hydrophobic core (KD>0 both, long) | Condensed_Matter | 14 | yes |
+| H-bond secondary (α/β) | Chemistry | 8 | yes |
+| Mid-range sidechain | Molecular_Chemistry | 9 | domain default |
+| Tertiary long-range | Biochemistry | 13 | yes |
+
+`δψ` / `δθ` come from that domain’s pin row, then trinary-modulated.  
+`S = K(T1+T2+T3)` and residual `(1+|S|·P_NEW)` are evaluated **at that interface**.
+
 ## Pin table |S| (D1D38A, this machine)
 
 Run: `python scripts/domain_interface.py`
 
 ## Gap to close next
 
-1. Align protein derivation δψ notes with pin table (or document why table wins).
-2. Bare-metal trit path for pair products (Python trit VM → Zig).
-3. Improve F15→D after interface is honest.
+1. Bare-metal trit path for pair products (Python trit VM → Zig).
+2. Improve F15→D **after** chem-link D_eff residual is honest (error log).
+3. Optional Biology D=12 for cellular-context packs only.

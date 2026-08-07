@@ -87,7 +87,7 @@ def load_smiles_protein() -> dict[str, Any]:
     fold_dg: dict[str, float] = {}
     for r in doc.get("records") or []:
         sec = r.get("section") or ""
-        name = r.get("name") or ""
+        name = (r.get("name") or "").strip()
         val = float(r.get("computed_value") or 0.0)
         if "§36" in sec:
             aa = _aa1(name)
@@ -106,7 +106,6 @@ def load_smiles_protein() -> dict[str, Any]:
             elif "PK1" in nu or "PK₁" in nu or "PK_1" in nu:
                 slot["pK1"] = val
             else:
-                # name like Asp_pKR
                 if "R" in nu.split("_")[-1]:
                     slot["pKR"] = val
                 elif "2" in nu or "₂" in nu:
@@ -114,12 +113,16 @@ def load_smiles_protein() -> dict[str, Any]:
                 else:
                     slot["pK1"] = val
         elif "§25" in sec:
-            # element radii — map common
-            el = name.split()[0].upper()[:2].strip("_")
-            vdw[el] = val
+            # element symbol is the record name (H, C, N, O, S, …)
+            el = name.split()[0].strip()
+            if el:
+                vdw[el] = val
+                vdw[el.upper()] = val
         elif "§26" in sec:
-            el = name.split()[0].upper()[:2]
-            pol[el] = val
+            el = name.split()[0].strip()
+            if el:
+                pol[el] = val
+                pol[el.upper()] = val
         elif "§21" in sec:
             fold_dg[name] = val
     return {
@@ -254,6 +257,98 @@ def smiles_pair_chemistry(aa1: str, aa2: str, sep: int = 1) -> dict[str, float]:
     }
 
 
+# Side-chain → representative heavy element for SMILES §25 vdW (seed radii)
+_AA_VDW_ELEMENT: dict[str, str] = {
+    "G": "H", "A": "C", "V": "C", "L": "C", "I": "C", "P": "C",
+    "F": "C", "W": "C", "Y": "O",  # phenol O
+    "S": "O", "T": "O", "N": "O", "Q": "O", "D": "O", "E": "O",
+    "C": "S", "M": "S",
+    "K": "N", "R": "N", "H": "N",
+}
+
+# Fallback seed vdW (Å) if element missing from table
+_VDW_SEED_FALLBACK: dict[str, float] = {
+    "H": 1.20,
+    "C": 1.70,
+    "N": 1.55,
+    "O": 1.52,
+    "S": 1.80,
+    "F": 1.47,
+    "CL": 1.75,
+}
+
+
+def vdw_radius_aa(aa: str) -> float:
+    """Effective side-chain vdW radius from SMILES §25 element table."""
+    data = load_smiles_protein()
+    aa = aa.upper()
+    el = _AA_VDW_ELEMENT.get(aa, "C")
+    vdw = data.get("vdw") or {}
+    # keys may be element symbols of various forms
+    for key in (el, el.title(), el.upper(), el.capitalize()):
+        if key in vdw:
+            return float(vdw[key])
+    # try scan records
+    for r in data.get("records") or []:
+        if "§25" not in (r.get("section") or ""):
+            continue
+        name = (r.get("name") or "").upper()
+        if name == el or name.startswith(el + " ") or name == el:
+            return float(r["computed_value"])
+    return float(_VDW_SEED_FALLBACK.get(el, 1.70))
+
+
+def polarizability_aa(aa: str) -> float:
+    """SMILES §26 polarizability proxy via side-chain element (Å³)."""
+    data = load_smiles_protein()
+    aa = aa.upper()
+    el = _AA_VDW_ELEMENT.get(aa, "C")
+    pol = data.get("polarizability") or {}
+    for key in (el, el.title(), el.upper()):
+        if key in pol:
+            return float(pol[key])
+    for r in data.get("records") or []:
+        if "§26" not in (r.get("section") or ""):
+            continue
+        name = (r.get("name") or "").upper()
+        if name == el or name.startswith(el):
+            return float(r["computed_value"])
+    # seed fallbacks
+    fb = {"H": 0.667, "C": 1.76, "N": 1.10, "O": 0.80, "S": 2.90}
+    return float(fb.get(el, 1.76))
+
+
+def contact_consensus_score(
+    aa1: str,
+    aa2: str,
+    m_ij: float,
+    sep: int,
+    *,
+    region_same: bool = False,
+    register_mult: float = 1.0,
+) -> float:
+    """Rank score for long-range contact clamps (higher = more likely true contact).
+
+    Combines F15 M with SMILES hydrophobicity, salt bridge, disulfide, polarizability.
+    """
+    a, b = aa1.upper(), aa2.upper()
+    score = float(m_ij)
+    h1, h2 = hydrophobicity_kd(a), hydrophobicity_kd(b)
+    if h1 > 0 and h2 > 0:
+        score += PHI * math.sqrt(h1 * h2)
+    q1, q2 = formal_charge(a), formal_charge(b)
+    # salt bridge (opposite charges)
+    if q1 * q2 < 0:
+        score += E * abs(q1 * q2) * PHI
+    if a == "C" and b == "C":
+        score += (PHI ** 3) * f18_disulfide_gate(sep)
+    # polarizable soft attraction (London-ish ~ α1α2 / r^6 proxy without free r)
+    score += math.sqrt(max(polarizability_aa(a) * polarizability_aa(b), 0.0)) / (PHI * E)
+    if region_same:
+        score += register_mult * PHI
+    return score
+
+
 def smiles_expanded_interaction(aa1: str, aa2: str, sep: int = 1) -> float:
     """Drop-in chemistry interaction using SMILES Lab AA solve + Zig pair spine."""
     from trinary_syntax import aa_opcode, aa_pair_weight, env_scale  # local import
@@ -289,10 +384,12 @@ def summary() -> dict[str, Any]:
         "n_smiles_protein_records": data["n"],
         "n_hydrophobicity": len(data["hydrophobicity"]),
         "n_pka_aa": len(data["pka"]),
+        "n_vdw_elements": len(data.get("vdw") or {}),
         "ph_physio": PH_PHYSIO,
         "source": data.get("source"),
         "sample_hydro": {aa: hydrophobicity_kd(aa) for aa in "IVLFWKRDE"},
         "sample_charge_pH7": {aa: formal_charge(aa) for aa in "DEKRHC"},
+        "sample_vdw_A": {aa: vdw_radius_aa(aa) for aa in "GACSF"},
     }
 
 

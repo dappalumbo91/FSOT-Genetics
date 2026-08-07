@@ -140,23 +140,95 @@ def _domain_row(name: str) -> ScaleDomain:
     )
 
 
-# Physical scale → named pin domain (not free D)
-SCALE_BACKBONE = _domain_row("Physical_Chemistry")   # local covalent / virtual bond
-SCALE_LOCAL = _domain_row("Molecular_Chemistry")      # residue chemistry
-SCALE_SS = _domain_row("Chemistry")                   # H-bond secondary
-SCALE_TERTIARY = _domain_row("Biochemistry")          # tertiary / observed fold
-SCALE_PACK = _domain_row("Condensed_Matter")          # packing
+# Named pin domains for *chemical connection class* (not free continuous D)
+SCALE_BACKBONE = _domain_row("Physical_Chemistry")     # virtual bond / local covalent geometry
+SCALE_COVALENT = _domain_row("Atomic_Physics")         # disulfide / covalent chemistry
+SCALE_HBOND = _domain_row("Chemistry")                 # H-bond secondary structure
+SCALE_MOLECULE = _domain_row("Molecular_Chemistry")    # general residue chemistry
+SCALE_ELECTRO = _domain_row("Electromagnetism")        # salt bridges / charge interaction
+SCALE_TERTIARY = _domain_row("Biochemistry")           # tertiary fold observation
+SCALE_PACK = _domain_row("Condensed_Matter")           # hydrophobic packing / dense core
+SCALE_BIO = _domain_row("Biology")                     # optional cellular context
+
+# Alias for older callers
+SCALE_LOCAL = SCALE_MOLECULE
+SCALE_SS = SCALE_HBOND
 
 
 def scale_for_sep(sep: int, long_range_gate: int) -> ScaleDomain:
-    """Route sequence separation to the correct dimensional interface."""
+    """Legacy sep-only route (fallback). Prefer chem_link_domain()."""
     if sep <= 2:
         return SCALE_BACKBONE
     if sep in (3, 4, 7):
-        return SCALE_SS
+        return SCALE_HBOND
     if sep < long_range_gate:
-        return SCALE_LOCAL
+        return SCALE_MOLECULE
     return SCALE_TERTIARY
+
+
+def chem_link_domain(
+    sep: int,
+    long_range_gate: int,
+    *,
+    aa1: str = "",
+    aa2: str = "",
+    p_alpha_i: float = 0.0,
+    p_alpha_j: float = 0.0,
+    p_beta_i: float = 0.0,
+    p_beta_j: float = 0.0,
+) -> tuple[ScaleDomain, str]:
+    """Route pair to D_eff by *connecting chemical system*, not sep alone.
+
+    Doctrine: interacting chemical structures live at different FSOT interfaces.
+    Named domains only (pin table). Returns (domain, link_class label).
+    """
+    a1, a2 = (aa1 or "?").upper(), (aa2 or "?").upper()
+
+    # 1) Backbone geometry — Physical_Chemistry (not an observation of fold)
+    if sep <= 2:
+        return SCALE_BACKBONE, "backbone_covalent_geometry"
+
+    # 2) Disulfide — Atomic_Physics covalent scale + observed
+    if a1 == "C" and a2 == "C" and sep >= 3:
+        return SCALE_COVALENT, "disulfide_covalent"
+
+    # SMILES charges / hydrophobicity when available
+    q1 = q2 = 0.0
+    h1 = h2 = 0.0
+    try:
+        from smiles_aa_chem import formal_charge, hydrophobicity_kd  # noqa: WPS433
+
+        if a1 in "ARNDCQEGHILKMFPSTWYV" and a2 in "ARNDCQEGHILKMFPSTWYV":
+            q1, q2 = formal_charge(a1), formal_charge(a2)
+            h1, h2 = hydrophobicity_kd(a1), hydrophobicity_kd(a2)
+    except Exception:
+        pass
+
+    # 3) Salt bridge — Electromagnetism (charge–charge), observed
+    if q1 * q2 < -1e-9 and sep >= 3:
+        return SCALE_ELECTRO, "salt_bridge_electrostatic"
+
+    # 4) Hydrophobic packing core — Condensed_Matter (dense soft matter)
+    if h1 > 0.0 and h2 > 0.0 and sep >= long_range_gate:
+        return SCALE_PACK, "hydrophobic_packing"
+
+    # 5) H-bond secondary — Chemistry (H-bond is chemical, not packing)
+    gate_a = 1.0 / E
+    helix_pair = (
+        sep in (3, 4, 7)
+        and p_alpha_i > gate_a
+        and p_alpha_j > gate_a
+    )
+    sheet_pair = sep >= 3 and p_beta_i > gate_a and p_beta_j > gate_a
+    if helix_pair or sheet_pair:
+        return SCALE_HBOND, "hbond_secondary"
+
+    # 6) Mid-range molecular chemistry
+    if sep < long_range_gate:
+        return SCALE_MOLECULE, "molecular_sidechain"
+
+    # 7) Long-range tertiary fold — Biochemistry (observed macromolecule)
+    return SCALE_TERTIARY, "tertiary_biochem"
 
 
 def delta_psi_from_trinary(
@@ -220,21 +292,45 @@ def pair_full_scalar(
     chain_len: int = 1,
     recent_hits: float = 0.0,
     force_observed: bool | None = None,
+    aa1: str = "",
+    aa2: str = "",
+    p_alpha_i: float = 0.0,
+    p_alpha_j: float = 0.0,
+    p_beta_i: float = 0.0,
+    p_beta_j: float = 0.0,
 ) -> dict[str, float]:
-    """Full-law S for one residue pair at sequence separation sep."""
-    sc = scale_for_sep(sep, long_range_gate)
+    """Full-law S for one residue pair at the *chemically correct* D_eff interface."""
+    sc, link = chem_link_domain(
+        sep,
+        long_range_gate,
+        aa1=aa1,
+        aa2=aa2,
+        p_alpha_i=p_alpha_i,
+        p_alpha_j=p_alpha_j,
+        p_beta_i=p_beta_i,
+        p_beta_j=p_beta_j,
+    )
     dpsi = delta_psi_from_trinary(sc.delta_psi0, spin_i, spin_j, charge_i, charge_j)
     dtheta = delta_theta_from_trinary(sc.delta_theta0, branch_i, branch_j, aro_i, aro_j)
-    observed = sc.observed_default if force_observed is None else force_observed
-    # Local chemistry is "observed" when we treat contacts as measurements;
-    # backbone geometry (sep<=2) stays unobserved geometric constraint.
-    if sep <= 2:
+
+    # Observer: backbone unobserved; connecting chemical systems that are
+    # measurements of structure (pack, salt, disulfide, tertiary) observed=True
+    if force_observed is not None:
+        observed = force_observed
+    elif link == "backbone_covalent_geometry":
         observed = False
-    elif force_observed is None and sep >= long_range_gate:
-        observed = True  # tertiary contacts = observation of fold
+    elif link in (
+        "disulfide_covalent",
+        "salt_bridge_electrostatic",
+        "hydrophobic_packing",
+        "tertiary_biochem",
+        "hbond_secondary",
+    ):
+        observed = True
+    else:
+        observed = bool(sc.observed_default)
 
     N = max(float(chain_len), 1.0)
-    # quantize for cache (hot O(n²) path)
     S = _cached_S(
         sc.D_eff,
         int(round(dpsi * 1000)),
@@ -254,6 +350,8 @@ def pair_full_scalar(
         "observed": 1.0 if observed else 0.0,
         "chaos_factor": chaos_factor,
         "recent_hits": recent_hits,
+        "chem_link": link,
+        "delta_psi0_domain": sc.delta_psi0,
     }
 
 
