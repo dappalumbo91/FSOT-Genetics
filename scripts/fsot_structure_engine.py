@@ -56,19 +56,21 @@ LONG_RANGE_GATE = int(math.ceil(ETA_EFF * 13.0))  # = 7
 CA_CA = 3.8  # Å crystallographic virtual bond (geometry constant, not fitted weight)
 
 
-# ── F01 trinary ────────────────────────────────────────────────────────────
+# ── F01 trinary + expanded syntax (trinary_syntax / neuron-zig) ───────────
+from trinary_syntax import (  # noqa: E402
+    aa_opcode,
+    expanded_chemical_interaction,
+    geometric_scale_dist,
+)
+
+
 def trinary_phase(aa: str) -> tuple[float, float, float]:
-    t = {
-        "A": (0, -1, -1), "R": (1, 1, 1), "N": (0, 1, 0), "D": (-1, 1, 0),
-        "C": (0, 0, -1), "Q": (0, 1, 1), "E": (-1, 1, 1), "G": (0, -1, -1),
-        "H": (1, 1, 1), "I": (0, -1, 1), "L": (0, -1, 1), "K": (1, 1, 1),
-        "M": (0, -1, 1), "F": (0, -1, 1), "P": (0, -1, 0), "S": (0, 1, -1),
-        "T": (0, 1, 0), "W": (0, -1, 1), "Y": (0, 1, 1), "V": (0, -1, 0),
-    }.get(aa.upper(), (0, 0, 0))
-    return float(t[0]), float(t[1]), float(t[2])
+    """F01 base (c,p,v). Higher precision lives in aa_opcode 6-trit word."""
+    op = aa_opcode(aa)
+    return float(op.c), float(op.p), float(op.v)
 
 
-# ── F02 chemical scalars (v7 refined) ─────────────────────────────────────
+# ── F02 chemical scalars (v7 + expansion) ─────────────────────────────────
 @dataclass
 class ChemProp:
     h: float
@@ -78,26 +80,18 @@ class ChemProp:
 
 
 def chemical_propensity(aa: str) -> ChemProp:
-    c, p, v = trinary_phase(aa)
-    h = (PHI ** (-p)) * math.exp(v / PI)
-    vol = PI * E * (PHI ** v)
-    q = c
-    mu = GAMMA * math.exp(abs(c) + p + 1.0)
+    op = aa_opcode(aa)
+    h = op.hydrophobicity()
+    vol = op.side_volume()
+    q = op.charge()
+    mu = GAMMA * math.exp(abs(op.c) + op.p + 1.0 + 0.5 * abs(op.aromatic))
     return ChemProp(h=h, vol=vol, q=q, mu=mu)
 
 
-# ── F03–F06 chemistry ─────────────────────────────────────────────────────
-def fsot_chemical_interaction(aa1: str, aa2: str) -> float:
-    c1, c2 = aa1.upper(), aa2.upper()
-    if c1 == "C" and c2 == "C":
-        return PHI ** 6  # F03
-    p1, p2 = chemical_propensity(c1), chemical_propensity(c2)
-    h1 = (p1.h - 1.0) / PHI  # F04 center at 1.0 (v7)
-    h2 = (p2.h - 1.0) / PHI
-    hydrophobic = h1 * h2
-    electrostatic = -p1.q * p2.q * E  # F05
-    dipole = math.sqrt(max(p1.mu * p2.mu, 0.0)) / (GAMMA * PI * E * E)  # F06
-    return hydrophobic + electrostatic + dipole
+# ── F03–F06 chemistry + Zig pair geometry ─────────────────────────────────
+def fsot_chemical_interaction(aa1: str, aa2: str, sep: int = 1) -> float:
+    """Expanded chemistry: F03–F06 + neuron-zig fsotPairWeight contribution."""
+    return expanded_chemical_interaction(aa1, aa2, sep=sep)
 
 
 # ── Secondary propensities (secondary.rs exact) ───────────────────────────
@@ -259,8 +253,8 @@ def build_distogram(sequence: str) -> tuple[np.ndarray, list[SsPropensity], list
             s = float(sep)
             # F07 backbone
             bb = 1.0 / (s ** (1.0 / PI))
-            # F08–F09 chemistry
-            interaction = fsot_chemical_interaction(chars[i], chars[j])
+            # F08–F09 chemistry (expanded trinary syntax + Zig pair law)
+            interaction = fsot_chemical_interaction(chars[i], chars[j], sep=sep)
             chem_env = s / (s + PI * E)
             chemistry = interaction * chem_env * CHEM_AMP
             # F10 F11
@@ -286,10 +280,7 @@ def build_distogram(sequence: str) -> tuple[np.ndarray, list[SsPropensity], list
     return M, props, regions, "".join(chars)
 
 
-def geometric_scale_dist(sep: int) -> float:
-    """Neuron Zig genetic.zig: geometricScaleDist = φ · dist^(-1/π)."""
-    d = float(max(sep, 1))
-    return PHI * (d ** (-1.0 / PI))
+# geometric_scale_dist imported from trinary_syntax (Zig twin)
 
 
 def proximity_to_distance(
@@ -620,12 +611,13 @@ def predict_ca_coords(sequence: str, rounds: int = 24) -> dict[str, Any]:
         "predict_ms": elapsed_ms,
         "n_sparse_pairs": len(pairs),
         "refine_rounds": n_rounds,
-        "engine": "fsot_protein_F01_F15_fast_v7",
+        "engine": "fsot_protein_F01_F15_trinary_v8",
         "free_parameters": 0,
         "authority": (
-            "F01-F15 + F07 inverse + Zig φ·dist^{-1/π}; embed = classical MDS "
-            "+ sparse O(n·k) vectorized polish — formula branch, not neural net"
+            "F01–F15 + expanded 6-trit AA syntax + Zig fsotPairWeight "
+            "(φ·dist^{-1/π}); MDS + sparse polish — formula branch, not neural net"
         ),
+        "trinary_expansion": "c,p,v,aromatic,branch,hetero,detail",
     }
 
 

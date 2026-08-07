@@ -121,10 +121,28 @@ def main() -> int:
         fail("missing formulas/FSOT_PROTEIN_DERIVATIONS.md")
     ok("F01–F15 derivation doc present")
 
+    # ── 6. Trinary syntax expansion (genetics as code) ────────────────
+    from trinary_syntax import uniqueness_report, write_expanded_maps, aa_pair_weight  # noqa: E402
+
+    payload = write_expanded_maps()
+    u = uniqueness_report()
+    if not u.get("all_unique"):
+        fail(f"expanded AA words not unique: {u.get('expanded_collisions')}")
+    ok(f"trinary expansion 20/20 unique opcodes  F01_collision_groups={len(u['f01_collisions'])}")
+    # Zig pair law finite
+    w = aa_pair_weight("F", "W", 8)
+    if not (w == w) or w <= 0:
+        fail(f"fsotPairWeight F–W@8 invalid: {w}")
+    ok(f"Zig pair weight F–W@8 = {w:.6f}")
+    if not (ROOT / "zig" / "src" / "genetic_pair.zig").is_file():
+        fail("missing zig/src/genetic_pair.zig (neuron twin)")
+    ok("neuron-zig genetics sources present under zig/")
+
     print("=" * 64)
     print("ALL CROSS-VERIFICATION GATES PASSED")
     print("  law: S=K(T1+T2+T3)  pin: D1D38A  free_parameters: 0")
     print("  path: mathematical formula branch (not neural net)")
+    print("  syntax: expanded trinary AA opcodes + codon map")
     print("=" * 64)
     return 0
 

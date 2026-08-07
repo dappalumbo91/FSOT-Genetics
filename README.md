@@ -53,16 +53,27 @@ cargo test --workspace
 
 ```
 vendor/fsot_compute.py          # D1D38A scalar engine (byte-pinned)
-scripts/fsot_structure_engine.py # F01–F15 + MDS + sparse polish
+scripts/trinary_syntax.py        # 7-trit AA opcodes + codon syntax + Zig pair law
+scripts/fsot_structure_engine.py # F01–F15 + expanded trinary + MDS + sparse polish
 scripts/run_fsot_vs_alphafold_*  # dual scoreboard
-scripts/verify_cross.py          # hard green gate
-formulas/                        # F01–F15 derivations + trinary maps
+scripts/verify_cross.py          # hard green gate (includes 20/20 unique opcodes)
+formulas/                        # F01–F15 + expanded trinary maps
+zig/                             # neuron-zig genetics twin (seeds, trit, codon, pair)
 crates/                          # codon_core, fsot_core, fsot_protein (Rust)
 docs/DESIGN.md                   # architecture
+docs/TRINARY_SYNTAX_EXPANSION.md # genetics-as-code syntax
 docs/BEAT_ALPHAFOLD_PLAN.md      # campaign bar
 docs/CROSS_VERIFICATION.md       # gate policy
 data/                            # scoreboard snapshots + sample PDBs
 ```
+
+### Genetics as code (trinary)
+
+```text
+codon → PRIMARY/SECONDARY trits → AA → 7-trit opcode → spin/charge → F15 pair → fold
+```
+
+F01 alone collides 6 AA groups. Expanded opcodes are **20/20 unique** (still zero free params).
 
 ---
 

@@ -1,38 +1,38 @@
 # FSOT vs AlphaFold — structure head-to-head
 
-*Generated 2026-08-07T01:24:11.218913+00:00*
+*Generated 2026-08-07T01:37:03.938192+00:00*
 
 ## Mission
 
 FSOT sequence-only structure prediction vs AlphaFold, scored on experimental PDB Cα RMSD
 
-- Engine: `fsot_protein_F01_F15_fast_v7` · **free parameters: 0**
+- Engine: `fsot_protein_F01_F15_trinary_v8` · **free parameters: 0**
 - Metric: Cα RMSD (Å) after Kabsch alignment to experimental PDB (lower is better)
 - Hardware: HP Omen-class desktop; formula path (MDS+sparse), storage-capped cache
-- FSOT median fold time: **163.40660001151264 ms**/chain · wall **12.218831300007878 s** (incl. downloads)
+- FSOT median fold time: **267.58060001884587 ms**/chain · wall **16.770663200004492 s** (incl. downloads)
 
 ## Scoreboard
 
 | Side | Median Cα RMSD (Å) | Wins |
 |------|-------------------:|-----:|
-| **FSOT** | **15.629035217133008** | **1** |
-| AlphaFold | 0.43535089145183603 | 7 |
+| **FSOT** | **13.901767727888158** | **0** |
+| AlphaFold | 0.43535089145183603 | 8 |
 | Ties | — | 0 |
 
-Paired proteins: **8** · FSOT win rate: **0.125**
+Paired proteins: **8** · FSOT win rate: **0.0**
 
 ## Per protein
 
 | UniProt | Name | PDB | FSOT RMSD Å | AF RMSD Å | predict_ms | Winner |
 |---------|------|-----|------------:|----------:|-----------:|:------:|
-| P69905 | Hemoglobin alpha | 1A3N | 13.653 | 0.2697832925375286 | 151 | AlphaFold |
-| P68871 | Hemoglobin beta | 1A3N | 15.629 | 0.5196952732909565 | 155 | AlphaFold |
-| P00918 | Carbonic anhydrase II | 1CA2 | 26.025 | 0.3617948214686656 | 417 | AlphaFold |
-| P00441 | SOD1 | 2C9V | 23.178 | 0.28634210236027413 | 172 | AlphaFold |
-| P61626 | Lysozyme human | 1LZ1 | 15.223 | 0.43535089145183603 | 158 | AlphaFold |
-| P61823 | RNase A | 7RSA | 18.710 | 0.3314052297214222 | 163 | AlphaFold |
-| P0CG47 | Ubiquitin | 1UBQ | 14.723 | 1.6959974037473304 | 334 | AlphaFold |
-| P01308 | Insulin | 4INS | 5.830 | 6.619892197937176 | 98 | FSOT |
+| P69905 | Hemoglobin alpha | 1A3N | 13.689 | 0.2697832925375286 | 232 | AlphaFold |
+| P68871 | Hemoglobin beta | 1A3N | 14.006 | 0.5196952732909565 | 272 | AlphaFold |
+| P00918 | Carbonic anhydrase II | 1CA2 | 16.626 | 0.3617948214686656 | 701 | AlphaFold |
+| P00441 | SOD1 | 2C9V | 13.902 | 0.28634210236027413 | 268 | AlphaFold |
+| P61626 | Lysozyme human | 1LZ1 | 13.168 | 0.43535089145183603 | 249 | AlphaFold |
+| P61823 | RNase A | 7RSA | 14.150 | 0.3314052297214222 | 257 | AlphaFold |
+| P0CG47 | Ubiquitin | 1UBQ | 11.406 | 1.6959974037473304 | 551 | AlphaFold |
+| P01308 | Insulin | 4INS | 6.705 | 6.619892197937176 | 148 | AlphaFold |
 
 ## How to run
 
