@@ -248,8 +248,14 @@ def beta_register_multiplier(
 def build_distogram(
     sequence: str,
     routing: str | None = None,
+    *,
+    collect_channels: bool = False,
 ) -> tuple[np.ndarray, list[SsPropensity], list[Region], str, dict]:
-    """Build F15 proximity matrix under a named multi-scale D_eff routing."""
+    """Build F15 proximity matrix under a named multi-scale D_eff routing.
+
+    When requested, ``iface["channels"]`` contains the five additive F15
+    matrices for diagnostics. Production callers pay no allocation cost.
+    """
     iface = _iface(routing)
     chem_amp = float(iface["chem_amp"])
     ss_amp = float(iface["ss_amp"])
@@ -270,6 +276,17 @@ def build_distogram(
     aros = [op.aromatic for op in ops]
 
     M = np.zeros((n, n), dtype=np.float64)
+    channels = (
+        {
+            "locality": np.zeros((n, n), dtype=np.float64),
+            "chemistry": np.zeros((n, n), dtype=np.float64),
+            "helix": np.zeros((n, n), dtype=np.float64),
+            "sheet": np.zeros((n, n), dtype=np.float64),
+            "region": np.zeros((n, n), dtype=np.float64),
+        }
+        if collect_channels
+        else None
+    )
     # diagnostics over full-law usage
     s_abs_acc = 0.0
     s_obs_n = 0
@@ -358,6 +375,12 @@ def build_distogram(
                     len_term = max(0.0, math.log(math.sqrt(r_i.length() * r_j.length())))
                     region_pair = joint * len_term * region_amp * reg_mult * res_use * chaos_use
             M[i, j] = bb + chemistry + helix + sheet + region_pair
+            if channels is not None:
+                channels["locality"][i, j] = bb
+                channels["chemistry"][i, j] = chemistry
+                channels["helix"][i, j] = helix
+                channels["sheet"][i, j] = sheet
+                channels["region"][i, j] = region_pair
 
     iface = dict(iface)
     iface["full_law"] = True
@@ -374,6 +397,11 @@ def build_distogram(
     ]
     iface["mean_abs_S_pairs"] = (s_abs_acc / n_pairs) if n_pairs else 0.0
     iface["observed_pair_fraction"] = (s_obs_n / n_pairs) if n_pairs else 0.0
+    if channels is not None:
+        reconstructed = sum(channels.values(), start=np.zeros_like(M))
+        if not np.allclose(M, reconstructed, rtol=0.0, atol=1e-12):
+            raise AssertionError("F15 diagnostic channels do not reconstruct proximity matrix")
+        iface["channels"] = channels
     iface["formula"] = (
         "S=K(T1+T2+T3) at chem-link D_eff "
         "(backbone/disulfide/salt/hydrophobic/H-bond/tertiary) + SMILES AA"

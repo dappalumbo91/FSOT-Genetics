@@ -1,0 +1,617 @@
+{
+  "generated_at": "2026-08-07T16:00:36.747305+00:00",
+  "role": "development_only",
+  "selection_rule": [
+    "maximize median exact-separation Pearson",
+    "then maximize worst-structure exact-separation Pearson",
+    "then maximize median separation>=24 Top-L/2 contact precision"
+  ],
+  "git_commit": "344e9d7cec87dd7e1781273ca452592d8086b31a",
+  "engine_sha256": "2d2dafc2c3975ed395d39b2422a73cf0a9940fb1367031cc764eb650dc058e25",
+  "development_structures": [
+    {
+      "pdb_id": "1UBQ",
+      "chain": "A",
+      "pdb_sha256": "d0c59461a71ad274f796afce2ef12b46b7c775496d7f3106c81a1a57bee7fb64"
+    },
+    {
+      "pdb_id": "1CRN",
+      "chain": "A",
+      "pdb_sha256": "86b02db13c695ca5d85b044131b7e886805f50bd0300efad379b91a46d8e2077"
+    },
+    {
+      "pdb_id": "1VII",
+      "chain": "A",
+      "pdb_sha256": "32ea7fa967e07443ecbea6255df1c80ff8de8adb59baaa6bc2add99dd3506d7b"
+    },
+    {
+      "pdb_id": "2GB1",
+      "chain": "A",
+      "pdb_sha256": "af6bc2066959f079835df0708cad0c4d5d8f1d95b11317d03a8f53e31ea81e13"
+    },
+    {
+      "pdb_id": "1ENH",
+      "chain": "A",
+      "pdb_sha256": "33132c40d2279bd51505eb1c562ae9877f48c733af2ced853d9ae4d52cf5e1df"
+    }
+  ],
+  "selected_candidate": {
+    "channels": [
+      "sheet"
+    ],
+    "median_conditioned_pearson": 0.14269175245486604,
+    "worst_conditioned_pearson": 0.03613806251192593,
+    "median_long_range_top_L2_precision": 0.07894736842105263,
+    "per_structure": [
+      {
+        "pdb_id": "1UBQ",
+        "conditioned_pearson": 0.1672001480094001,
+        "long_range_top_L2_precision": 0.07894736842105263
+      },
+      {
+        "pdb_id": "1CRN",
+        "conditioned_pearson": 0.16002650388349554,
+        "long_range_top_L2_precision": 0.2608695652173913
+      },
+      {
+        "pdb_id": "1VII",
+        "conditioned_pearson": 0.03613806251192593,
+        "long_range_top_L2_precision": 0.0
+      },
+      {
+        "pdb_id": "2GB1",
+        "conditioned_pearson": 0.1294449681030713,
+        "long_range_top_L2_precision": 0.07142857142857142
+      },
+      {
+        "pdb_id": "1ENH",
+        "conditioned_pearson": 0.14269175245486604,
+        "long_range_top_L2_precision": 0.1111111111111111
+      }
+    ]
+  },
+  "candidates": [
+    {
+      "channels": [
+        "sheet"
+      ],
+      "median_conditioned_pearson": 0.14269175245486604,
+      "worst_conditioned_pearson": 0.03613806251192593,
+      "median_long_range_top_L2_precision": 0.07894736842105263,
+      "per_structure": [
+        {
+          "pdb_id": "1UBQ",
+          "conditioned_pearson": 0.1672001480094001,
+          "long_range_top_L2_precision": 0.07894736842105263
+        },
+        {
+          "pdb_id": "1CRN",
+          "conditioned_pearson": 0.16002650388349554,
+          "long_range_top_L2_precision": 0.2608695652173913
+        },
+        {
+          "pdb_id": "1VII",
+          "conditioned_pearson": 0.03613806251192593,
+          "long_range_top_L2_precision": 0.0
+        },
+        {
+          "pdb_id": "2GB1",
+          "conditioned_pearson": 0.1294449681030713,
+          "long_range_top_L2_precision": 0.07142857142857142
+        },
+        {
+          "pdb_id": "1ENH",
+          "conditioned_pearson": 0.14269175245486604,
+          "long_range_top_L2_precision": 0.1111111111111111
+        }
+      ]
+    },
+    {
+      "channels": [
+        "helix",
+        "sheet"
+      ],
+      "median_conditioned_pearson": 0.12582477217163282,
+      "worst_conditioned_pearson": 0.03508698450751792,
+      "median_long_range_top_L2_precision": 0.07894736842105263,
+      "per_structure": [
+        {
+          "pdb_id": "1UBQ",
+          "conditioned_pearson": 0.15715054620534916,
+          "long_range_top_L2_precision": 0.07894736842105263
+        },
+        {
+          "pdb_id": "1CRN",
+          "conditioned_pearson": 0.16315228504051718,
+          "long_range_top_L2_precision": 0.2608695652173913
+        },
+        {
+          "pdb_id": "1VII",
+          "conditioned_pearson": 0.03508698450751792,
+          "long_range_top_L2_precision": 0.0
+        },
+        {
+          "pdb_id": "2GB1",
+          "conditioned_pearson": 0.12011548483672611,
+          "long_range_top_L2_precision": 0.07142857142857142
+        },
+        {
+          "pdb_id": "1ENH",
+          "conditioned_pearson": 0.12582477217163282,
+          "long_range_top_L2_precision": 0.1111111111111111
+        }
+      ]
+    },
+    {
+      "channels": [
+        "sheet",
+        "region"
+      ],
+      "median_conditioned_pearson": 0.071931987401649,
+      "worst_conditioned_pearson": -0.06217669868107148,
+      "median_long_range_top_L2_precision": 0.037037037037037035,
+      "per_structure": [
+        {
+          "pdb_id": "1UBQ",
+          "conditioned_pearson": 0.1317061414665284,
+          "long_range_top_L2_precision": 0.05263157894736842
+        },
+        {
+          "pdb_id": "1CRN",
+          "conditioned_pearson": 0.34765166924125823,
+          "long_range_top_L2_precision": 0.13043478260869565
+        },
+        {
+          "pdb_id": "1VII",
+          "conditioned_pearson": 0.071931987401649,
+          "long_range_top_L2_precision": 0.0
+        },
+        {
+          "pdb_id": "2GB1",
+          "conditioned_pearson": 0.04150529930925873,
+          "long_range_top_L2_precision": 0.0
+        },
+        {
+          "pdb_id": "1ENH",
+          "conditioned_pearson": -0.06217669868107148,
+          "long_range_top_L2_precision": 0.037037037037037035
+        }
+      ]
+    },
+    {
+      "channels": [
+        "helix",
+        "sheet",
+        "region"
+      ],
+      "median_conditioned_pearson": 0.06881411785303512,
+      "worst_conditioned_pearson": -0.06120395086857802,
+      "median_long_range_top_L2_precision": 0.037037037037037035,
+      "per_structure": [
+        {
+          "pdb_id": "1UBQ",
+          "conditioned_pearson": 0.13021757210395313,
+          "long_range_top_L2_precision": 0.05263157894736842
+        },
+        {
+          "pdb_id": "1CRN",
+          "conditioned_pearson": 0.34615944594350706,
+          "long_range_top_L2_precision": 0.13043478260869565
+        },
+        {
+          "pdb_id": "1VII",
+          "conditioned_pearson": 0.06881411785303512,
+          "long_range_top_L2_precision": 0.0
+        },
+        {
+          "pdb_id": "2GB1",
+          "conditioned_pearson": 0.042993263878823344,
+          "long_range_top_L2_precision": 0.0
+        },
+        {
+          "pdb_id": "1ENH",
+          "conditioned_pearson": -0.06120395086857802,
+          "long_range_top_L2_precision": 0.037037037037037035
+        }
+      ]
+    },
+    {
+      "channels": [
+        "chemistry",
+        "helix",
+        "sheet"
+      ],
+      "median_conditioned_pearson": 0.05415295121331032,
+      "worst_conditioned_pearson": 0.027114611916973223,
+      "median_long_range_top_L2_precision": 0.037037037037037035,
+      "per_structure": [
+        {
+          "pdb_id": "1UBQ",
+          "conditioned_pearson": 0.08225133580036029,
+          "long_range_top_L2_precision": 0.02631578947368421
+        },
+        {
+          "pdb_id": "1CRN",
+          "conditioned_pearson": 0.1281643396144369,
+          "long_range_top_L2_precision": 0.17391304347826086
+        },
+        {
+          "pdb_id": "1VII",
+          "conditioned_pearson": 0.040859626813564504,
+          "long_range_top_L2_precision": 0.0
+        },
+        {
+          "pdb_id": "2GB1",
+          "conditioned_pearson": 0.05415295121331032,
+          "long_range_top_L2_precision": 0.10714285714285714
+        },
+        {
+          "pdb_id": "1ENH",
+          "conditioned_pearson": 0.027114611916973223,
+          "long_range_top_L2_precision": 0.037037037037037035
+        }
+      ]
+    },
+    {
+      "channels": [
+        "chemistry",
+        "sheet"
+      ],
+      "median_conditioned_pearson": 0.05332472727966693,
+      "worst_conditioned_pearson": 0.027369253587339805,
+      "median_long_range_top_L2_precision": 0.037037037037037035,
+      "per_structure": [
+        {
+          "pdb_id": "1UBQ",
+          "conditioned_pearson": 0.08158608808862168,
+          "long_range_top_L2_precision": 0.02631578947368421
+        },
+        {
+          "pdb_id": "1CRN",
+          "conditioned_pearson": 0.1269777624296197,
+          "long_range_top_L2_precision": 0.17391304347826086
+        },
+        {
+          "pdb_id": "1VII",
+          "conditioned_pearson": 0.0405638216542535,
+          "long_range_top_L2_precision": 0.0
+        },
+        {
+          "pdb_id": "2GB1",
+          "conditioned_pearson": 0.05332472727966693,
+          "long_range_top_L2_precision": 0.10714285714285714
+        },
+        {
+          "pdb_id": "1ENH",
+          "conditioned_pearson": 0.027369253587339805,
+          "long_range_top_L2_precision": 0.037037037037037035
+        }
+      ]
+    },
+    {
+      "channels": [
+        "chemistry",
+        "helix",
+        "sheet",
+        "region"
+      ],
+      "median_conditioned_pearson": 0.0494616821086937,
+      "worst_conditioned_pearson": 0.001013505851284974,
+      "median_long_range_top_L2_precision": 0.037037037037037035,
+      "per_structure": [
+        {
+          "pdb_id": "1UBQ",
+          "conditioned_pearson": 0.08403915747055159,
+          "long_range_top_L2_precision": 0.02631578947368421
+        },
+        {
+          "pdb_id": "1CRN",
+          "conditioned_pearson": 0.17061664169522667,
+          "long_range_top_L2_precision": 0.2608695652173913
+        },
+        {
+          "pdb_id": "1VII",
+          "conditioned_pearson": 0.0494616821086937,
+          "long_range_top_L2_precision": 0.0
+        },
+        {
+          "pdb_id": "2GB1",
+          "conditioned_pearson": 0.04923885271193295,
+          "long_range_top_L2_precision": 0.10714285714285714
+        },
+        {
+          "pdb_id": "1ENH",
+          "conditioned_pearson": 0.001013505851284974,
+          "long_range_top_L2_precision": 0.037037037037037035
+        }
+      ]
+    },
+    {
+      "channels": [
+        "chemistry",
+        "sheet",
+        "region"
+      ],
+      "median_conditioned_pearson": 0.04918705222287072,
+      "worst_conditioned_pearson": 0.0012044990955633228,
+      "median_long_range_top_L2_precision": 0.037037037037037035,
+      "per_structure": [
+        {
+          "pdb_id": "1UBQ",
+          "conditioned_pearson": 0.08337514452654085,
+          "long_range_top_L2_precision": 0.02631578947368421
+        },
+        {
+          "pdb_id": "1CRN",
+          "conditioned_pearson": 0.16958239816013365,
+          "long_range_top_L2_precision": 0.2608695652173913
+        },
+        {
+          "pdb_id": "1VII",
+          "conditioned_pearson": 0.04918705222287072,
+          "long_range_top_L2_precision": 0.0
+        },
+        {
+          "pdb_id": "2GB1",
+          "conditioned_pearson": 0.04849944677864031,
+          "long_range_top_L2_precision": 0.10714285714285714
+        },
+        {
+          "pdb_id": "1ENH",
+          "conditioned_pearson": 0.0012044990955633228,
+          "long_range_top_L2_precision": 0.037037037037037035
+        }
+      ]
+    },
+    {
+      "channels": [
+        "chemistry",
+        "helix",
+        "region"
+      ],
+      "median_conditioned_pearson": 0.04555411347747575,
+      "worst_conditioned_pearson": -0.01259454916280984,
+      "median_long_range_top_L2_precision": 0.02631578947368421,
+      "per_structure": [
+        {
+          "pdb_id": "1UBQ",
+          "conditioned_pearson": 0.07194410668076652,
+          "long_range_top_L2_precision": 0.02631578947368421
+        },
+        {
+          "pdb_id": "1CRN",
+          "conditioned_pearson": 0.16505473948829122,
+          "long_range_top_L2_precision": 0.2608695652173913
+        },
+        {
+          "pdb_id": "1VII",
+          "conditioned_pearson": 0.04555411347747575,
+          "long_range_top_L2_precision": 0.0
+        },
+        {
+          "pdb_id": "2GB1",
+          "conditioned_pearson": 0.035306881318113235,
+          "long_range_top_L2_precision": 0.10714285714285714
+        },
+        {
+          "pdb_id": "1ENH",
+          "conditioned_pearson": -0.01259454916280984,
+          "long_range_top_L2_precision": 0.0
+        }
+      ]
+    },
+    {
+      "channels": [
+        "chemistry",
+        "region"
+      ],
+      "median_conditioned_pearson": 0.045102106945546276,
+      "worst_conditioned_pearson": -0.012422250826977366,
+      "median_long_range_top_L2_precision": 0.02631578947368421,
+      "per_structure": [
+        {
+          "pdb_id": "1UBQ",
+          "conditioned_pearson": 0.0711744650935982,
+          "long_range_top_L2_precision": 0.02631578947368421
+        },
+        {
+          "pdb_id": "1CRN",
+          "conditioned_pearson": 0.16394713358974125,
+          "long_range_top_L2_precision": 0.2608695652173913
+        },
+        {
+          "pdb_id": "1VII",
+          "conditioned_pearson": 0.045102106945546276,
+          "long_range_top_L2_precision": 0.0
+        },
+        {
+          "pdb_id": "2GB1",
+          "conditioned_pearson": 0.03440335456462216,
+          "long_range_top_L2_precision": 0.10714285714285714
+        },
+        {
+          "pdb_id": "1ENH",
+          "conditioned_pearson": -0.012422250826977366,
+          "long_range_top_L2_precision": 0.0
+        }
+      ]
+    },
+    {
+      "channels": [
+        "chemistry",
+        "helix"
+      ],
+      "median_conditioned_pearson": 0.03961309939229021,
+      "worst_conditioned_pearson": 0.013911422260166572,
+      "median_long_range_top_L2_precision": 0.02631578947368421,
+      "per_structure": [
+        {
+          "pdb_id": "1UBQ",
+          "conditioned_pearson": 0.07005941241514595,
+          "long_range_top_L2_precision": 0.02631578947368421
+        },
+        {
+          "pdb_id": "1CRN",
+          "conditioned_pearson": 0.1211055474629144,
+          "long_range_top_L2_precision": 0.17391304347826086
+        },
+        {
+          "pdb_id": "1VII",
+          "conditioned_pearson": 0.03628453982434239,
+          "long_range_top_L2_precision": 0.0
+        },
+        {
+          "pdb_id": "2GB1",
+          "conditioned_pearson": 0.03961309939229021,
+          "long_range_top_L2_precision": 0.10714285714285714
+        },
+        {
+          "pdb_id": "1ENH",
+          "conditioned_pearson": 0.013911422260166572,
+          "long_range_top_L2_precision": 0.0
+        }
+      ]
+    },
+    {
+      "channels": [
+        "chemistry"
+      ],
+      "median_conditioned_pearson": 0.038609546397297544,
+      "worst_conditioned_pearson": 0.014129001376904048,
+      "median_long_range_top_L2_precision": 0.02631578947368421,
+      "per_structure": [
+        {
+          "pdb_id": "1UBQ",
+          "conditioned_pearson": 0.06928937721918486,
+          "long_range_top_L2_precision": 0.02631578947368421
+        },
+        {
+          "pdb_id": "1CRN",
+          "conditioned_pearson": 0.1198454021095051,
+          "long_range_top_L2_precision": 0.17391304347826086
+        },
+        {
+          "pdb_id": "1VII",
+          "conditioned_pearson": 0.03583576622680311,
+          "long_range_top_L2_precision": 0.0
+        },
+        {
+          "pdb_id": "2GB1",
+          "conditioned_pearson": 0.038609546397297544,
+          "long_range_top_L2_precision": 0.10714285714285714
+        },
+        {
+          "pdb_id": "1ENH",
+          "conditioned_pearson": 0.014129001376904048,
+          "long_range_top_L2_precision": 0.0
+        }
+      ]
+    },
+    {
+      "channels": [
+        "helix",
+        "region"
+      ],
+      "median_conditioned_pearson": 0.028871544956049287,
+      "worst_conditioned_pearson": -0.16516193001808485,
+      "median_long_range_top_L2_precision": 0.02631578947368421,
+      "per_structure": [
+        {
+          "pdb_id": "1UBQ",
+          "conditioned_pearson": 0.028871544956049287,
+          "long_range_top_L2_precision": 0.02631578947368421
+        },
+        {
+          "pdb_id": "1CRN",
+          "conditioned_pearson": 0.32948540553097855,
+          "long_range_top_L2_precision": 0.21739130434782608
+        },
+        {
+          "pdb_id": "1VII",
+          "conditioned_pearson": 0.08338720756468737,
+          "long_range_top_L2_precision": 0.0
+        },
+        {
+          "pdb_id": "2GB1",
+          "conditioned_pearson": -0.003310289786351391,
+          "long_range_top_L2_precision": 0.0
+        },
+        {
+          "pdb_id": "1ENH",
+          "conditioned_pearson": -0.16516193001808485,
+          "long_range_top_L2_precision": 0.037037037037037035
+        }
+      ]
+    },
+    {
+      "channels": [
+        "helix"
+      ],
+      "median_conditioned_pearson": 0.028555505067474472,
+      "worst_conditioned_pearson": -0.008110208311290334,
+      "median_long_range_top_L2_precision": 0.0,
+      "per_structure": [
+        {
+          "pdb_id": "1UBQ",
+          "conditioned_pearson": 0.03636408435873096,
+          "long_range_top_L2_precision": 0.0
+        },
+        {
+          "pdb_id": "1CRN",
+          "conditioned_pearson": 0.06986976889553224,
+          "long_range_top_L2_precision": 0.21739130434782608
+        },
+        {
+          "pdb_id": "1VII",
+          "conditioned_pearson": 0.009851585971614339,
+          "long_range_top_L2_precision": 0.0
+        },
+        {
+          "pdb_id": "2GB1",
+          "conditioned_pearson": 0.028555505067474472,
+          "long_range_top_L2_precision": 0.0
+        },
+        {
+          "pdb_id": "1ENH",
+          "conditioned_pearson": -0.008110208311290334,
+          "long_range_top_L2_precision": 0.0
+        }
+      ]
+    },
+    {
+      "channels": [
+        "region"
+      ],
+      "median_conditioned_pearson": 0.020792063351971056,
+      "worst_conditioned_pearson": -0.16700622561996206,
+      "median_long_range_top_L2_precision": 0.02631578947368421,
+      "per_structure": [
+        {
+          "pdb_id": "1UBQ",
+          "conditioned_pearson": 0.020792063351971056,
+          "long_range_top_L2_precision": 0.02631578947368421
+        },
+        {
+          "pdb_id": "1CRN",
+          "conditioned_pearson": 0.32825641695474833,
+          "long_range_top_L2_precision": 0.21739130434782608
+        },
+        {
+          "pdb_id": "1VII",
+          "conditioned_pearson": 0.0855801129144484,
+          "long_range_top_L2_precision": 0.0
+        },
+        {
+          "pdb_id": "2GB1",
+          "conditioned_pearson": -0.006635264082079996,
+          "long_range_top_L2_precision": 0.0
+        },
+        {
+          "pdb_id": "1ENH",
+          "conditioned_pearson": -0.16700622561996206,
+          "long_range_top_L2_precision": 0.037037037037037035
+        }
+      ]
+    }
+  ]
+}
