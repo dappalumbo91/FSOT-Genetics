@@ -1,0 +1,25 @@
+{
+  "doctrine": "Metal/cofactor coordination nodes are routed to EXISTING FSOT physics domains (pin D1D38A) so no new free parameters are introduced. Dative/d-orbital transition-metal bonds -> Atomic_Physics (D_eff 7, the covalent domain). Hard ionic metal coordination -> Electromagnetism (D_eff 9, the charge domain). Organic cofactors -> Molecular_Chemistry (D_eff 9). The coordinating residues form a structural node constrained at coordination geometry; the node interaction is scored at the cofactor's domain D_eff.",
+  "law": "S=K(T1+T2+T3) at the cofactor domain D_eff; zero free parameters",
+  "cofactors": {
+    "ZN": {"class": "transition_metal", "domain": "Atomic_Physics", "D_eff": 7, "coordination": 4, "geometry": "tetrahedral", "typical_ligands": ["CYS", "HIS", "ASP", "GLU"], "role": "structural/catalytic Lewis acid"},
+    "CU": {"class": "transition_metal", "domain": "Atomic_Physics", "D_eff": 7, "coordination": 4, "geometry": "distorted_square_planar", "typical_ligands": ["HIS", "CYS", "MET"], "role": "redox center"},
+    "FE": {"class": "transition_metal", "domain": "Atomic_Physics", "D_eff": 7, "coordination": 6, "geometry": "octahedral", "typical_ligands": ["HIS", "CYS", "ASP", "GLU"], "role": "redox/O2 binding"},
+    "FE2": {"class": "transition_metal", "domain": "Atomic_Physics", "D_eff": 7, "coordination": 6, "geometry": "octahedral", "typical_ligands": ["HIS", "CYS", "ASP", "GLU"], "role": "redox/O2 binding"},
+    "MN": {"class": "transition_metal", "domain": "Atomic_Physics", "D_eff": 7, "coordination": 6, "geometry": "octahedral", "typical_ligands": ["ASP", "GLU", "HIS"], "role": "redox/catalysis"},
+    "CO": {"class": "transition_metal", "domain": "Atomic_Physics", "D_eff": 7, "coordination": 6, "geometry": "octahedral", "typical_ligands": ["HIS", "CYS"], "role": "cofactor core"},
+    "NI": {"class": "transition_metal", "domain": "Atomic_Physics", "D_eff": 7, "coordination": 5, "geometry": "square_pyramidal", "typical_ligands": ["HIS", "CYS"], "role": "catalysis"},
+    "MO": {"class": "transition_metal", "domain": "Atomic_Physics", "D_eff": 7, "coordination": 6, "geometry": "octahedral", "typical_ligands": ["CYS", "SER"], "role": "redox"},
+    "CA": {"class": "hard_ionic", "domain": "Electromagnetism", "D_eff": 9, "coordination": 7, "geometry": "pentagonal_bipyramidal", "typical_ligands": ["ASP", "GLU", "ASN", "THR", "SER"], "role": "EF-hand conformational switch"},
+    "MG": {"class": "hard_ionic", "domain": "Electromagnetism", "D_eff": 9, "coordination": 6, "geometry": "octahedral", "typical_ligands": ["ASP", "GLU", "ASN"], "role": "phosphate/catalysis"},
+    "NA": {"class": "hard_ionic", "domain": "Electromagnetism", "D_eff": 9, "coordination": 6, "geometry": "octahedral", "typical_ligands": ["ASP", "GLU", "backbone_O"], "role": "ionic"},
+    "K": {"class": "hard_ionic", "domain": "Electromagnetism", "D_eff": 9, "coordination": 7, "geometry": "pentagonal_bipyramidal", "typical_ligands": ["ASP", "GLU", "backbone_O"], "role": "ionic"},
+    "HEM": {"class": "organometallic_porphyrin", "domain": "Atomic_Physics", "D_eff": 7, "coordination": 6, "geometry": "octahedral_porphyrin", "typical_ligands": ["HIS"], "role": "Fe-porphyrin: 4 pyrrole N + proximal His + 6th axial site"},
+    "HEC": {"class": "organometallic_porphyrin", "domain": "Atomic_Physics", "D_eff": 7, "coordination": 6, "geometry": "octahedral_porphyrin", "typical_ligands": ["HIS", "MET", "CYS"], "role": "c-type heme, covalently attached"},
+    "NAD": {"class": "organic_cofactor", "domain": "Molecular_Chemistry", "D_eff": 9, "coordination": 0, "geometry": "extended", "typical_ligands": ["GLY", "ASP", "SER"], "role": "hydride carrier"},
+    "NAP": {"class": "organic_cofactor", "domain": "Molecular_Chemistry", "D_eff": 9, "coordination": 0, "geometry": "extended", "typical_ligands": ["GLY", "ARG"], "role": "hydride carrier (phosphorylated)"},
+    "FAD": {"class": "organic_cofactor", "domain": "Molecular_Chemistry", "D_eff": 9, "coordination": 0, "geometry": "extended", "typical_ligands": ["GLY", "ARG", "TYR"], "role": "redox flavin"},
+    "FMN": {"class": "organic_cofactor", "domain": "Molecular_Chemistry", "D_eff": 9, "coordination": 0, "geometry": "extended", "typical_ligands": ["THR", "SER"], "role": "redox flavin"},
+    "PLP": {"class": "organic_cofactor", "domain": "Molecular_Chemistry", "D_eff": 9, "coordination": 1, "geometry": "schiff_base", "typical_ligands": ["LYS"], "role": "amino-transfer"}
+  }
+}
