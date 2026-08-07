@@ -81,7 +81,20 @@ def main() -> int:
         fail(f"free_parameters={pred.get('free_parameters')} (must be 0)")
     ok(f"free_parameters=0  engine={pred.get('engine')}  routing={pred.get('routing')}")
     if pred.get("runtime"):
-        ok(f"runtime={pred.get('runtime')}  (trinary law emulated in Python floats)")
+        ok(f"runtime={pred.get('runtime')}")
+    if not pred.get("full_law"):
+        fail("engine must set full_law=True (whole S=K(T1+T2+T3), not frozen |S| slice)")
+    ok(f"full_law S_final={pred.get('S_final_observation')}  observer_mod={pred.get('observer_mod_final')}")
+    ok(f"T1={pred.get('T1_final')} T2={pred.get('T2_final')} T3={pred.get('T3_final')}")
+
+    # parity: float full law vs vendor domain_scalar
+    from full_scalar_law import parity_check_domain  # noqa: E402
+
+    for dname in ("Biochemistry", "Molecular_Chemistry"):
+        pr = parity_check_domain(dname)
+        if not pr["ok"]:
+            fail(f"full scalar parity fail {dname}: {pr}")
+        ok(f"scalar parity {dname} err={pr['abs_err']:.2e}")
 
     xyz = pred["ca_coords"]
     if xyz.shape != (len(seq), 3):

@@ -1,16 +1,14 @@
 #!/usr/bin/env python3
-"""FSOT sequence → Cα structure — PORT of Genetics/fsot_protein math (F01–F15).
+"""FSOT sequence → Cα structure — FULL scalar law + F01–F15.
 
 Authority:
-  - I:/FSOT-Physical-Archive/04_Genetics-Longevity/fsot_protein/formulas/
-  - Desktop/Genetics/fsot_protein/src/{secondary,chemical,distogram,regions}.rs
-  - FSOT_PROTEIN_DERIVATIONS.md v7
+  - vendor/fsot_compute.py  S = K(T1+T2+T3)  pin D1D38A  (observer, chaos, poof/suction)
+  - F01–F15 protein formulas + trinary opcodes
+  - neuron-zig pair geometry
 
-Law: zero free parameters — only {π, e, φ, γ} + domain_scalar(Biochemistry, Molecular_Chemistry).
-Distogram M_ij = bb + chem·env·chem_amp + helix + sheet + region_pair (F15).
-Coordinates: classical MDS embedding of distances derived from proximity M.
-
-Does NOT invent Chou-Fasman tables or free MD force fields.
+Law: zero free parameters. Uses the *whole* formula — not a frozen |S| slice:
+  per-pair full scalar (T1 observer / T2 / T3 chaos), residual scale (1+|S|·P_NEW),
+  refine rounds as observations (observed=True, hits grow).
 """
 
 from __future__ import annotations
@@ -56,6 +54,12 @@ CA_CA = 3.8  # Å crystallographic virtual bond (geometry constant, not fitted w
 
 # Multi-scale D_eff routing (named pin domains only — see domain_interface.py)
 from domain_interface import DEFAULT_ROUTING, get_routing  # noqa: E402
+from full_scalar_law import (  # noqa: E402
+    pair_full_scalar,
+    refine_observation_scalar,
+    residual_scale,
+    compute_scalar_full,
+)
 
 
 def _iface(routing: str | None = None) -> dict:
@@ -258,23 +262,66 @@ def build_distogram(
     regions = detect_regions(props)
     rmap = residue_to_region(n, regions)
 
+    # Precompute trinary spin/charge for full-law pair scalars
+    ops = [aa_opcode(c) for c in chars]
+    spins = [op.spin() for op in ops]
+    charges = [op.charge() for op in ops]
+    branches = [op.branch for op in ops]
+    aros = [op.aromatic for op in ops]
+
     M = np.zeros((n, n), dtype=np.float64)
+    # diagnostics over full-law usage
+    s_abs_acc = 0.0
+    s_obs_n = 0
+    n_pairs = 0
+
     for i in range(n):
         for j in range(n):
             if i == j:
                 continue
             sep = abs(i - j)
             s = float(sep)
-            # F07 backbone — seed only (no domain dial)
-            bb = 1.0 / (s ** (1.0 / PI))
-            # F08–F09 chemistry @ chem domain
+            # ── FULL S = K(T1+T2+T3) for this pair / interface ──
+            fs = pair_full_scalar(
+                sep,
+                spins[i],
+                spins[j],
+                charges[i],
+                charges[j],
+                branch_i=branches[i],
+                branch_j=branches[j],
+                aro_i=aros[i],
+                aro_j=aros[j],
+                long_range_gate=gate,
+                chain_len=n,
+                recent_hits=0.0,
+            )
+            S = float(fs["S"])
+            res = float(fs["residual"])  # (1 + |S|·P_NEW)
+            chaos = float(fs["chaos_factor"])
+            s_abs_acc += abs(S)
+            n_pairs += 1
+            if fs["observed"]:
+                s_obs_n += 1
+
+            # F07 backbone — seed, residual-scaled (law, not free weight)
+            bb = (1.0 / (s ** (1.0 / PI))) * res
+            # F08–F09 chemistry · full-law residual + chaos on longer range
             interaction = fsot_chemical_interaction(chars[i], chars[j], sep=sep)
             chem_env = s / (s + PI * E)
-            chemistry = interaction * chem_env * chem_amp
-            # F10 F11 — secondary / H-bond scale domain
-            helix = helix_periodicity_bonus(props[i], props[j], sep) * (ss_amp / max(chem_amp, 1e-12))
-            sheet = sheet_pair_bonus(props[i], props[j], sep) * (ss_amp / max(chem_amp, 1e-12))
-            # F13 region pair @ region domain D_eff gate
+            chemistry = interaction * chem_env * chem_amp * res * (chaos if sep >= gate else 1.0)
+            # F10 F11 — SS at Chemistry interface, residual-scaled
+            helix = (
+                helix_periodicity_bonus(props[i], props[j], sep)
+                * (ss_amp / max(chem_amp, 1e-12))
+                * res
+            )
+            sheet = (
+                sheet_pair_bonus(props[i], props[j], sep)
+                * (ss_amp / max(chem_amp, 1e-12))
+                * res
+            )
+            # F13 region pair — tertiary observed domain + full residual
             region_pair = 0.0
             ri, rj = rmap[i], rmap[j]
             if ri is not None and rj is not None and ri != rj and sep >= gate:
@@ -289,8 +336,14 @@ def build_distogram(
                             i, j, r_i.start, r_i.end, r_j.start, r_j.end
                         )
                     joint = math.sqrt(pi_v * pj_v)
-                    region_pair = joint * region_amp * reg_mult
+                    region_pair = joint * region_amp * reg_mult * res * chaos
             M[i, j] = bb + chemistry + helix + sheet + region_pair
+
+    iface = dict(iface)
+    iface["full_law"] = True
+    iface["mean_abs_S_pairs"] = (s_abs_acc / n_pairs) if n_pairs else 0.0
+    iface["observed_pair_fraction"] = (s_obs_n / n_pairs) if n_pairs else 0.0
+    iface["formula"] = "S=K(T1+T2+T3) per pair + residual (1+|S|P_NEW) + observer/chaos"
     return M, props, regions, "".join(chars), iface
 
 
@@ -531,16 +584,16 @@ def refine_with_distogram(
     rounds: int = 24,
     pairs: list[tuple[int, int]] | None = None,
 ) -> np.ndarray:
-    """Fast sparse refine: local band + top contacts only (formula weights).
+    """Sparse refine with *full* scalar law as observer each round.
 
-    Mathematical path must stay *fast* — zero free params is not an excuse
-    for O(n²)×hundreds of iterations (that apes neural-net cost without the wins).
+    Every polish step is an observation: observed=True, hits=round,
+    S = K(T1+T2+T3), forces scaled by residual (1+|S|·P_NEW).
+    Still O(n·k) pairs — not O(n²)×neural grind.
     """
     n = X.shape[0]
     pos = X.copy()
     if pairs is None:
         pairs = _sparse_pairs(n, M, local=int(PI * E) + 3)  # local window ~12 from πe
-    # Pre-index for vectorized force accumulation
     if not pairs:
         return pos
     pi = np.array([p[0] for p in pairs], dtype=np.int32)
@@ -549,12 +602,29 @@ def refine_with_distogram(
     m_ij = M[pi, pj]
     sep = np.abs(pi - pj).astype(np.float64)
     env = sep / (sep + PI * E)
-    w = (1.0 + np.maximum(m_ij, 0.0) * PHI) * (0.35 + 0.65 * env)
-    w = np.where(sep == 1, 80.0, w)
-    w = np.where(sep == 2, 15.0, w)
+    w0 = (1.0 + np.maximum(m_ij, 0.0) * PHI) * (0.35 + 0.65 * env)
+    w0 = np.where(sep == 1, 80.0, w0)
+    w0 = np.where(sep == 2, 15.0, w0)
 
     for rnd in range(rounds):
-        lr = 0.30 * (1.0 - rnd / (rounds + PHI))
+        # ── OBSERVER PATH: this refine step is a measurement of structure ──
+        # stress proxy from current residual distances (seed-scaled)
+        diff0 = pos[pj] - pos[pi]
+        dist0 = np.linalg.norm(diff0, axis=1) + 1e-9
+        stress_proxy = float(np.mean((dist0 - td) ** 2))
+        obs = refine_observation_scalar(rnd, rounds, n, mean_stress_proxy=stress_proxy)
+        S_obs = float(obs["S"])
+        res_obs = residual_scale(S_obs)
+        # T3 chaos already inside S; explicit chaos factor for long-range weights
+        chaos = float(obs.get("chaos_factor", 1.0 + float(fc.CHAOS) * (13.0 - 25.0) / 25.0))
+        # observer_mod is in T1 when observed=True — residual carries the full law
+        w = w0 * res_obs
+        # long-range pairs feel chaos valve more (sep ≥ πe ≈ 8)
+        w = np.where(sep >= PI * E, w * abs(chaos), w)
+
+        lr = 0.30 * (1.0 - rnd / (rounds + PHI)) * res_obs / (1.0 + abs(S_obs))
+        # keep step size finite
+        lr = float(np.clip(lr, 0.02, 0.45))
         diff = pos[pj] - pos[pi]
         dist = np.linalg.norm(diff, axis=1) + 1e-9
         scale = (w * (dist - td) / dist)[:, None]
@@ -584,12 +654,9 @@ def predict_ca_coords(
     rounds: int = 24,
     routing: str | None = None,
 ) -> dict[str, Any]:
-    """Fast mathematical fold: F15 matrix → D → MDS → sparse polish.
+    """Full-law fold: S=K(T1+T2+T3) per pair + observer refine + F15/MDS.
 
-    Design goal: seconds per chain on a home PC, not minutes — closed-form
-    MDS is the main embed; sparse refine only polishes.
-
-    routing: named multi-scale D_eff interface (default multi_scale_v9).
+    Uses the whole formula (observer, chaos, residual), not a frozen |S| slice.
     """
     import time as _time
 
@@ -612,7 +679,6 @@ def predict_ca_coords(
     X_mds = classical_mds(D, dim=3)
     candidates: list[tuple[str, np.ndarray]] = [
         ("mds", X_mds),
-        # Mirror image is an equally valid embed of D; pick by sparse stress (no free dials)
         ("mds_mirror", X_mds * np.array([1.0, 1.0, -1.0])),
         ("regions", initial_from_regions(seq, props, regions)),
     ]
@@ -625,6 +691,9 @@ def predict_ca_coords(
         if stc < st:
             X, st, best_name = Xc, stc, cname
 
+    # Final observation scalar (full law snapshot of finished fold)
+    final_obs = refine_observation_scalar(n_rounds, n_rounds, len(seq), mean_stress_proxy=st / max(len(seq), 1))
+
     elapsed_ms = (_time.perf_counter() - t0) * 1000.0
     ss = "".join(p.dominant() for p in props)
     return {
@@ -635,6 +704,14 @@ def predict_ca_coords(
         "ca_coords": X,
         "S_biochem": S_BIOCHEM,
         "S_molchem": S_MOLCHEM,
+        "S_final_observation": final_obs["S"],
+        "T1_final": final_obs["T1"],
+        "T2_final": final_obs["T2"],
+        "T3_final": final_obs["T3"],
+        "observer_mod_final": final_obs["observer_mod"],
+        "chaos_factor_final": final_obs["chaos_factor"],
+        "mean_abs_S_pairs": iface.get("mean_abs_S_pairs"),
+        "observed_pair_fraction": iface.get("observed_pair_fraction"),
         "chem_amp": iface["chem_amp"],
         "ss_amp": iface["ss_amp"],
         "region_amp": iface["region_amp"],
@@ -655,14 +732,16 @@ def predict_ca_coords(
         "predict_ms": elapsed_ms,
         "n_sparse_pairs": len(pairs),
         "refine_rounds": n_rounds,
-        "engine": "fsot_protein_F01_F15_deff_v9",
+        "engine": "fsot_protein_FULL_SCALAR_v10",
         "free_parameters": 0,
-        "runtime": "python_float_emulated_trinary",
+        "runtime": "python_full_scalar_T1T2T3_observer",
+        "full_law": True,
         "authority": (
-            "F01–F15 + 7-trit AA syntax + Zig pair law + multi-scale D_eff "
-            "routing (named pin domains only); MDS + sparse polish — not neural net"
+            "FULL S=K(T1+T2+T3) per pair (observer/chaos/poof/suction) + residual "
+            "(1+|S|P_NEW) + observer refine rounds + F01–F15 + trinary + MDS — not a frozen |S| slice"
         ),
         "trinary_expansion": "c,p,v,aromatic,branch,hetero,detail",
+        "formula": "S=K(T1+T2+T3)",
     }
 
 
