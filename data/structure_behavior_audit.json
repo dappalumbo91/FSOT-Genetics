@@ -1,0 +1,795 @@
+{
+  "generated_at": "2026-08-07T16:48:25.129743+00:00",
+  "purpose": "Observed behavior audit; no production formula selection",
+  "manifest_sha256": "e9473f68455949876dca015ba87190b5abea2eba46a60560d9dc39bea0bc9385",
+  "aggregate": {
+    "tight_ranked_contact_precision": 0.0274869109947644,
+    "tight_ranked_lr24_precision": 0.02356020942408377,
+    "loose_ranked_contact_precision": 0.026041666666666668,
+    "loose_ranked_lr24_precision": 0.01953125,
+    "top_L_native_long_range_recall": 0.020599250936329586,
+    "false_constraint_signed_median_A": -17.450368996787738,
+    "baseline_rmsd_A": {
+      "median": 15.065531392869191,
+      "minimum": 8.302653430040595,
+      "maximum": 28.681840304541424
+    },
+    "diagnostic_no_rank_local_rebond_rmsd_A": {
+      "median": 13.230009872044711,
+      "minimum": 7.818108229790101,
+      "maximum": 19.311832361812037
+    },
+    "native_radius_of_gyration_A": {
+      "median": 14.788957803164887,
+      "minimum": 11.072060640852303,
+      "maximum": 23.23759686358796
+    },
+    "context_counts": {
+      "with_other_protein_chain": 6,
+      "with_nonwater_hetero_component": 10,
+      "with_either_context": 12
+    },
+    "residual_by_separation": {
+      "local_1_2": {
+        "target_signed_median_A": -0.08750732733568234,
+        "target_absolute_median_A": 0.0933329218110468,
+        "realized_signed_median_A": -0.027910135690526916,
+        "realized_absolute_median_A": 0.07536829610805951
+      },
+      "mid_3_6": {
+        "target_signed_median_A": -4.494191701806916,
+        "target_absolute_median_A": 4.494191701806916,
+        "realized_signed_median_A": -4.883340962026162,
+        "realized_absolute_median_A": 4.897037947914642
+      },
+      "medium_7_11": {
+        "target_signed_median_A": -5.564963091626637,
+        "target_absolute_median_A": 5.575595032002023,
+        "realized_signed_median_A": -8.379784681089337,
+        "realized_absolute_median_A": 8.379784681089337
+      },
+      "long_12_23": {
+        "target_signed_median_A": -9.421783383590128,
+        "target_absolute_median_A": 9.421783383590128,
+        "realized_signed_median_A": -8.23653969186159,
+        "realized_absolute_median_A": 8.70551167047617
+      },
+      "long_24_plus": {
+        "target_signed_median_A": -6.979279277845929,
+        "target_absolute_median_A": 7.261638877620394,
+        "realized_signed_median_A": 6.2239131279149955,
+        "realized_absolute_median_A": 9.993123737695125
+      }
+    }
+  },
+  "results": [
+    {
+      "pdb_id": "22LX",
+      "chain": "A",
+      "length": 146,
+      "pdb_sha256": "3ce5b662542b0c427b4613568d7b18d21d36da0030d9708e7f0987ea853c9e93",
+      "baseline_rmsd_A": 16.873760038238437,
+      "diagnostic_no_rank_local_rebond_rmsd_A": 11.662207612853162,
+      "diagnostic_chirality_reflected": true,
+      "native_radius_of_gyration_A": 14.542988352669704,
+      "native_shape_axis_variance_ratio": 2.987464358510868,
+      "native_long_range_contact_density": 0.021991203518592562,
+      "tight_ranked_contact_precision": 0.0136986301369863,
+      "tight_ranked_lr24_precision": 0.0,
+      "top_L_native_long_range_recall": 0.0,
+      "context": {
+        "protein_chain_count": 1,
+        "protein_chains": {
+          "A": 1150
+        },
+        "hetero_components": {
+          "SO4": 15,
+          "ACT": 4,
+          "NA": 1
+        },
+        "residue_fraction_near_other_chain_6A": 0.0,
+        "residue_fraction_near_nonwater_hetero_6A": 0.11643835616438356
+      },
+      "residual_by_separation": {
+        "local_1_2": {
+          "target_signed_median_A": -0.1428360351401876,
+          "target_mae_A": 0.523066948310521,
+          "realized_signed_median_A": -0.019127780996572863,
+          "realized_mae_A": 1.308950600800216
+        },
+        "mid_3_6": {
+          "target_signed_median_A": -4.284707154835781,
+          "target_mae_A": 4.948890674103662,
+          "realized_signed_median_A": -4.241150812272936,
+          "realized_mae_A": 5.118174069921406
+        },
+        "medium_7_11": {
+          "target_signed_median_A": -4.653807342064178,
+          "target_mae_A": 6.682970306905606,
+          "realized_signed_median_A": -6.1930939203385975,
+          "realized_mae_A": 8.333187115367416
+        },
+        "long_12_23": {
+          "target_signed_median_A": -8.716693360128387,
+          "target_mae_A": 9.80741271021028,
+          "realized_signed_median_A": -5.424216064386735,
+          "realized_mae_A": 7.565326336791227
+        },
+        "long_24_plus": {
+          "target_signed_median_A": -6.381585651366873,
+          "target_mae_A": 7.842898769828954,
+          "realized_signed_median_A": 13.976202378053086,
+          "realized_mae_A": 14.483836711970106
+        }
+      }
+    },
+    {
+      "pdb_id": "9SDC",
+      "chain": "A",
+      "length": 76,
+      "pdb_sha256": "842e7e2fa7368747597db446eb923793c05daa4486a70438baef378647b698a6",
+      "baseline_rmsd_A": 17.07032720130125,
+      "diagnostic_no_rank_local_rebond_rmsd_A": 19.311832361812037,
+      "diagnostic_chirality_reflected": false,
+      "native_radius_of_gyration_A": 23.23759686358796,
+      "native_shape_axis_variance_ratio": 25.869285270819876,
+      "native_long_range_contact_density": 0.001451378809869376,
+      "tight_ranked_contact_precision": 0.0,
+      "tight_ranked_lr24_precision": 0.0,
+      "top_L_native_long_range_recall": 0.0,
+      "context": {
+        "protein_chain_count": 8,
+        "protein_chains": {
+          "A": 572,
+          "B": 581,
+          "C": 631,
+          "D": 631,
+          "E": 556,
+          "F": 575,
+          "G": 631,
+          "H": 631
+        },
+        "hetero_components": {},
+        "residue_fraction_near_other_chain_6A": 0.6842105263157895,
+        "residue_fraction_near_nonwater_hetero_6A": 0.0
+      },
+      "residual_by_separation": {
+        "local_1_2": {
+          "target_signed_median_A": -0.05958261992148639,
+          "target_mae_A": 0.3780231347028714,
+          "realized_signed_median_A": -0.03917738684406791,
+          "realized_mae_A": 1.2303692541755762
+        },
+        "mid_3_6": {
+          "target_signed_median_A": -2.8629409640036445,
+          "target_mae_A": 3.100303171645253,
+          "realized_signed_median_A": -3.847703695019349,
+          "realized_mae_A": 4.164062725915855
+        },
+        "medium_7_11": {
+          "target_signed_median_A": -6.512938523710443,
+          "target_mae_A": 6.463914705868018,
+          "realized_signed_median_A": -8.300056545475847,
+          "realized_mae_A": 8.325926782501739
+        },
+        "long_12_23": {
+          "target_signed_median_A": -13.31640558775436,
+          "target_mae_A": 13.22061753845326,
+          "realized_signed_median_A": -14.001028857137772,
+          "realized_mae_A": 13.242227511642678
+        },
+        "long_24_plus": {
+          "target_signed_median_A": -31.701049369886462,
+          "target_mae_A": 29.309983527651966,
+          "realized_signed_median_A": -28.741994414441166,
+          "realized_mae_A": 25.5069268363613
+        }
+      }
+    },
+    {
+      "pdb_id": "9T4K",
+      "chain": "A",
+      "length": 148,
+      "pdb_sha256": "7644346e3359659c13cd4cf5075ff2dc6c84531e3853e96fd9b347b710af8034",
+      "baseline_rmsd_A": 28.0288969822476,
+      "diagnostic_no_rank_local_rebond_rmsd_A": 13.78946976744886,
+      "diagnostic_chirality_reflected": false,
+      "native_radius_of_gyration_A": 14.438810117537368,
+      "native_shape_axis_variance_ratio": 1.5406555767299863,
+      "native_long_range_contact_density": 0.024516129032258065,
+      "tight_ranked_contact_precision": 0.013513513513513514,
+      "tight_ranked_lr24_precision": 0.013513513513513514,
+      "top_L_native_long_range_recall": 0.010526315789473684,
+      "context": {
+        "protein_chain_count": 1,
+        "protein_chains": {
+          "A": 1287
+        },
+        "hetero_components": {
+          "IHP": 36,
+          "PO4": 10,
+          "EDO": 4,
+          "MG": 2,
+          "CL": 1
+        },
+        "residue_fraction_near_other_chain_6A": 0.0,
+        "residue_fraction_near_nonwater_hetero_6A": 0.19594594594594594
+      },
+      "residual_by_separation": {
+        "local_1_2": {
+          "target_signed_median_A": -0.09501450574962744,
+          "target_mae_A": 0.6344065346728156,
+          "realized_signed_median_A": -0.02692317765161567,
+          "realized_mae_A": 1.236274958682652
+        },
+        "mid_3_6": {
+          "target_signed_median_A": -5.463482832663664,
+          "target_mae_A": 5.8837885378343975,
+          "realized_signed_median_A": -4.500503407104146,
+          "realized_mae_A": 5.134876873322417
+        },
+        "medium_7_11": {
+          "target_signed_median_A": -6.571132857718677,
+          "target_mae_A": 7.9235133252232,
+          "realized_signed_median_A": -6.407887987526154,
+          "realized_mae_A": 7.742401955514967
+        },
+        "long_12_23": {
+          "target_signed_median_A": -10.616573030598765,
+          "target_mae_A": 10.880872007276045,
+          "realized_signed_median_A": -1.8916027554615322,
+          "realized_mae_A": 6.376663915708979
+        },
+        "long_24_plus": {
+          "target_signed_median_A": -6.273091031220422,
+          "target_mae_A": 7.621130327613981,
+          "realized_signed_median_A": 28.536011370440846,
+          "realized_mae_A": 27.741007489468235
+        }
+      }
+    },
+    {
+      "pdb_id": "9NO5",
+      "chain": "A",
+      "length": 194,
+      "pdb_sha256": "a29eeda527b86aec4fd13c092bed0a5195e1308a8de66872084470e5add56172",
+      "baseline_rmsd_A": 13.752317665161279,
+      "diagnostic_no_rank_local_rebond_rmsd_A": 13.039604553746296,
+      "diagnostic_chirality_reflected": false,
+      "native_radius_of_gyration_A": 15.034927253660072,
+      "native_shape_axis_variance_ratio": 1.813892451067412,
+      "native_long_range_contact_density": 0.021671826625386997,
+      "tight_ranked_contact_precision": 0.020618556701030927,
+      "tight_ranked_lr24_precision": 0.020618556701030927,
+      "top_L_native_long_range_recall": 0.022222222222222223,
+      "context": {
+        "protein_chain_count": 3,
+        "protein_chains": {
+          "A": 1401,
+          "B": 1401,
+          "C": 1389
+        },
+        "hetero_components": {
+          "CA": 12,
+          "EDO": 8
+        },
+        "residue_fraction_near_other_chain_6A": 0.13402061855670103,
+        "residue_fraction_near_nonwater_hetero_6A": 0.16494845360824742
+      },
+      "residual_by_separation": {
+        "local_1_2": {
+          "target_signed_median_A": -0.07187732243675171,
+          "target_mae_A": 0.5625174590589537,
+          "realized_signed_median_A": -0.028257437481877368,
+          "realized_mae_A": 1.6283490566167642
+        },
+        "mid_3_6": {
+          "target_signed_median_A": -4.63448763159478,
+          "target_mae_A": 5.184130098915816,
+          "realized_signed_median_A": -5.810741011421016,
+          "realized_mae_A": 6.373996826018485
+        },
+        "medium_7_11": {
+          "target_signed_median_A": -5.219606803304183,
+          "target_mae_A": 6.6333495663173165,
+          "realized_signed_median_A": -11.092498176262332,
+          "realized_mae_A": 11.80623470616335
+        },
+        "long_12_23": {
+          "target_signed_median_A": -9.582343160476594,
+          "target_mae_A": 10.095397803841578,
+          "realized_signed_median_A": -13.890408525104675,
+          "realized_mae_A": 13.931642484181099
+        },
+        "long_24_plus": {
+          "target_signed_median_A": -6.169180500829807,
+          "target_mae_A": 7.6495869348061865,
+          "realized_signed_median_A": -1.543934785534777,
+          "realized_mae_A": 7.00000633694623
+        }
+      }
+    },
+    {
+      "pdb_id": "9LMB",
+      "chain": "A",
+      "length": 154,
+      "pdb_sha256": "ab33b37adb7f5cbd5f37f7486ce44db1fe112502a147fd62857739c859ccf1e1",
+      "baseline_rmsd_A": 15.554545625875758,
+      "diagnostic_no_rank_local_rebond_rmsd_A": 13.524567583825966,
+      "diagnostic_chirality_reflected": false,
+      "native_radius_of_gyration_A": 15.119659871668079,
+      "native_shape_axis_variance_ratio": 3.513999518818528,
+      "native_long_range_contact_density": 0.011274221961244862,
+      "tight_ranked_contact_precision": 0.05194805194805195,
+      "tight_ranked_lr24_precision": 0.05194805194805195,
+      "top_L_native_long_range_recall": 0.052083333333333336,
+      "context": {
+        "protein_chain_count": 1,
+        "protein_chains": {
+          "A": 1224
+        },
+        "hetero_components": {
+          "HEM": 43
+        },
+        "residue_fraction_near_other_chain_6A": 0.0,
+        "residue_fraction_near_nonwater_hetero_6A": 0.09740259740259741
+      },
+      "residual_by_separation": {
+        "local_1_2": {
+          "target_signed_median_A": -0.059662420471510824,
+          "target_mae_A": 0.3353540290752595,
+          "realized_signed_median_A": -0.02191705923136844,
+          "realized_mae_A": 1.3246174163826339
+        },
+        "mid_3_6": {
+          "target_signed_median_A": -2.9390235782412413,
+          "target_mae_A": 3.1026232095516595,
+          "realized_signed_median_A": -4.018773453649145,
+          "realized_mae_A": 4.124374829902369
+        },
+        "medium_7_11": {
+          "target_signed_median_A": -3.5651649477702243,
+          "target_mae_A": 3.7759046869543003,
+          "realized_signed_median_A": -8.241712829904744,
+          "realized_mae_A": 8.076041159930467
+        },
+        "long_12_23": {
+          "target_signed_median_A": -10.084167582053922,
+          "target_mae_A": 10.270009911951542,
+          "realized_signed_median_A": -12.234534873598584,
+          "realized_mae_A": 12.0662500680464
+        },
+        "long_24_plus": {
+          "target_signed_median_A": -7.539158584682134,
+          "target_mae_A": 9.002214154552775,
+          "realized_signed_median_A": 0.8666810754371177,
+          "realized_mae_A": 8.068008151755143
+        }
+      }
+    },
+    {
+      "pdb_id": "9KKD",
+      "chain": "A",
+      "length": 45,
+      "pdb_sha256": "7a7b2a470c33569847873450aae09094d7bce9ee2a79b2cdcd69dc3c396b644b",
+      "baseline_rmsd_A": 8.302653430040595,
+      "diagnostic_no_rank_local_rebond_rmsd_A": 7.818108229790101,
+      "diagnostic_chirality_reflected": true,
+      "native_radius_of_gyration_A": 11.981358130976473,
+      "native_shape_axis_variance_ratio": 2.9522166714799085,
+      "native_long_range_contact_density": 0.0,
+      "tight_ranked_contact_precision": 0.0,
+      "tight_ranked_lr24_precision": 0.0,
+      "top_L_native_long_range_recall": 0.0,
+      "context": {
+        "protein_chain_count": 4,
+        "protein_chains": {
+          "A": 375,
+          "B": 355,
+          "C": 375,
+          "D": 355
+        },
+        "hetero_components": {},
+        "residue_fraction_near_other_chain_6A": 0.6666666666666666,
+        "residue_fraction_near_nonwater_hetero_6A": 0.0
+      },
+      "residual_by_separation": {
+        "local_1_2": {
+          "target_signed_median_A": -0.05163419862271024,
+          "target_mae_A": 0.4558856224141192,
+          "realized_signed_median_A": -0.031144608033049526,
+          "realized_mae_A": 1.0382033179008352
+        },
+        "mid_3_6": {
+          "target_signed_median_A": -3.1733875146774277,
+          "target_mae_A": 3.606261380964426,
+          "realized_signed_median_A": -3.070879852920876,
+          "realized_mae_A": 4.10250668897128
+        },
+        "medium_7_11": {
+          "target_signed_median_A": -6.582054616083987,
+          "target_mae_A": 6.688559664674136,
+          "realized_signed_median_A": -6.2093483277865635,
+          "realized_mae_A": 6.77179044871534
+        },
+        "long_12_23": {
+          "target_signed_median_A": -10.09133940711353,
+          "target_mae_A": 10.11409210246971,
+          "realized_signed_median_A": -8.160272266135992,
+          "realized_mae_A": 8.241928929544706
+        },
+        "long_24_plus": {
+          "target_signed_median_A": -9.56322108622086,
+          "target_mae_A": 9.778619795545238,
+          "realized_signed_median_A": -5.484935258730495,
+          "realized_mae_A": 6.90888256927142
+        }
+      }
+    },
+    {
+      "pdb_id": "9DKS",
+      "chain": "C",
+      "length": 77,
+      "pdb_sha256": "d938a90f4e5bf2fd12de37c109389f37e0b3d9af5b5679a431fdf752ca396b7d",
+      "baseline_rmsd_A": 11.18996681875781,
+      "diagnostic_no_rank_local_rebond_rmsd_A": 10.106153654795671,
+      "diagnostic_chirality_reflected": false,
+      "native_radius_of_gyration_A": 11.37235262759597,
+      "native_shape_axis_variance_ratio": 2.5777648111294034,
+      "native_long_range_contact_density": 0.0286512928022362,
+      "tight_ranked_contact_precision": 0.07894736842105263,
+      "tight_ranked_lr24_precision": 0.05263157894736842,
+      "top_L_native_long_range_recall": 0.04878048780487805,
+      "context": {
+        "protein_chain_count": 3,
+        "protein_chains": {
+          "B": 2735,
+          "A": 2683,
+          "C": 587
+        },
+        "hetero_components": {
+          "MLI": 14,
+          "PNS": 4
+        },
+        "residue_fraction_near_other_chain_6A": 0.23376623376623376,
+        "residue_fraction_near_nonwater_hetero_6A": 0.012987012987012988
+      },
+      "residual_by_separation": {
+        "local_1_2": {
+          "target_signed_median_A": -0.10165721200620226,
+          "target_mae_A": 0.4737488444332503,
+          "realized_signed_median_A": -0.07352991568637934,
+          "realized_mae_A": 1.2536720962339023
+        },
+        "mid_3_6": {
+          "target_signed_median_A": -2.9737756764619507,
+          "target_mae_A": 3.2496019644747385,
+          "realized_signed_median_A": -3.59128532245125,
+          "realized_mae_A": 3.9529856952793736
+        },
+        "medium_7_11": {
+          "target_signed_median_A": -6.0250004324353466,
+          "target_mae_A": 5.770624523001022,
+          "realized_signed_median_A": -5.782401912803069,
+          "realized_mae_A": 5.934023301147566
+        },
+        "long_12_23": {
+          "target_signed_median_A": -6.54264912580421,
+          "target_mae_A": 6.755640786488663,
+          "realized_signed_median_A": -2.6852739068106874,
+          "realized_mae_A": 4.563156648162851
+        },
+        "long_24_plus": {
+          "target_signed_median_A": -5.016752739653507,
+          "target_mae_A": 6.369277292610957,
+          "realized_signed_median_A": 5.333774250901659,
+          "realized_mae_A": 6.712569710295893
+        }
+      }
+    },
+    {
+      "pdb_id": "9G1F",
+      "chain": "A",
+      "length": 137,
+      "pdb_sha256": "38fee058998cb7a53d4bc4002bbbed5a404f44e57c3c79afe4150debaef97dc4",
+      "baseline_rmsd_A": 17.031440329552524,
+      "diagnostic_no_rank_local_rebond_rmsd_A": 13.420415190343126,
+      "diagnostic_chirality_reflected": true,
+      "native_radius_of_gyration_A": 16.23324954476358,
+      "native_shape_axis_variance_ratio": 2.78968645146429,
+      "native_long_range_contact_density": 0.014749262536873156,
+      "tight_ranked_contact_precision": 0.058823529411764705,
+      "tight_ranked_lr24_precision": 0.058823529411764705,
+      "top_L_native_long_range_recall": 0.042105263157894736,
+      "context": {
+        "protein_chain_count": 2,
+        "protein_chains": {
+          "A": 1236,
+          "B": 1160
+        },
+        "hetero_components": {
+          "MN": 2,
+          "SYV": 12
+        },
+        "residue_fraction_near_other_chain_6A": 0.4306569343065693,
+        "residue_fraction_near_nonwater_hetero_6A": 0.029197080291970802
+      },
+      "residual_by_separation": {
+        "local_1_2": {
+          "target_signed_median_A": -0.03556058484284774,
+          "target_mae_A": 0.6451358830075322,
+          "realized_signed_median_A": -0.016460927038553397,
+          "realized_mae_A": 1.43216750199522
+        },
+        "mid_3_6": {
+          "target_signed_median_A": -5.241369361979129,
+          "target_mae_A": 5.7937713645426046,
+          "realized_signed_median_A": -5.384565397046458,
+          "realized_mae_A": 5.861231529945933
+        },
+        "medium_7_11": {
+          "target_signed_median_A": -6.609650682650883,
+          "target_mae_A": 7.609836624476344,
+          "realized_signed_median_A": -7.783759980055687,
+          "realized_mae_A": 8.790962976229014
+        },
+        "long_12_23": {
+          "target_signed_median_A": -8.99837167462285,
+          "target_mae_A": 9.689179031741691,
+          "realized_signed_median_A": -4.593466054004918,
+          "realized_mae_A": 7.891050548779323
+        },
+        "long_24_plus": {
+          "target_signed_median_A": -9.89830634193344,
+          "target_mae_A": 10.6802022448176,
+          "realized_signed_median_A": 11.718880632624144,
+          "realized_mae_A": 12.81736746957874
+        }
+      }
+    },
+    {
+      "pdb_id": "9D2R",
+      "chain": "A",
+      "length": 180,
+      "pdb_sha256": "2fb2812a1153f446f0a1c21064315c89c0e31299d67522dd9f0a558ad02c486a",
+      "baseline_rmsd_A": 28.681840304541424,
+      "diagnostic_no_rank_local_rebond_rmsd_A": 13.87554788351198,
+      "diagnostic_chirality_reflected": true,
+      "native_radius_of_gyration_A": 15.971063999198096,
+      "native_shape_axis_variance_ratio": 2.6531180627628244,
+      "native_long_range_contact_density": 0.018863302302792748,
+      "tight_ranked_contact_precision": 0.011111111111111112,
+      "tight_ranked_lr24_precision": 0.011111111111111112,
+      "top_L_native_long_range_recall": 0.030303030303030304,
+      "context": {
+        "protein_chain_count": 1,
+        "protein_chains": {
+          "A": 1453
+        },
+        "hetero_components": {
+          "ILE": 9,
+          "GOL": 30,
+          "ACT": 4
+        },
+        "residue_fraction_near_other_chain_6A": 0.0,
+        "residue_fraction_near_nonwater_hetero_6A": 0.2111111111111111
+      },
+      "residual_by_separation": {
+        "local_1_2": {
+          "target_signed_median_A": -0.08530153269987562,
+          "target_mae_A": 0.6141051135759868,
+          "realized_signed_median_A": -0.022528091147784757,
+          "realized_mae_A": 1.2993586680243616
+        },
+        "mid_3_6": {
+          "target_signed_median_A": -5.313227760948395,
+          "target_mae_A": 5.86053398178883,
+          "realized_signed_median_A": -4.808693659270844,
+          "realized_mae_A": 5.366773640244644
+        },
+        "medium_7_11": {
+          "target_signed_median_A": -6.114408965038509,
+          "target_mae_A": 7.4418581793350675,
+          "realized_signed_median_A": -7.09842159593004,
+          "realized_mae_A": 8.423189130771604
+        },
+        "long_12_23": {
+          "target_signed_median_A": -9.360146536438734,
+          "target_mae_A": 10.131350513157455,
+          "realized_signed_median_A": -3.240780185785921,
+          "realized_mae_A": 7.030011335414796
+        },
+        "long_24_plus": {
+          "target_signed_median_A": -7.622894882883358,
+          "target_mae_A": 9.074981821483627,
+          "realized_signed_median_A": 28.907837326215244,
+          "realized_mae_A": 29.474607277237528
+        }
+      }
+    },
+    {
+      "pdb_id": "9BGH",
+      "chain": "B",
+      "length": 163,
+      "pdb_sha256": "d49359e84e2f861f40c602e61d41061b918e261696b302c3e10f3d2f4083e847",
+      "baseline_rmsd_A": 14.246333364526281,
+      "diagnostic_no_rank_local_rebond_rmsd_A": 13.73540048672475,
+      "diagnostic_chirality_reflected": false,
+      "native_radius_of_gyration_A": 13.963005993631354,
+      "native_shape_axis_variance_ratio": 1.7514801711888508,
+      "native_long_range_contact_density": 0.027852004110996916,
+      "tight_ranked_contact_precision": 0.04938271604938271,
+      "tight_ranked_lr24_precision": 0.04938271604938271,
+      "top_L_native_long_range_recall": 0.02214022140221402,
+      "context": {
+        "protein_chain_count": 4,
+        "protein_chains": {
+          "B": 1248,
+          "D": 1248,
+          "A": 1349,
+          "C": 1321
+        },
+        "hetero_components": {
+          "ZNI": 124,
+          "GDP": 56,
+          "MG": 2,
+          "AF3": 4
+        },
+        "residue_fraction_near_other_chain_6A": 0.10429447852760736,
+        "residue_fraction_near_nonwater_hetero_6A": 0.049079754601226995
+      },
+      "residual_by_separation": {
+        "local_1_2": {
+          "target_signed_median_A": -0.06486662124322207,
+          "target_mae_A": 0.6468967698555881,
+          "realized_signed_median_A": -0.019854710282503962,
+          "realized_mae_A": 1.6638656719490768
+        },
+        "mid_3_6": {
+          "target_signed_median_A": -5.386355074851535,
+          "target_mae_A": 5.8302073182372,
+          "realized_signed_median_A": -6.314238687477289,
+          "realized_mae_A": 6.846799194636041
+        },
+        "medium_7_11": {
+          "target_signed_median_A": -6.554839909475879,
+          "target_mae_A": 7.304826483262321,
+          "realized_signed_median_A": -10.982565401180283,
+          "realized_mae_A": 11.344316740709102
+        },
+        "long_12_23": {
+          "target_signed_median_A": -8.61106411567806,
+          "target_mae_A": 9.053831714840628,
+          "realized_signed_median_A": -11.81403399210161,
+          "realized_mae_A": 11.70453683986144
+        },
+        "long_24_plus": {
+          "target_signed_median_A": -5.635357152872809,
+          "target_mae_A": 7.227267443821052,
+          "realized_signed_median_A": -1.541332447450504,
+          "realized_mae_A": 6.59265119069658
+        }
+      }
+    },
+    {
+      "pdb_id": "8JVQ",
+      "chain": "A",
+      "length": 44,
+      "pdb_sha256": "cad26261f6dc661f3f5d910e21b806fa5b4db458608e547d660f27f0a094a6ae",
+      "baseline_rmsd_A": 11.294658253547261,
+      "diagnostic_no_rank_local_rebond_rmsd_A": 10.4240787447542,
+      "diagnostic_chirality_reflected": false,
+      "native_radius_of_gyration_A": 11.072060640852303,
+      "native_shape_axis_variance_ratio": 4.218578213488953,
+      "native_long_range_contact_density": 0.05714285714285714,
+      "tight_ranked_contact_precision": 0.0,
+      "tight_ranked_lr24_precision": 0.0,
+      "top_L_native_long_range_recall": 0.0,
+      "context": {
+        "protein_chain_count": 1,
+        "protein_chains": {
+          "A": 335
+        },
+        "hetero_components": {
+          "SO4": 5,
+          "CIT": 13
+        },
+        "residue_fraction_near_other_chain_6A": 0.0,
+        "residue_fraction_near_nonwater_hetero_6A": 0.11363636363636363
+      },
+      "residual_by_separation": {
+        "local_1_2": {
+          "target_signed_median_A": -0.03209994650452774,
+          "target_mae_A": 0.6952662652683202,
+          "realized_signed_median_A": -0.017775400365636962,
+          "realized_mae_A": 1.1434223368072611
+        },
+        "mid_3_6": {
+          "target_signed_median_A": -5.764195733184052,
+          "target_mae_A": 5.952159015474115,
+          "realized_signed_median_A": -5.833463939347661,
+          "realized_mae_A": 6.390946888225891
+        },
+        "medium_7_11": {
+          "target_signed_median_A": -8.677133523988426,
+          "target_mae_A": 9.489081007746599,
+          "realized_signed_median_A": -8.788652371624693,
+          "realized_mae_A": 9.746302563089056
+        },
+        "long_12_23": {
+          "target_signed_median_A": -8.287384787292254,
+          "target_mae_A": 8.826385701844309,
+          "realized_signed_median_A": -5.95205279045009,
+          "realized_mae_A": 7.000805059685228
+        },
+        "long_24_plus": {
+          "target_signed_median_A": -2.817515616093691,
+          "target_mae_A": 4.4622127294294005,
+          "realized_signed_median_A": 0.4984259361424721,
+          "realized_mae_A": 4.088876831456352
+        }
+      }
+    },
+    {
+      "pdb_id": "8RHR",
+      "chain": "A",
+      "length": 168,
+      "pdb_sha256": "dba44daf3081c1b383cd48309e9956e5de0ae47401c0b1aae0956ca46a55191e",
+      "baseline_rmsd_A": 14.576517159862625,
+      "diagnostic_no_rank_local_rebond_rmsd_A": 12.897146161445876,
+      "diagnostic_chirality_reflected": false,
+      "native_radius_of_gyration_A": 15.429847522392162,
+      "native_shape_axis_variance_ratio": 2.9028637930023358,
+      "native_long_range_contact_density": 0.017624521072796936,
+      "tight_ranked_contact_precision": 0.011904761904761904,
+      "tight_ranked_lr24_precision": 0.0,
+      "top_L_native_long_range_recall": 0.0,
+      "context": {
+        "protein_chain_count": 1,
+        "protein_chains": {
+          "A": 1389
+        },
+        "hetero_components": {
+          "ZN": 1,
+          "BB4": 15,
+          "GOL": 6,
+          "DMS": 8
+        },
+        "residue_fraction_near_other_chain_6A": 0.0,
+        "residue_fraction_near_nonwater_hetero_6A": 0.13690476190476192
+      },
+      "residual_by_separation": {
+        "local_1_2": {
+          "target_signed_median_A": -0.053850801471172716,
+          "target_mae_A": 0.5823164591362765,
+          "realized_signed_median_A": -0.025089411719328325,
+          "realized_mae_A": 1.4780222592684278
+        },
+        "mid_3_6": {
+          "target_signed_median_A": -5.189339093912871,
+          "target_mae_A": 5.647509862964179,
+          "realized_signed_median_A": -5.650218829081903,
+          "realized_mae_A": 6.222371285732724
+        },
+        "medium_7_11": {
+          "target_signed_median_A": -5.849874140927209,
+          "target_mae_A": 7.021958376158945,
+          "realized_signed_median_A": -10.043164073887748,
+          "realized_mae_A": 10.96715097505786
+        },
+        "long_12_23": {
+          "target_signed_median_A": -10.025757352677179,
+          "target_mae_A": 9.857787838488507,
+          "realized_signed_median_A": -11.61239705183499,
+          "realized_mae_A": 11.285549354498112
+        },
+        "long_24_plus": {
+          "target_signed_median_A": -6.965918399519618,
+          "target_mae_A": 8.679189626775589,
+          "realized_signed_median_A": 3.0243069258765978,
+          "realized_mae_A": 8.048214587934032
+        }
+      }
+    }
+  ]
+}

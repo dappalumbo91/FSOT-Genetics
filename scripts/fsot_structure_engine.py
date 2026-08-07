@@ -490,6 +490,10 @@ def proximity_to_distance(
     props: list[SsPropensity] | None = None,
     regions: list[Region] | None = None,
     iface: dict | None = None,
+    *,
+    apply_ranked_contacts: bool = True,
+    apply_region_anchors: bool = True,
+    apply_noncontact_floor: bool = True,
 ) -> np.ndarray:
     """F15 proximity → Å with consensus top-L caps + SS geometry (error-log levers).
 
@@ -596,16 +600,17 @@ def proximity_to_distance(
     # Hard contacts: top L/2 consensus (keeps contact MAE ~2Å) but…
     tight = (contact_scale / PHI) / pack_boost
     contact_set: set[tuple[int, int]] = set()
-    for rank, (_sc, i, j) in enumerate(lr_pairs[: max(L, 1)]):
-        if rank < max(L // 2, 1):
-            D[i, j] = D[j, i] = min(D[i, j], tight)
-            contact_set.add((i, j))
-        else:
-            D[i, j] = D[j, i] = min(D[i, j], contact_scale / math.sqrt(pack_boost))
-            contact_set.add((i, j))
+    if apply_ranked_contacts:
+        for rank, (_sc, i, j) in enumerate(lr_pairs[: max(L, 1)]):
+            if rank < max(L // 2, 1):
+                D[i, j] = D[j, i] = min(D[i, j], tight)
+                contact_set.add((i, j))
+            else:
+                D[i, j] = D[j, i] = min(D[i, j], contact_scale / math.sqrt(pack_boost))
+                contact_set.add((i, j))
 
     # Same-kind region midpoints (sparse packing anchors)
-    if regions:
+    if apply_region_anchors and regions:
         structured = [r for r in regions if r.kind != "C"]
         for a, ra in enumerate(structured):
             for rb in structured[a + 1 :]:
@@ -622,16 +627,17 @@ def proximity_to_distance(
     # Floor non-contact D at FSOT polymer/globule scale (seed-only).
     trg = target_rg_fsot(n)
     globule_span = trg * math.sqrt(2.0)  # characteristic pair distance in a globule
-    for i in range(n):
-        for j in range(i + gate, n):
-            if (i, j) in contact_set:
-                continue
-            # collapsed polymer with globule ceiling
-            d_poly = CA_CA * (float(j - i) ** (1.0 / PI))
-            d_bulk = min(max(d_poly, trg / PHI), globule_span * PHI)
-            # do not shrink existing; only raise floors that are too tight
-            if D[i, j] < d_bulk:
-                D[i, j] = D[j, i] = d_bulk
+    if apply_noncontact_floor:
+        for i in range(n):
+            for j in range(i + gate, n):
+                if (i, j) in contact_set:
+                    continue
+                # collapsed polymer with globule ceiling
+                d_poly = CA_CA * (float(j - i) ** (1.0 / PI))
+                d_bulk = min(max(d_poly, trg / PHI), globule_span * PHI)
+                # do not shrink existing; only raise floors that are too tight
+                if D[i, j] < d_bulk:
+                    D[i, j] = D[j, i] = d_bulk
     return D
 
 
