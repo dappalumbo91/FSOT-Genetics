@@ -105,6 +105,18 @@ def rna_homologs(seq):
     return ids
 
 
+def hinge_split(tc, xc, min_seg=6):
+    """Best 2-domain split minimizing the larger per-domain RMSD (rigid-body hinge test)."""
+    best = None
+    for k in range(min_seg, len(tc) - min_seg):
+        r1 = kabsch_rmsd(tc[:k], xc[:k])
+        r2 = kabsch_rmsd(tc[k:], xc[k:])
+        m = max(r1, r2)
+        if best is None or m < best[0]:
+            best = (m, k, r1, r2)
+    return best
+
+
 def main():
     rows = []
     for pid in select_rna():
@@ -130,8 +142,8 @@ def main():
                 continue
             for hc in rna_chains(htxt):
                 hseq, hX = parse_rna_c1(htxt, hc)
-                if len(hseq) < 15:
-                    continue
+                if len(hseq) < 15 or len(hseq) > 2.5 * len(seq):
+                    continue  # skip spurious sub-alignments inside far-larger RNAs
                 pairs = nw_align(seq, hseq)
                 if len(pairs) < 10:
                     continue
@@ -149,9 +161,16 @@ def main():
         _s, hp, hc, ident, cov, pairs, hX = best
         qi = [a for a, b in pairs]
         ti = [b for a, b in pairs]
-        rmsd = kabsch_rmsd(hX[ti], X[qi])
+        tc, xc = hX[ti], X[qi]
+        rmsd = kabsch_rmsd(tc, xc)
+        note = ""
+        if rmsd > 6.0 and len(pairs) >= 16:
+            hs = hinge_split(tc, xc)
+            if hs and hs[0] < 0.5 * rmsd:
+                note = ("  [HINGE @res%d: domains %.2f/%.2f A near-native; "
+                        "interdomain angle is context-dependent]" % (hs[1], hs[2], hs[3]))
         rows.append(rmsd)
-        print(f"{pid} n={len(seq):3d}  RNA template {hp} id={ident:.2f} cov={cov:.2f} -> {rmsd:.2f} A")
+        print(f"{pid} n={len(seq):3d}  RNA template {hp} id={ident:.2f} cov={cov:.2f} -> {rmsd:.2f} A{note}")
     if rows:
         print("--- RNA template-transfer median C1' RMSD: %.2f A  (n=%d) ---" % (
             float(np.median(rows)), len(rows)))
