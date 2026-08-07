@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "frozen_at": "2026-08-07",
+  "role": "candidate_validation_holdout",
+  "candidate": {
+    "name": "f12c_plus_f19_oriented_backbone",
+    "frozen_commit": "3673219",
+    "development_evidence": "data/information_gap_audit.json"
+  },
+  "policy": "Evaluate F19 once. Do not revise F19 from these outcomes.",
+  "success_gate": {
+    "median_f19_rmsd_not_above_f12c": true,
+    "maximum_pair_distance_delta_A": 0.0
+  },
+  "source": "RCSB Protein Data Bank",
+  "selection": {
+    "experimental_method": "X-RAY DIFFRACTION",
+    "maximum_resolution_A": 2.0,
+    "minimum_release_date": "2024-01-01",
+    "chain_length_range": [40, 220],
+    "maximum_pairwise_simple_similarity": 0.8,
+    "excluded_sets": ["five-protein development set", "all prior RCSB manifests"],
+    "outcome_blinding": "Selection used metadata and sequence only; coordinates were not scored.",
+    "search_offsets": [73, 325, 875, 1751, 2818, 3750, 4759, 5750, 7260, 10018, 11500, 12758]
+  },
+  "entries": [
+    { "pdb_id": "22LX", "chain": "A", "expected_length": 146, "release_date": "2026-08-05", "resolution_A": 1.5 },
+    { "pdb_id": "9SDC", "chain": "A", "expected_length": 76, "release_date": "2026-07-22", "resolution_A": 1.7 },
+    { "pdb_id": "9T4K", "chain": "A", "expected_length": 148, "release_date": "2026-06-10", "resolution_A": 1.394 },
+    { "pdb_id": "9NO5", "chain": "A", "expected_length": 194, "release_date": "2026-04-01", "resolution_A": 1.45 },
+    { "pdb_id": "9LMB", "chain": "A", "expected_length": 154, "release_date": "2026-01-21", "resolution_A": 1.64 },
+    { "pdb_id": "9KKD", "chain": "A", "expected_length": 45, "release_date": "2025-11-19", "resolution_A": 1.85 },
+    { "pdb_id": "9DKS", "chain": "C", "expected_length": 77, "release_date": "2025-09-17", "resolution_A": 1.55 },
+    { "pdb_id": "9G1F", "chain": "A", "expected_length": 137, "release_date": "2025-07-23", "resolution_A": 1.4 },
+    { "pdb_id": "9D2R", "chain": "A", "expected_length": 180, "release_date": "2025-04-09", "resolution_A": 1.6 },
+    { "pdb_id": "9BGH", "chain": "B", "expected_length": 163, "release_date": "2024-11-06", "resolution_A": 1.65 },
+    { "pdb_id": "8JVQ", "chain": "A", "expected_length": 44, "release_date": "2024-07-03", "resolution_A": 1.401 },
+    { "pdb_id": "8RHR", "chain": "A", "expected_length": 168, "release_date": "2024-04-17", "resolution_A": 1.42 }
+  ]
+}
