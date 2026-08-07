@@ -1,6 +1,6 @@
 # Error margin log
 
-*Generated 2026-08-07T02:28:07.574688+00:00*
+*Generated 2026-08-07T02:35:38.524592+00:00*
 
 ## Protocol
 
@@ -17,20 +17,20 @@
 |---------|--:|-------:|:-------------|--------------:|-----------:|
 | Ubiquitin | 76 | 11.18 | `global_topology` | 6.1877596880348715 | 0.07894736842105263 |
 | Crambin | 46 | 8.59 | `long_range_contacts` | 12.535356432737489 | 0.043478260869565216 |
-| Villin headpiece | 36 | 5.70 | `global_topology` | 3.140972230571936 | 0.08333333333333333 |
-| Protein G B1 | 56 | 10.17 | `global_topology` | 5.59237534380693 | 0.05357142857142857 |
-| Engrailed HD | 54 | 8.35 | `long_range_contacts` | 8.012722371619954 | 0.0 |
+| Villin headpiece | 36 | 5.70 | `long_range_contacts` | 3.140972230571936 | 0.08333333333333333 |
+| Protein G B1 | 56 | 10.17 | `long_range_contacts` | 5.59237534380693 | 0.05357142857142857 |
+| Engrailed HD | 54 | 8.29 | `long_range_contacts` | 7.725383721298292 | 0.0 |
 
 ## Fix queue (priority)
 
-### 1. `long_range_contacts` (votes=9)
+### 1. `long_range_contacts` (votes=13)
 
 - **Meaning:** Tertiary native contacts missing or false
 - **Literature:** Contact maps / top-L metrics drive fold quality (CASP; Marks/Sander coevolution; AF distograms).
 - **FSOT handle:** F13–F15 + observer tertiary S at Biochemistry D=13; top-L caps; residual-at-interface on contact set.
 - **Status:** open
 
-### 2. `global_topology` (votes=11)
+### 2. `global_topology` (votes=7)
 
 - **Meaning:** Chain topology / domain packing globally wrong after Kabsch
 - **Literature:** Energy landscape funnel; topology from contact order (Onuchic/Wolynes; Baker).

@@ -478,41 +478,20 @@ def proximity_to_distance(
 
             D[i, j] = D[j, i] = float(np.clip(d, CA_CA * 0.95, d_hard))
 
-    # Consensus top-L long-range contacts
+    # Consensus top-L — Haskell Contact.hs evidence ranker (contact_rank.py)
+    from contact_rank import rank_long_range_contacts  # noqa: WPS433
+
     L = n
-    lr_pairs: list[tuple[float, int, int]] = []
-    for i in range(n):
-        for j in range(i + gate, n):
-            region_same = False
-            reg_mult = 1.0
-            ri, rj = rmap[i], rmap[j]
-            if (
-                regions
-                and ri is not None
-                and rj is not None
-                and ri != rj
-                and regions[ri].kind == regions[rj].kind
-                and regions[ri].kind != "C"
-            ):
-                region_same = True
-                ra, rb = regions[ri], regions[rj]
-                if ra.kind == "H":
-                    reg_mult = helix_heptad_multiplier(i, j, ra.start, rb.start)
-                else:
-                    reg_mult = beta_register_multiplier(i, j, ra.start, ra.end, rb.start, rb.end)
-            if seq_chars and len(seq_chars) == n:
-                score = contact_consensus_score(
-                    seq_chars[i],
-                    seq_chars[j],
-                    float(M[i, j]),
-                    abs(i - j),
-                    region_same=region_same,
-                    register_mult=reg_mult,
-                )
-            else:
-                score = float(M[i, j])
-            lr_pairs.append((score, i, j))
-    lr_pairs.sort(reverse=True)
+    ranked = []
+    if seq_chars and len(seq_chars) == n:
+        ranked = rank_long_range_contacts(seq_chars, M, regions or [], gate)
+        lr_pairs = [(r["score"], r["i"], r["j"]) for r in ranked]
+    else:
+        lr_pairs = []
+        for i in range(n):
+            for j in range(i + gate, n):
+                lr_pairs.append((float(M[i, j]), i, j))
+        lr_pairs.sort(reverse=True)
     # Hard contacts: top L/2 consensus (keeps contact MAE ~2Å) but…
     tight = (contact_scale / PHI) / pack_boost
     contact_set: set[tuple[int, int]] = set()
@@ -919,7 +898,7 @@ def predict_ca_coords(
         "predict_ms": elapsed_ms,
         "n_sparse_pairs": len(pairs),
         "refine_rounds": n_rounds,
-        "engine": "fsot_protein_FULL_SCALAR_v16c_topology",
+        "engine": "fsot_protein_FULL_SCALAR_v17_contacts",
         "free_parameters": 0,
         "runtime": "python_full_scalar_T1T2T3_observer",
         "full_law": True,
@@ -928,12 +907,12 @@ def predict_ca_coords(
         "domain_D_eff_histogram": iface.get("domain_D_eff_histogram"),
         "error_margin_fixes": (iface.get("error_log_fixes") or []) + [
             "noncontact_long_range_D_floor_globule",
-            "target_Rg_pi_N_inv_pi_partial_expand",
+            "haskell_parity_evidence_contact_ranker",
             "topology_weighted_multi_start",
         ],
         "authority": (
-            "FULL S chem-link D_eff + topology: contact set kept, non-contact "
-            "long-range D floored to globule span π·N^{1/π} (fix over-collapse)"
+            "FULL S chem-link D_eff + evidence contact ranker (Haskell Contact.hs) "
+            "+ globule non-contact D floor"
         ),
         "trinary_expansion": "c,p,v,aromatic,branch,hetero,detail",
         "formula": "S=K(T1+T2+T3)",

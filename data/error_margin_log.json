@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-07T02:28:07.574688+00:00",
+  "generated_at": "2026-08-07T02:35:38.524592+00:00",
   "doctrine": "Error margin log: localize residual by structural mode, map literature, fix one mode at a time under full S=K(T1+T2+T3). Same residual discipline as multi-domain / MPCORB campaigns. Zero free parameters.",
   "protocol": {
     "sequence_source": "experimental PDB chain (not UniProt polyprotein)",
@@ -9,7 +9,7 @@
   "summary": {
     "n_proteins": 5,
     "median_rmsd_A": 8.58994132311432,
-    "wall_s": 0.4498726000019815,
+    "wall_s": 0.7508430999878328,
     "primary_modes_seen": [
       "global_topology",
       "long_range_contacts"
@@ -73,6 +73,459 @@
       "native_contacts": 143,
       "contact_mae_A": 6.1877596880348715,
       "top_L_precision": 0.07894736842105263,
+      "top_L_precision_structure": 0.07894736842105263,
+      "evidence_contact_diag": {
+        "L": 76,
+        "n_native_long_range": 143,
+        "n_top_hits": 9,
+        "top_L_precision_evidence": 0.11842105263157894,
+        "top_L_recall_evidence": 0.06293706293706294,
+        "mean_evidence_on_hits": {
+          "hydrophobic": 4.717574892279288,
+          "salt": 1.4660907964826488,
+          "disulfide": 0.0,
+          "register": 0.1111111111111111,
+          "m_ij": 3.405657232850558,
+          "polarizability": 0.3379580849381736
+        },
+        "missed_natives_sample": [
+          {
+            "i": 14,
+            "j": 25,
+            "aa": "LV",
+            "score": 9.153802341446799,
+            "rank": 87,
+            "evidence": {
+              "m_ij": 1.2763869713473026,
+              "hydrophobic": 6.477261708828154,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.9999999999999999,
+              "polarizability": 0.4001536612713431,
+              "total": 9.153802341446799
+            }
+          },
+          {
+            "i": 44,
+            "j": 60,
+            "aa": "FI",
+            "score": 8.409840337243274,
+            "rank": 110,
+            "evidence": {
+              "m_ij": 2.2663627898014145,
+              "hydrophobic": 5.743323886170517,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 8.409840337243274
+            }
+          },
+          {
+            "i": 3,
+            "j": 12,
+            "aa": "FI",
+            "score": 8.255853632713206,
+            "rank": 115,
+            "evidence": {
+              "m_ij": 2.1123760852713467,
+              "hydrophobic": 5.743323886170517,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 8.255853632713206
+            }
+          },
+          {
+            "i": 22,
+            "j": 55,
+            "aa": "IL",
+            "score": 8.19944286279095,
+            "rank": 137,
+            "evidence": {
+              "m_ij": 1.0946166597445492,
+              "hydrophobic": 6.704672541775057,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 8.19944286279095
+            }
+          },
+          {
+            "i": 2,
+            "j": 66,
+            "aa": "IL",
+            "score": 8.19849197978421,
+            "rank": 141,
+            "evidence": {
+              "m_ij": 1.0936657767378095,
+              "hydrophobic": 6.704672541775057,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 8.19849197978421
+            }
+          },
+          {
+            "i": 22,
+            "j": 49,
+            "aa": "IL",
+            "score": 8.1960276225692,
+            "rank": 149,
+            "evidence": {
+              "m_ij": 1.0912014195227995,
+              "hydrophobic": 6.704672541775057,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 8.1960276225692
+            }
+          },
+          {
+            "i": 43,
+            "j": 68,
+            "aa": "IL",
+            "score": 8.194302479468204,
+            "rank": 152,
+            "evidence": {
+              "m_ij": 1.0894762764218036,
+              "hydrophobic": 6.704672541775057,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 8.194302479468204
+            }
+          },
+          {
+            "i": 43,
+            "j": 66,
+            "aa": "IL",
+            "score": 8.192205115926225,
+            "rank": 153,
+            "evidence": {
+              "m_ij": 1.0873789128798237,
+              "hydrophobic": 6.704672541775057,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 8.192205115926225
+            }
+          },
+          {
+            "i": 22,
+            "j": 42,
+            "aa": "IL",
+            "score": 8.188244215544312,
+            "rank": 156,
+            "evidence": {
+              "m_ij": 1.083418012497912,
+              "hydrophobic": 6.704672541775057,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 8.188244215544312
+            }
+          },
+          {
+            "i": 14,
+            "j": 29,
+            "aa": "LI",
+            "score": 8.179146353551735,
+            "rank": 161,
+            "evidence": {
+              "m_ij": 1.0743201505053344,
+              "hydrophobic": 6.704672541775057,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 8.179146353551735
+            }
+          },
+          {
+            "i": 2,
+            "j": 14,
+            "aa": "IL",
+            "score": 8.172524178932765,
+            "rank": 164,
+            "evidence": {
+              "m_ij": 1.0676979758863638,
+              "hydrophobic": 6.704672541775057,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 8.172524178932765
+            }
+          },
+          {
+            "i": 7,
+            "j": 70,
+            "aa": "LL",
+            "score": 8.12684760069648,
+            "rank": 172,
+            "evidence": {
+              "m_ij": 1.5525249085965027,
+              "hydrophobic": 6.174169030828634,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 8.12684760069648
+            }
+          },
+          {
+            "i": 7,
+            "j": 68,
+            "aa": "LL",
+            "score": 8.12621653486984,
+            "rank": 173,
+            "evidence": {
+              "m_ij": 1.551893842769863,
+              "hydrophobic": 6.174169030828634,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 8.12621653486984
+            }
+          },
+          {
+            "i": 4,
+            "j": 68,
+            "aa": "VL",
+            "score": 8.111550975058464,
+            "rank": 178,
+            "evidence": {
+              "m_ij": 1.234135604958967,
+              "hydrophobic": 6.477261708828154,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 8.111550975058464
+            }
+          },
+          {
+            "i": 4,
+            "j": 66,
+            "aa": "VL",
+            "score": 8.11153008921355,
+            "rank": 179,
+            "evidence": {
+              "m_ij": 1.2341147191140525,
+              "hydrophobic": 6.477261708828154,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 8.11153008921355
+            }
+          }
+        ],
+        "top_predicted_sample": [
+          {
+            "i": 17,
+            "j": 53,
+            "aa": "ER",
+            "score": 11.596716213205662,
+            "native": false,
+            "evidence": {
+              "m_ij": 5.9848768914858805,
+              "hydrophobic": 0.0,
+              "salt": 4.398272389447946,
+              "disulfide": 0.0,
+              "register": 0.9999999999999999,
+              "polarizability": 0.2135669322718347,
+              "total": 11.596716213205662
+            }
+          },
+          {
+            "i": 2,
+            "j": 60,
+            "aa": "II",
+            "score": 11.347020440764393,
+            "native": false,
+            "evidence": {
+              "m_ij": 3.6661082404934593,
+              "hydrophobic": 7.280758538999591,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 11.347020440764393
+            }
+          },
+          {
+            "i": 12,
+            "j": 60,
+            "aa": "II",
+            "score": 11.295939147890616,
+            "native": false,
+            "evidence": {
+              "m_ij": 3.615026947619682,
+              "hydrophobic": 7.280758538999591,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 11.295939147890616
+            }
+          },
+          {
+            "i": 2,
+            "j": 43,
+            "aa": "II",
+            "score": 11.245913339890565,
+            "native": false,
+            "evidence": {
+              "m_ij": 3.565001139619631,
+              "hydrophobic": 7.280758538999591,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 11.245913339890565
+            }
+          },
+          {
+            "i": 22,
+            "j": 60,
+            "aa": "II",
+            "score": 11.219276970900424,
+            "native": false,
+            "evidence": {
+              "m_ij": 3.538364770629489,
+              "hydrophobic": 7.280758538999591,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 11.219276970900424
+            }
+          },
+          {
+            "i": 2,
+            "j": 35,
+            "aa": "II",
+            "score": 11.165401798903925,
+            "native": false,
+            "evidence": {
+              "m_ij": 3.4844895986329916,
+              "hydrophobic": 7.280758538999591,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 11.165401798903925
+            }
+          },
+          {
+            "i": 12,
+            "j": 25,
+            "aa": "IV",
+            "score": 11.161031687603577,
+            "native": false,
+            "evidence": {
+              "m_ij": 2.7270701554708396,
+              "hydrophobic": 7.033807870861394,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.9999999999999999,
+              "polarizability": 0.4001536612713431,
+              "total": 11.161031687603577
+            }
+          },
+          {
+            "i": 12,
+            "j": 43,
+            "aa": "II",
+            "score": 11.139687869566282,
+            "native": false,
+            "evidence": {
+              "m_ij": 3.4587756692953477,
+              "hydrophobic": 7.280758538999591,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 11.139687869566282
+            }
+          },
+          {
+            "i": 29,
+            "j": 60,
+            "aa": "II",
+            "score": 11.139687869566282,
+            "native": false,
+            "evidence": {
+              "m_ij": 3.4587756692953477,
+              "hydrophobic": 7.280758538999591,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 11.139687869566282
+            }
+          },
+          {
+            "i": 2,
+            "j": 29,
+            "aa": "II",
+            "score": 11.078925395592572,
+            "native": false,
+            "evidence": {
+              "m_ij": 3.3980131953216373,
+              "hydrophobic": 7.280758538999591,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 11.078925395592572
+            }
+          },
+          {
+            "i": 35,
+            "j": 60,
+            "aa": "II",
+            "score": 11.04278634838132,
+            "native": false,
+            "evidence": {
+              "m_ij": 3.361874148110385,
+              "hydrophobic": 7.280758538999591,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 11.04278634838132
+            }
+          },
+          {
+            "i": 12,
+            "j": 35,
+            "aa": "II",
+            "score": 11.001869370471105,
+            "native": false,
+            "evidence": {
+              "m_ij": 3.3209571702001703,
+              "hydrophobic": 7.280758538999591,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 11.001869370471105
+            }
+          }
+        ],
+        "top_L_precision_structure": 0.07894736842105263
+      },
       "rg_exp_A": 11.49289487620769,
       "rg_pred_A": 8.165135589100371,
       "rg_err_A": 3.327759287107318,
@@ -158,7 +611,7 @@
         "backbone_sep1_2": 0.03548904181687073,
         "helix_period_3_4_7": 0.246587690753019,
         "mid_range_5_12": 0.9013597035462672,
-        "long_range_contacts": 8.267290717632948,
+        "long_range_contacts": 12.675185454475052,
         "per_residue_hotspots": 1.5270107539688316,
         "global_topology": 16.637679059132502
       },
@@ -171,10 +624,10 @@
         "helix_period_3_4_7",
         "backbone_sep1_2"
       ],
-      "engine": "fsot_protein_FULL_SCALAR_v16c_topology",
+      "engine": "fsot_protein_FULL_SCALAR_v17_contacts",
       "full_law": true,
       "S_final": 21.865529077410095,
-      "predict_ms": 138.53130000643432,
+      "predict_ms": 165.19139998126775,
       "note": "all-alpha/beta mixed, classic contact test"
     },
     {
@@ -234,6 +687,459 @@
       "native_contacts": 72,
       "contact_mae_A": 12.535356432737489,
       "top_L_precision": 0.043478260869565216,
+      "top_L_precision_structure": 0.043478260869565216,
+      "evidence_contact_diag": {
+        "L": 46,
+        "n_native_long_range": 72,
+        "n_top_hits": 1,
+        "top_L_precision_evidence": 0.021739130434782608,
+        "top_L_recall_evidence": 0.013888888888888888,
+        "mean_evidence_on_hits": {
+          "hydrophobic": 4.054689706125153,
+          "salt": 0.0,
+          "disulfide": 3.6302882838135426,
+          "register": 0.9999999999999999,
+          "m_ij": 10.80877177215399,
+          "polarizability": 0.6593675647413986
+        },
+        "missed_natives_sample": [
+          {
+            "i": 2,
+            "j": 34,
+            "aa": "CI",
+            "score": 7.286883000195554,
+            "rank": 47,
+            "evidence": {
+              "m_ij": 1.3398782469971546,
+              "hydrophobic": 5.433343050173111,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.5136617030252888,
+              "total": 7.286883000195554
+            }
+          },
+          {
+            "i": 2,
+            "j": 33,
+            "aa": "CI",
+            "score": 7.284739691115114,
+            "rank": 48,
+            "evidence": {
+              "m_ij": 1.337734937916714,
+              "hydrophobic": 5.433343050173111,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.5136617030252888,
+              "total": 7.284739691115114
+            }
+          },
+          {
+            "i": 2,
+            "j": 32,
+            "aa": "CI",
+            "score": 7.282445138157009,
+            "rank": 50,
+            "evidence": {
+              "m_ij": 1.3354403849586087,
+              "hydrophobic": 5.433343050173111,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.5136617030252888,
+              "total": 7.282445138157009
+            }
+          },
+          {
+            "i": 3,
+            "j": 32,
+            "aa": "CI",
+            "score": 7.279987096194256,
+            "rank": 52,
+            "evidence": {
+              "m_ij": 1.3329823429958565,
+              "hydrophobic": 5.433343050173111,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.5136617030252888,
+              "total": 7.279987096194256
+            }
+          },
+          {
+            "i": 12,
+            "j": 31,
+            "aa": "FC",
+            "score": 7.043281959100032,
+            "rank": 64,
+            "evidence": {
+              "m_ij": 1.2436040731914733,
+              "hydrophobic": 4.28601618288327,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.9999999999999999,
+              "polarizability": 0.5136617030252888,
+              "total": 7.043281959100032
+            }
+          },
+          {
+            "i": 12,
+            "j": 25,
+            "aa": "FC",
+            "score": 7.038182901099649,
+            "rank": 65,
+            "evidence": {
+              "m_ij": 1.2385050151910897,
+              "hydrophobic": 4.28601618288327,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.9999999999999999,
+              "polarizability": 0.5136617030252888,
+              "total": 7.038182901099649
+            }
+          },
+          {
+            "i": 3,
+            "j": 12,
+            "aa": "CF",
+            "score": 7.009861615133842,
+            "rank": 66,
+            "evidence": {
+              "m_ij": 1.2101837292252837,
+              "hydrophobic": 4.28601618288327,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.9999999999999999,
+              "polarizability": 0.5136617030252888,
+              "total": 7.009861615133842
+            }
+          },
+          {
+            "i": 3,
+            "j": 31,
+            "aa": "CC",
+            "score": 6.733626726134137,
+            "rank": 76,
+            "evidence": {
+              "m_ij": 1.0195694552622878,
+              "hydrophobic": 4.054689706125153,
+              "salt": 0.0,
+              "disulfide": 5.2983827781007365e-12,
+              "register": 0.9999999999999999,
+              "polarizability": 0.6593675647413986,
+              "total": 6.733626726134137
+            }
+          },
+          {
+            "i": 2,
+            "j": 31,
+            "aa": "CC",
+            "score": 6.7290298633129435,
+            "rank": 77,
+            "evidence": {
+              "m_ij": 1.0149725924460982,
+              "hydrophobic": 4.054689706125153,
+              "salt": 0.0,
+              "disulfide": 2.947257608286817e-13,
+              "register": 0.9999999999999999,
+              "polarizability": 0.6593675647413986,
+              "total": 6.7290298633129435
+            }
+          },
+          {
+            "i": 26,
+            "j": 33,
+            "aa": "AI",
+            "score": 5.7441474658543585,
+            "rank": 89,
+            "evidence": {
+              "m_ij": 0.7390980612678615,
+              "hydrophobic": 4.604895743315154,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 5.7441474658543585
+            }
+          },
+          {
+            "i": 12,
+            "j": 26,
+            "aa": "FA",
+            "score": 5.675963652385045,
+            "rank": 92,
+            "evidence": {
+              "m_ij": 0.6433028046384794,
+              "hydrophobic": 3.6325071864752227,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.9999999999999999,
+              "polarizability": 0.4001536612713431,
+              "total": 5.675963652385045
+            }
+          },
+          {
+            "i": 23,
+            "j": 32,
+            "aa": "AI",
+            "score": 5.675526462217185,
+            "rank": 93,
+            "evidence": {
+              "m_ij": 0.6704770576306875,
+              "hydrophobic": 4.604895743315154,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 5.675526462217185
+            }
+          },
+          {
+            "i": 23,
+            "j": 33,
+            "aa": "AI",
+            "score": 5.6639874537540535,
+            "rank": 94,
+            "evidence": {
+              "m_ij": 0.6589380491675563,
+              "hydrophobic": 4.604895743315154,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 5.6639874537540535
+            }
+          },
+          {
+            "i": 8,
+            "j": 31,
+            "aa": "AC",
+            "score": 5.593612923747422,
+            "rank": 104,
+            "evidence": {
+              "m_ij": 0.6434990777630022,
+              "hydrophobic": 3.436452142959131,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.9999999999999999,
+              "polarizability": 0.5136617030252888,
+              "total": 5.593612923747422
+            }
+          },
+          {
+            "i": 3,
+            "j": 26,
+            "aa": "CA",
+            "score": 5.59075847125958,
+            "rank": 105,
+            "evidence": {
+              "m_ij": 0.6406446252751608,
+              "hydrophobic": 3.436452142959131,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.9999999999999999,
+              "polarizability": 0.5136617030252888,
+              "total": 5.59075847125958
+            }
+          }
+        ],
+        "top_predicted_sample": [
+          {
+            "i": 15,
+            "j": 25,
+            "aa": "CC",
+            "score": 20.153117326834085,
+            "native": true,
+            "evidence": {
+              "m_ij": 10.80877177215399,
+              "hydrophobic": 4.054689706125153,
+              "salt": 0.0,
+              "disulfide": 3.6302882838135426,
+              "register": 0.9999999999999999,
+              "polarizability": 0.6593675647413986,
+              "total": 20.153117326834085
+            }
+          },
+          {
+            "i": 31,
+            "j": 39,
+            "aa": "CC",
+            "score": 19.33077787453991,
+            "native": false,
+            "evidence": {
+              "m_ij": 10.46902587340578,
+              "hydrophobic": 4.054689706125153,
+              "salt": 0.0,
+              "disulfide": 4.147694730267576,
+              "register": 0.0,
+              "polarizability": 0.6593675647413986,
+              "total": 19.33077787453991
+            }
+          },
+          {
+            "i": 3,
+            "j": 15,
+            "aa": "CC",
+            "score": 16.20074803259825,
+            "native": false,
+            "evidence": {
+              "m_ij": 7.08779238723832,
+              "hydrophobic": 4.054689706125153,
+              "salt": 0.0,
+              "disulfide": 1.78086438574348,
+              "register": 2.618033988749895,
+              "polarizability": 0.6593675647413986,
+              "total": 16.20074803259825
+            }
+          },
+          {
+            "i": 6,
+            "j": 24,
+            "aa": "II",
+            "score": 11.220841253081803,
+            "native": false,
+            "evidence": {
+              "m_ij": 2.539929052810868,
+              "hydrophobic": 7.280758538999591,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.9999999999999999,
+              "polarizability": 0.4001536612713431,
+              "total": 11.220841253081803
+            }
+          },
+          {
+            "i": 2,
+            "j": 15,
+            "aa": "CC",
+            "score": 10.771464150343052,
+            "native": false,
+            "evidence": {
+              "m_ij": 4.05352181407866,
+              "hydrophobic": 4.054689706125153,
+              "salt": 0.0,
+              "disulfide": 1.0038850653978402,
+              "register": 0.9999999999999999,
+              "polarizability": 0.6593675647413986,
+              "total": 10.771464150343052
+            }
+          },
+          {
+            "i": 14,
+            "j": 24,
+            "aa": "VI",
+            "score": 10.41591952526462,
+            "native": false,
+            "evidence": {
+              "m_ij": 1.9819579931318834,
+              "hydrophobic": 7.033807870861394,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.9999999999999999,
+              "polarizability": 0.4001536612713431,
+              "total": 10.41591952526462
+            }
+          },
+          {
+            "i": 6,
+            "j": 14,
+            "aa": "IV",
+            "score": 10.331165667392986,
+            "native": false,
+            "evidence": {
+              "m_ij": 1.8972041352602491,
+              "hydrophobic": 7.033807870861394,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.9999999999999999,
+              "polarizability": 0.4001536612713431,
+              "total": 10.331165667392986
+            }
+          },
+          {
+            "i": 6,
+            "j": 34,
+            "aa": "II",
+            "score": 10.090223754624736,
+            "native": false,
+            "evidence": {
+              "m_ij": 2.4093115543538017,
+              "hydrophobic": 7.280758538999591,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 10.090223754624736
+            }
+          },
+          {
+            "i": 6,
+            "j": 33,
+            "aa": "II",
+            "score": 10.08044015624034,
+            "native": false,
+            "evidence": {
+              "m_ij": 2.3995279559694054,
+              "hydrophobic": 7.280758538999591,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 10.08044015624034
+            }
+          },
+          {
+            "i": 6,
+            "j": 32,
+            "aa": "II",
+            "score": 10.070045260316993,
+            "native": false,
+            "evidence": {
+              "m_ij": 2.3891330600460594,
+              "hydrophobic": 7.280758538999591,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 10.070045260316993
+            }
+          },
+          {
+            "i": 24,
+            "j": 34,
+            "aa": "II",
+            "score": 9.75343901508144,
+            "native": false,
+            "evidence": {
+              "m_ij": 2.072526814810505,
+              "hydrophobic": 7.280758538999591,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 9.75343901508144
+            }
+          },
+          {
+            "i": 24,
+            "j": 33,
+            "aa": "II",
+            "score": 9.71818726813645,
+            "native": false,
+            "evidence": {
+              "m_ij": 2.0372750678655165,
+              "hydrophobic": 7.280758538999591,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 9.71818726813645
+            }
+          }
+        ],
+        "top_L_precision_structure": 0.043478260869565216
+      },
       "rg_exp_A": 9.67550126933248,
       "rg_pred_A": 10.371494818416936,
       "rg_err_A": 0.6959935490844558,
@@ -289,7 +1195,7 @@
         "backbone_sep1_2": 0.043903505195089475,
         "helix_period_3_4_7": 0.21345338018712864,
         "mid_range_5_12": 0.6150947425502291,
-        "long_range_contacts": 14.087919940682495,
+        "long_range_contacts": 18.979224288508583,
         "per_residue_hotspots": 1.6210247247966334,
         "global_topology": 7.439697526905067
       },
@@ -302,10 +1208,10 @@
         "helix_period_3_4_7",
         "backbone_sep1_2"
       ],
-      "engine": "fsot_protein_FULL_SCALAR_v16c_topology",
+      "engine": "fsot_protein_FULL_SCALAR_v17_contacts",
       "full_law": true,
       "S_final": 13.397738518952414,
-      "predict_ms": 60.86569998296909,
+      "predict_ms": 65.12050001765601,
       "note": "small SS-rich, disulfide"
     },
     {
@@ -365,6 +1271,459 @@
       "native_contacts": 19,
       "contact_mae_A": 3.140972230571936,
       "top_L_precision": 0.08333333333333333,
+      "top_L_precision_structure": 0.08333333333333333,
+      "evidence_contact_diag": {
+        "L": 36,
+        "n_native_long_range": 19,
+        "n_top_hits": 3,
+        "top_L_precision_evidence": 0.08333333333333333,
+        "top_L_recall_evidence": 0.15789473684210525,
+        "mean_evidence_on_hits": {
+          "hydrophobic": 3.8210185291136995,
+          "salt": 1.4660907964826488,
+          "disulfide": 0.0,
+          "register": 0.0,
+          "m_ij": 1.3412960872188933,
+          "polarizability": 0.33795808493817364
+        },
+        "missed_natives_sample": [
+          {
+            "i": 1,
+            "j": 35,
+            "aa": "LF",
+            "score": 6.390076760609915,
+            "rank": 37,
+            "evidence": {
+              "m_ij": 0.701036542826107,
+              "hydrophobic": 5.288886556512465,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 6.390076760609915
+            }
+          },
+          {
+            "i": 10,
+            "j": 17,
+            "aa": "FF",
+            "score": 6.282594229798165,
+            "rank": 38,
+            "evidence": {
+              "m_ij": 1.35190036660039,
+              "hydrophobic": 4.530540201926432,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 6.282594229798165
+            }
+          },
+          {
+            "i": 17,
+            "j": 25,
+            "aa": "FQ",
+            "score": 1.9532693657052222,
+            "rank": 106,
+            "evidence": {
+              "m_ij": 0.6831463382562837,
+              "hydrophobic": 0.0,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.9999999999999999,
+              "polarizability": 0.27012302744893857,
+              "total": 1.9532693657052222
+            }
+          },
+          {
+            "i": 18,
+            "j": 25,
+            "aa": "AQ",
+            "score": 1.9317735665749538,
+            "rank": 110,
+            "evidence": {
+              "m_ij": 0.6616505391260155,
+              "hydrophobic": 0.0,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.9999999999999999,
+              "polarizability": 0.27012302744893857,
+              "total": 1.9317735665749538
+            }
+          },
+          {
+            "i": 6,
+            "j": 14,
+            "aa": "FR",
+            "score": 1.154250934204959,
+            "rank": 132,
+            "evidence": {
+              "m_ij": 0.8378780922368003,
+              "hydrophobic": 0.0,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.3163728419681587,
+              "total": 1.154250934204959
+            }
+          },
+          {
+            "i": 6,
+            "j": 13,
+            "aa": "FT",
+            "score": 0.9156891560726952,
+            "rank": 162,
+            "evidence": {
+              "m_ij": 0.6455661286237566,
+              "hydrophobic": 0.0,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.27012302744893857,
+              "total": 0.9156891560726952
+            }
+          },
+          {
+            "i": 1,
+            "j": 14,
+            "aa": "LR",
+            "score": 0.8567137653865358,
+            "rank": 201,
+            "evidence": {
+              "m_ij": 0.5403409234183771,
+              "hydrophobic": 0.0,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.3163728419681587,
+              "total": 0.8567137653865358
+            }
+          },
+          {
+            "i": 3,
+            "j": 13,
+            "aa": "DT",
+            "score": 0.8215862667629271,
+            "rank": 231,
+            "evidence": {
+              "m_ij": 0.6392401906921608,
+              "hydrophobic": 0.0,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.18234607607076636,
+              "total": 0.8215862667629271
+            }
+          },
+          {
+            "i": 10,
+            "j": 29,
+            "aa": "FK",
+            "score": 0.8091043746632001,
+            "rank": 240,
+            "evidence": {
+              "m_ij": 0.4927315326950414,
+              "hydrophobic": 0.0,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.3163728419681587,
+              "total": 0.8091043746632001
+            }
+          },
+          {
+            "i": 10,
+            "j": 32,
+            "aa": "FK",
+            "score": 0.7909163323182609,
+            "rank": 251,
+            "evidence": {
+              "m_ij": 0.4745434903501022,
+              "hydrophobic": 0.0,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.3163728419681587,
+              "total": 0.7909163323182609
+            }
+          },
+          {
+            "i": 9,
+            "j": 32,
+            "aa": "VK",
+            "score": 0.756552370399542,
+            "rank": 305,
+            "evidence": {
+              "m_ij": 0.4401795284313834,
+              "hydrophobic": 0.0,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.3163728419681587,
+              "total": 0.756552370399542
+            }
+          },
+          {
+            "i": 10,
+            "j": 33,
+            "aa": "FG",
+            "score": 0.666334960809142,
+            "rank": 385,
+            "evidence": {
+              "m_ij": 0.420003146031527,
+              "hydrophobic": 0.0,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.24633181477761504,
+              "total": 0.666334960809142
+            }
+          },
+          {
+            "i": 9,
+            "j": 33,
+            "aa": "VG",
+            "score": 0.6578025980397666,
+            "rank": 393,
+            "evidence": {
+              "m_ij": 0.41147078326215153,
+              "hydrophobic": 0.0,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.24633181477761504,
+              "total": 0.6578025980397666
+            }
+          },
+          {
+            "i": 6,
+            "j": 33,
+            "aa": "FG",
+            "score": 0.6476968009653634,
+            "rank": 399,
+            "evidence": {
+              "m_ij": 0.40136498618774835,
+              "hydrophobic": 0.0,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.24633181477761504,
+              "total": 0.6476968009653634
+            }
+          },
+          {
+            "i": 1,
+            "j": 33,
+            "aa": "LG",
+            "score": 0.6186271659030511,
+            "rank": 415,
+            "evidence": {
+              "m_ij": 0.37229535112543605,
+              "hydrophobic": 0.0,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.24633181477761504,
+              "total": 0.6186271659030511
+            }
+          }
+        ],
+        "top_predicted_sample": [
+          {
+            "i": 16,
+            "j": 28,
+            "aa": "AL",
+            "score": 8.286834008089478,
+            "native": false,
+            "evidence": {
+              "m_ij": 1.0281104465196296,
+              "hydrophobic": 4.24053591154861,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 2.618033988749895,
+              "polarizability": 0.4001536612713431,
+              "total": 8.286834008089478
+            }
+          },
+          {
+            "i": 10,
+            "j": 20,
+            "aa": "FL",
+            "score": 8.153375151548985,
+            "native": false,
+            "evidence": {
+              "m_ij": 0.8463009450152814,
+              "hydrophobic": 5.288886556512465,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 1.618033988749895,
+              "polarizability": 0.4001536612713431,
+              "total": 8.153375151548985
+            }
+          },
+          {
+            "i": 10,
+            "j": 22,
+            "aa": "FL",
+            "score": 8.138587548067665,
+            "native": false,
+            "evidence": {
+              "m_ij": 0.8315133415339613,
+              "hydrophobic": 5.288886556512465,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 1.618033988749895,
+              "polarizability": 0.4001536612713431,
+              "total": 8.138587548067665
+            }
+          },
+          {
+            "i": 1,
+            "j": 9,
+            "aa": "LV",
+            "score": 7.811851984399141,
+            "native": false,
+            "evidence": {
+              "m_ij": 0.9344366142996439,
+              "hydrophobic": 6.477261708828154,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 7.811851984399141
+            }
+          },
+          {
+            "i": 9,
+            "j": 34,
+            "aa": "VL",
+            "score": 7.8062993218151835,
+            "native": false,
+            "evidence": {
+              "m_ij": 0.928883951715687,
+              "hydrophobic": 6.477261708828154,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 7.8062993218151835
+            }
+          },
+          {
+            "i": 9,
+            "j": 20,
+            "aa": "VL",
+            "score": 7.806206406448328,
+            "native": false,
+            "evidence": {
+              "m_ij": 0.9287910363488313,
+              "hydrophobic": 6.477261708828154,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 7.806206406448328
+            }
+          },
+          {
+            "i": 9,
+            "j": 28,
+            "aa": "VL",
+            "score": 7.80616754189688,
+            "native": false,
+            "evidence": {
+              "m_ij": 0.928752171797383,
+              "hydrophobic": 6.477261708828154,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 7.80616754189688
+            }
+          },
+          {
+            "i": 9,
+            "j": 22,
+            "aa": "VL",
+            "score": 7.805533889795844,
+            "native": false,
+            "evidence": {
+              "m_ij": 0.9281185196963471,
+              "hydrophobic": 6.477261708828154,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 7.805533889795844
+            }
+          },
+          {
+            "i": 1,
+            "j": 34,
+            "aa": "LL",
+            "score": 7.634309554761814,
+            "native": true,
+            "evidence": {
+              "m_ij": 1.0599868626618372,
+              "hydrophobic": 6.174169030828634,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 7.634309554761814
+            }
+          },
+          {
+            "i": 1,
+            "j": 28,
+            "aa": "LL",
+            "score": 7.633208201819573,
+            "native": false,
+            "evidence": {
+              "m_ij": 1.0588855097195966,
+              "hydrophobic": 6.174169030828634,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 7.633208201819573
+            }
+          },
+          {
+            "i": 1,
+            "j": 22,
+            "aa": "LL",
+            "score": 7.6301096281850835,
+            "native": false,
+            "evidence": {
+              "m_ij": 1.0557869360851064,
+              "hydrophobic": 6.174169030828634,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 7.6301096281850835
+            }
+          },
+          {
+            "i": 1,
+            "j": 20,
+            "aa": "LL",
+            "score": 7.6285100651253,
+            "native": false,
+            "evidence": {
+              "m_ij": 1.0541873730253235,
+              "hydrophobic": 6.174169030828634,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 7.6285100651253
+            }
+          }
+        ],
+        "top_L_precision_structure": 0.08333333333333333
+      },
       "rg_exp_A": 8.817566839898648,
       "rg_pred_A": 6.709039062798881,
       "rg_err_A": 2.1085277770997664,
@@ -410,23 +1769,23 @@
         "backbone_sep1_2": 0.057981797251189876,
         "helix_period_3_4_7": 0.22537530802350297,
         "mid_range_5_12": 0.7784928652878735,
-        "long_range_contacts": 4.025386403839763,
+        "long_range_contacts": 8.608719737173097,
         "per_residue_hotspots": 1.471279332632682,
         "global_topology": 5.52081817300549
       },
-      "primary_error_mode": "global_topology",
+      "primary_error_mode": "long_range_contacts",
       "ranked_modes": [
-        "global_topology",
         "long_range_contacts",
+        "global_topology",
         "per_residue_hotspots",
         "mid_range_5_12",
         "helix_period_3_4_7",
         "backbone_sep1_2"
       ],
-      "engine": "fsot_protein_FULL_SCALAR_v16c_topology",
+      "engine": "fsot_protein_FULL_SCALAR_v17_contacts",
       "full_law": true,
       "S_final": 10.575141904246689,
-      "predict_ms": 42.288700002245605,
+      "predict_ms": 47.70650001592003,
       "note": "helical bundle"
     },
     {
@@ -486,6 +1845,459 @@
       "native_contacts": 110,
       "contact_mae_A": 5.59237534380693,
       "top_L_precision": 0.05357142857142857,
+      "top_L_precision_structure": 0.05357142857142857,
+      "evidence_contact_diag": {
+        "L": 56,
+        "n_native_long_range": 110,
+        "n_top_hits": 8,
+        "top_L_precision_evidence": 0.14285714285714285,
+        "top_L_recall_evidence": 0.07272727272727272,
+        "mean_evidence_on_hits": {
+          "hydrophobic": 5.685176491534343,
+          "salt": 0.5497840486809933,
+          "disulfide": 0.0,
+          "register": 0.12499999999999999,
+          "m_ij": 1.539121460147647,
+          "polarizability": 0.3768303201464045
+        },
+        "missed_natives_sample": [
+          {
+            "i": 29,
+            "j": 51,
+            "aa": "FF",
+            "score": 6.582610968280095,
+            "rank": 58,
+            "evidence": {
+              "m_ij": 1.65191710508232,
+              "hydrophobic": 4.530540201926432,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 6.582610968280095
+            }
+          },
+          {
+            "i": 4,
+            "j": 29,
+            "aa": "LF",
+            "score": 6.476791621728131,
+            "rank": 63,
+            "evidence": {
+              "m_ij": 0.7877514039443224,
+              "hydrophobic": 5.288886556512465,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 6.476791621728131
+            }
+          },
+          {
+            "i": 4,
+            "j": 51,
+            "aa": "LF",
+            "score": 6.446612404677485,
+            "rank": 65,
+            "evidence": {
+              "m_ij": 0.7575721868936773,
+              "hydrophobic": 5.288886556512465,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 6.446612404677485
+            }
+          },
+          {
+            "i": 0,
+            "j": 20,
+            "aa": "MV",
+            "score": 6.32812306132522,
+            "rank": 70,
+            "evidence": {
+              "m_ij": 1.2435030856825144,
+              "hydrophobic": 4.570958272617417,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.5136617030252888,
+              "total": 6.32812306132522
+            }
+          },
+          {
+            "i": 3,
+            "j": 14,
+            "aa": "KE",
+            "score": 6.095077645894461,
+            "rank": 77,
+            "evidence": {
+              "m_ij": 1.4832383241746798,
+              "hydrophobic": 0.0,
+              "salt": 4.398272389447946,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.2135669322718347,
+              "total": 6.095077645894461
+            }
+          },
+          {
+            "i": 30,
+            "j": 39,
+            "aa": "KD",
+            "score": 5.784106910686798,
+            "rank": 104,
+            "evidence": {
+              "m_ij": 1.1722675889670173,
+              "hydrophobic": 0.0,
+              "salt": 4.398272389447946,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.2135669322718347,
+              "total": 5.784106910686798
+            }
+          },
+          {
+            "i": 19,
+            "j": 28,
+            "aa": "AV",
+            "score": 5.572130242264526,
+            "rank": 117,
+            "evidence": {
+              "m_ij": 0.7232708932096154,
+              "hydrophobic": 4.448705687783568,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 5.572130242264526
+            }
+          },
+          {
+            "i": 6,
+            "j": 33,
+            "aa": "LA",
+            "score": 5.485263331106979,
+            "rank": 134,
+            "evidence": {
+              "m_ij": 0.8445737582870259,
+              "hydrophobic": 4.24053591154861,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 5.485263331106979
+            }
+          },
+          {
+            "i": 0,
+            "j": 19,
+            "aa": "MA",
+            "score": 4.028209446121887,
+            "rank": 150,
+            "evidence": {
+              "m_ij": 0.5220312173545618,
+              "hydrophobic": 2.9925165257420367,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.5136617030252888,
+              "total": 4.028209446121887
+            }
+          },
+          {
+            "i": 41,
+            "j": 54,
+            "aa": "ET",
+            "score": 3.8703161062263582,
+            "rank": 163,
+            "evidence": {
+              "m_ij": 1.069936041405697,
+              "hydrophobic": 0.0,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 2.618033988749895,
+              "polarizability": 0.18234607607076636,
+              "total": 3.8703161062263582
+            }
+          },
+          {
+            "i": 17,
+            "j": 25,
+            "aa": "TA",
+            "score": 3.662791346966814,
+            "rank": 179,
+            "evidence": {
+              "m_ij": 0.7746343307679804,
+              "hydrophobic": 0.0,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 2.618033988749895,
+              "polarizability": 0.27012302744893857,
+              "total": 3.662791346966814
+            }
+          },
+          {
+            "i": 7,
+            "j": 54,
+            "aa": "NT",
+            "score": 3.405871064372418,
+            "rank": 213,
+            "evidence": {
+              "m_ij": 0.6054909995517568,
+              "hydrophobic": 0.0,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 2.618033988749895,
+              "polarizability": 0.18234607607076636,
+              "total": 3.405871064372418
+            }
+          },
+          {
+            "i": 42,
+            "j": 51,
+            "aa": "WF",
+            "score": 3.237897614160615,
+            "rank": 214,
+            "evidence": {
+              "m_ij": 1.837743952889272,
+              "hydrophobic": 0.0,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.9999999999999999,
+              "polarizability": 0.4001536612713431,
+              "total": 3.237897614160615
+            }
+          },
+          {
+            "i": 44,
+            "j": 51,
+            "aa": "YF",
+            "score": 2.3560983940373723,
+            "rank": 219,
+            "evidence": {
+              "m_ij": 1.085975366588434,
+              "hydrophobic": 0.0,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.9999999999999999,
+              "polarizability": 0.27012302744893857,
+              "total": 2.3560983940373723
+            }
+          },
+          {
+            "i": 18,
+            "j": 25,
+            "aa": "EA",
+            "score": 2.19462277666756,
+            "rank": 220,
+            "evidence": {
+              "m_ij": 0.9244997492186213,
+              "hydrophobic": 0.0,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.9999999999999999,
+              "polarizability": 0.27012302744893857,
+              "total": 2.19462277666756
+            }
+          }
+        ],
+        "top_predicted_sample": [
+          {
+            "i": 20,
+            "j": 53,
+            "aa": "VV",
+            "score": 10.311765021158955,
+            "native": false,
+            "evidence": {
+              "m_ij": 2.1163780199573865,
+              "hydrophobic": 6.795233339930226,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.9999999999999999,
+              "polarizability": 0.4001536612713431,
+              "total": 10.311765021158955
+            }
+          },
+          {
+            "i": 5,
+            "j": 53,
+            "aa": "IV",
+            "score": 9.791838425640215,
+            "native": true,
+            "evidence": {
+              "m_ij": 2.3578768935074783,
+              "hydrophobic": 7.033807870861394,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 9.791838425640215
+            }
+          },
+          {
+            "i": 5,
+            "j": 38,
+            "aa": "IV",
+            "score": 9.721454644344586,
+            "native": false,
+            "evidence": {
+              "m_ij": 2.28749311221185,
+              "hydrophobic": 7.033807870861394,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 9.721454644344586
+            }
+          },
+          {
+            "i": 5,
+            "j": 28,
+            "aa": "IV",
+            "score": 9.630881558215666,
+            "native": false,
+            "evidence": {
+              "m_ij": 2.196920026082929,
+              "hydrophobic": 7.033807870861394,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 9.630881558215666
+            }
+          },
+          {
+            "i": 5,
+            "j": 20,
+            "aa": "IV",
+            "score": 9.499632387010385,
+            "native": false,
+            "evidence": {
+              "m_ij": 2.0656708548776472,
+              "hydrophobic": 7.033807870861394,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 9.499632387010385
+            }
+          },
+          {
+            "i": 11,
+            "j": 53,
+            "aa": "LV",
+            "score": 9.085590731727834,
+            "native": false,
+            "evidence": {
+              "m_ij": 1.2081753616283364,
+              "hydrophobic": 6.477261708828154,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.9999999999999999,
+              "polarizability": 0.4001536612713431,
+              "total": 9.085590731727834
+            }
+          },
+          {
+            "i": 28,
+            "j": 53,
+            "aa": "VV",
+            "score": 9.002449601497645,
+            "native": false,
+            "evidence": {
+              "m_ij": 1.8070626002960757,
+              "hydrophobic": 6.795233339930226,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 9.002449601497645
+            }
+          },
+          {
+            "i": 20,
+            "j": 38,
+            "aa": "VV",
+            "score": 8.933607879416762,
+            "native": false,
+            "evidence": {
+              "m_ij": 1.738220878215194,
+              "hydrophobic": 6.795233339930226,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 8.933607879416762
+            }
+          },
+          {
+            "i": 38,
+            "j": 53,
+            "aa": "VV",
+            "score": 8.891260319141876,
+            "native": true,
+            "evidence": {
+              "m_ij": 1.6958733179403072,
+              "hydrophobic": 6.795233339930226,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 8.891260319141876
+            }
+          },
+          {
+            "i": 20,
+            "j": 51,
+            "aa": "VF",
+            "score": 8.874642292354242,
+            "native": false,
+            "evidence": {
+              "m_ij": 1.9259683032815582,
+              "hydrophobic": 5.5485203278013415,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.9999999999999999,
+              "polarizability": 0.4001536612713431,
+              "total": 8.874642292354242
+            }
+          },
+          {
+            "i": 28,
+            "j": 38,
+            "aa": "VV",
+            "score": 8.793678074431774,
+            "native": false,
+            "evidence": {
+              "m_ij": 1.5982910732302047,
+              "hydrophobic": 6.795233339930226,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 8.793678074431774
+            }
+          },
+          {
+            "i": 20,
+            "j": 28,
+            "aa": "VV",
+            "score": 8.743187262334397,
+            "native": false,
+            "evidence": {
+              "m_ij": 1.547800261132828,
+              "hydrophobic": 6.795233339930226,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 8.743187262334397
+            }
+          }
+        ],
+        "top_L_precision_structure": 0.05357142857142857
+      },
       "rg_exp_A": 10.135882126035968,
       "rg_pred_A": 8.477551273612043,
       "rg_err_A": 1.6583308524239246,
@@ -551,23 +2363,23 @@
         "backbone_sep1_2": 0.039936226312468924,
         "helix_period_3_4_7": 0.2952180163233927,
         "mid_range_5_12": 1.0320056641848412,
-        "long_range_contacts": 6.982686698207642,
+        "long_range_contacts": 11.268400983921929,
         "per_residue_hotspots": 1.531067244449018,
         "global_topology": 8.584462274232816
       },
-      "primary_error_mode": "global_topology",
+      "primary_error_mode": "long_range_contacts",
       "ranked_modes": [
-        "global_topology",
         "long_range_contacts",
+        "global_topology",
         "per_residue_hotspots",
         "mid_range_5_12",
         "helix_period_3_4_7",
         "backbone_sep1_2"
       ],
-      "engine": "fsot_protein_FULL_SCALAR_v16c_topology",
+      "engine": "fsot_protein_FULL_SCALAR_v17_contacts",
       "full_law": true,
       "S_final": 16.220335295229127,
-      "predict_ms": 87.82929999870248,
+      "predict_ms": 90.02199998940341,
       "note": "\u03b2 hairpin + helix"
     },
     {
@@ -577,119 +2389,572 @@
       "pred_len": 54,
       "exp_len": 54,
       "seq_match": true,
-      "rmsd_A": 8.353918888289572,
-      "per_res_mean_A": 7.672284176549409,
-      "per_res_median_A": 7.5844797737999885,
-      "per_res_p90_A": 12.422305058963909,
-      "per_res_max_A": 14.71343837197858,
+      "rmsd_A": 8.288258489757581,
+      "per_res_mean_A": 7.599298022846967,
+      "per_res_median_A": 7.3952237872413,
+      "per_res_p90_A": 12.299104836172752,
+      "per_res_max_A": 14.905365821747658,
       "distance_bins": [
         {
           "mode": "backbone_sep1_2",
           "sep_lo": 1,
           "sep_hi": 3,
           "n_pairs": 105,
-          "mean_abs_dA": 1.0662910020748708,
-          "median_abs_dA": 0.06210978711263815,
-          "p90_abs_dA": 3.3879497914313412,
-          "contribution_proxy": 0.0383952521323256
+          "mean_abs_dA": 1.0701350112721,
+          "median_abs_dA": 0.062109787113491244,
+          "p90_abs_dA": 3.2333793556125734,
+          "contribution_proxy": 0.03853366810136162
         },
         {
           "mode": "helix_period_3_4_7",
           "sep_lo": 3,
           "sep_hi": 5,
           "n_pairs": 148,
-          "mean_abs_dA": 3.3354707347608756,
-          "median_abs_dA": 2.7850597360129696,
-          "p90_abs_dA": 6.829590423863205,
-          "contribution_proxy": 0.16929000985754786
+          "mean_abs_dA": 3.4011153419583375,
+          "median_abs_dA": 2.9225915219578105,
+          "p90_abs_dA": 7.162573857833348,
+          "contribution_proxy": 0.17262176632710355
         },
         {
           "mode": "mid_range_5_12",
           "sep_lo": 5,
           "sep_hi": 13,
           "n_pairs": 364,
-          "mean_abs_dA": 5.4166666755841915,
-          "median_abs_dA": 5.038442355206012,
-          "p90_abs_dA": 9.652074392379049,
-          "contribution_proxy": 0.6761545507245013
+          "mean_abs_dA": 5.501645052534119,
+          "median_abs_dA": 5.230256256455515,
+          "p90_abs_dA": 9.628662699407137,
+          "contribution_proxy": 0.6867622767909531
         },
         {
           "mode": "long_range_contacts",
           "sep_lo": 13,
           "sep_hi": 54,
           "n_pairs": 861,
-          "mean_abs_dA": 4.68191080789882,
-          "median_abs_dA": 3.886537755521756,
-          "p90_abs_dA": 9.947203081370176,
-          "contribution_proxy": 1.382416051303458
+          "mean_abs_dA": 4.614533732883709,
+          "median_abs_dA": 3.729198485324412,
+          "p90_abs_dA": 9.812080968369889,
+          "contribution_proxy": 1.3625217914996137
         }
       ],
       "native_contacts": 28,
-      "contact_mae_A": 8.012722371619954,
+      "contact_mae_A": 7.725383721298292,
       "top_L_precision": 0.0,
+      "top_L_precision_structure": 0.0,
+      "evidence_contact_diag": {
+        "L": 54,
+        "n_native_long_range": 28,
+        "n_top_hits": 2,
+        "top_L_precision_evidence": 0.037037037037037035,
+        "top_L_recall_evidence": 0.07142857142857142,
+        "mean_evidence_on_hits": {
+          "hydrophobic": 6.704672541775057,
+          "salt": 0.0,
+          "disulfide": 0.0,
+          "register": 0.0,
+          "m_ij": 0.9758772784458095,
+          "polarizability": 0.4001536612713431
+        },
+        "missed_natives_sample": [
+          {
+            "i": 28,
+            "j": 39,
+            "aa": "RE",
+            "score": 7.884545002821826,
+            "rank": 60,
+            "evidence": {
+              "m_ij": 3.2727056811020443,
+              "hydrophobic": 0.0,
+              "salt": 4.398272389447946,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.2135669322718347,
+              "total": 7.884545002821826
+            }
+          },
+          {
+            "i": 17,
+            "j": 46,
+            "aa": "FF",
+            "score": 6.582897636467365,
+            "rank": 89,
+            "evidence": {
+              "m_ij": 1.6522037732695902,
+              "hydrophobic": 4.530540201926432,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 6.582897636467365
+            }
+          },
+          {
+            "i": 23,
+            "j": 46,
+            "aa": "LF",
+            "score": 6.473831642084591,
+            "rank": 97,
+            "evidence": {
+              "m_ij": 0.784791424300783,
+              "hydrophobic": 5.288886556512465,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 6.473831642084591
+            }
+          },
+          {
+            "i": 5,
+            "j": 37,
+            "aa": "FL",
+            "score": 6.45810493458646,
+            "rank": 100,
+            "evidence": {
+              "m_ij": 0.7690647168026518,
+              "hydrophobic": 5.288886556512465,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 6.45810493458646
+            }
+          },
+          {
+            "i": 13,
+            "j": 46,
+            "aa": "LF",
+            "score": 6.456622802197382,
+            "rank": 101,
+            "evidence": {
+              "m_ij": 0.7675825844135733,
+              "hydrophobic": 5.288886556512465,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 6.456622802197382
+            }
+          },
+          {
+            "i": 17,
+            "j": 49,
+            "aa": "FK",
+            "score": 1.834133406042311,
+            "rank": 266,
+            "evidence": {
+              "m_ij": 0.5177605640741524,
+              "hydrophobic": 0.0,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.9999999999999999,
+              "polarizability": 0.3163728419681587,
+              "total": 1.834133406042311
+            }
+          },
+          {
+            "i": 28,
+            "j": 42,
+            "aa": "RI",
+            "score": 1.1478370216554166,
+            "rank": 343,
+            "evidence": {
+              "m_ij": 0.8314641796872579,
+              "hydrophobic": 0.0,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.3163728419681587,
+              "total": 1.1478370216554166
+            }
+          },
+          {
+            "i": 21,
+            "j": 46,
+            "aa": "RF",
+            "score": 1.0956424845129502,
+            "rank": 356,
+            "evidence": {
+              "m_ij": 0.7792696425447916,
+              "hydrophobic": 0.0,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.3163728419681587,
+              "total": 1.0956424845129502
+            }
+          },
+          {
+            "i": 2,
+            "j": 45,
+            "aa": "RW",
+            "score": 1.0765890367800293,
+            "rank": 359,
+            "evidence": {
+              "m_ij": 0.7602161948118706,
+              "hydrophobic": 0.0,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.3163728419681587,
+              "total": 1.0765890367800293
+            }
+          },
+          {
+            "i": 2,
+            "j": 44,
+            "aa": "RI",
+            "score": 0.996878641791729,
+            "rank": 387,
+            "evidence": {
+              "m_ij": 0.6805057998235704,
+              "hydrophobic": 0.0,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.3163728419681587,
+              "total": 0.996878641791729
+            }
+          },
+          {
+            "i": 32,
+            "j": 39,
+            "aa": "SE",
+            "score": 0.904785807532352,
+            "rank": 468,
+            "evidence": {
+              "m_ij": 0.7224397314615857,
+              "hydrophobic": 0.0,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.18234607607076636,
+              "total": 0.904785807532352
+            }
+          },
+          {
+            "i": 2,
+            "j": 41,
+            "aa": "RQ",
+            "score": 0.901907774844537,
+            "rank": 470,
+            "evidence": {
+              "m_ij": 0.6883408425727022,
+              "hydrophobic": 0.0,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.2135669322718347,
+              "total": 0.901907774844537
+            }
+          },
+          {
+            "i": 22,
+            "j": 46,
+            "aa": "YF",
+            "score": 0.8986960146563919,
+            "rank": 474,
+            "evidence": {
+              "m_ij": 0.6285729872074534,
+              "hydrophobic": 0.0,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.27012302744893857,
+              "total": 0.8986960146563919
+            }
+          },
+          {
+            "i": 0,
+            "j": 41,
+            "aa": "RQ",
+            "score": 0.8979915039151369,
+            "rank": 476,
+            "evidence": {
+              "m_ij": 0.6844245716433023,
+              "hydrophobic": 0.0,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.2135669322718347,
+              "total": 0.8979915039151369
+            }
+          },
+          {
+            "i": 31,
+            "j": 39,
+            "aa": "LE",
+            "score": 0.8905461460531886,
+            "rank": 489,
+            "evidence": {
+              "m_ij": 0.62042311860425,
+              "hydrophobic": 0.0,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.27012302744893857,
+              "total": 0.8905461460531886
+            }
+          }
+        ],
+        "top_predicted_sample": [
+          {
+            "i": 8,
+            "j": 50,
+            "aa": "ER",
+            "score": 10.268769690105115,
+            "native": false,
+            "evidence": {
+              "m_ij": 4.656930368385334,
+              "hydrophobic": 0.0,
+              "salt": 4.398272389447946,
+              "disulfide": 0.0,
+              "register": 0.9999999999999999,
+              "polarizability": 0.2135669322718347,
+              "total": 10.268769690105115
+            }
+          },
+          {
+            "i": 0,
+            "j": 25,
+            "aa": "RE",
+            "score": 10.042771068269898,
+            "native": false,
+            "evidence": {
+              "m_ij": 4.430931746550117,
+              "hydrophobic": 0.0,
+              "salt": 4.398272389447946,
+              "disulfide": 0.0,
+              "register": 0.9999999999999999,
+              "polarizability": 0.2135669322718347,
+              "total": 10.042771068269898
+            }
+          },
+          {
+            "i": 19,
+            "j": 50,
+            "aa": "ER",
+            "score": 10.03790258229873,
+            "native": false,
+            "evidence": {
+              "m_ij": 4.426063260578948,
+              "hydrophobic": 0.0,
+              "salt": 4.398272389447946,
+              "disulfide": 0.0,
+              "register": 0.9999999999999999,
+              "polarizability": 0.2135669322718347,
+              "total": 10.03790258229873
+            }
+          },
+          {
+            "i": 42,
+            "j": 53,
+            "aa": "II",
+            "score": 9.999309082004213,
+            "native": false,
+            "evidence": {
+              "m_ij": 2.3183968817332783,
+              "hydrophobic": 7.280758538999591,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 9.999309082004213
+            }
+          },
+          {
+            "i": 2,
+            "j": 25,
+            "aa": "RE",
+            "score": 9.985574015493416,
+            "native": false,
+            "evidence": {
+              "m_ij": 4.373734693773634,
+              "hydrophobic": 0.0,
+              "salt": 4.398272389447946,
+              "disulfide": 0.0,
+              "register": 0.9999999999999999,
+              "polarizability": 0.2135669322718347,
+              "total": 9.985574015493416
+            }
+          },
+          {
+            "i": 25,
+            "j": 50,
+            "aa": "ER",
+            "score": 9.94385820375173,
+            "native": false,
+            "evidence": {
+              "m_ij": 4.33201888203195,
+              "hydrophobic": 0.0,
+              "salt": 4.398272389447946,
+              "disulfide": 0.0,
+              "register": 0.9999999999999999,
+              "polarizability": 0.2135669322718347,
+              "total": 9.94385820375173
+            }
+          },
+          {
+            "i": 44,
+            "j": 53,
+            "aa": "II",
+            "score": 9.918330653513921,
+            "native": false,
+            "evidence": {
+              "m_ij": 2.2374184532429875,
+              "hydrophobic": 7.280758538999591,
+              "salt": 0.0,
+              "disulfide": 0.0,
+              "register": 0.0,
+              "polarizability": 0.4001536612713431,
+              "total": 9.918330653513921
+            }
+          },
+          {
+            "i": 8,
+            "j": 28,
+            "aa": "ER",
+            "score": 9.884022405997428,
+            "native": false,
+            "evidence": {
+              "m_ij": 4.272183084277645,
+              "hydrophobic": 0.0,
+              "salt": 4.398272389447946,
+              "disulfide": 0.0,
+              "register": 0.9999999999999999,
+              "polarizability": 0.2135669322718347,
+              "total": 9.884022405997428
+            }
+          },
+          {
+            "i": 8,
+            "j": 27,
+            "aa": "ER",
+            "score": 9.845078326516902,
+            "native": false,
+            "evidence": {
+              "m_ij": 4.23323900479712,
+              "hydrophobic": 0.0,
+              "salt": 4.398272389447946,
+              "disulfide": 0.0,
+              "register": 0.9999999999999999,
+              "polarizability": 0.2135669322718347,
+              "total": 9.845078326516902
+            }
+          },
+          {
+            "i": 0,
+            "j": 19,
+            "aa": "RE",
+            "score": 9.8040372700986,
+            "native": false,
+            "evidence": {
+              "m_ij": 4.19219794837882,
+              "hydrophobic": 0.0,
+              "salt": 4.398272389447946,
+              "disulfide": 0.0,
+              "register": 0.9999999999999999,
+              "polarizability": 0.2135669322718347,
+              "total": 9.8040372700986
+            }
+          },
+          {
+            "i": 8,
+            "j": 26,
+            "aa": "ER",
+            "score": 9.803125498989154,
+            "native": false,
+            "evidence": {
+              "m_ij": 4.191286177269372,
+              "hydrophobic": 0.0,
+              "salt": 4.398272389447946,
+              "disulfide": 0.0,
+              "register": 0.9999999999999999,
+              "polarizability": 0.2135669322718347,
+              "total": 9.803125498989154
+            }
+          },
+          {
+            "i": 2,
+            "j": 19,
+            "aa": "RE",
+            "score": 9.71678692205084,
+            "native": false,
+            "evidence": {
+              "m_ij": 4.10494760033106,
+              "hydrophobic": 0.0,
+              "salt": 4.398272389447946,
+              "disulfide": 0.0,
+              "register": 0.9999999999999999,
+              "polarizability": 0.2135669322718347,
+              "total": 9.71678692205084
+            }
+          }
+        ],
+        "top_L_precision_structure": 0.0
+      },
       "rg_exp_A": 10.08894278769526,
-      "rg_pred_A": 9.250788337887561,
-      "rg_err_A": 0.838154449807698,
-      "end_to_end_err_A": 0.13677732899395778,
+      "rg_pred_A": 9.189829839538929,
+      "rg_err_A": 0.8991129481563309,
+      "end_to_end_err_A": 0.38686194555710074,
       "hotspots": [
         {
           "i": 0,
           "aa": "R",
-          "err_A": 14.71343837197858
+          "err_A": 14.905365821747658
         },
         {
           "i": 1,
           "aa": "P",
-          "err_A": 14.01871162799559
+          "err_A": 14.25906629764881
         },
         {
           "i": 36,
           "aa": "G",
-          "err_A": 13.664506978009827
-        },
-        {
-          "i": 22,
-          "aa": "Y",
-          "err_A": 12.895988834576801
-        },
-        {
-          "i": 35,
-          "aa": "L",
-          "err_A": 12.820115953350367
+          "err_A": 13.397214365503618
         },
         {
           "i": 33,
           "aa": "S",
-          "err_A": 12.514057116484173
+          "err_A": 12.529347357375888
         },
         {
-          "i": 20,
-          "aa": "N",
-          "err_A": 12.208216924749957
+          "i": 35,
+          "aa": "L",
+          "err_A": 12.479994399119406
+        },
+        {
+          "i": 22,
+          "aa": "Y",
+          "err_A": 12.450600287405889
         },
         {
           "i": 34,
           "aa": "E",
-          "err_A": 11.972662036016782
+          "err_A": 11.945615449962096
+        },
+        {
+          "i": 20,
+          "aa": "N",
+          "err_A": 11.892733859267823
+        },
+        {
+          "i": 19,
+          "aa": "E",
+          "err_A": 11.419118077209871
         },
         {
           "i": 37,
           "aa": "L",
-          "err_A": 11.69230538154259
-        },
-        {
-          "i": 21,
-          "aa": "R",
-          "err_A": 11.673535360003159
+          "err_A": 11.401836621277548
         }
       ],
       "mode_scores": {
-        "backbone_sep1_2": 0.0383952521323256,
-        "helix_period_3_4_7": 0.16929000985754786,
-        "mid_range_5_12": 0.6761545507245013,
-        "long_range_contacts": 9.395138422923413,
-        "per_residue_hotspots": 1.5342923518730838,
-        "global_topology": 0.9226874880163904
+        "backbone_sep1_2": 0.03853366810136162,
+        "helix_period_3_4_7": 0.17262176632710355,
+        "mid_range_5_12": 0.6867622767909531,
+        "long_range_contacts": 13.902720327612721,
+        "per_residue_hotspots": 1.5284380029057687,
+        "global_topology": 1.1382067794645305
       },
       "primary_error_mode": "long_range_contacts",
       "ranked_modes": [
@@ -700,10 +2965,10 @@
         "helix_period_3_4_7",
         "backbone_sep1_2"
       ],
-      "engine": "fsot_protein_FULL_SCALAR_v16c_topology",
+      "engine": "fsot_protein_FULL_SCALAR_v17_contacts",
       "full_law": true,
       "S_final": 15.655815931356033,
-      "predict_ms": 77.72060000570491,
+      "predict_ms": 84.69680001144297,
       "note": "helix bundle"
     }
   ],
@@ -711,8 +2976,8 @@
     {
       "priority": 1,
       "mode": "long_range_contacts",
-      "votes": 9,
-      "score_sum": 42.75842218328626,
+      "votes": 13,
+      "score_sum": 65.43425079169138,
       "meaning": "Tertiary native contacts missing or false",
       "literature": "Contact maps / top-L metrics drive fold quality (CASP; Marks/Sander coevolution; AF distograms).",
       "fsot_handle": "F13\u2013F15 + observer tertiary S at Biochemistry D=13; top-L caps; residual-at-interface on contact set.",
@@ -722,8 +2987,8 @@
     {
       "priority": 2,
       "mode": "global_topology",
-      "votes": 11,
-      "score_sum": 39.10534452129227,
+      "votes": 7,
+      "score_sum": 39.320863812740406,
       "meaning": "Chain topology / domain packing globally wrong after Kabsch",
       "literature": "Energy landscape funnel; topology from contact order (Onuchic/Wolynes; Baker).",
       "fsot_handle": "MDS is only as good as D; fix contact D first, then sparse polish; multi-start from SS regions.",
@@ -734,7 +2999,7 @@
       "priority": 3,
       "mode": "per_residue_hotspots",
       "votes": 5,
-      "score_sum": 7.68467440772025,
+      "score_sum": 7.678820058752934,
       "meaning": "Local segments high RMSD after global align",
       "literature": "Flexible loops, termini disorder; core vs surface (crystallographic B-factors).",
       "fsot_handle": "Segment-wise residual; coil vs H/E different D_eff; do not over-constrain termini.",
@@ -745,7 +3010,7 @@
       "priority": 4,
       "mode": "mid_range_5_12",
       "votes": 5,
-      "score_sum": 4.003107526293712,
+      "score_sum": 4.013715252360164,
       "meaning": "Secondary packing / loops at mid separation",
       "literature": "Secondary structure packing; loop closure; contact order (Plaxco et al.).",
       "fsot_handle": "F11 sheet + F12 regions; SS amp at Chemistry domain; full scalar residual mid-sep.",
@@ -756,7 +3021,7 @@
       "priority": 5,
       "mode": "helix_period_3_4_7",
       "votes": 5,
-      "score_sum": 1.1499244051445912,
+      "score_sum": 1.1532561616141468,
       "meaning": "\u03b1-helix i,i+3/4/7 distances wrong",
       "literature": "\u03b1-helix rise 1.5 \u00c5/res, 3.6 res/turn; C\u03b1 i\u2192i+4 \u2248 6.2 \u00c5 (Pauling).",
       "fsot_handle": "F10 helix geometry + Chemistry D=8 interface; enforce ideal helix D when p_alpha high.",
@@ -767,7 +3032,7 @@
       "priority": 6,
       "mode": "backbone_sep1_2",
       "votes": 5,
-      "score_sum": 0.21570582270794464,
+      "score_sum": 0.21584423867698066,
       "meaning": "Virtual C\u03b1\u2013C\u03b1 bond / local geometry wrong",
       "literature": "Standard C\u03b1 virtual bond \u2248 3.8 \u00c5; local geometry dominates short-range map (Dill polymer; Flory).",
       "fsot_handle": "F07 bb + CA_CA seed; do NOT residual-scale sep=1,2 (geometry is hard constraint).",
@@ -822,8 +3087,8 @@
   "next_action": {
     "priority": 1,
     "mode": "long_range_contacts",
-    "votes": 9,
-    "score_sum": 42.75842218328626,
+    "votes": 13,
+    "score_sum": 65.43425079169138,
     "meaning": "Tertiary native contacts missing or false",
     "literature": "Contact maps / top-L metrics drive fold quality (CASP; Marks/Sander coevolution; AF distograms).",
     "fsot_handle": "F13\u2013F15 + observer tertiary S at Biochemistry D=13; top-L caps; residual-at-interface on contact set.",

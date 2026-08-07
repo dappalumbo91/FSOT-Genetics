@@ -187,26 +187,43 @@ def analyze_one(
     # Contact metrics (native contacts in exp < CONTACT_A, |i-j|>=gate)
     gate = int(pred.get("long_range_gate") or 7)
     native = []
-    pred_at_native = []
     for i in range(n):
         for j in range(i + gate, n):
             if De[i, j] < CONTACT_A:
                 native.append((i, j, De[i, j]))
-                pred_at_native.append(Dp[i, j])
+    evidence_diag = None
     if native:
         contact_mae = float(np.mean([abs(Dp[i, j] - de) for i, j, de in native]))
-        # precision@L: top-L predicted contacts that are native
+        # Structure top-L (from folded distances)
         L = n
         scores = []
         for i in range(n):
             for j in range(i + gate, n):
-                # high M would be better; use inverse distance as proxy rank from pred
                 scores.append((1.0 / max(Dp[i, j], 1e-3), i, j))
         scores.sort(reverse=True)
         top = scores[:L]
         hit = sum(1 for _, i, j in top if De[i, j] < CONTACT_A)
         top_l_prec = hit / max(L, 1)
+        # Evidence top-L (pre-fold ranker — the data we need to solidify contacts)
+        try:
+            from contact_rank import rank_long_range_contacts, top_l_precision_vs_native
+            from fsot_structure_engine import build_distogram
+
+            M, _, regions, seq_m, _if = build_distogram(exp_seq)
+            ranked = rank_long_range_contacts(seq_m, M, regions, gate)
+            # only natives with sep>=gate for De
+            De_lr = De.copy()
+            evidence_diag = top_l_precision_vs_native(ranked, De_lr, CONTACT_A, L, gate=gate)
+            # restrict native set in diagnostic to sep>=gate
+            evidence_diag["top_L_precision_structure"] = top_l_prec
+        except Exception as ex:
+            evidence_diag = {"error": str(ex)}
         mode_scores["long_range_contacts"] = mode_scores.get("long_range_contacts", 0) + contact_mae
+        if evidence_diag and evidence_diag.get("top_L_precision_evidence") is not None:
+            # invert precision so low top-L increases mode pressure
+            mode_scores["long_range_contacts"] += (
+                1.0 - float(evidence_diag["top_L_precision_evidence"])
+            ) * 5.0
     else:
         contact_mae = None
         top_l_prec = None
@@ -255,6 +272,8 @@ def analyze_one(
         "native_contacts": len(native) if native else 0,
         "contact_mae_A": contact_mae,
         "top_L_precision": top_l_prec,
+        "top_L_precision_structure": top_l_prec,
+        "evidence_contact_diag": evidence_diag,
         "rg_exp_A": rg_e,
         "rg_pred_A": rg_p,
         "rg_err_A": abs(rg_p - rg_e),
@@ -329,10 +348,13 @@ def main() -> int:
         rec = analyze_one(name, fname, exp_seq, exp_xyz, pred)
         rec["note"] = note
         rows.append(rec)
+        ev = rec.get("evidence_contact_diag") or {}
+        ev_p = ev.get("top_L_precision_evidence")
         print(
             f"  {fname:8s} n={rec.get('n')}  RMSD={rec.get('rmsd_A', float('nan')):6.2f} Å  "
             f"primary={rec.get('primary_error_mode')}  "
-            f"contact_mae={rec.get('contact_mae_A')}  topL={rec.get('top_L_precision')}"
+            f"contact_mae={rec.get('contact_mae_A')}  "
+            f"topL_struct={rec.get('top_L_precision')}  topL_evid={ev_p}"
         )
 
     queue = build_fix_queue(rows)
