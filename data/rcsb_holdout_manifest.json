@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "frozen_at": "2026-08-07",
+  "role": "holdout",
+  "policy": "Do not choose formulas, routings, or thresholds from these outcomes.",
+  "source": "RCSB Protein Data Bank",
+  "search_endpoint": "https://search.rcsb.org/rcsbsearch/v2/query",
+  "selection": {
+    "experimental_method": "X-RAY DIFFRACTION",
+    "maximum_resolution_A": 2.0,
+    "minimum_release_date": "2024-01-01",
+    "sort": "initial_release_date descending",
+    "chain_length_range": [
+      40,
+      220
+    ],
+    "sampling": "First PDB-format chain satisfying the length range at stratified search offsets.",
+    "search_offsets": [
+      0,
+      250,
+      750,
+      1500,
+      3000,
+      4000,
+      5000,
+      6000,
+      7500,
+      11000,
+      12500,
+      13000
+    ]
+  },
+  "entries": [
+    {
+      "pdb_id": "10UT",
+      "chain": "A",
+      "expected_length": 137,
+      "release_date": "2026-08-05",
+      "resolution_A": 1.6,
+      "title": "Cohesin domain number 1 from Rcal_2938"
+    },
+    {
+      "pdb_id": "9TUF",
+      "chain": "A",
+      "expected_length": 98,
+      "release_date": "2026-07-29",
+      "resolution_A": 1.8,
+      "title": "Death domain of human p53-induced protein with a death domain"
+    },
+    {
+      "pdb_id": "9P0Y",
+      "chain": "A",
+      "expected_length": 129,
+      "release_date": "2026-06-17",
+      "resolution_A": 1.499,
+      "title": "Hen egg white lysozyme at 100 Kelvin"
+    },
+    {
+      "pdb_id": "9PU3",
+      "chain": "A",
+      "expected_length": 165,
+      "release_date": "2026-04-22",
+      "resolution_A": 1.7,
+      "title": "HRAS complex with UM0140692"
+    },
+    {
+      "pdb_id": "7IS9",
+      "chain": "A",
+      "expected_length": 113,
+      "release_date": "2026-01-14",
+      "resolution_A": 1.5,
+      "title": "SARS-CoV-2 Nsp1 crystal E01a"
+    },
+    {
+      "pdb_id": "9BN7",
+      "chain": "A",
+      "expected_length": 149,
+      "release_date": "2025-11-05",
+      "resolution_A": 1.92,
+      "title": "TNFa-VNAR C4 complex"
+    },
+    {
+      "pdb_id": "9RC4",
+      "chain": "A",
+      "expected_length": 219,
+      "release_date": "2025-09-03",
+      "resolution_A": 1.74,
+      "title": "VirJ domain 1 from Brucella"
+    },
+    {
+      "pdb_id": "8VTD",
+      "chain": "A",
+      "expected_length": 214,
+      "release_date": "2025-07-02",
+      "resolution_A": 1.23,
+      "title": "Anti-TIGIT Vibostolimab Fab complex"
+    },
+    {
+      "pdb_id": "8YUF",
+      "chain": "A",
+      "expected_length": 133,
+      "release_date": "2025-04-02",
+      "resolution_A": 1.59,
+      "title": "HEPN Q64A toxin"
+    },
+    {
+      "pdb_id": "8Q1C",
+      "chain": "A",
+      "expected_length": 219,
+      "release_date": "2024-08-07",
+      "resolution_A": 1.679,
+      "title": "Beta-phosphoglucomutase D10N P146A variant"
+    },
+    {
+      "pdb_id": "8J81",
+      "chain": "A",
+      "expected_length": 87,
+      "release_date": "2024-05-01",
+      "resolution_A": 1.35,
+      "title": "MDM2 bound with a peptoid"
+    },
+    {
+      "pdb_id": "8OG0",
+      "chain": "H",
+      "expected_length": 211,
+      "release_date": "2024-03-27",
+      "resolution_A": 1.712,
+      "title": "MJF14-6-4-2 Fab fragment complex"
+    }
+  ]
+}

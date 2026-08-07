@@ -42,7 +42,14 @@ python scripts/run_fsot_vs_alphafold_structure.py --max-proteins 8 --rounds 24 -
 
 # Distogram contact metrics (F15 design metrics)
 python scripts/run_fsot_distogram_contact_eval.py
+
+# Frozen real-data reproduction audit (downloads 12 experimental RCSB structures)
+python scripts/run_rcsb_holdout.py
 ```
+
+The RCSB manifest is a no-tuning holdout: do not select formulas, routings, or
+thresholds from its outcomes. After a formula change is frozen in Git, validate
+it on a newly preregistered holdout rather than re-optimizing against this set.
 
 Optional Rust formula crates:
 
