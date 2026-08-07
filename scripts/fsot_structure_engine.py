@@ -725,6 +725,23 @@ def classical_mds(D: np.ndarray, dim: int = 3, gate: int = 7) -> np.ndarray:
     return X
 
 
+def _bulk_observer_mds(D: np.ndarray, dim: int) -> np.ndarray:
+    """Raw classical MDS at the D_eff bulk dimension (no 3-D bond rescale)."""
+    n = D.shape[0]
+    J = np.eye(n) - np.ones((n, n)) / n
+    B = -0.5 * J @ (D ** 2) @ J
+    evals, evecs = np.linalg.eigh(B)
+    idx = np.argsort(evals)[::-1][:dim]
+    return evecs[:, idx] @ np.diag(np.sqrt(np.clip(evals[idx], 0.0, None)))
+
+
+def _solidify_to_3d(X: np.ndarray) -> np.ndarray:
+    """Observer collapse: project the D_eff bulk onto its 3 principal axes."""
+    Xc = X - X.mean(axis=0)
+    _, _, Vt = np.linalg.svd(Xc, full_matrices=False)
+    return Xc @ Vt[:3].T
+
+
 def initial_extended(n: int) -> np.ndarray:
     """Deterministic extended chain (seed angle step 2π/φ)."""
     X = np.zeros((n, 3), dtype=np.float64)
@@ -939,6 +956,7 @@ def predict_ca_coords(
     *,
     cooperative_regions: bool = False,
     canonicalize_chirality: bool = False,
+    observer_bulk_dim: int | None = None,
 ) -> dict[str, Any]:
     """Full-law fold: S=K(T1+T2+T3) per pair + observer refine + F15/MDS.
 
@@ -965,37 +983,47 @@ def predict_ca_coords(
     pairs = _sparse_pairs(len(seq), M, local=int(PI * E) + 3, gate=gate)
     n_rounds = max(8, min(int(rounds), 32))
 
-    # Topology-first embedding (error mode global_topology)
-    X_mds = classical_mds(D, dim=3, gate=gate)
-    X_reg = classical_mds(D, dim=3, gate=gate)  # same D; region start after refine choice
-    # region / helix starts: place SS then expand only if crushed
-    X_reg0 = initial_from_regions(seq, props, regions)
-    if radius_of_gyration(X_reg0) < target_rg_fsot(len(seq)) / PHI:
-        X_reg0 = scale_to_target_rg(X_reg0, len(seq))
-    X_helix0 = initial_helix_bundle(seq, props)
-    if radius_of_gyration(X_helix0) < target_rg_fsot(len(seq)) / PHI:
-        X_helix0 = scale_to_target_rg(X_helix0, len(seq))
-    candidates: list[tuple[str, np.ndarray]] = [
-        ("mds", X_mds),
-        ("mds_mirror", X_mds * np.array([1.0, 1.0, -1.0])),
-        ("regions", X_reg0),
-        ("helix_bundle", X_helix0),
-    ]
-    best_name = "mds"
-    X = candidates[0][1]
-    st = float("inf")
-    for cname, X0 in candidates:
-        Xc = refine_with_distogram(X0.copy(), D, M, rounds=n_rounds, pairs=pairs)
-        # if refine re-crushed topology, partial expand once
-        if radius_of_gyration(Xc) < target_rg_fsot(len(seq)) / PHI:
-            Xc = scale_to_target_rg(Xc, len(seq))
-            for i in range(1, len(seq)):
-                dvec = Xc[i] - Xc[i - 1]
-                dlen = float(np.linalg.norm(dvec) + 1e-9)
-                Xc[i] = Xc[i - 1] + dvec * (CA_CA / dlen)
-        stc = stress(Xc, D, M, pairs=pairs, topology_weight=True, gate=gate)
-        if stc < st:
-            X, st, best_name = Xc, stc, cname
+    if observer_bulk_dim is not None:
+        # Observer solidification: refine in the D_eff bulk, then project to 3-D.
+        bd = int(min(max(int(observer_bulk_dim), 3), max(len(seq) - 1, 3)))
+        bulk = refine_with_distogram(
+            _bulk_observer_mds(D, bd), D, M, rounds=n_rounds, pairs=pairs
+        )
+        X = _solidify_to_3d(bulk)
+        best_name = f"bulk{bd}"
+        st = stress(X, D, M, pairs=pairs, topology_weight=True, gate=gate)
+    else:
+        # Topology-first embedding (error mode global_topology)
+        X_mds = classical_mds(D, dim=3, gate=gate)
+        X_reg = classical_mds(D, dim=3, gate=gate)  # same D; region start after refine choice
+        # region / helix starts: place SS then expand only if crushed
+        X_reg0 = initial_from_regions(seq, props, regions)
+        if radius_of_gyration(X_reg0) < target_rg_fsot(len(seq)) / PHI:
+            X_reg0 = scale_to_target_rg(X_reg0, len(seq))
+        X_helix0 = initial_helix_bundle(seq, props)
+        if radius_of_gyration(X_helix0) < target_rg_fsot(len(seq)) / PHI:
+            X_helix0 = scale_to_target_rg(X_helix0, len(seq))
+        candidates: list[tuple[str, np.ndarray]] = [
+            ("mds", X_mds),
+            ("mds_mirror", X_mds * np.array([1.0, 1.0, -1.0])),
+            ("regions", X_reg0),
+            ("helix_bundle", X_helix0),
+        ]
+        best_name = "mds"
+        X = candidates[0][1]
+        st = float("inf")
+        for cname, X0 in candidates:
+            Xc = refine_with_distogram(X0.copy(), D, M, rounds=n_rounds, pairs=pairs)
+            # if refine re-crushed topology, partial expand once
+            if radius_of_gyration(Xc) < target_rg_fsot(len(seq)) / PHI:
+                Xc = scale_to_target_rg(Xc, len(seq))
+                for i in range(1, len(seq)):
+                    dvec = Xc[i] - Xc[i - 1]
+                    dlen = float(np.linalg.norm(dvec) + 1e-9)
+                    Xc[i] = Xc[i - 1] + dvec * (CA_CA / dlen)
+            stc = stress(Xc, D, M, pairs=pairs, topology_weight=True, gate=gate)
+            if stc < st:
+                X, st, best_name = Xc, stc, cname
 
     chirality_reflected = False
     if canonicalize_chirality:
