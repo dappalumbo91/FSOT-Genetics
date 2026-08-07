@@ -1,0 +1,648 @@
+{
+  "generated_at": "2026-08-07T15:56:12.084294+00:00",
+  "policy": "Do not choose formulas, routings, or thresholds from these outcomes.",
+  "source": "RCSB Protein Data Bank",
+  "manifest_sha256": "67e309a7489b2b4b21a19f4c03c0949dffc0d389c72c475d07c58af834c158bf",
+  "git_commit": "c5affb18bba37ddbc453817521d7ad7dfbc62fcd",
+  "benchmark_sha256": "cba35031639929867d7fe833bbbe635f7f47483b92c714bb98c69ec6b8624f54",
+  "engine_sha256": "4739711f270dc0ea3d22a3702f84be5d1f4fe6525a04ada67a5e77998b27e6f2",
+  "authority_sha256": "d1d38a185487b452e470ac68ece2eb45aeb1ca9ce25fc9bf9564c19633ffbe70",
+  "contact_cutoff_A": 8.0,
+  "summary": {
+    "n_structures": 12,
+    "all_pair_pearson_fsot": {
+      "median": 0.04467224040685798,
+      "bootstrap_95_ci": [
+        0.03372651295610972,
+        0.08135275239427239
+      ],
+      "values": [
+        0.060446863551826366,
+        0.07561869583791701,
+        0.09794638780371129,
+        0.031263961698823256,
+        0.03618906421339618,
+        0.04487059573643465,
+        0.044473885077281304,
+        0.024418442565438014,
+        0.08708680895062776,
+        0.027155478942658014,
+        0.13763391896249041,
+        0.04422186708440743
+      ]
+    },
+    "all_pair_pearson_separation_only": {
+      "median": 0.6696468011679261,
+      "bootstrap_95_ci": [
+        0.6068069630081128,
+        0.7434360978330563
+      ],
+      "values": [
+        0.5208050930671062,
+        0.7595932540175536,
+        0.7277637477855249,
+        0.6570112283391905,
+        0.565077992582999,
+        0.521452629788766,
+        0.6748010133555639,
+        0.6644925889802883,
+        0.7591084478805877,
+        0.7260594164375831,
+        0.7774919040199963,
+        0.6485359334332266
+      ]
+    },
+    "exact_separation_pearson_fsot": {
+      "median": 0.038056162539511745,
+      "bootstrap_95_ci": [
+        0.024781037347110402,
+        0.04453640928316477
+      ],
+      "values": [
+        0.053835124968848215,
+        0.021097517555641366,
+        0.03958952379554528,
+        0.025863350702110734,
+        0.022900708000847834,
+        0.04053680533489118,
+        0.041545435506596236,
+        0.024416323579223808,
+        0.04752738305973331,
+        0.025145751114996995,
+        0.05011633651187947,
+        0.036522801283478214
+      ]
+    },
+    "top_L2_contact_precision": {
+      "6": {
+        "fsot_total": {
+          "median": 0.017158294392523366,
+          "bootstrap_95_ci": [
+            0.0,
+            0.028991596638655463
+          ],
+          "values": [
+            0.029411764705882353,
+            0.0,
+            0.015625,
+            0.0,
+            0.03571428571428571,
+            0.013513513513513514,
+            0.0,
+            0.018691588785046728,
+            0.045454545454545456,
+            0.0,
+            0.023255813953488372,
+            0.02857142857142857
+          ]
+        },
+        "fsot_residual": {
+          "median": 0.017158294392523366,
+          "bootstrap_95_ci": [
+            0.0,
+            0.028991596638655463
+          ],
+          "values": [
+            0.029411764705882353,
+            0.0,
+            0.015625,
+            0.0,
+            0.03571428571428571,
+            0.013513513513513514,
+            0.0,
+            0.018691588785046728,
+            0.045454545454545456,
+            0.0,
+            0.023255813953488372,
+            0.02857142857142857
+          ]
+        },
+        "separation_only": {
+          "median": 0.06422018348623854,
+          "bootstrap_95_ci": [
+            0.053812741312741316,
+            0.07547841566533156
+          ],
+          "values": [
+            0.058823529411764705,
+            0.10204081632653061,
+            0.171875,
+            0.07317073170731707,
+            0.05357142857142857,
+            0.05405405405405406,
+            0.06422018348623854,
+            0.07476635514018691,
+            0.045454545454545456,
+            0.06422018348623854,
+            0.046511627906976744,
+            0.0761904761904762
+          ]
+        }
+      },
+      "12": {
+        "fsot_total": {
+          "median": 0.017158294392523366,
+          "bootstrap_95_ci": [
+            0.0,
+            0.026333789329685362
+          ],
+          "values": [
+            0.029411764705882353,
+            0.0,
+            0.015625,
+            0.0,
+            0.03571428571428571,
+            0.013513513513513514,
+            0.0,
+            0.018691588785046728,
+            0.045454545454545456,
+            0.0,
+            0.023255813953488372,
+            0.01904761904761905
+          ]
+        },
+        "fsot_residual": {
+          "median": 0.017158294392523366,
+          "bootstrap_95_ci": [
+            0.0,
+            0.026333789329685362
+          ],
+          "values": [
+            0.029411764705882353,
+            0.0,
+            0.015625,
+            0.0,
+            0.03571428571428571,
+            0.013513513513513514,
+            0.0,
+            0.018691588785046728,
+            0.045454545454545456,
+            0.0,
+            0.023255813953488372,
+            0.01904761904761905
+          ]
+        },
+        "separation_only": {
+          "median": 0.028467350242849434,
+          "bootstrap_95_ci": [
+            0.007575757575757576,
+            0.06649406415761555
+          ],
+          "values": [
+            0.029411764705882353,
+            0.0,
+            0.125,
+            0.06097560975609756,
+            0.0,
+            0.06756756756756757,
+            0.027522935779816515,
+            0.06542056074766354,
+            0.015151515151515152,
+            0.01834862385321101,
+            0.0,
+            0.09523809523809523
+          ]
+        }
+      },
+      "24": {
+        "fsot_total": {
+          "median": 0.004761904761904762,
+          "bootstrap_95_ci": [
+            0.0,
+            0.03497615262321145
+          ],
+          "values": [
+            0.029411764705882353,
+            0.0,
+            0.0,
+            0.0,
+            0.05357142857142857,
+            0.04054054054054054,
+            0.0,
+            0.018691588785046728,
+            0.045454545454545456,
+            0.0,
+            0.0,
+            0.009523809523809525
+          ]
+        },
+        "fsot_residual": {
+          "median": 0.004761904761904762,
+          "bootstrap_95_ci": [
+            0.0,
+            0.03497615262321145
+          ],
+          "values": [
+            0.029411764705882353,
+            0.0,
+            0.0,
+            0.0,
+            0.05357142857142857,
+            0.04054054054054054,
+            0.0,
+            0.018691588785046728,
+            0.045454545454545456,
+            0.0,
+            0.0,
+            0.009523809523809525
+          ]
+        },
+        "separation_only": {
+          "median": 0.03397362385321101,
+          "bootstrap_95_ci": [
+            0.01827436582109479,
+            0.055598455598455596
+          ],
+          "values": [
+            0.058823529411764705,
+            0.0,
+            0.03125,
+            0.012195121951219513,
+            0.017857142857142856,
+            0.05405405405405406,
+            0.08256880733944955,
+            0.018691588785046728,
+            0.030303030303030304,
+            0.03669724770642202,
+            0.046511627906976744,
+            0.05714285714285714
+          ]
+        }
+      }
+    }
+  },
+  "results": [
+    {
+      "pdb_id": "10UT",
+      "chain": "A",
+      "length": 137,
+      "release_date": "2026-08-05",
+      "resolution_A": 1.6,
+      "pdb_sha256": "dd0b31602baa09f84bbb0adb8257804b1c8a72a4300aa056b595a8535bf5af31",
+      "routing": "legacy_v7",
+      "all_pair_pearson": {
+        "fsot": 0.060446863551826366,
+        "separation_only": 0.5208050930671062
+      },
+      "exact_separation_pearson_fsot": 0.053835124968848215,
+      "top_L2_contact_precision": {
+        "6": {
+          "fsot_total": 0.029411764705882353,
+          "fsot_residual": 0.029411764705882353,
+          "separation_only": 0.058823529411764705
+        },
+        "12": {
+          "fsot_total": 0.029411764705882353,
+          "fsot_residual": 0.029411764705882353,
+          "separation_only": 0.029411764705882353
+        },
+        "24": {
+          "fsot_total": 0.029411764705882353,
+          "fsot_residual": 0.029411764705882353,
+          "separation_only": 0.058823529411764705
+        }
+      }
+    },
+    {
+      "pdb_id": "9TUF",
+      "chain": "A",
+      "length": 98,
+      "release_date": "2026-07-29",
+      "resolution_A": 1.8,
+      "pdb_sha256": "af46889a9cd5e153a70d1bb2681fa3be2b19e48ae08dadf2496d83fc63493fc5",
+      "routing": "legacy_v7",
+      "all_pair_pearson": {
+        "fsot": 0.07561869583791701,
+        "separation_only": 0.7595932540175536
+      },
+      "exact_separation_pearson_fsot": 0.021097517555641366,
+      "top_L2_contact_precision": {
+        "6": {
+          "fsot_total": 0.0,
+          "fsot_residual": 0.0,
+          "separation_only": 0.10204081632653061
+        },
+        "12": {
+          "fsot_total": 0.0,
+          "fsot_residual": 0.0,
+          "separation_only": 0.0
+        },
+        "24": {
+          "fsot_total": 0.0,
+          "fsot_residual": 0.0,
+          "separation_only": 0.0
+        }
+      }
+    },
+    {
+      "pdb_id": "9P0Y",
+      "chain": "A",
+      "length": 129,
+      "release_date": "2026-06-17",
+      "resolution_A": 1.499,
+      "pdb_sha256": "6e811f8938f7f3bdf59db889bb4aef59e4177526d0c01a964e7f1b8064a70de1",
+      "routing": "legacy_v7",
+      "all_pair_pearson": {
+        "fsot": 0.09794638780371129,
+        "separation_only": 0.7277637477855249
+      },
+      "exact_separation_pearson_fsot": 0.03958952379554528,
+      "top_L2_contact_precision": {
+        "6": {
+          "fsot_total": 0.015625,
+          "fsot_residual": 0.015625,
+          "separation_only": 0.171875
+        },
+        "12": {
+          "fsot_total": 0.015625,
+          "fsot_residual": 0.015625,
+          "separation_only": 0.125
+        },
+        "24": {
+          "fsot_total": 0.0,
+          "fsot_residual": 0.0,
+          "separation_only": 0.03125
+        }
+      }
+    },
+    {
+      "pdb_id": "9PU3",
+      "chain": "A",
+      "length": 165,
+      "release_date": "2026-04-22",
+      "resolution_A": 1.7,
+      "pdb_sha256": "c8aba921611ee0f5d2351dd6db94278a0fc6d07d1cdbec45831d9776d09d43e5",
+      "routing": "legacy_v7",
+      "all_pair_pearson": {
+        "fsot": 0.031263961698823256,
+        "separation_only": 0.6570112283391905
+      },
+      "exact_separation_pearson_fsot": 0.025863350702110734,
+      "top_L2_contact_precision": {
+        "6": {
+          "fsot_total": 0.0,
+          "fsot_residual": 0.0,
+          "separation_only": 0.07317073170731707
+        },
+        "12": {
+          "fsot_total": 0.0,
+          "fsot_residual": 0.0,
+          "separation_only": 0.06097560975609756
+        },
+        "24": {
+          "fsot_total": 0.0,
+          "fsot_residual": 0.0,
+          "separation_only": 0.012195121951219513
+        }
+      }
+    },
+    {
+      "pdb_id": "7IS9",
+      "chain": "A",
+      "length": 113,
+      "release_date": "2026-01-14",
+      "resolution_A": 1.5,
+      "pdb_sha256": "1153b6ad47b78842de92179bdd1cf83a879ba74257bda41759afcf63635f9311",
+      "routing": "legacy_v7",
+      "all_pair_pearson": {
+        "fsot": 0.03618906421339618,
+        "separation_only": 0.565077992582999
+      },
+      "exact_separation_pearson_fsot": 0.022900708000847834,
+      "top_L2_contact_precision": {
+        "6": {
+          "fsot_total": 0.03571428571428571,
+          "fsot_residual": 0.03571428571428571,
+          "separation_only": 0.05357142857142857
+        },
+        "12": {
+          "fsot_total": 0.03571428571428571,
+          "fsot_residual": 0.03571428571428571,
+          "separation_only": 0.0
+        },
+        "24": {
+          "fsot_total": 0.05357142857142857,
+          "fsot_residual": 0.05357142857142857,
+          "separation_only": 0.017857142857142856
+        }
+      }
+    },
+    {
+      "pdb_id": "9BN7",
+      "chain": "A",
+      "length": 149,
+      "release_date": "2025-11-05",
+      "resolution_A": 1.92,
+      "pdb_sha256": "6ac05e32c7ff3ab92ac2cc259ee1a113652cf5e6c723131d27a4c9688f8913b0",
+      "routing": "legacy_v7",
+      "all_pair_pearson": {
+        "fsot": 0.04487059573643465,
+        "separation_only": 0.521452629788766
+      },
+      "exact_separation_pearson_fsot": 0.04053680533489118,
+      "top_L2_contact_precision": {
+        "6": {
+          "fsot_total": 0.013513513513513514,
+          "fsot_residual": 0.013513513513513514,
+          "separation_only": 0.05405405405405406
+        },
+        "12": {
+          "fsot_total": 0.013513513513513514,
+          "fsot_residual": 0.013513513513513514,
+          "separation_only": 0.06756756756756757
+        },
+        "24": {
+          "fsot_total": 0.04054054054054054,
+          "fsot_residual": 0.04054054054054054,
+          "separation_only": 0.05405405405405406
+        }
+      }
+    },
+    {
+      "pdb_id": "9RC4",
+      "chain": "A",
+      "length": 219,
+      "release_date": "2025-09-03",
+      "resolution_A": 1.74,
+      "pdb_sha256": "c0d36695e5e9d6a6abada1fa44988e56424cdc1e18bb204ab66e3c14e08b8014",
+      "routing": "legacy_v7",
+      "all_pair_pearson": {
+        "fsot": 0.044473885077281304,
+        "separation_only": 0.6748010133555639
+      },
+      "exact_separation_pearson_fsot": 0.041545435506596236,
+      "top_L2_contact_precision": {
+        "6": {
+          "fsot_total": 0.0,
+          "fsot_residual": 0.0,
+          "separation_only": 0.06422018348623854
+        },
+        "12": {
+          "fsot_total": 0.0,
+          "fsot_residual": 0.0,
+          "separation_only": 0.027522935779816515
+        },
+        "24": {
+          "fsot_total": 0.0,
+          "fsot_residual": 0.0,
+          "separation_only": 0.08256880733944955
+        }
+      }
+    },
+    {
+      "pdb_id": "8VTD",
+      "chain": "A",
+      "length": 214,
+      "release_date": "2025-07-02",
+      "resolution_A": 1.23,
+      "pdb_sha256": "932687fec8b0f10cf808d1e1a6843b66fd237de199fd6a166490991df643117b",
+      "routing": "legacy_v7",
+      "all_pair_pearson": {
+        "fsot": 0.024418442565438014,
+        "separation_only": 0.6644925889802883
+      },
+      "exact_separation_pearson_fsot": 0.024416323579223808,
+      "top_L2_contact_precision": {
+        "6": {
+          "fsot_total": 0.018691588785046728,
+          "fsot_residual": 0.018691588785046728,
+          "separation_only": 0.07476635514018691
+        },
+        "12": {
+          "fsot_total": 0.018691588785046728,
+          "fsot_residual": 0.018691588785046728,
+          "separation_only": 0.06542056074766354
+        },
+        "24": {
+          "fsot_total": 0.018691588785046728,
+          "fsot_residual": 0.018691588785046728,
+          "separation_only": 0.018691588785046728
+        }
+      }
+    },
+    {
+      "pdb_id": "8YUF",
+      "chain": "A",
+      "length": 133,
+      "release_date": "2025-04-02",
+      "resolution_A": 1.59,
+      "pdb_sha256": "5c3e3b7797350cb52393495f4cf3093d6e77b18cc81edb1f94f6d570f77a650d",
+      "routing": "legacy_v7",
+      "all_pair_pearson": {
+        "fsot": 0.08708680895062776,
+        "separation_only": 0.7591084478805877
+      },
+      "exact_separation_pearson_fsot": 0.04752738305973331,
+      "top_L2_contact_precision": {
+        "6": {
+          "fsot_total": 0.045454545454545456,
+          "fsot_residual": 0.045454545454545456,
+          "separation_only": 0.045454545454545456
+        },
+        "12": {
+          "fsot_total": 0.045454545454545456,
+          "fsot_residual": 0.045454545454545456,
+          "separation_only": 0.015151515151515152
+        },
+        "24": {
+          "fsot_total": 0.045454545454545456,
+          "fsot_residual": 0.045454545454545456,
+          "separation_only": 0.030303030303030304
+        }
+      }
+    },
+    {
+      "pdb_id": "8Q1C",
+      "chain": "A",
+      "length": 219,
+      "release_date": "2024-08-07",
+      "resolution_A": 1.679,
+      "pdb_sha256": "43b30e684f125fac7c3297a5147c91b4298f45547394e2a875d4f9b00a5b244a",
+      "routing": "legacy_v7",
+      "all_pair_pearson": {
+        "fsot": 0.027155478942658014,
+        "separation_only": 0.7260594164375831
+      },
+      "exact_separation_pearson_fsot": 0.025145751114996995,
+      "top_L2_contact_precision": {
+        "6": {
+          "fsot_total": 0.0,
+          "fsot_residual": 0.0,
+          "separation_only": 0.06422018348623854
+        },
+        "12": {
+          "fsot_total": 0.0,
+          "fsot_residual": 0.0,
+          "separation_only": 0.01834862385321101
+        },
+        "24": {
+          "fsot_total": 0.0,
+          "fsot_residual": 0.0,
+          "separation_only": 0.03669724770642202
+        }
+      }
+    },
+    {
+      "pdb_id": "8J81",
+      "chain": "A",
+      "length": 87,
+      "release_date": "2024-05-01",
+      "resolution_A": 1.35,
+      "pdb_sha256": "495e5a9969954294543cd656abee5c97c3c3bc896cf79abc5c590f5713bf815a",
+      "routing": "legacy_v7",
+      "all_pair_pearson": {
+        "fsot": 0.13763391896249041,
+        "separation_only": 0.7774919040199963
+      },
+      "exact_separation_pearson_fsot": 0.05011633651187947,
+      "top_L2_contact_precision": {
+        "6": {
+          "fsot_total": 0.023255813953488372,
+          "fsot_residual": 0.023255813953488372,
+          "separation_only": 0.046511627906976744
+        },
+        "12": {
+          "fsot_total": 0.023255813953488372,
+          "fsot_residual": 0.023255813953488372,
+          "separation_only": 0.0
+        },
+        "24": {
+          "fsot_total": 0.0,
+          "fsot_residual": 0.0,
+          "separation_only": 0.046511627906976744
+        }
+      }
+    },
+    {
+      "pdb_id": "8OG0",
+      "chain": "H",
+      "length": 211,
+      "release_date": "2024-03-27",
+      "resolution_A": 1.712,
+      "pdb_sha256": "2d7a60b86cc55e2f5ff7b57db44831ac2d90514fed1106d88ff0df054ff6a0b1",
+      "routing": "legacy_v7",
+      "all_pair_pearson": {
+        "fsot": 0.04422186708440743,
+        "separation_only": 0.6485359334332266
+      },
+      "exact_separation_pearson_fsot": 0.036522801283478214,
+      "top_L2_contact_precision": {
+        "6": {
+          "fsot_total": 0.02857142857142857,
+          "fsot_residual": 0.02857142857142857,
+          "separation_only": 0.0761904761904762
+        },
+        "12": {
+          "fsot_total": 0.01904761904761905,
+          "fsot_residual": 0.01904761904761905,
+          "separation_only": 0.09523809523809523
+        },
+        "24": {
+          "fsot_total": 0.009523809523809525,
+          "fsot_residual": 0.009523809523809525,
+          "separation_only": 0.05714285714285714
+        }
+      }
+    }
+  ]
+}
