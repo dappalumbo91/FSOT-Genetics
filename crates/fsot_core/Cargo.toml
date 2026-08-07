@@ -1,0 +1,20 @@
+[package]
+name = "fsot_core"
+version = "0.1.0"
+edition = "2021"
+description = "FSOT 2.0 scalar engine + 35-domain table + bond library — no_std-clean Rust port"
+license = "MIT"
+
+[lib]
+name = "fsot_core"
+path = "src/lib.rs"
+
+# `libm` provides sin/cos/exp/ln/sqrt in no_std environments.  On `std` builds
+# we do NOT pull in libm — the std versions of these functions are used.
+[features]
+default = ["std"]
+std = []
+nostd = ["dep:libm"]
+
+[dependencies]
+libm = { version = "0.2", optional = true }

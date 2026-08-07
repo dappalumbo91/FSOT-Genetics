@@ -1,0 +1,11 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/codon_core",
+    "crates/fsot_core",
+    "crates/fsot_protein",
+]
+
+[workspace.package]
+license = "MIT"
+edition = "2021"

@@ -1,0 +1,34 @@
+# Build / cache
+target/
+**/target/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+.venv/
+venv/
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Large local labs (never commit)
+*.pth
+*.ckpt
+*.pt
+tools/
+cuda*/
+data/cameo/
+data/pull_cache/
+vendor/fsot_vs_alphafold/cache/
+G:/
+
+# Local only
+.env
+*.log
+_bench_*.py

@@ -1,0 +1,10 @@
+[package]
+name = "fsot_protein"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+fsot_core = { path = "../fsot_core" }
+codon_core = { path = "../codon_core" }
+
+# Workspace member of FSOT-Genetics (public genetics formula branch)

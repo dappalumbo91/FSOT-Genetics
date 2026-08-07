@@ -1,0 +1,98 @@
+FSOT β-STRAND-PAIR TRINARY COUPLING MAP (F17)
+============================================================
+Same format as 64_codon_trinary_map.txt and the 20 AA chemical map.
+3 trits = 27 cells. Every coefficient closed-form in {π, e, φ, γ}.
+
+Trit axes:
+  D  Direction        −1=antiparallel    0=no register     +1=parallel
+  R  Register offset  −1=Δ negative      0=in register     +1=Δ positive
+  P  Pleat face       −1=opposite face   0=H-bond face     +1=same face
+
+Multiplier rule (D ≠ 0):
+  m(D, R, P) = φ ^ ((1 − |R|) + (1 − |P|) − 1)
+For D = 0 (no register match): m = 1 / φ²  (suppress)
+For continuous offsets |Δ| > 1: extra factor φ^(−|Δ|/π)
+
+Note: φ ≈ 1.6180, φ² ≈ 2.6180, 1/φ ≈ 0.6180, 1/φ² ≈ 0.3820
+
+============================================================
+CELL # | [D, R, P]      | INTERPRETATION                                      | MULTIPLIER     | NUMERIC
+------------------------------------------------------------------------------------------------------
+  01   | [-1, -1, -1]   | antipar., shifted backward, opposite pleat face     | 1/φ            | 0.6180
+  02   | [-1, -1,  0]   | antipar., shifted backward, on H-bond face          | φ⁰  = 1        | 1.0000
+  03   | [-1, -1, +1]   | antipar., shifted backward, same side-chain face    | 1/φ            | 0.6180
+  04   | [-1,  0, -1]   | antipar., in register, opposite pleat               | φ⁰  = 1        | 1.0000
+  05   | [-1,  0,  0]   | antipar., in register, H-bond pair  ← STRONGEST     | φ¹  = φ        | 1.6180
+  06   | [-1,  0, +1]   | antipar., in register, same pleat side-chain pair   | φ⁰  = 1        | 1.0000
+  07   | [-1, +1, -1]   | antipar., shifted forward, opposite pleat           | 1/φ            | 0.6180
+  08   | [-1, +1,  0]   | antipar., shifted forward, on H-bond face           | φ⁰  = 1        | 1.0000
+  09   | [-1, +1, +1]   | antipar., shifted forward, same pleat               | 1/φ            | 0.6180
+------------------------------------------------------------------------------------------------------
+  10   | [ 0, -1, -1]   | no register fit (both directions far off)           | 1/φ²           | 0.3820
+  11   | [ 0, -1,  0]   | no register fit                                     | 1/φ²           | 0.3820
+  12   | [ 0, -1, +1]   | no register fit                                     | 1/φ²           | 0.3820
+  13   | [ 0,  0, -1]   | (collapsed: D=0 dominates)                          | 1/φ²           | 0.3820
+  14   | [ 0,  0,  0]   | no β-pair structure                                 | 1/φ²           | 0.3820
+  15   | [ 0,  0, +1]   | no β-pair structure                                 | 1/φ²           | 0.3820
+  16   | [ 0, +1, -1]   | no register fit                                     | 1/φ²           | 0.3820
+  17   | [ 0, +1,  0]   | no register fit                                     | 1/φ²           | 0.3820
+  18   | [ 0, +1, +1]   | no register fit                                     | 1/φ²           | 0.3820
+------------------------------------------------------------------------------------------------------
+  19   | [+1, -1, -1]   | parallel, shifted backward, opposite pleat          | 1/φ            | 0.6180
+  20   | [+1, -1,  0]   | parallel, shifted backward, on H-bond face          | φ⁰  = 1        | 1.0000
+  21   | [+1, -1, +1]   | parallel, shifted backward, same pleat              | 1/φ            | 0.6180
+  22   | [+1,  0, -1]   | parallel, in register, opposite pleat               | φ⁰  = 1        | 1.0000
+  23   | [+1,  0,  0]   | parallel, in register, H-bond pair  ← STRONGEST     | φ¹  = φ        | 1.6180
+  24   | [+1,  0, +1]   | parallel, in register, same pleat side-chain pair   | φ⁰  = 1        | 1.0000
+  25   | [+1, +1, -1]   | parallel, shifted forward, opposite pleat           | 1/φ            | 0.6180
+  26   | [+1, +1,  0]   | parallel, shifted forward, on H-bond face           | φ⁰  = 1        | 1.0000
+  27   | [+1, +1, +1]   | parallel, shifted forward, same pleat               | 1/φ            | 0.6180
+============================================================
+
+DERIVATION OF AXES
+------------------------------------------------------------
+D — Direction trit
+  In a β-sheet two strands run either antiparallel (most common, lowest
+  energy, all H-bonds aligned perpendicular) or parallel (slightly higher
+  energy, H-bonds tilted). FSOT trinary collapse: pick the direction
+  whose Δ (offset from ideal register) is smaller; if BOTH directions are
+  off by more than half the shorter strand, the trit collapses to 0 (no
+  coherent pairing exists between the two regions).
+
+R — Register trit
+  Two β-strands H-bond at a unique register: residue i ↔ partner j*.
+  Antiparallel:  j* = e_B − (i − s_A)
+  Parallel:      j* = s_B + (i − s_A)
+  Δ = j − j*.  Sign of Δ ⇒ R. |Δ| > 1 contributes the continuous decay
+  φ^(−|Δ|/π) on top of the trit multiplier.
+
+P — Pleat face trit
+  Adjacent residues on one strand have side chains alternating UP/DOWN
+  (the β-pleat). For an in-register H-bond pair both backbone NH/CO point
+  inward — that is P = 0. Pairs whose side chains point the SAME way
+  across strands (sterically packed) are P = +1. Pairs facing opposite
+  ways (no contact possible) are P = −1.
+  Antiparallel pleat: P = +1 if (i − s_A + e_B − j) mod 2 == 0  else −1.
+  Parallel pleat:     P = +1 if (i − s_A + j − s_B) mod 2 == 0  else −1.
+  P = 0 is reserved for the in-register (|Δ|=0) H-bond pair — the trinary
+  collapsed state where pleat face is geometrically dominated by H-bonds.
+
+WHY φ (NO FREE PARAMETERS)
+------------------------------------------------------------
+Every multiplier is φ^n for n ∈ {-2, -1, 0, +1}. φ is the canonical FSOT
+golden-mean scaling. The (1−|R|) + (1−|P|) − 1 form gives a clean lattice:
+  perfect cell ([±1, 0, 0])  → φ
+  one trit off                → 1
+  two trits off               → 1/φ
+  D collapsed                 → 1/φ²
+
+The continuous decay rate 1/π matches F07 backbone exponent — same FSOT
+seed used consistently across the geometric layers.
+
+INTEGRATION POINT
+------------------------------------------------------------
+Used as multiplicative gate inside F13 (region-pair contact) when both
+regions are Strand kind. Replaces the uniform "every-pair-equal" coupling
+that was capping LR precision at 7-8% on β-containing proteins.
+
+Source of truth: Genetics/fsot_protein/src/regions.rs::beta_register_multiplier

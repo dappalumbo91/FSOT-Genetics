@@ -1,0 +1,12 @@
+[package]
+name = "codon_core"
+version = "0.1.0"
+edition = "2021"
+description = "FSOT codon trinary core — no_std, zero-allocation, bare-metal-ready"
+license = "MIT"
+
+[lib]
+name = "codon_core"
+path = "src/lib.rs"
+
+# Pure #![no_std], no dependencies — usable from kernel, TUI, and tests.

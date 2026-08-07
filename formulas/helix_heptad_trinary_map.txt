@@ -1,0 +1,61 @@
+FSOT α-HELIX HEPTAD COUPLING TRINARY MAP (F16)
+============================================================
+Same format as 64_codon_trinary_map.txt, 20-AA chemical map,
+and beta_pair_trinary_map.txt. 2 trits = 9 cells.
+Every coefficient closed-form in {π, e, φ, γ}.
+
+Trit axes:
+  H_i  Heptad face of residue i (i within helix A, local pos a = i - s_A)
+  H_j  Heptad face of residue j (j within helix B, local pos b = j - s_B)
+
+Heptad position trit definition (k = local pos mod 7):
+  k ∈ {0, 3}    → +1  packing face (a, d — hydrophobic core, faces partner)
+  k ∈ {4, 6}    →  0  ionic face   (e, g — salt-bridge edge)
+  k ∈ {1, 2, 5} → -1  outward face (b, c, f — solvent-exposed)
+
+Multiplier rule:
+  m(H_i, H_j) = φ ^ (H_i + H_j)
+
+============================================================
+CELL # | [H_i, H_j]    | INTERPRETATION                              | MULTIPLIER     | NUMERIC
+------------------------------------------------------------------------------------------------------
+  01   | [-1, -1]      | both outward (b/c/f vs b/c/f)               | 1/φ²            | 0.3820
+  02   | [-1,  0]      | outward vs ionic (b/c/f vs e/g)             | 1/φ             | 0.6180
+  03   | [-1, +1]      | outward vs packing (b/c/f vs a/d)           | 1/φ             | 0.6180
+------------------------------------------------------------------------------------------------------
+  04   | [ 0, -1]      | ionic vs outward (e/g vs b/c/f)             | 1/φ             | 0.6180
+  05   | [ 0,  0]      | both ionic (e/g vs e/g — salt-bridge edge)  | φ⁰  = 1         | 1.0000
+  06   | [ 0, +1]      | ionic vs packing (e/g vs a/d)               | φ¹  = φ         | 1.6180
+------------------------------------------------------------------------------------------------------
+  07   | [+1, -1]      | packing vs outward (a/d vs b/c/f)           | 1/φ             | 0.6180
+  08   | [+1,  0]      | packing vs ionic (a/d vs e/g)               | φ¹  = φ         | 1.6180
+  09   | [+1, +1]      | both packing (a/d vs a/d) ← STRONGEST       | φ²              | 2.6180
+============================================================
+
+DERIVATION
+------------------------------------------------------------
+The α-helix has 3.6 residues per turn. A coiled-coil pattern of two
+packed helices uses a heptad repeat (7 residues = 2 turns) labeled
+a-b-c-d-e-f-g. Positions a and d are on the same side of the helix
+and form the hydrophobic core when two helices pack. Positions e and g
+are on the edges and form inter-helix salt bridges. Positions b, c, f
+face the solvent.
+
+For any pair of residues (i in helix A, j in helix B), the geometric
+likelihood of direct contact is determined by which face each residue
+sits on. The (+1, +1) packing-packing case is the dominant interaction
+(φ²), the (0, 0) ionic-ionic is neutral (1), and the (-1, -1) outward-
+outward is forbidden (1/φ²).
+
+WHY φ^(H_i + H_j)
+------------------------------------------------------------
+The two trits are independent — each residue's face is set by its own
+position mod 7. The product φ^(H_i+H_j) is the natural FSOT golden-mean
+multiplicative encoding. Diagonal symmetry (M(a,b) = M(b,a)) is automatic.
+
+INTEGRATION POINT
+------------------------------------------------------------
+Used as multiplicative gate inside F13 (region-pair contact) when both
+regions are Helix kind. Replaces uniform multiplier = 1.0 with the
+heptad-localized signal. Source of truth:
+  Genetics/fsot_protein/src/regions.rs::helix_heptad_multiplier
