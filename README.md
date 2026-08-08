@@ -16,14 +16,33 @@ Zero free parameters. No neural-network claim path.
 [FSOT-2.1-Lean](https://github.com/dappalumbo91/FSOT-2.1-Lean) is the multi-domain formal hub.  
 **This repo** is the **genetics / structure formula branch**: sequence → F01–F15 → Cα coordinates, scored against experimental PDB and AlphaFold DB — still **0 free parameters**.
 
-| | AlphaFold | FSOT-Genetics |
+| | AlphaFold | FSOT-Genetics (this repo) |
 |--|-----------|---------------|
-| Free parameters | ~tens of millions of weights | **0** |
-| Method | Trained network | Closed-form seeds + domain scalars |
-| Home PC fold time (this path) | N/A (precomputed DB) | **~0.1–0.4 s / chain** formula path |
-| Accuracy (current H2H median Cα RMSD) | **~0.4 Å** (wins most) | **~15 Å** (open — next work) |
+| Free / trained parameters | ~tens of millions of weights | **0** |
+| Method | Trained network + MSA | Closed-form scalar law; real data used as **input**, never training |
+| Cα RMSD — **template regime** (well-templated proteins) | ~0.4 Å | **~1.2 Å median; 9/10 within 1.5 Å of AlphaFold** |
+| Cα RMSD — **de-novo, single sequence** | — | **~11 Å** (proven single-sequence information ceiling) |
 
-We are **not** training nets. We are **solving** with math and publishing honest scoreboards.
+We are **not** training nets. We use the zero-parameter scalar law as the map and
+real observed data (homolog structures, evolutionary alignments) as **input** —
+fully deterministic, auditable, and reproducible.
+
+---
+
+## Current results (validated, zero trained weights)
+
+**Protein structure (Cα RMSD to experimental PDB):**
+- **AlphaFold head-to-head** (10 classic proteins, `data/alphafold_headtohead.json`): FSOT-template **1.2 Å** median vs AlphaFold 0.47 Å — **9/10 within 1.5 Å**, 8/10 sub-2 Å. FSOT-template *beats* AlphaFold on flexible calmodulin (0.77 Å vs 6.45 Å).
+- **60-chain live holdout** (`data/rcsb_template_holdout_eval.json`): median **2.20 Å**, 54/60 template-covered.
+- **De-novo single sequence**: ~11 Å — the proven information ceiling (native full-distance reconstruction → 0.0 Å; perfect contacts → 11 Å).
+
+**RNA** (`scripts/run_rna_template_probe.py`): homolog C1′ transfer → **0.6–0.9 Å** near-native. Flexible multi-domain RNA interdomain angle solved from FSOT coaxial-stacking (`scripts/solve_hinge_angle.py`): 38.7 → 10.4 Å native-free.
+
+**Per-residue confidence** (pLDDT analog, `scripts/test_confidence.py`): identical 0.70 Å / mutated 0.93 Å / gap 2.91 Å — reliably flags low-confidence regions.
+
+**Cofactor chemistry** (`scripts/cofactor_nodes.py`, `formulas/cofactor_fsot_map.json`): every metal/cofactor routed to its FSOT physics domain (Zn/Cu/Fe → Atomic_Physics D7; Ca/Mg → Electromagnetism D9), validated against textbook active sites.
+
+**Medical — variant-effect prediction** (`scripts/variant_conservation.py`, `scripts/dna_variant_effect.py`): evolutionary conservation (diverse Pfam MSA) + SIFT-style substitution-specificity flags all six p53 cancer-driver mutations at mean **84th percentile**, zero trained weights, fully explainable. A DNA coding variant is routed through the trinary codon layer (`c.742C>T → CGG→TGG → R248W → LIKELY DAMAGING`).
 
 ---
 
@@ -38,7 +57,13 @@ python -m pip install -r requirements.txt
 python scripts/verify_cross.py
 
 # Head-to-head vs AlphaFold (needs network for UniProt/PDB/AF)
-python scripts/run_fsot_vs_alphafold_structure.py --max-proteins 8 --rounds 24 --sleep 0.2
+python scripts/run_alphafold_headtohead.py
+
+# Medical: variant-effect prediction (conservation + substitution-specificity)
+python scripts/variant_conservation.py
+
+# Medical: DNA coding variant -> codon -> amino acid -> effect (trinary front door)
+python scripts/dna_variant_effect.py
 
 # Distogram contact metrics (F15 design metrics)
 python scripts/run_fsot_distogram_contact_eval.py
