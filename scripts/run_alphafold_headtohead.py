@@ -11,7 +11,10 @@ Shows both regimes side by side so the competitive gap is explicit.
 
 from __future__ import annotations
 
+import json
 import sys
+from datetime import datetime, timezone
+
 import numpy as np
 from pathlib import Path
 
@@ -26,6 +29,7 @@ from fsot_structure_engine import predict_ca_coords  # noqa: E402
 
 CACHE = Path.home() / ".cache" / "fsot-genetics" / "af_headtohead"
 CACHE.mkdir(parents=True, exist_ok=True)
+OUT_JSON = ROOT / "data" / "alphafold_headtohead.json"
 
 
 def af_rmsd(acc: str, nseq: str, nxyz: np.ndarray):
@@ -47,7 +51,7 @@ def med(vals):
 
 
 def main() -> int:
-    rows = []
+    rows, results = [], []
     print(f"{'protein':<22}{'pdb':<6}{'N':>4}  {'AlphaFold':>10}{'FSOT-tmpl':>11}{'FSOT-bulk':>11}  tmpl")
     print("-" * 78)
     for acc, pdb, chain, name in BENCHMARK_SET:
@@ -63,6 +67,12 @@ def main() -> int:
         tr = kabsch_rmsd(t["model"], nxyz) if t else None
         tid = f"{t['pdb_id']} id={t['identity']:.2f}" if t else "-"
         rows.append((name, af, tr, bulk))
+        results.append({
+            "name": name, "pdb_id": pdb, "chain": chain, "length": len(nseq),
+            "alphafold_rmsd_A": af, "fsot_template_rmsd_A": tr, "fsot_bulk_rmsd_A": bulk,
+            "template_pdb": t["pdb_id"] if t else None,
+            "template_identity": t["identity"] if t else None,
+        })
         af_s = f"{af:.2f}" if af is not None else "  n/a"
         tr_s = f"{tr:.2f}" if tr is not None else "  n/a"
         print(f"{name:<22}{pdb:<6}{len(nseq):>4}  {af_s:>10}{tr_s:>11}{bulk:>11.2f}  {tid}")
@@ -73,6 +83,26 @@ def main() -> int:
     within = sum(1 for r in rows if r[2] is not None and r[1] is not None and r[2] - r[1] <= 1.5)
     print(f"\nFSOT-template within 1.5 A of AlphaFold: {within}/{len(rows)}")
     print(f"FSOT-template sub-2 A: {sum(1 for r in rows if r[2] is not None and r[2] < 2.0)}/{len(rows)}")
+    OUT_JSON.write_text(json.dumps({
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "metric": "CA RMSD (A) after Kabsch to experimental PDB native",
+        "columns": {
+            "alphafold": "AlphaFold DB model (ML + MSA, trained weights)",
+            "fsot_template": "FSOT real-homolog template transfer, self-excluded, zero trained weights",
+            "fsot_bulk": "FSOT de-novo single-sequence, zero trained weights",
+        },
+        "free_parameters": 0,
+        "summary": {
+            "n": len(rows),
+            "alphafold_median_A": af_m,
+            "fsot_template_median_A": tr_m,
+            "fsot_bulk_median_A": bl_m,
+            "fsot_template_within_1p5A_of_alphafold": within,
+            "fsot_template_sub2A": sum(1 for r in rows if r[2] is not None and r[2] < 2.0),
+        },
+        "results": results,
+    }, indent=2), encoding="utf-8")
+    print(f"\nWrote {OUT_JSON.relative_to(ROOT)}")
     return 0
 
 

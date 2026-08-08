@@ -1,0 +1,130 @@
+{
+  "generated_at": "2026-08-08T01:09:06.095579+00:00",
+  "metric": "CA RMSD (A) after Kabsch to experimental PDB native",
+  "columns": {
+    "alphafold": "AlphaFold DB model (ML + MSA, trained weights)",
+    "fsot_template": "FSOT real-homolog template transfer, self-excluded, zero trained weights",
+    "fsot_bulk": "FSOT de-novo single-sequence, zero trained weights"
+  },
+  "free_parameters": 0,
+  "summary": {
+    "n": 10,
+    "alphafold_median_A": 0.4706172512401575,
+    "fsot_template_median_A": 1.2218645296216386,
+    "fsot_bulk_median_A": 13.651723964978117,
+    "fsot_template_within_1p5A_of_alphafold": 9,
+    "fsot_template_sub2A": 8
+  },
+  "results": [
+    {
+      "name": "Hemoglobin alpha",
+      "pdb_id": "1A3N",
+      "chain": "A",
+      "length": 141,
+      "alphafold_rmsd_A": 0.2697832925375286,
+      "fsot_template_rmsd_A": 1.2218645296216386,
+      "fsot_bulk_rmsd_A": 12.749229354670604,
+      "template_pdb": "1A4F",
+      "template_identity": 0.75
+    },
+    {
+      "name": "Hemoglobin beta",
+      "pdb_id": "1A3N",
+      "chain": "B",
+      "length": 145,
+      "alphafold_rmsd_A": 0.5196952732909565,
+      "fsot_template_rmsd_A": 1.316946851256844,
+      "fsot_bulk_rmsd_A": 13.969999581307594,
+      "template_pdb": "1CH4",
+      "template_identity": 0.8333333333333334
+    },
+    {
+      "name": "Carbonic anhydrase II",
+      "pdb_id": "1CA2",
+      "chain": "A",
+      "length": 256,
+      "alphafold_rmsd_A": 0.3617948214686656,
+      "fsot_template_rmsd_A": 1.3692903337125972,
+      "fsot_bulk_rmsd_A": 16.701707003467828,
+      "template_pdb": "1CRM",
+      "template_identity": 0.6546184738955824
+    },
+    {
+      "name": "SOD1",
+      "pdb_id": "2C9V",
+      "chain": "A",
+      "length": 153,
+      "alphafold_rmsd_A": 0.28634210236027413,
+      "fsot_template_rmsd_A": 1.1102558204064985,
+      "fsot_bulk_rmsd_A": 13.333448348648641,
+      "template_pdb": "1CBJ",
+      "template_identity": 0.84
+    },
+    {
+      "name": "Lysozyme human",
+      "pdb_id": "1LZ1",
+      "chain": "A",
+      "length": 130,
+      "alphafold_rmsd_A": 0.4215392291893585,
+      "fsot_template_rmsd_A": 1.3768790696061302,
+      "fsot_bulk_rmsd_A": 11.522104126674796,
+      "template_pdb": "1BB6",
+      "template_identity": 0.7301587301587301
+    },
+    {
+      "name": "RNase A",
+      "pdb_id": "7RSA",
+      "chain": "A",
+      "length": 124,
+      "alphafold_rmsd_A": 0.3314052297214222,
+      "fsot_template_rmsd_A": 0.43689372627119694,
+      "fsot_bulk_rmsd_A": 14.041992633226073,
+      "template_pdb": "1B6V",
+      "template_identity": 0.9435483870967742
+    },
+    {
+      "name": "Ubiquitin",
+      "pdb_id": "1UBQ",
+      "chain": "A",
+      "length": 76,
+      "alphafold_rmsd_A": 0.8786917675958038,
+      "fsot_template_rmsd_A": 2.1158469962203252,
+      "fsot_bulk_rmsd_A": 10.882215988348232,
+      "template_pdb": "1C3T",
+      "template_identity": 0.8947368421052632
+    },
+    {
+      "name": "Insulin",
+      "pdb_id": "4INS",
+      "chain": "A",
+      "length": 21,
+      "alphafold_rmsd_A": 4.51096053472208,
+      "fsot_template_rmsd_A": 1.1278167282724048,
+      "fsot_bulk_rmsd_A": 5.499865520104438,
+      "template_pdb": "1APH",
+      "template_identity": 0.9047619047619048
+    },
+    {
+      "name": "p53 DNA-binding",
+      "pdb_id": "1TUP",
+      "chain": "A",
+      "length": 196,
+      "alphafold_rmsd_A": 6.187575266577746,
+      "fsot_template_rmsd_A": null,
+      "fsot_bulk_rmsd_A": 15.677976690927586,
+      "template_pdb": null,
+      "template_identity": null
+    },
+    {
+      "name": "Calmodulin",
+      "pdb_id": "1CLL",
+      "chain": "A",
+      "length": 144,
+      "alphafold_rmsd_A": 6.453900855719977,
+      "fsot_template_rmsd_A": 0.7653541154685084,
+      "fsot_bulk_rmsd_A": 17.501257415924723,
+      "template_pdb": "1CLM",
+      "template_identity": 0.9020979020979021
+    }
+  ]
+}
