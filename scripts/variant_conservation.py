@@ -89,22 +89,44 @@ def parse_stockholm(txt):
     return list(rows.values())
 
 
-def conservation_profile(seq, self_pdb, pfam=None):
-    """Per-position identity conservation from the diverse Pfam family MSA."""
+def conservation_profile(seq, self_pdb, pfam=None, *, max_rows: int = 4000, max_ref_scan: int = 250):
+    """Per-position identity conservation from the diverse Pfam family MSA.
+
+    Speed caps (data subsample, not free parameters):
+      max_rows     — hard ceiling on sequences counted in frequencies
+      max_ref_scan — how many rows to scan when locating the query
+    Prefer full Pfam when small; auto-falls back to seed if full fetch fails.
+    """
     pfam = pfam or pfam_accession(self_pdb)
     if not pfam:
         return np.zeros(len(seq)), [], 0, None
-    rows = parse_stockholm(fetch_msa(pfam))
+    try:
+        rows = parse_stockholm(fetch_msa(pfam, kind="full"))
+    except Exception:
+        rows = []
+    if len(rows) < 20:
+        try:
+            rows = parse_stockholm(fetch_msa(pfam, kind="seed"))
+        except Exception:
+            rows = rows or []
+    if not rows:
+        return np.zeros(len(seq)), [], 0, pfam
     # pick the alignment row whose ungapped sequence best matches our query
     best = None
-    for row in rows:
+    scan = rows[: max(max_ref_scan, 1)]
+    for row in scan:
         ung = row.replace(".", "").replace("-", "").upper()
         if len(ung) < 20:
+            continue
+        # length prefilter — avoid O(n·m) NW on absurd pairs
+        if not (0.4 * len(seq) <= len(ung) <= 2.5 * len(seq)):
             continue
         pairs = nw_align(seq, ung)
         score = sum(1 for a, b in pairs if seq[a] == ung[b])
         if best is None or score > best[0]:
             best = (score, row)
+        if best[0] > 0.9 * len(seq):
+            break
     if best is None:
         return np.zeros(len(seq)), [], 0, pfam
     ref = best[1]
@@ -116,7 +138,14 @@ def conservation_profile(seq, self_pdb, pfam=None):
     cover = np.zeros(len(seq))
     from collections import Counter
     colcount = [Counter() for _ in range(len(seq))]
-    cols = [list(r) for r in rows]
+    # subsample rows for counting
+    if len(rows) > max_rows:
+        rng = np.random.default_rng(0)
+        use_idx = rng.choice(len(rows), size=max_rows, replace=False)
+        use_rows = [rows[i] for i in use_idx]
+    else:
+        use_rows = rows
+    cols = [list(r) for r in use_rows]
     for qi, ui in qpairs.items():
         if ui >= len(ung_to_col):
             continue
@@ -132,7 +161,7 @@ def conservation_profile(seq, self_pdb, pfam=None):
                     match[qi] += 1
     cons = np.where(cover > 0, match / np.maximum(cover, 1), 0.0)
     freq = [{a: c[a] / max(sum(c.values()), 1) for a in c} for c in colcount]
-    return cons, freq, len(rows), pfam
+    return cons, freq, len(use_rows), pfam
 
 
 def main() -> int:

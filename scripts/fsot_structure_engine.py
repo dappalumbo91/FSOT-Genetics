@@ -14,6 +14,7 @@ Law: zero free parameters. Uses the *whole* formula — not a frozen |S| slice:
 from __future__ import annotations
 
 import math
+import os
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -318,11 +319,16 @@ def build_distogram(
     *,
     collect_channels: bool = False,
     cooperative_regions: bool = False,
+    msa_features: Any | None = None,
 ) -> tuple[np.ndarray, list[SsPropensity], list[Region], str, dict]:
     """Build F15 proximity matrix under a named multi-scale D_eff routing.
 
     When requested, ``iface["channels"]`` contains the five additive F15
     matrices for diagnostics. Production callers pay no allocation cost.
+
+    Optional ``msa_features`` (from ``msa_pipeline.MsaFeatures``) injects an
+    evolutionary long-range channel (MI+APC × conservation). Default None
+    preserves pure single-sequence behaviour and all prior claims.
     """
     iface = _iface(routing)
     chem_amp = float(iface["chem_amp"])
@@ -355,6 +361,7 @@ def build_distogram(
             "helix": np.zeros((n, n), dtype=np.float64),
             "sheet": np.zeros((n, n), dtype=np.float64),
             "region": np.zeros((n, n), dtype=np.float64),
+            "evolution": np.zeros((n, n), dtype=np.float64),
         }
         if collect_channels
         else None
@@ -454,11 +461,35 @@ def build_distogram(
                 channels["sheet"][i, j] = sheet
                 channels["region"][i, j] = region_pair
 
+    # Optional MSA evolutionary channel (data input; amplitude is F09-family seed scale)
+    msa_mode = "single_sequence"
+    msa_summary: dict[str, Any] | None = None
+    if msa_features is not None:
+        try:
+            from msa_pipeline import evo_proximity_boost, conservation_confidence  # noqa: WPS433
+
+            Mevo = evo_proximity_boost(msa_features, gate=gate)
+            if Mevo.shape == M.shape and float(Mevo.max()) > 0:
+                M = M + Mevo
+                if channels is not None:
+                    channels["evolution"] = Mevo
+                msa_mode = "msa_augmented"
+            msa_summary = dict(msa_features.summary())
+            msa_summary["mean_evo_confidence"] = float(
+                conservation_confidence(msa_features).mean()
+            )
+            msa_summary["evo_boost_nnz"] = int((Mevo > 0).sum() // 2) if Mevo.shape == M.shape else 0
+        except Exception as exc:  # noqa: BLE001 — never break single-seq path
+            msa_mode = "single_sequence"
+            msa_summary = {"error": str(exc), "backend": "failed"}
+
     iface = dict(iface)
     iface["full_law"] = True
     iface["smiles_chemistry"] = True
     iface["sequence"] = "".join(chars)
     iface["region_model"] = "f12c_cooperative" if cooperative_regions else "f12_baseline"
+    iface["structure_mode"] = msa_mode
+    iface["msa"] = msa_summary
     iface["chem_link_histogram"] = link_hist
     iface["domain_D_eff_histogram"] = domain_hist
     iface["error_log_fixes"] = [
@@ -468,9 +499,14 @@ def build_distogram(
         "smiles_lab_hydrophobicity_pka_F18",
         "F13_length_term",
     ]
+    if msa_mode == "msa_augmented":
+        iface["error_log_fixes"] = list(iface["error_log_fixes"]) + [
+            "optional_msa_coevolution_channel_F09_amp"
+        ]
     iface["mean_abs_S_pairs"] = (s_abs_acc / n_pairs) if n_pairs else 0.0
     iface["observed_pair_fraction"] = (s_obs_n / n_pairs) if n_pairs else 0.0
     if channels is not None:
+        # evolution is an optional additive channel; include it in the recon check
         reconstructed = sum(channels.values(), start=np.zeros_like(M))
         if not np.allclose(M, reconstructed, rtol=0.0, atol=1e-12):
             raise AssertionError("F15 diagnostic channels do not reconstruct proximity matrix")
@@ -478,6 +514,7 @@ def build_distogram(
     iface["formula"] = (
         "S=K(T1+T2+T3) at chem-link D_eff "
         "(backbone/disulfide/salt/hydrophobic/H-bond/tertiary) + SMILES AA"
+        + (" + optional MSA coevolution" if msa_mode == "msa_augmented" else "")
     )
     return M, props, regions, "".join(chars), iface
 
@@ -957,10 +994,24 @@ def predict_ca_coords(
     cooperative_regions: bool = False,
     canonicalize_chirality: bool = False,
     observer_bulk_dim: int | None = None,
+    mode: str = "single",
+    msa_features: Any | None = None,
+    pfam: str | None = None,
+    uniprot: str | None = None,
+    msa_path: str | Path | None = None,
 ) -> dict[str, Any]:
     """Full-law fold: S=K(T1+T2+T3) per pair + observer refine + F15/MDS.
 
     Uses the whole formula (observer, chaos, residual), not a frozen |S| slice.
+
+    Modes
+    -----
+    single (default)
+        Pure single-sequence F01–F15 path. Preserves all published de-novo claims.
+    msa / msa_augmented
+        Optionally obtain an MSA (file / local jackhmmer|hhblits / Pfam) and inject
+        coevolution×conservation into long-range F15 proximity. Core arithmetic
+        stays closed-form; MSA is data input, not training.
     """
     import time as _time
 
@@ -972,10 +1023,27 @@ def predict_ca_coords(
     if len(seq) > max_n:
         seq = seq[:max_n]
 
+    mode_l = (mode or "single").lower().strip()
+    if mode_l in ("msa", "msa_augmented", "evo", "evolutionary") and msa_features is None:
+        try:
+            from msa_pipeline import build_msa_features  # noqa: WPS433
+
+            msa_features = build_msa_features(
+                seq,
+                msa_path=msa_path,
+                pfam=pfam,
+                uniprot=uniprot,
+                jackhmmer_db=os.environ.get("FSOT_JACKHMMER_DB"),
+                hhblits_db=os.environ.get("FSOT_HHBLITS_DB"),
+            )
+        except Exception:
+            msa_features = None
+
     M, props, regions, chars, iface = build_distogram(
         seq,
         routing=routing,
         cooperative_regions=cooperative_regions,
+        msa_features=msa_features if mode_l not in ("single", "single_sequence", "") else None,
     )
     assert chars == seq
     D = proximity_to_distance(M, props=props, regions=regions, iface=iface)
@@ -1097,6 +1165,8 @@ def predict_ca_coords(
         ),
         "trinary_expansion": "c,p,v,aromatic,branch,hetero,detail",
         "formula": "S=K(T1+T2+T3)",
+        "structure_mode": iface.get("structure_mode", "single_sequence"),
+        "msa": iface.get("msa"),
     }
 
 

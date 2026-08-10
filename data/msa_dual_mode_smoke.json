@@ -1,0 +1,58 @@
+{
+  "name": "ubiquitin",
+  "length": 76,
+  "single": {
+    "structure_mode": "single_sequence",
+    "rg_A": 8.327292426872948,
+    "rg_target_fsot_A": 12.468994494611536,
+    "predict_ms": 135.2618999662809,
+    "free_parameters": 0,
+    "engine": "fsot_protein_FULL_SCALAR_v17_contacts"
+  },
+  "msa": {
+    "backend": "pfam",
+    "detail": "PF00240",
+    "n_seqs": 12000,
+    "neff": 1290.0,
+    "length": 76,
+    "mean_conservation": 0.44746310562376806,
+    "mean_gap_frac": 0.13054605263157892,
+    "n_covered": 72,
+    "depth_ok": true,
+    "evo_amp": 0.05442980349867469,
+    "free_parameters": 0,
+    "mean_evo_confidence": 0.40411355253963643
+  },
+  "msa_augmented": {
+    "structure_mode": "msa_augmented",
+    "rg_A": 8.327609820070293,
+    "rg_target_fsot_A": 12.468994494611536,
+    "predict_ms": 132.34329997794703,
+    "free_parameters": 0,
+    "msa": {
+      "backend": "pfam",
+      "detail": "PF00240",
+      "n_seqs": 12000,
+      "neff": 1290.0,
+      "length": 76,
+      "mean_conservation": 0.44746310562376806,
+      "mean_gap_frac": 0.13054605263157892,
+      "n_covered": 72,
+      "depth_ok": true,
+      "evo_amp": 0.05442980349867469,
+      "free_parameters": 0,
+      "mean_evo_confidence": 0.40411355253963643,
+      "evo_boost_nnz": 1085
+    },
+    "engine": "fsot_protein_FULL_SCALAR_v17_contacts"
+  },
+  "tools": {
+    "jackhmmer": null,
+    "hhblits": null,
+    "jackhmmer_db": null,
+    "hhblits_db": null,
+    "pfam_network": true,
+    "evo_amp": 0.05442980349867469
+  },
+  "mean_ca_drift_single_vs_msa_A": 0.0011747833708762514
+}

@@ -68,9 +68,47 @@ python scripts/dna_variant_effect.py
 # Distogram contact metrics (F15 design metrics)
 python scripts/run_fsot_distogram_contact_eval.py
 
+# Dual-mode fold: pure single-sequence vs optional MSA-augmented F15
+python scripts/run_msa_augmented_fold.py --id 1UBQ
+
 # Frozen real-data reproduction audit (downloads 12 experimental RCSB structures)
 python scripts/run_rcsb_holdout.py
 ```
+
+**MSA (optional usability layer):** default fold is pure single-sequence (published
+claims). Pass `mode="msa"` or use `scripts/run_msa_augmented_fold.py` to inject
+Pfam / local JackHMMER–HHblits / file MSA features into long-range F15. See
+`docs/MSA_AUGMENTATION.md`. MSA is **data input**, not training — still 0 free parameters.
+
+**Medical front door + stress suite:**
+
+```powershell
+python scripts/fsot_predict.py --id 1UBQ --pdb-out model.pdb
+python scripts/run_medical_stress_suite.py   # AF vs template vs fuse vs bulk±MSA
+```
+
+Latest multi-regime stress (`data/medical_stress_suite.json`): FSOT **template+MSA
+packing fuse median ~1.16 Å** (7/9 beats raw template); bulk remains the orphan
+fallback. Roadmap: `docs/CAPABILITY_ROADMAP.md`.
+
+**Multi-gene medical variant panel** (TP53, KRAS, EGFR, BRAF, CFTR, SOD1, HBB, BRCA1):
+
+```powershell
+python scripts/run_medical_variant_panel.py
+```
+
+Domain-aware Pfam conservation × substitution specificity; DNA front door for TP53.
+See `data/medical_variant_panel.json`.
+
+**Domain-split structure assembly** (multi-domain disease proteins):
+
+```powershell
+python scripts/domain_split_assemble.py TP53 KRAS SOD1 EGFR
+```
+
+Per-domain templates + FSOT interface pad; trust per-domain RMSD (orientation between
+domains is low-confidence without a joint template).
+
 
 The RCSB manifest is a no-tuning holdout: do not select formulas, routings, or
 thresholds from its outcomes. After a formula change is frozen in Git, validate

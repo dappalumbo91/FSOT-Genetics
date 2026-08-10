@@ -42,3 +42,7 @@ _bench_*.py
 haskell/dist-newstyle/
 cabal.project.local
 
+
+# Large local public genetics dumps
+data/public/
+
