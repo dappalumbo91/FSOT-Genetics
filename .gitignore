@@ -46,3 +46,8 @@ cabal.project.local
 # Large local public genetics dumps
 data/public/
 
+
+# Zig build
+zig/.zig-cache/
+zig/zig-out/
+
