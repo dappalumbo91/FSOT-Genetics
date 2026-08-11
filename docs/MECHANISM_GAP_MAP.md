@@ -36,7 +36,7 @@ Ranked by medical impact × solvability under pure FSOT.
 | **Not the residual law** | Residual physics cannot fix a wrong measured scaffold |
 | **FSOT handle** | Density-weighted multi-template among fair candidates (native-free); Pfam **domain** accession filter; ChemLink D_eff for kinase vs antibody vs viral RBD; reject templates that fail `model_is_sane` + Rg vs `target_rg_fsot` harder |
 | **Success metric** | ABL1 product **&lt; 3 Å**; RBD product **&lt; 2.5 Å** with a true sarbecovirus RBD template |
-| **Status** | **OPEN — top priority** |
+| **Status** | **SHIPPED** (expand isoform pool id≤0.99 when starved; medoid neighborhood when score&lt;0.85 and structural disagree; force structural multi-fill on expanded pools). Verify: `data/m1_authority_verify.json` — ABL1 12.7→4.9 Å, BCL2 5.8→3.5, BRAF 2.8→1.1, EGFR no_tmpl→5.0; freeze median ≤1.16 |
 
 ### M2 — Template search coverage holes
 

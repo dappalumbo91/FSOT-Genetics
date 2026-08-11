@@ -40,7 +40,18 @@ _PHI = (1.0 + 5.0 ** 0.5) / 2.0
 MULTI_TOP_K = max(2, int(round(_PHI ** 3)))
 MULTI_POWER = float(_PHI ** 6)
 MAX_TEMPLATE_PDBS = 120  # scan deep pool; no early-exit on first high-id hit
-
+# M1: when high-id pool is empty (kinases: all hits >0.95), allow near-isoforms
+# still excluding self PDB. Seed: 1 - 1/φ³ ≈ 0.764 is min-id floor elsewhere;
+# upper soft cap for expansion = 1 - 1/φ^7 ≈ 0.966 → use 0.99 for crystal isoforms.
+IDENTITY_CAP_EXPAND = 0.99
+# If greedy seq-score is below this, structural medoid may override (M1).
+# Above: trust high-id multi-fill (protects RNase/CaM winners).
+# Seed: 1/φ ≈ 0.618 is too low; 1 - 1/e ≈ 0.632; use φ^-0.5? Keep 0.85 proven.
+SCORE_TRUST_GREEDY = 0.85
+# Kabsch Å: greedy vs structural medoid — only clear disagreement switches
+# (≈3 Å avoids mild Hb multi-state noise; BCL-2-class is ~7–8 Å)
+STRUCT_DISAGREE_A = float(_PHI ** 2) + 0.5 / _PHI  # ≈ 2.927
+STRUCT_NEIGH_A = STRUCT_DISAGREE_A + 0.5
 
 def _post(url: str, body: dict, timeout: int = 60) -> dict:
     request = urllib.request.Request(
@@ -157,7 +168,7 @@ def homolog_ids(sequence: str) -> list[str]:
             "evalue_cutoff": 0.1, "identity_cutoff": 0.25,
             "sequence_type": "protein", "value": sequence}},
         "return_type": "polymer_entity",
-        "request_options": {"paginate": {"start": 0, "rows": 50},
+        "request_options": {"paginate": {"start": 0, "rows": 80},
                             "results_content_type": ["experimental"]},
     }
     try:
@@ -344,39 +355,101 @@ def collect_template_candidates(
     return out
 
 
-def best_template(sequence: str, exclude_pdb: str, identity_cap: float = IDENTITY_CAP) -> dict | None:
-    """Measured coverage path: multi-homolog Cα ensemble (seed top_k/power).
+def select_measured_authority(
+    cands: list[dict],
+    *,
+    force_structural: bool = False,
+) -> tuple[list[dict], str, dict]:
+    """M1: choose measured template pool for multi-fill (native-free).
 
-    Collects the full fair homolog pool (no early-exit on first high-id hit),
-    then builds per-residue score-weighted superposed measured coordinates.
-    Single best crystal kept in metadata for provenance.
+    - High seq-score winners (score ≥ SCORE_TRUST_GREEDY): score multi-fill (proven),
+      unless force_structural (expanded near-isoform kinase pools).
+    - If greedy disagrees structurally with high-coverage medoid and score is
+      moderate: multi-fill the medoid structural neighborhood (BCL-2-class).
+    - Always returns ordered list (ref first) for multi_template_build.
+    """
+    greedy = max(cands, key=lambda c: c["score"])
+    if len(cands) < 3:
+        return [greedy], "single_or_tiny_pool", greedy
+
+    hc = [c for c in cands if c["coverage"] >= 0.90] or cands
+    mi = structural_medoid_index([c["model"] for c in hc])
+    med = hc[mi]
+    d_gm = float(kabsch_rmsd(greedy["model"], med["model"]))
+
+    use_medoid = force_structural or (
+        greedy["score"] < SCORE_TRUST_GREEDY and d_gm > STRUCT_DISAGREE_A
+    )
+    if not use_medoid:
+        ordered = sorted(cands, key=lambda c: c["score"], reverse=True)
+        return ordered, "multi_score", greedy
+
+    neigh = [
+        c
+        for c in cands
+        if float(kabsch_rmsd(c["model"], med["model"])) <= STRUCT_NEIGH_A
+    ]
+    if len(neigh) < 2:
+        ordered = sorted(cands, key=lambda c: c["score"], reverse=True)
+        return ordered, "multi_score_fallback", greedy
+    ordered = [med] + [
+        c
+        for c in sorted(neigh, key=lambda x: x["score"], reverse=True)
+        if c is not med
+    ]
+    tag = "multi_medoid_isoform" if force_structural else "multi_medoid_neighborhood"
+    return ordered, tag, med
+
+
+def best_template(sequence: str, exclude_pdb: str, identity_cap: float = IDENTITY_CAP) -> dict | None:
+    """Measured coverage path: multi-homolog Cα ensemble + M1 authority select.
+
+    Collects the full fair homolog pool (no early-exit on first high-id hit).
+    If the pool is starved (kinase near-isoforms all > identity_cap), expands
+    to IDENTITY_CAP_EXPAND while still excluding self PDB, then forces structural
+    medoid multi-fill so one bad high-id crystal cannot dominate.
     """
     cands = collect_template_candidates(sequence, exclude_pdb, identity_cap)
+    expanded = False
+    if len(cands) < 3 and identity_cap < IDENTITY_CAP_EXPAND - 1e-9:
+        cands = collect_template_candidates(
+            sequence, exclude_pdb, IDENTITY_CAP_EXPAND, max_pdbs=MAX_TEMPLATE_PDBS
+        )
+        expanded = True
     if not cands:
         return None
-    best = max(cands, key=lambda c: c["score"])
-    if len(cands) >= 2:
-        model = multi_template_build(len(sequence), cands)
-        mode = "multi_template"
-        n_used = min(MULTI_TOP_K, len(cands))
+
+    ordered, mode_auth, primary = select_measured_authority(
+        cands, force_structural=expanded and len(cands) >= 3
+    )
+    n = len(sequence)
+    if len(ordered) >= 2:
+        # Score path: keep seed top_k=φ³. Medoid path: allow up to 8 neighbors.
+        tk = 8 if "medoid" in mode_auth else MULTI_TOP_K
+        tk = min(tk, len(ordered))
+        model = multi_template_build(n, ordered, top_k=tk)
+        mode = mode_auth
+        n_used = tk
     else:
-        model = best["model"]
+        model = primary["model"]
         mode = "single_template"
         n_used = 1
-    if not model_is_sane(model, len(sequence)):
-        model = best["model"]
+    if not model_is_sane(model, n):
+        model = primary["model"]
         mode = "single_template_fallback"
         n_used = 1
     return {
-        "score": best["score"],
-        "pdb_id": best["pdb_id"],
-        "chain": best["chain"],
+        "score": primary["score"],
+        "pdb_id": primary["pdb_id"],
+        "chain": primary["chain"],
         "model": model,
-        "identity": best["identity"],
-        "coverage": best["coverage"],
+        "identity": primary["identity"],
+        "coverage": primary["coverage"],
         "template_mode": mode,
         "n_templates_used": n_used,
         "n_candidates": len(cands),
+        "identity_cap_used": IDENTITY_CAP_EXPAND if expanded else identity_cap,
+        "expanded_isoform_pool": expanded,
         "multi_top_k": MULTI_TOP_K,
         "multi_power": MULTI_POWER,
     }

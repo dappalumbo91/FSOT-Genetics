@@ -1,0 +1,100 @@
+{
+  "hard": [
+    {
+      "name": "ABL1",
+      "status": "ok",
+      "rmsd": 4.926161110354934,
+      "tmpl": "3HMI",
+      "mode": "multi_score",
+      "n_cand": 13,
+      "expanded": false,
+      "cap": 0.95
+    },
+    {
+      "name": "BCL2",
+      "status": "ok",
+      "rmsd": 3.4920009147960993,
+      "tmpl": "1YSG",
+      "mode": "multi_medoid_neighborhood",
+      "n_cand": 56,
+      "expanded": false,
+      "cap": 0.95
+    },
+    {
+      "name": "RBD",
+      "status": "ok",
+      "rmsd": 5.762771843012769,
+      "tmpl": "3D0G",
+      "mode": "multi_medoid_neighborhood",
+      "n_cand": 16,
+      "expanded": false,
+      "cap": 0.95
+    },
+    {
+      "name": "BRAF",
+      "status": "ok",
+      "rmsd": 1.0850317141156511,
+      "tmpl": "1UWJ",
+      "mode": "multi_medoid_isoform",
+      "n_cand": 9,
+      "expanded": true,
+      "cap": 0.99
+    },
+    {
+      "name": "EGFR",
+      "status": "ok",
+      "rmsd": 4.9693008207197895,
+      "tmpl": "3POZ",
+      "mode": "multi_medoid_isoform",
+      "n_cand": 4,
+      "expanded": true,
+      "cap": 0.99
+    }
+  ],
+  "guards": [
+    {
+      "name": "RNase",
+      "status": "ok",
+      "rmsd": 0.774500576208004,
+      "tmpl": "1B6V",
+      "mode": "multi_score",
+      "n_cand": 17,
+      "expanded": false,
+      "cap": 0.95
+    },
+    {
+      "name": "CaM",
+      "status": "ok",
+      "rmsd": 0.8922759818896333,
+      "tmpl": "1CLM",
+      "mode": "multi_score",
+      "n_cand": 10,
+      "expanded": false,
+      "cap": 0.95
+    },
+    {
+      "name": "Ubq",
+      "status": "ok",
+      "rmsd": 2.025587072375234,
+      "tmpl": "1UD7",
+      "mode": "multi_score",
+      "n_cand": 21,
+      "expanded": false,
+      "cap": 0.95
+    }
+  ],
+  "freeze_median": 1.1487082611913828,
+  "freeze_rmsds": [
+    1.1447739118806795,
+    1.080760616751466,
+    1.3020616472741238,
+    1.1674135068802707,
+    1.152642610502086,
+    0.774500576208004,
+    2.025587072375234,
+    1.1390064394992834,
+    2.6013650533378136,
+    0.8922759818896333
+  ],
+  "ok": true
+}
