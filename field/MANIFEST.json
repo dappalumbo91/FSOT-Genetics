@@ -1,11 +1,11 @@
 {
-  "pack_name": "FSOT-Genetics-field-4a04db0-dirty",
-  "generated_at": "2026-08-11T13:35:58.528071+00:00",
+  "pack_name": "FSOT-Genetics-field-59c889f",
+  "generated_at": "2026-08-11T13:36:59.922582+00:00",
   "git": {
-    "sha": "4a04db0",
-    "sha_full": "4a04db02781f7050d3108701604f4be38c53e819",
+    "sha": "59c889f",
+    "sha_full": "59c889fa37b4ef2093be7878d02b43ed22a73871",
     "branch": "main",
-    "dirty": true
+    "dirty": false
   },
   "pin": "D1D38A",
   "free_parameters": 0,
@@ -25,13 +25,13 @@
   "files": [
     {
       "path": "console.html",
-      "sha256": "d0bd37361e28d00c99a45cfc5325c635e1aaa6965740448747a0d800783ab3c2",
-      "bytes": 31552
+      "sha256": "7abb80ae45067eed86d66645d1c12ce5ccde910cf735441f1174d08aa1f11a40",
+      "bytes": 31553
     },
     {
       "path": "console_data.json",
-      "sha256": "a8f8f6ce6a30081ed9128014d6f8f3c684f781f398c4531753a638cad7e0febf",
-      "bytes": 13937
+      "sha256": "2e856c3efd97ea3f3573886117b52c04924f5c608e32e57cf7a8b021d6e8348d",
+      "bytes": 13938
     },
     {
       "path": "docs/PRODUCT_FREEZE.md",
@@ -70,7 +70,7 @@
     },
     {
       "path": "data/parity_zig_python.json",
-      "sha256": "f007b654695feeef60d839ba67817bc9ce1d86d282047928c5bf75819e6e33d5",
+      "sha256": "8c292afef922a1d7dfc322817c2e2ffeb2d755c5edb5a98b2cd4dcae79b4f38a",
       "bytes": 4136
     },
     {
@@ -95,8 +95,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "e4cb051e7fb99f7e3e44027fa394d48b8e31162c115f6ef52bc13766313b64ac",
-      "bytes": 1466
+      "sha256": "3e49e4b306c7c047b5b878bf947fe4c920174433b2bc738dd1abb09014fadb98",
+      "bytes": 1446
     }
   ],
   "how_to_open_console": "Open console.html in a browser",
