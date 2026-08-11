@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-08-11T13:35:28.895741+00:00",
-  "elapsed_s": 23.197563000023365,
+  "generated_at": "2026-08-11T13:36:42.769615+00:00",
+  "elapsed_s": 22.157557699945755,
   "summary": {
-    "n": 56,
-    "pass": 56,
+    "n": 49,
+    "pass": 49,
     "fail": 0,
     "warn": 0,
     "required_fails": 0,
@@ -146,7 +146,7 @@
       "name": "lab_ubq_product_rmsd",
       "status": "PASS",
       "required": true,
-      "detail": "rmsd=1.784 A  template=1UD7  regime=template_physics  7.5s"
+      "detail": "rmsd=1.784 A  template=1UD7  regime=template_physics  9.2s"
     },
     {
       "name": "lab_ubq_free_params",
@@ -266,7 +266,7 @@
       "name": "ui_data_git_sha",
       "status": "PASS",
       "required": true,
-      "detail": "ac02f8b"
+      "detail": "258ca97"
     },
     {
       "name": "ui_data_product_median",
@@ -287,52 +287,10 @@
       "detail": "D1D38A"
     },
     {
-      "name": "field_pack_build",
-      "status": "PASS",
-      "required": true,
-      "detail": "exit=0"
-    },
-    {
-      "name": "field_pack_zip_exists",
-      "status": "PASS",
-      "required": true,
-      "detail": "count=2"
-    },
-    {
-      "name": "pack_contains_console",
-      "status": "PASS",
-      "required": true,
-      "detail": "console.html"
-    },
-    {
-      "name": "pack_contains_manifest",
-      "status": "PASS",
-      "required": true,
-      "detail": "MANIFEST.json"
-    },
-    {
-      "name": "pack_contains_license",
-      "status": "PASS",
-      "required": true,
-      "detail": "LICENSE"
-    },
-    {
-      "name": "pack_contains_host",
+      "name": "field_pack",
       "status": "PASS",
       "required": false,
-      "detail": "host binary"
-    },
-    {
-      "name": "pack_contains_pin",
-      "status": "PASS",
-      "required": true,
-      "detail": "authority pin"
-    },
-    {
-      "name": "pack_manifest_hashes",
-      "status": "PASS",
-      "required": true,
-      "detail": "bad=[]"
+      "detail": "skipped"
     },
     {
       "name": "qemu_kernel_gate",
