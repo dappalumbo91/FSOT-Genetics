@@ -60,6 +60,7 @@ from full_scalar_law import (  # noqa: E402
     refine_observation_scalar,
     residual_scale,
     compute_scalar_full,
+    chem_link_target_distance,
 )
 
 
@@ -372,6 +373,46 @@ def build_distogram(
     n_pairs = 0
     link_hist: dict[str, int] = {}
     domain_hist: dict[str, int] = {}
+    # Per-pair chem-link residual for geometry stage (multi-system application)
+    residual_mat = np.ones((n, n), dtype=np.float64)
+    link_codes = np.zeros((n, n), dtype=np.int8)
+    # link code map for compact storage
+    _LINK_TO_CODE = {
+        "backbone_covalent_geometry": 1,
+        "disulfide_covalent": 2,
+        "salt_bridge_electrostatic": 3,
+        "hydrophobic_packing": 4,
+        "hbond_secondary": 5,
+        "molecular_sidechain": 6,
+        "tertiary_biochem": 7,
+    }
+    # MSA as evolutionary observable for tertiary/pack hits (not free SP geometry)
+    evo_cons = np.zeros(n, dtype=np.float64)
+    evo_coev = np.zeros((n, n), dtype=np.float64)
+    msa_mode = "single_sequence"
+    msa_summary: dict[str, Any] | None = None
+    if msa_features is not None:
+        try:
+            from msa_pipeline import conservation_confidence  # noqa: WPS433
+
+            evo_cons = np.asarray(conservation_confidence(msa_features), dtype=np.float64)
+            if len(evo_cons) != n:
+                evo_cons = np.zeros(n, dtype=np.float64)
+            C = getattr(msa_features, "coevolution", None)
+            if C is not None and getattr(C, "shape", None) == (n, n):
+                # normalize coev to O(1) by top-L mean (data scale)
+                tri = C[np.triu_indices(n, k=gate)]
+                if tri.size and float(tri.max()) > 0:
+                    top = np.partition(tri, max(len(tri) - n, 0))[-min(n, len(tri)) :]
+                    scale = float(top.mean()) + 1e-12
+                    evo_coev = np.maximum(C / scale, 0.0)
+            msa_mode = "msa_augmented"
+            msa_summary = dict(msa_features.summary())
+            msa_summary["mean_evo_confidence"] = float(evo_cons.mean())
+            msa_summary["bridge"] = "tertiary_hits_delta_psi"
+        except Exception as exc:  # noqa: BLE001
+            msa_mode = "single_sequence"
+            msa_summary = {"error": str(exc), "backend": "failed"}
 
     for i in range(n):
         for j in range(n):
@@ -399,6 +440,9 @@ def build_distogram(
                 p_alpha_j=props[j].p_alpha,
                 p_beta_i=props[i].p_beta,
                 p_beta_j=props[j].p_beta,
+                evo_cons_i=float(evo_cons[i]),
+                evo_cons_j=float(evo_cons[j]),
+                evo_coev=float(evo_coev[i, j]),
             )
             S = float(fs["S"])
             res = float(fs["residual"])  # (1 + |S|·P_NEW) at *this* interface
@@ -407,6 +451,8 @@ def build_distogram(
             dom = str(fs.get("domain") or "?")
             link_hist[link] = link_hist.get(link, 0) + 1
             domain_hist[dom] = domain_hist.get(dom, 0) + 1
+            residual_mat[i, j] = res
+            link_codes[i, j] = _LINK_TO_CODE.get(link, 0)
             s_abs_acc += abs(S)
             n_pairs += 1
             if fs["observed"]:
@@ -461,32 +507,13 @@ def build_distogram(
                 channels["sheet"][i, j] = sheet
                 channels["region"][i, j] = region_pair
 
-    # Optional MSA evolutionary channel (data input; amplitude is F09-family seed scale)
-    msa_mode = "single_sequence"
-    msa_summary: dict[str, Any] | None = None
-    if msa_features is not None:
-        try:
-            from msa_pipeline import evo_proximity_boost, conservation_confidence  # noqa: WPS433
-
-            Mevo = evo_proximity_boost(msa_features, gate=gate)
-            if Mevo.shape == M.shape and float(Mevo.max()) > 0:
-                M = M + Mevo
-                if channels is not None:
-                    channels["evolution"] = Mevo
-                msa_mode = "msa_augmented"
-            msa_summary = dict(msa_features.summary())
-            msa_summary["mean_evo_confidence"] = float(
-                conservation_confidence(msa_features).mean()
-            )
-            msa_summary["evo_boost_nnz"] = int((Mevo > 0).sum() // 2) if Mevo.shape == M.shape else 0
-        except Exception as exc:  # noqa: BLE001 — never break single-seq path
-            msa_mode = "single_sequence"
-            msa_summary = {"error": str(exc), "backend": "failed"}
-
     iface = dict(iface)
     iface["full_law"] = True
     iface["smiles_chemistry"] = True
     iface["sequence"] = "".join(chars)
+    iface["residual_mat"] = residual_mat
+    iface["link_codes"] = link_codes
+    iface["link_code_map"] = {v: k for k, v in _LINK_TO_CODE.items()}
     iface["region_model"] = "f12c_cooperative" if cooperative_regions else "f12_baseline"
     iface["structure_mode"] = msa_mode
     iface["msa"] = msa_summary
@@ -501,7 +528,8 @@ def build_distogram(
     ]
     if msa_mode == "msa_augmented":
         iface["error_log_fixes"] = list(iface["error_log_fixes"]) + [
-            "optional_msa_coevolution_channel_F09_amp"
+            "msa_bridge_tertiary_hits_delta_psi",
+            "chem_link_target_distances",
         ]
     iface["mean_abs_S_pairs"] = (s_abs_acc / n_pairs) if n_pairs else 0.0
     iface["observed_pair_fraction"] = (s_obs_n / n_pairs) if n_pairs else 0.0
@@ -514,7 +542,7 @@ def build_distogram(
     iface["formula"] = (
         "S=K(T1+T2+T3) at chem-link D_eff "
         "(backbone/disulfide/salt/hydrophobic/H-bond/tertiary) + SMILES AA"
-        + (" + optional MSA coevolution" if msa_mode == "msa_augmented" else "")
+        + (" + MSA→tertiary hits/δψ" if msa_mode == "msa_augmented" else "")
     )
     return M, props, regions, "".join(chars), iface
 
@@ -562,12 +590,21 @@ def proximity_to_distance(
     rise, rad, turn = 1.5, 2.3, 100.0 * PI / 180.0
     # Ideal inter-strand Cα for H-bonded β partners ≈ π + e/φ ≈ 4.82 Å
     d_sheet = PI + E / PHI
+    residual_mat = (iface or {}).get("residual_mat")
+    link_codes = (iface or {}).get("link_codes")
+    code_map = (iface or {}).get("link_code_map") or {}
 
     def _in_kind_region(idx: int, kind: str) -> bool:
         ri = rmap[idx] if idx < len(rmap) else None
         if ri is None or not regions:
             return False
         return regions[ri].kind == kind
+
+    def _link_name(i: int, j: int) -> str:
+        if link_codes is None:
+            return ""
+        code = int(link_codes[i, j])
+        return str(code_map.get(code, ""))
 
     for i in range(n):
         for j in range(i + 1, n):
@@ -585,6 +622,31 @@ def proximity_to_distance(
                 bb_only = float(sep) ** (-1.0 / PI)
                 if m > bb_only * PHI:
                     d = min(d, contact_scale / (1.0 + (m - bb_only) * PHI))
+
+            # Multi-system geometry: chem-link residual target (doctrine)
+            link = _link_name(i, j)
+            res = 1.0
+            if residual_mat is not None:
+                res = float(residual_mat[i, j])
+            pa_i = props[i].p_alpha if props is not None else 0.0
+            pa_j = props[j].p_alpha if props is not None else 0.0
+            if link:
+                d_tgt = chem_link_target_distance(
+                    link, sep, res, p_alpha_i=pa_i, p_alpha_j=pa_j
+                )
+                if d_tgt is not None:
+                    if link == "disulfide_covalent":
+                        # Atomic_Physics: hard SS geometry
+                        d = min(d, d_tgt)
+                    elif link == "salt_bridge_electrostatic":
+                        # Electromagnetism: residual-tight salt Cα
+                        d = min(d, d_tgt)
+                    elif link == "hbond_secondary":
+                        d = (d + PHI * d_tgt) / (1.0 + PHI)
+                    elif link == "hydrophobic_packing":
+                        d = min(d, d_tgt * PHI)
+                    elif link == "tertiary_biochem":
+                        d = min(d, max(d_tgt, contact_scale / PHI))
 
             # Helix periods (error mode helix_period): soft-min toward ideal
             # Stronger pull when both residues sit in a detected H region
@@ -634,16 +696,30 @@ def proximity_to_distance(
             for j in range(i + gate, n):
                 lr_pairs.append((float(M[i, j]), i, j))
         lr_pairs.sort(reverse=True)
-    # Hard contacts: top L/2 consensus (keeps contact MAE ~2Å) but…
+    # Hard contacts: top-L evidence, but clamp *strength* by chem-link class
+    # (only SS / salt / pack / hbond get tight clamps — not false tertiary noise)
     tight = (contact_scale / PHI) / pack_boost
     contact_set: set[tuple[int, int]] = set()
+    hard_links = {
+        "disulfide_covalent",
+        "salt_bridge_electrostatic",
+        "hydrophobic_packing",
+        "hbond_secondary",
+    }
     if apply_ranked_contacts:
         for rank, (_sc, i, j) in enumerate(lr_pairs[: max(L, 1)]):
-            if rank < max(L // 2, 1):
-                D[i, j] = D[j, i] = min(D[i, j], tight)
+            ln = _link_name(i, j)
+            if ln in hard_links or rank < max(L // 5, 1):
+                if rank < max(L // 2, 1) and ln in hard_links:
+                    D[i, j] = D[j, i] = min(D[i, j], tight)
+                elif rank < max(L // 2, 1):
+                    D[i, j] = D[j, i] = min(D[i, j], contact_scale / math.sqrt(pack_boost))
+                else:
+                    D[i, j] = D[j, i] = min(D[i, j], contact_scale)
                 contact_set.add((i, j))
-            else:
-                D[i, j] = D[j, i] = min(D[i, j], contact_scale / math.sqrt(pack_boost))
+            elif rank < max(L // 2, 1):
+                # soft tertiary-only ranked
+                D[i, j] = D[j, i] = min(D[i, j], contact_scale)
                 contact_set.add((i, j))
 
     # Same-kind region midpoints (sparse packing anchors)
@@ -920,12 +996,17 @@ def refine_with_distogram(
     M: np.ndarray,
     rounds: int = 24,
     pairs: list[tuple[int, int]] | None = None,
+    residual_mat: np.ndarray | None = None,
+    link_codes: np.ndarray | None = None,
 ) -> np.ndarray:
     """Sparse refine with *full* scalar law as observer each round.
 
     Every polish step is an observation: observed=True, hits=round,
     S = K(T1+T2+T3), forces scaled by residual (1+|S|·P_NEW).
     Still O(n·k) pairs — not O(n²)×neural grind.
+
+    residual_mat / link_codes: optional per-pair chem-link residual and class
+    from build_distogram — multiplies force weight by residual on observed links.
     """
     n = X.shape[0]
     pos = X.copy()
@@ -942,7 +1023,15 @@ def refine_with_distogram(
     w0 = (1.0 + np.maximum(m_ij, 0.0) * PHI) * (0.35 + 0.65 * env)
     w0 = np.where(sep == 1, 80.0, w0)
     w0 = np.where(sep == 2, 15.0, w0)
-
+    if residual_mat is not None:
+        res_p = residual_mat[pi, pj]
+        # observed chemical systems: codes 2=SS, 3=salt, 4=pack, 5=hbond, 7=tertiary
+        if link_codes is not None:
+            lc = link_codes[pi, pj]
+            chem = (lc >= 2) & (lc <= 5) | (lc == 7)
+            w0 = np.where(chem, w0 * res_p, w0)
+        else:
+            w0 = w0 * res_p
     for rnd in range(rounds):
         # ── OBSERVER PATH: this refine step is a measurement of structure ──
         # stress proxy from current residual distances (seed-scaled)
@@ -1051,11 +1140,15 @@ def predict_ca_coords(
     pairs = _sparse_pairs(len(seq), M, local=int(PI * E) + 3, gate=gate)
     n_rounds = max(8, min(int(rounds), 32))
 
+    res_mat = iface.get("residual_mat")
+    lcodes = iface.get("link_codes")
+    _ref_kw = dict(residual_mat=res_mat, link_codes=lcodes)
+
     if observer_bulk_dim is not None:
         # Observer solidification: refine in the D_eff bulk, then project to 3-D.
         bd = int(min(max(int(observer_bulk_dim), 3), max(len(seq) - 1, 3)))
         bulk = refine_with_distogram(
-            _bulk_observer_mds(D, bd), D, M, rounds=n_rounds, pairs=pairs
+            _bulk_observer_mds(D, bd), D, M, rounds=n_rounds, pairs=pairs, **_ref_kw
         )
         X = _solidify_to_3d(bulk)
         best_name = f"bulk{bd}"
@@ -1081,7 +1174,9 @@ def predict_ca_coords(
         X = candidates[0][1]
         st = float("inf")
         for cname, X0 in candidates:
-            Xc = refine_with_distogram(X0.copy(), D, M, rounds=n_rounds, pairs=pairs)
+            Xc = refine_with_distogram(
+                X0.copy(), D, M, rounds=n_rounds, pairs=pairs, **_ref_kw
+            )
             # if refine re-crushed topology, partial expand once
             if radius_of_gyration(Xc) < target_rg_fsot(len(seq)) / PHI:
                 Xc = scale_to_target_rg(Xc, len(seq))
@@ -1147,7 +1242,7 @@ def predict_ca_coords(
         "predict_ms": elapsed_ms,
         "n_sparse_pairs": len(pairs),
         "refine_rounds": n_rounds,
-        "engine": "fsot_protein_FULL_SCALAR_v17_contacts",
+        "engine": "fsot_protein_FULL_SCALAR_v18_chemlink",
         "free_parameters": 0,
         "runtime": "python_full_scalar_T1T2T3_observer",
         "full_law": True,

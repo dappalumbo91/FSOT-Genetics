@@ -298,8 +298,16 @@ def pair_full_scalar(
     p_alpha_j: float = 0.0,
     p_beta_i: float = 0.0,
     p_beta_j: float = 0.0,
+    evo_cons_i: float = 0.0,
+    evo_cons_j: float = 0.0,
+    evo_coev: float = 0.0,
 ) -> dict[str, float]:
-    """Full-law S for one residue pair at the *chemically correct* D_eff interface."""
+    """Full-law S for one residue pair at the *chemically correct* D_eff interface.
+
+    Evolutionary observables (MSA conservation / coevolution) enter only as
+    measured data into hits and δψ on tertiary/pack interfaces — same pattern
+    as live-API bridges on other FSOT domains. Not free weights.
+    """
     sc, link = chem_link_domain(
         sep,
         long_range_gate,
@@ -312,6 +320,16 @@ def pair_full_scalar(
     )
     dpsi = delta_psi_from_trinary(sc.delta_psi0, spin_i, spin_j, charge_i, charge_j)
     dtheta = delta_theta_from_trinary(sc.delta_theta0, branch_i, branch_j, aro_i, aro_j)
+
+    # Bridge MSA → tertiary/pack observer path (seed-scaled)
+    hits = float(recent_hits)
+    if link in ("tertiary_biochem", "hydrophobic_packing"):
+        evo = math.sqrt(max(evo_cons_i, 0.0) * max(evo_cons_j, 0.0))
+        # hits accumulate evolutionary observations; coev boosts phase on tertiary
+        hits = hits + evo * PHI
+        if evo_coev > 0.0 and link == "tertiary_biochem":
+            dpsi = dpsi * (1.0 + min(evo_coev, PHI) / (PHI * E))
+            hits = hits + min(evo_coev, PHI) * E
 
     # Observer: backbone unobserved; connecting chemical systems that are
     # measurements of structure (pack, salt, disulfide, tertiary) observed=True
@@ -335,7 +353,7 @@ def pair_full_scalar(
         sc.D_eff,
         int(round(dpsi * 1000)),
         int(round(dtheta * 1000)),
-        int(round(recent_hits)),
+        int(round(min(hits, 50.0))),
         1 if observed else 0,
         int(min(N, 400)),
     )
@@ -349,10 +367,56 @@ def pair_full_scalar(
         "delta_theta": dtheta,
         "observed": 1.0 if observed else 0.0,
         "chaos_factor": chaos_factor,
-        "recent_hits": recent_hits,
+        "recent_hits": hits,
         "chem_link": link,
         "delta_psi0_domain": sc.delta_psi0,
     }
+
+
+def chem_link_target_distance(
+    link: str,
+    sep: int,
+    residual: float,
+    *,
+    p_alpha_i: float = 0.0,
+    p_alpha_j: float = 0.0,
+) -> float | None:
+    """Per-system Cα distance target from chem-link class (seed scales only).
+
+    Returns None when the link does not impose a hard geometric target
+    (caller keeps F07 polymer blend). residual = 1+|S|·P_NEW tightens attractive systems.
+    """
+    res = max(float(residual), 1e-9)
+    contact = PI * E  # F08
+    tight = contact / PHI
+    if link == "backbone_covalent_geometry":
+        if sep == 1:
+            return 3.8  # CA_CA virtual bond (Pauling/FSOT constant in engine)
+        if sep == 2:
+            return 3.8 * math.sqrt(E / PHI)
+        return None
+    if link == "disulfide_covalent":
+        # Atomic_Physics: SS Cα span ~ (π+e/φ)·φ/e compressed by residual
+        d0 = (PI + E / PHI) * PHI / E
+        return d0 / res
+    if link == "salt_bridge_electrostatic":
+        # Electromagnetism: salt Cα often ~ contact_scale; residual tightens
+        return tight / math.sqrt(res)
+    if link == "hydrophobic_packing":
+        # Condensed_Matter: core packing at F08, residual softens crush
+        return contact / math.sqrt(res)
+    if link == "hbond_secondary":
+        if sep in (3, 4, 7) and p_alpha_i > 1.0 / E and p_alpha_j > 1.0 / E:
+            rise, rad, turn = 1.5, 2.3, 100.0 * PI / 180.0
+            d_h = math.sqrt((sep * rise) ** 2 + (2 * rad * math.sin(sep * turn / 2)) ** 2)
+            return d_h
+        # sheet-ish interstrand
+        return PI + E / PHI
+    if link == "tertiary_biochem":
+        # Biochemistry observation: residual-scaled contact envelope, not polymer walk
+        return contact * PHI / res
+    # molecular_sidechain: no hard target
+    return None
 
 
 def refine_observation_scalar(

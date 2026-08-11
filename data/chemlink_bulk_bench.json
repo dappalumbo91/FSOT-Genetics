@@ -1,0 +1,155 @@
+{
+  "generated_at": "2026-08-11T11:17:19.323372+00:00",
+  "prior_bulk_median_A": 13.65,
+  "median_single_A": 13.574186909012191,
+  "median_msa_A": 13.336649752232262,
+  "delta_vs_prior_A": -0.07581309098780942,
+  "free_parameters": 0,
+  "results": [
+    {
+      "name": "Hemoglobin alpha",
+      "length": 141,
+      "single_A": 12.751112624835999,
+      "msa_A": 12.750762690558757,
+      "chem_link_histogram": {
+        "backbone_covalent_geometry": 558,
+        "molecular_sidechain": 664,
+        "hbond_secondary": 578,
+        "tertiary_biochem": 13902,
+        "hydrophobic_packing": 3476,
+        "salt_bridge_electrostatic": 562
+      }
+    },
+    {
+      "name": "Hemoglobin beta",
+      "length": 145,
+      "single_A": 13.949716145451596,
+      "msa_A": 13.950203776317156,
+      "chem_link_histogram": {
+        "backbone_covalent_geometry": 574,
+        "molecular_sidechain": 720,
+        "salt_bridge_electrostatic": 674,
+        "hbond_secondary": 584,
+        "tertiary_biochem": 14954,
+        "hydrophobic_packing": 3372,
+        "disulfide_covalent": 2
+      }
+    },
+    {
+      "name": "Carbonic anhydrase II",
+      "length": 256,
+      "single_A": 16.703234169644812,
+      "msa_A": 16.70221670413639,
+      "chem_link_histogram": {
+        "backbone_covalent_geometry": 1018,
+        "hbond_secondary": 1540,
+        "molecular_sidechain": 1290,
+        "tertiary_biochem": 52960,
+        "salt_bridge_electrostatic": 2596,
+        "hydrophobic_packing": 5876
+      }
+    },
+    {
+      "name": "SOD1",
+      "length": 153,
+      "single_A": 13.33639283446066,
+      "msa_A": 13.336649752232262,
+      "chem_link_histogram": {
+        "backbone_covalent_geometry": 606,
+        "hbond_secondary": 450,
+        "molecular_sidechain": 824,
+        "hydrophobic_packing": 2248,
+        "tertiary_biochem": 18180,
+        "salt_bridge_electrostatic": 936,
+        "disulfide_covalent": 12
+      }
+    },
+    {
+      "name": "Lysozyme human",
+      "length": 130,
+      "single_A": 11.534637546753615,
+      "msa_A": 11.535085706136758,
+      "chem_link_histogram": {
+        "backbone_covalent_geometry": 514,
+        "salt_bridge_electrostatic": 424,
+        "hbond_secondary": 688,
+        "molecular_sidechain": 588,
+        "tertiary_biochem": 12516,
+        "hydrophobic_packing": 1984,
+        "disulfide_covalent": 56
+      }
+    },
+    {
+      "name": "RNase A",
+      "length": 124,
+      "single_A": 13.811980983563721,
+      "msa_A": 13.813390885707275,
+      "chem_link_histogram": {
+        "backbone_covalent_geometry": 490,
+        "hbond_secondary": 560,
+        "molecular_sidechain": 540,
+        "salt_bridge_electrostatic": 340,
+        "tertiary_biochem": 11828,
+        "hydrophobic_packing": 1438,
+        "disulfide_covalent": 56
+      }
+    },
+    {
+      "name": "Ubiquitin",
+      "length": 76,
+      "single_A": 10.858662993243023,
+      "msa_A": 10.8577562077558,
+      "chem_link_histogram": {
+        "backbone_covalent_geometry": 298,
+        "hbond_secondary": 276,
+        "molecular_sidechain": 340,
+        "hydrophobic_packing": 516,
+        "tertiary_biochem": 4014,
+        "salt_bridge_electrostatic": 256
+      }
+    },
+    {
+      "name": "Insulin",
+      "length": 21,
+      "single_A": 5.511783547243767,
+      "msa_A": 5.513231704990453,
+      "chem_link_histogram": {
+        "backbone_covalent_geometry": 78,
+        "molecular_sidechain": 62,
+        "tertiary_biochem": 154,
+        "hbond_secondary": 86,
+        "hydrophobic_packing": 30,
+        "disulfide_covalent": 10
+      }
+    },
+    {
+      "name": "p53 DNA-binding",
+      "length": 196,
+      "single_A": 15.673583529931204,
+      "msa_A": 15.672297925149069,
+      "chem_link_histogram": {
+        "backbone_covalent_geometry": 778,
+        "hbond_secondary": 804,
+        "molecular_sidechain": 946,
+        "tertiary_biochem": 30940,
+        "hydrophobic_packing": 3586,
+        "salt_bridge_electrostatic": 1078,
+        "disulfide_covalent": 88
+      }
+    },
+    {
+      "name": "Calmodulin",
+      "length": 144,
+      "single_A": 17.497996968596254,
+      "msa_A": null,
+      "chem_link_histogram": {
+        "backbone_covalent_geometry": 570,
+        "hbond_secondary": 488,
+        "molecular_sidechain": 698,
+        "hydrophobic_packing": 2350,
+        "tertiary_biochem": 15476,
+        "salt_bridge_electrostatic": 1010
+      }
+    }
+  ]
+}
