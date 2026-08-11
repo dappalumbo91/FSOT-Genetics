@@ -1,0 +1,92 @@
+{
+  "generated_at": "2026-08-11T11:29:05.341333+00:00",
+  "prior_median_A": 13.65,
+  "median_single_A": 13.565049119898845,
+  "median_uniref_A": 13.27583057856631,
+  "delta_single_A": -0.08495088010115559,
+  "delta_uniref_A": -0.3741694214336899,
+  "n_uniref_beats_single": 3,
+  "free_parameters": 0,
+  "results": [
+    {
+      "name": "Hemoglobin alpha",
+      "length": 141,
+      "single_A": 12.75213244774507,
+      "uniref_A": 12.727318347839784,
+      "delta_single_vs_prior": -0.8978675522549295,
+      "delta_uniref_vs_prior": -0.9226816521602164
+    },
+    {
+      "name": "Hemoglobin beta",
+      "length": 145,
+      "single_A": 13.949312362918407,
+      "uniref_A": 13.195335049040931,
+      "delta_single_vs_prior": 0.2993123629184069,
+      "delta_uniref_vs_prior": -0.454664950959069
+    },
+    {
+      "name": "Carbonic anhydrase II",
+      "length": 256,
+      "single_A": 16.70193982073878,
+      "uniref_A": 16.686841267182125,
+      "delta_single_vs_prior": 3.051939820738779,
+      "delta_uniref_vs_prior": 3.0368412671821243
+    },
+    {
+      "name": "SOD1",
+      "length": 153,
+      "single_A": 13.325970128553468,
+      "uniref_A": 13.356326108091688,
+      "delta_single_vs_prior": -0.32402987144653217,
+      "delta_uniref_vs_prior": -0.2936738919083126
+    },
+    {
+      "name": "Lysozyme human",
+      "length": 130,
+      "single_A": 11.549219591304025,
+      "uniref_A": 11.522560763260746,
+      "delta_single_vs_prior": -2.100780408695975,
+      "delta_uniref_vs_prior": -2.1274392367392547
+    },
+    {
+      "name": "RNase A",
+      "length": 124,
+      "single_A": 13.80412811124422,
+      "uniref_A": 13.743104771525315,
+      "delta_single_vs_prior": 0.1541281112442192,
+      "delta_uniref_vs_prior": 0.09310477152531504
+    },
+    {
+      "name": "Ubiquitin",
+      "length": 76,
+      "single_A": 10.851307481423353,
+      "uniref_A": 10.799215374148462,
+      "delta_single_vs_prior": -2.7986925185766474,
+      "delta_uniref_vs_prior": -2.8507846258515386
+    },
+    {
+      "name": "Insulin",
+      "length": 21,
+      "single_A": 5.530324859468049,
+      "uniref_A": 5.487052009927751,
+      "delta_single_vs_prior": -8.119675140531951,
+      "delta_uniref_vs_prior": -8.162947990072249
+    },
+    {
+      "name": "p53 DNA-binding",
+      "length": 196,
+      "single_A": 15.747546849145682,
+      "uniref_A": 15.746442385387416,
+      "delta_single_vs_prior": 2.0975468491456812,
+      "delta_uniref_vs_prior": 2.096442385387416
+    },
+    {
+      "name": "Calmodulin",
+      "length": 144,
+      "single_A": 17.535127057487596,
+      "uniref_A": 17.565357425683622,
+      "delta_single_vs_prior": 3.885127057487596,
+      "delta_uniref_vs_prior": 3.915357425683622
+    }
+  ]
+}

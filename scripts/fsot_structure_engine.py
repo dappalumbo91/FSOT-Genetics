@@ -644,9 +644,14 @@ def proximity_to_distance(
                     elif link == "hbond_secondary":
                         d = (d + PHI * d_tgt) / (1.0 + PHI)
                     elif link == "hydrophobic_packing":
-                        d = min(d, d_tgt * PHI)
+                        # only tighten when F15 also supports proximity (avoids mass false packs)
+                        if m > float(sep) ** (-1.0 / PI) * PHI:
+                            d = min(d, d_tgt * PHI)
                     elif link == "tertiary_biochem":
+                        # residual + evo-informed tertiary envelope
                         d = min(d, max(d_tgt, contact_scale / PHI))
+                        if m > float(sep) ** (-1.0 / PI) * PHI * PHI:
+                            d = min(d, contact_scale / res)
 
             # Helix periods (error mode helix_period): soft-min toward ideal
             # Stronger pull when both residues sit in a detected H region
@@ -1114,19 +1119,28 @@ def predict_ca_coords(
 
     mode_l = (mode or "single").lower().strip()
     if mode_l in ("msa", "msa_augmented", "evo", "evolutionary") and msa_features is None:
-        try:
-            from msa_pipeline import build_msa_features  # noqa: WPS433
+        # Prefer UniRef protein-specific MSA when uniprot given (measured homologs)
+        if uniprot:
+            try:
+                from msa_uniref import build_uniref_msa_features  # noqa: WPS433
 
-            msa_features = build_msa_features(
-                seq,
-                msa_path=msa_path,
-                pfam=pfam,
-                uniprot=uniprot,
-                jackhmmer_db=os.environ.get("FSOT_JACKHMMER_DB"),
-                hhblits_db=os.environ.get("FSOT_HHBLITS_DB"),
-            )
-        except Exception:
-            msa_features = None
+                msa_features = build_uniref_msa_features(seq, str(uniprot), pfam=pfam)
+            except Exception:
+                msa_features = None
+        if msa_features is None:
+            try:
+                from msa_pipeline import build_msa_features  # noqa: WPS433
+
+                msa_features = build_msa_features(
+                    seq,
+                    msa_path=msa_path,
+                    pfam=pfam,
+                    uniprot=uniprot,
+                    jackhmmer_db=os.environ.get("FSOT_JACKHMMER_DB"),
+                    hhblits_db=os.environ.get("FSOT_HHBLITS_DB"),
+                )
+            except Exception:
+                msa_features = None
 
     M, props, regions, chars, iface = build_distogram(
         seq,

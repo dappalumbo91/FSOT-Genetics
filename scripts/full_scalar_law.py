@@ -325,11 +325,12 @@ def pair_full_scalar(
     hits = float(recent_hits)
     if link in ("tertiary_biochem", "hydrophobic_packing"):
         evo = math.sqrt(max(evo_cons_i, 0.0) * max(evo_cons_j, 0.0))
-        # hits accumulate evolutionary observations; coev boosts phase on tertiary
-        hits = hits + evo * PHI
-        if evo_coev > 0.0 and link == "tertiary_biochem":
-            dpsi = dpsi * (1.0 + min(evo_coev, PHI) / (PHI * E))
-            hits = hits + min(evo_coev, PHI) * E
+        # hits = evolutionary observation count (seed-scaled)
+        hits = hits + evo * PHI * E
+        if evo_coev > 0.0:
+            # coevolution strengthens observer phase on long-range systems
+            dpsi = dpsi * (1.0 + min(float(evo_coev), PHI) / PHI)
+            hits = hits + min(float(evo_coev), PHI) * E * PHI
 
     # Observer: backbone unobserved; connecting chemical systems that are
     # measurements of structure (pack, salt, disulfide, tertiary) observed=True

@@ -238,6 +238,49 @@ def conservation_profile_uniref(
     return cons, freq, n_used, cluster, meta
 
 
+def build_uniref_msa_features(
+    sequence: str,
+    uniprot: str,
+    *,
+    pfam: str | None = None,
+    max_members: int = 600,
+) -> "Any":
+    """Build MsaFeatures from UniRef cluster for tertiary chem-link bridge."""
+    from msa_pipeline import MsaFeatures, map_msa_to_query, mutual_information_apc  # noqa: WPS433
+
+    seq = "".join(c for c in sequence.upper() if c in AA20)
+    cons, freq, n, meta = best_conservation_profile(seq, uniprot=uniprot, pfam=pfam)
+    cluster = meta.get("cluster_id") or resolve_uniref_cluster(uniprot, 0.5)
+    rows: list[str] = [seq]
+    if cluster:
+        members = fetch_uniref_sequences(cluster, max_members=max_members)
+        rows.extend(s for _i, s in members)
+    coev = np.zeros((len(seq), len(seq)))
+    covered = list(range(len(seq)))
+    if len(rows) >= 20:
+        mapped = map_msa_to_query(seq, rows)
+        if mapped is not None:
+            mat, covered, _ref = mapped
+            if len(covered) >= 5:
+                coev = mutual_information_apc(mat, covered)
+    cons_a = np.asarray(cons, dtype=float)
+    if len(cons_a) != len(seq):
+        cons_a = np.zeros(len(seq))
+    return MsaFeatures(
+        sequence=seq,
+        n_seqs=max(n, len(rows)),
+        neff=float(max(n, 1)),
+        backend="uniref",
+        detail=str(cluster),
+        conservation=cons_a,
+        gap_frac=np.zeros(len(seq)),
+        entropy=np.full(len(seq), math.log(20.0)),
+        aa_freq=np.zeros((len(seq), 20)),
+        coevolution=coev,
+        covered=covered,
+    )
+
+
 def best_conservation_profile(
     sequence: str,
     uniprot: str | None = None,

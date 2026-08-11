@@ -1,16 +1,16 @@
 {
-  "generated_at": "2026-08-11T11:17:19.323372+00:00",
+  "generated_at": "2026-08-11T11:28:24.547855+00:00",
   "prior_bulk_median_A": 13.65,
-  "median_single_A": 13.574186909012191,
-  "median_msa_A": 13.336649752232262,
-  "delta_vs_prior_A": -0.07581309098780942,
+  "median_single_A": 13.574035917440511,
+  "median_msa_A": 13.065557003140976,
+  "delta_vs_prior_A": -0.07596408255948894,
   "free_parameters": 0,
   "results": [
     {
       "name": "Hemoglobin alpha",
       "length": 141,
-      "single_A": 12.751112624835999,
-      "msa_A": 12.750762690558757,
+      "single_A": 12.751695537301067,
+      "msa_A": 12.764145997664196,
       "chem_link_histogram": {
         "backbone_covalent_geometry": 558,
         "molecular_sidechain": 664,
@@ -23,8 +23,8 @@
     {
       "name": "Hemoglobin beta",
       "length": 145,
-      "single_A": 13.949716145451596,
-      "msa_A": 13.950203776317156,
+      "single_A": 13.949496568473018,
+      "msa_A": 13.065557003140976,
       "chem_link_histogram": {
         "backbone_covalent_geometry": 574,
         "molecular_sidechain": 720,
@@ -38,8 +38,8 @@
     {
       "name": "Carbonic anhydrase II",
       "length": 256,
-      "single_A": 16.703234169644812,
-      "msa_A": 16.70221670413639,
+      "single_A": 16.703138284434697,
+      "msa_A": 16.665738784903343,
       "chem_link_histogram": {
         "backbone_covalent_geometry": 1018,
         "hbond_secondary": 1540,
@@ -52,8 +52,8 @@
     {
       "name": "SOD1",
       "length": 153,
-      "single_A": 13.33639283446066,
-      "msa_A": 13.336649752232262,
+      "single_A": 13.33637250694617,
+      "msa_A": 13.327418620802225,
       "chem_link_histogram": {
         "backbone_covalent_geometry": 606,
         "hbond_secondary": 450,
@@ -67,8 +67,8 @@
     {
       "name": "Lysozyme human",
       "length": 130,
-      "single_A": 11.534637546753615,
-      "msa_A": 11.535085706136758,
+      "single_A": 11.534684051709375,
+      "msa_A": 12.944994518296237,
       "chem_link_histogram": {
         "backbone_covalent_geometry": 514,
         "salt_bridge_electrostatic": 424,
@@ -82,8 +82,8 @@
     {
       "name": "RNase A",
       "length": 124,
-      "single_A": 13.811980983563721,
-      "msa_A": 13.813390885707275,
+      "single_A": 13.811699327934852,
+      "msa_A": 13.787259102123208,
       "chem_link_histogram": {
         "backbone_covalent_geometry": 490,
         "hbond_secondary": 560,
@@ -98,7 +98,7 @@
       "name": "Ubiquitin",
       "length": 76,
       "single_A": 10.858662993243023,
-      "msa_A": 10.8577562077558,
+      "msa_A": 10.82551625843661,
       "chem_link_histogram": {
         "backbone_covalent_geometry": 298,
         "hbond_secondary": 276,
@@ -112,7 +112,7 @@
       "name": "Insulin",
       "length": 21,
       "single_A": 5.511783547243767,
-      "msa_A": 5.513231704990453,
+      "msa_A": 5.574598388778874,
       "chem_link_histogram": {
         "backbone_covalent_geometry": 78,
         "molecular_sidechain": 62,
@@ -125,8 +125,8 @@
     {
       "name": "p53 DNA-binding",
       "length": 196,
-      "single_A": 15.673583529931204,
-      "msa_A": 15.672297925149069,
+      "single_A": 15.673411039452464,
+      "msa_A": 15.73835545269208,
       "chem_link_histogram": {
         "backbone_covalent_geometry": 778,
         "hbond_secondary": 804,
@@ -140,7 +140,7 @@
     {
       "name": "Calmodulin",
       "length": 144,
-      "single_A": 17.497996968596254,
+      "single_A": 17.497890964874788,
       "msa_A": null,
       "chem_link_histogram": {
         "backbone_covalent_geometry": 570,
