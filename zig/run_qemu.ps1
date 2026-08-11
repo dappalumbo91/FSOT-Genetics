@@ -19,7 +19,6 @@ if ($LASTEXITCODE -ne 0) { throw "zig build kernel failed" }
 
 $kernelSrc = Join-Path $PSScriptRoot "zig-out\bin\fsot_genetics_kernel"
 if (-not (Test-Path $kernelSrc)) {
-    # Some Zig versions install without extension differently
     $alt = Get-ChildItem (Join-Path $PSScriptRoot "zig-out\bin") -ErrorAction SilentlyContinue |
         Where-Object { $_.Name -like "fsot_genetics_kernel*" } | Select-Object -First 1
     if ($alt) { $kernelSrc = $alt.FullName }
@@ -36,7 +35,7 @@ if (-not $qemu -and (Test-Path "C:\Program Files\qemu\qemu-system-x86_64.exe")) 
     $qemu = "C:\Program Files\qemu\qemu-system-x86_64.exe"
 }
 if (-not $qemu) {
-    Write-Host "WARN: qemu-system-x86_64 not found — kernel built at $kernelSrc"
+    Write-Host "WARN: qemu-system-x86_64 not found - kernel built at $kernelSrc"
     Write-Host "Install QEMU then re-run. Host gate: zig build host"
     exit 0
 }
@@ -48,8 +47,14 @@ Copy-Item -Force $kernelSrc $kernel
 Remove-Item $serialLog, $errLog -ErrorAction SilentlyContinue
 
 Write-Host "=== QEMU genetics product cell ==="
-$arg = "-display none -serial file:$serialLog -no-reboot -m 64M -kernel `"$kernel`""
-$p = Start-Process -FilePath $qemu -ArgumentList $arg -PassThru -WindowStyle Hidden -RedirectStandardError $errLog
+$argList = @(
+    "-display", "none",
+    "-serial", "file:$serialLog",
+    "-no-reboot",
+    "-m", "64M",
+    "-kernel", $kernel
+)
+$p = Start-Process -FilePath $qemu -ArgumentList $argList -PassThru -WindowStyle Hidden -RedirectStandardError $errLog
 
 $maxWaitSec = 60
 $waited = 0

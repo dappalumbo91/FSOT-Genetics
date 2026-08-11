@@ -42,6 +42,16 @@ zig build kernel
 .\run_qemu.ps1
 ```
 
+**Parity gate (Zig host vs Python pin oracle — required before claim):**
+
+```powershell
+python scripts/parity_zig_python.py
+# → PARITY_GATE PASS  (data/parity_zig_python.json)
+```
+
+Compares residual channels, domain S, seeds, ATG codon, DNA→AA fragment,
+and one residual-physics bond step. Tolerances: seeds/residual ≤ 5e−6 abs.
+
 Expected serial markers (kernel):
 
 ```text

@@ -63,6 +63,14 @@ zig build kernel        # freestanding Multiboot image
 
 Host residual must match pin: `r_bond≈1.100 r_clash≈1.122 r_anchor≈1.092`.
 
+**Parity gate (Zig vs Python — do not skip):**
+
+```powershell
+python scripts/parity_zig_python.py   # → PARITY_GATE PASS
+```
+
+See `docs/PARITY_ZIG_PYTHON.md`.
+
 ### Research oracle (Python — metrics only)
 
 ```powershell

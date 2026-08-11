@@ -1,0 +1,186 @@
+{
+  "generated_at": "2026-08-11T13:16:21.266300+00:00",
+  "status": "PASS",
+  "python": {
+    "P_NEW": 0.30030227667037146,
+    "K": 0.4202216641606967,
+    "PHI": 1.618033988749895,
+    "S_Physical_Chemistry": 0.33401327040170914,
+    "S_Chemistry": 0.4078840642307454,
+    "S_Biochemistry": 0.3062212293865662,
+    "r_bond": 1.1003049455397496,
+    "r_clash": 1.122488513106057,
+    "r_anchor": 1.091958932349586,
+    "multi_top_k": 4,
+    "multi_power": 17.944271909999163,
+    "codon_atg0": 1,
+    "codon_atg1": -1,
+    "codon_atg2": 1,
+    "aa_atg": "M",
+    "aa_translate": "MALWMRLLPLLALLALWGPDPA",
+    "aa_len": 22,
+    "phys_bond_len": 3.9823951207877406,
+    "phys_end_x": 3.982395120787741,
+    "neuro_S": 1.5617717644392166,
+    "trit_pair": -1,
+    "trit_consensus": 1
+  },
+  "zig": {
+    "trit_pair": "-1",
+    "trit_consensus": "1",
+    "codon_atg0": "1",
+    "codon_atg1": "-1",
+    "codon_atg2": "1",
+    "aa_atg": "M",
+    "aa_translate": "MALWMRLLPLLALLALWGPDPA",
+    "neuro_S": "1.561771764439",
+    "P_NEW": "0.300302276670",
+    "K": "0.420221664161",
+    "PHI": "1.618033988750",
+    "S_Physical_Chemistry": "0.334013270402",
+    "S_Chemistry": "0.407884064231",
+    "S_Biochemistry": "0.306221229387",
+    "r_bond": "1.100304945540",
+    "r_clash": "1.122488513106",
+    "r_anchor": "1.091958932350",
+    "multi_top_k": "4",
+    "multi_power": "17.944271909999",
+    "phys_bond_len": "3.982395120788",
+    "phys_end_x": "3.982395120788",
+    "aa_len": "22"
+  },
+  "rows": [
+    {
+      "key": "P_NEW",
+      "python": 0.30030227667037146,
+      "zig": 0.30030227667,
+      "ok": true
+    },
+    {
+      "key": "K",
+      "python": 0.4202216641606967,
+      "zig": 0.420221664161,
+      "ok": true
+    },
+    {
+      "key": "PHI",
+      "python": 1.618033988749895,
+      "zig": 1.61803398875,
+      "ok": true
+    },
+    {
+      "key": "S_Physical_Chemistry",
+      "python": 0.33401327040170914,
+      "zig": 0.334013270402,
+      "ok": true
+    },
+    {
+      "key": "S_Chemistry",
+      "python": 0.4078840642307454,
+      "zig": 0.407884064231,
+      "ok": true
+    },
+    {
+      "key": "S_Biochemistry",
+      "python": 0.3062212293865662,
+      "zig": 0.306221229387,
+      "ok": true
+    },
+    {
+      "key": "r_bond",
+      "python": 1.1003049455397496,
+      "zig": 1.10030494554,
+      "ok": true
+    },
+    {
+      "key": "r_clash",
+      "python": 1.122488513106057,
+      "zig": 1.122488513106,
+      "ok": true
+    },
+    {
+      "key": "r_anchor",
+      "python": 1.091958932349586,
+      "zig": 1.09195893235,
+      "ok": true
+    },
+    {
+      "key": "multi_power",
+      "python": 17.944271909999163,
+      "zig": 17.944271909999,
+      "ok": true
+    },
+    {
+      "key": "phys_bond_len",
+      "python": 3.9823951207877406,
+      "zig": 3.982395120788,
+      "ok": true
+    },
+    {
+      "key": "phys_end_x",
+      "python": 3.982395120787741,
+      "zig": 3.982395120788,
+      "ok": true
+    },
+    {
+      "key": "neuro_S",
+      "python": 1.5617717644392166,
+      "zig": 1.561771764439,
+      "ok": true
+    },
+    {
+      "key": "multi_top_k",
+      "python": 4,
+      "zig": 4,
+      "ok": true
+    },
+    {
+      "key": "codon_atg0",
+      "python": 1,
+      "zig": 1,
+      "ok": true
+    },
+    {
+      "key": "codon_atg1",
+      "python": -1,
+      "zig": -1,
+      "ok": true
+    },
+    {
+      "key": "codon_atg2",
+      "python": 1,
+      "zig": 1,
+      "ok": true
+    },
+    {
+      "key": "aa_len",
+      "python": 22,
+      "zig": 22,
+      "ok": true
+    },
+    {
+      "key": "trit_pair",
+      "python": -1,
+      "zig": -1,
+      "ok": true
+    },
+    {
+      "key": "trit_consensus",
+      "python": 1,
+      "zig": 1,
+      "ok": true
+    },
+    {
+      "key": "aa_atg",
+      "python": "M",
+      "zig": "M",
+      "ok": true
+    },
+    {
+      "key": "aa_translate",
+      "python": "MALWMRLLPLLALLALWGPDPA",
+      "zig": "MALWMRLLPLLALLALWGPDPA",
+      "ok": true
+    }
+  ]
+}
