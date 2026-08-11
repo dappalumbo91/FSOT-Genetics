@@ -1,0 +1,352 @@
+{
+  "generated_at": "2026-08-11T13:35:28.895741+00:00",
+  "elapsed_s": 23.197563000023365,
+  "summary": {
+    "n": 56,
+    "pass": 56,
+    "fail": 0,
+    "warn": 0,
+    "required_fails": 0,
+    "overall": "PASS"
+  },
+  "gates": [
+    {
+      "name": "cross_verify_pin",
+      "status": "PASS",
+      "required": true,
+      "detail": "exit=0 tail=ATION GATES PASSED\n  law: S=K(T1+T2+T3)  pin: D1D38A  free_parameters: 0\n  path: mathematical formula branch (not neural net)\n  syntax: expanded trinary AA opcodes + codon map\n  formal: Lean + Mathlib chem-link D_eff + residual lemmas\n================================================================\n"
+    },
+    {
+      "name": "residual_r_bond_band",
+      "status": "PASS",
+      "required": true,
+      "detail": "r_bond=1.100304945540"
+    },
+    {
+      "name": "residual_r_clash_band",
+      "status": "PASS",
+      "required": true,
+      "detail": "r_clash=1.122488513106"
+    },
+    {
+      "name": "residual_r_anchor_band",
+      "status": "PASS",
+      "required": true,
+      "detail": "r_anchor=1.091958932350"
+    },
+    {
+      "name": "residual_recompute_match",
+      "status": "PASS",
+      "required": true,
+      "detail": "S=0.334013270402"
+    },
+    {
+      "name": "p_new_pin",
+      "status": "PASS",
+      "required": true,
+      "detail": "P_NEW=0.30030227667037146"
+    },
+    {
+      "name": "zig_host_gate",
+      "status": "PASS",
+      "required": true,
+      "detail": "exit=0 has_ok=True"
+    },
+    {
+      "name": "zig_host_residuals_printed",
+      "status": "PASS",
+      "required": true,
+      "detail": "residual printout"
+    },
+    {
+      "name": "parity_zig_python",
+      "status": "PASS",
+      "required": true,
+      "detail": "exit=0"
+    },
+    {
+      "name": "parity_json_status",
+      "status": "PASS",
+      "required": true,
+      "detail": "PASS"
+    },
+    {
+      "name": "product_n_10",
+      "status": "PASS",
+      "required": true,
+      "detail": "n=10"
+    },
+    {
+      "name": "product_free_params_0",
+      "status": "PASS",
+      "required": true,
+      "detail": "free=0"
+    },
+    {
+      "name": "product_median_gate",
+      "status": "PASS",
+      "required": true,
+      "detail": "median=1.1600280586911782 max=1.165"
+    },
+    {
+      "name": "product_within_1p5_of_af",
+      "status": "PASS",
+      "required": true,
+      "detail": "within=10"
+    },
+    {
+      "name": "product_all_rows_scored",
+      "status": "PASS",
+      "required": true,
+      "detail": "rows=10"
+    },
+    {
+      "name": "medical_free_params",
+      "status": "PASS",
+      "required": true,
+      "detail": "free_parameters"
+    },
+    {
+      "name": "medical_driver_recall",
+      "status": "PASS",
+      "required": true,
+      "detail": "34/35"
+    },
+    {
+      "name": "medical_genes_present",
+      "status": "PASS",
+      "required": true,
+      "detail": "n_genes=8"
+    },
+    {
+      "name": "lab_tp53_r175h_call",
+      "status": "PASS",
+      "required": true,
+      "detail": "call=LIKELY DAMAGING"
+    },
+    {
+      "name": "lab_tp53_r175h_present",
+      "status": "PASS",
+      "required": true,
+      "detail": "R175H in panel"
+    },
+    {
+      "name": "lab_ubq_length",
+      "status": "PASS",
+      "required": true,
+      "detail": "n=76"
+    },
+    {
+      "name": "lab_ubq_template_found",
+      "status": "PASS",
+      "required": true,
+      "detail": "tmpl=1UD7"
+    },
+    {
+      "name": "lab_ubq_product_rmsd",
+      "status": "PASS",
+      "required": true,
+      "detail": "rmsd=1.784 A  template=1UD7  regime=template_physics  7.5s"
+    },
+    {
+      "name": "lab_ubq_free_params",
+      "status": "PASS",
+      "required": true,
+      "detail": "0"
+    },
+    {
+      "name": "lab_ubq_residual_channels",
+      "status": "PASS",
+      "required": true,
+      "detail": "{'Physical_Chemistry': 1.1003049455397496, 'Chemistry': 1.122488513106057, 'Biochemistry': 1.091958932349586}"
+    },
+    {
+      "name": "physics_bond_moves_toward_ideal",
+      "status": "PASS",
+      "required": true,
+      "detail": "bond=3.982395"
+    },
+    {
+      "name": "physics_finite",
+      "status": "PASS",
+      "required": true,
+      "detail": "coords finite"
+    },
+    {
+      "name": "physics_report_keys",
+      "status": "PASS",
+      "required": true,
+      "detail": "keys"
+    },
+    {
+      "name": "codon_atg_primary",
+      "status": "PASS",
+      "required": true,
+      "detail": "(1, -1, 1)"
+    },
+    {
+      "name": "dna_translate_insulin_fragment",
+      "status": "PASS",
+      "required": true,
+      "detail": "MALWMRLLPLLALLALWGPDPA"
+    },
+    {
+      "name": "console_build",
+      "status": "PASS",
+      "required": true,
+      "detail": "exit=0"
+    },
+    {
+      "name": "console_html_exists",
+      "status": "PASS",
+      "required": true,
+      "detail": "C:\\Users\\damia\\Desktop\\FSOT-Genetics\\field\\console.html"
+    },
+    {
+      "name": "console_data_exists",
+      "status": "PASS",
+      "required": true,
+      "detail": "C:\\Users\\damia\\Desktop\\FSOT-Genetics\\field\\console_data.json"
+    },
+    {
+      "name": "ui_has_title",
+      "status": "PASS",
+      "required": true,
+      "detail": "title"
+    },
+    {
+      "name": "ui_has_3dmol_or_fallback",
+      "status": "PASS",
+      "required": true,
+      "detail": "viewer"
+    },
+    {
+      "name": "ui_has_parity_badge",
+      "status": "PASS",
+      "required": true,
+      "detail": "parity badge"
+    },
+    {
+      "name": "ui_has_git_badge",
+      "status": "PASS",
+      "required": true,
+      "detail": "git stamp"
+    },
+    {
+      "name": "ui_has_product_table",
+      "status": "PASS",
+      "required": true,
+      "detail": "product table"
+    },
+    {
+      "name": "ui_has_variant_table",
+      "status": "PASS",
+      "required": true,
+      "detail": "variant table"
+    },
+    {
+      "name": "ui_has_honest_limits",
+      "status": "PASS",
+      "required": true,
+      "detail": "limits"
+    },
+    {
+      "name": "ui_charset_utf8",
+      "status": "PASS",
+      "required": true,
+      "detail": "utf8"
+    },
+    {
+      "name": "ui_data_json_parse",
+      "status": "PASS",
+      "required": true,
+      "detail": "keys=['built_at', 'pin', 'pin_sha256_prefix', 'git', 'free_parameters', 'product', 'parity', 'medical']"
+    },
+    {
+      "name": "ui_data_git_sha",
+      "status": "PASS",
+      "required": true,
+      "detail": "ac02f8b"
+    },
+    {
+      "name": "ui_data_product_median",
+      "status": "PASS",
+      "required": true,
+      "detail": "median present"
+    },
+    {
+      "name": "ui_data_parity_pass",
+      "status": "PASS",
+      "required": true,
+      "detail": "PASS"
+    },
+    {
+      "name": "console_data_pin",
+      "status": "PASS",
+      "required": true,
+      "detail": "D1D38A"
+    },
+    {
+      "name": "field_pack_build",
+      "status": "PASS",
+      "required": true,
+      "detail": "exit=0"
+    },
+    {
+      "name": "field_pack_zip_exists",
+      "status": "PASS",
+      "required": true,
+      "detail": "count=2"
+    },
+    {
+      "name": "pack_contains_console",
+      "status": "PASS",
+      "required": true,
+      "detail": "console.html"
+    },
+    {
+      "name": "pack_contains_manifest",
+      "status": "PASS",
+      "required": true,
+      "detail": "MANIFEST.json"
+    },
+    {
+      "name": "pack_contains_license",
+      "status": "PASS",
+      "required": true,
+      "detail": "LICENSE"
+    },
+    {
+      "name": "pack_contains_host",
+      "status": "PASS",
+      "required": false,
+      "detail": "host binary"
+    },
+    {
+      "name": "pack_contains_pin",
+      "status": "PASS",
+      "required": true,
+      "detail": "authority pin"
+    },
+    {
+      "name": "pack_manifest_hashes",
+      "status": "PASS",
+      "required": true,
+      "detail": "bad=[]"
+    },
+    {
+      "name": "qemu_kernel_gate",
+      "status": "PASS",
+      "required": false,
+      "detail": "exit=0"
+    },
+    {
+      "name": "repo_no_junk_probes",
+      "status": "PASS",
+      "required": true,
+      "detail": "still present: []"
+    }
+  ],
+  "product_median_max_A": 1.165,
+  "ubq_product_max_A": 2.5
+}

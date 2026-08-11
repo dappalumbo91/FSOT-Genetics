@@ -88,6 +88,13 @@ python scripts/build_field_pack.py
 # → dist/FSOT-Genetics-field-<gitsha>.zip
 ```
 
+**Field stress suite** (lab-style — pin, parity, product freeze, 1UBQ assay, UI, pack, QEMU):
+
+```powershell
+python scripts/run_field_stress_suite.py
+# → data/field_stress_suite.json  (all required gates PASS)
+```
+
 ### Research oracle (Python — metrics only)
 
 ```powershell

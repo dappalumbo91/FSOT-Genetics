@@ -1,18 +1,16 @@
 {
-  "pack_name": "FSOT-Genetics-field-5ee935e-dirty",
-  "generated_at": "2026-08-11T13:31:21.475629+00:00",
+  "pack_name": "FSOT-Genetics-field-ac02f8b-dirty",
+  "generated_at": "2026-08-11T13:35:24.470482+00:00",
   "git": {
-    "sha": "5ee935e",
-    "sha_full": "5ee935ec526142e0daa79f794b717e7505801287",
+    "sha": "ac02f8b",
+    "sha_full": "ac02f8bdd3d4b057d94cb98def12bf7c53d227b9",
     "branch": "main",
     "dirty": true
   },
   "pin": "D1D38A",
   "free_parameters": 0,
   "parity": {
-    "status": "PASS",
-    "returncode": 0,
-    "tail": "                                 -1                -1     0.000e+00  PASS\ncodon_atg2                                   1                 1     0.000e+00  PASS\naa_len                                      22                22     0.000e+00  PASS\ntrit_pair                                   -1                -1     0.000e+00  PASS\ntrit_consensus                               1                 1     0.000e+00  PASS\naa_atg                                       M                 M                PASS\naa_translate                MALWMRLLPLLALLALWGPDPAMALWMRLLPLLALLALWGPDPA                PASS\n----------------------------------------------------------------------------------\nPARITY_GATE PASS \u2014 Zig host matches Python pin oracle\nWrote C:\\Users\\damia\\Desktop\\FSOT-Genetics\\data\\parity_zig_python.json\n"
+    "status": "SKIPPED"
   },
   "product_summary": {
     "n": 10,
@@ -27,12 +25,12 @@
   "files": [
     {
       "path": "console.html",
-      "sha256": "6844d7056cd8668e507e57eb46dad397195f002ca077c3b91eac56190ffbe29b",
+      "sha256": "38036e9fe9c512a24f67cef672c10951fffb0040b7450672d78549a12e018822",
       "bytes": 31552
     },
     {
       "path": "console_data.json",
-      "sha256": "1a0af766ee740d780d8c59c0493b5072146aa26637fd974219232ee5a108acd1",
+      "sha256": "f808cde4b95cc507ed16f3a34629f5b1075b39979ce6d1884e5e4e76cb7fc1ac",
       "bytes": 13937
     },
     {
@@ -72,7 +70,7 @@
     },
     {
       "path": "data/parity_zig_python.json",
-      "sha256": "a31a483cb38bbb7b56a2ed35f95836bdd782fde0ccaf193649ac85575836dfb0",
+      "sha256": "f007b654695feeef60d839ba67817bc9ce1d86d282047928c5bf75819e6e33d5",
       "bytes": 4136
     },
     {
@@ -97,7 +95,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "d19836595cdba0c00580453ea5fb798a3dc63ffd4852f54b6946702149eaff11",
+      "sha256": "ac383c2708935bb325b3bea1248ea5c99874bb29071b3b19ebbfedbdc9923a9f",
       "bytes": 1466
     }
   ],

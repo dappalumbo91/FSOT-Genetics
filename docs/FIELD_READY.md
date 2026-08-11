@@ -59,11 +59,9 @@ GUI shows **frozen gates**. CLI/Zig **does** the science.
 ## Recommended daily field ritual
 
 ```powershell
-python scripts/parity_zig_python.py
+python scripts/run_field_stress_suite.py   # full lab stress (required before ship)
 python scripts/build_field_console.py --open
-# optional live structure:
-python scripts/fsot_predict.py --id 1UBQ --pdb-out predictions/ubq_fsot.pdb
-python scripts/build_field_console.py --open   # refresh 3D
+python scripts/build_field_pack.py         # USB zip
 ```
 
 ## What “production ready” means here

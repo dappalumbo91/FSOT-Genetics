@@ -1,10 +1,10 @@
 {
-  "built_at": "2026-08-11T13:31:20.085009+00:00",
+  "built_at": "2026-08-11T13:35:23.990555+00:00",
   "pin": "D1D38A",
   "pin_sha256_prefix": "D1D38A185487",
   "git": {
-    "sha": "5ee935e",
-    "sha_full": "5ee935ec526142e0daa79f794b717e7505801287",
+    "sha": "ac02f8b",
+    "sha_full": "ac02f8bdd3d4b057d94cb98def12bf7c53d227b9",
     "branch": "main",
     "dirty": true
   },
@@ -116,7 +116,7 @@
   },
   "parity": {
     "status": "PASS",
-    "generated_at": "2026-08-11T13:16:21.266300+00:00",
+    "generated_at": "2026-08-11T13:35:13.258909+00:00",
     "r_bond": 1.1003049455397496,
     "r_clash": 1.122488513106057,
     "r_anchor": 1.091958932349586,
