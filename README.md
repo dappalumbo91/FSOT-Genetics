@@ -103,6 +103,11 @@ python scripts/run_wetlab_af_eval.py
 # → predictions/reports/WETLAB_AF_EVAL.md
 ```
 
+**Where we fail and how to fix under FSOT** (mechanism map, not vibes):
+
+`docs/MECHANISM_GAP_MAP.md` — wrong-template (M1), coverage holes (M2), domain scope (M3),
+conformation (M4), precision (M5), bulk wall (M6), variant false + (M7).
+
 ### Research oracle (Python — metrics only)
 
 ```powershell
