@@ -173,6 +173,47 @@ STRUCTURE_CASES: list[dict[str, Any]] = [
         "wetlab": "X-ray SOD1",
         "note": "ALS drivers; medical structure",
     },
+    # --- Extra wet-lab anchors (reality panel expansion) ---
+    {
+        "id": "hbb",
+        "category": "drug",
+        "name": "Hemoglobin beta",
+        "uniprot": "P68871",
+        "pdb": "1A3N",
+        "chain": "B",
+        "wetlab": "X-ray deoxyHb",
+        "note": "sickle cell / medical classic",
+    },
+    {
+        "id": "rnase",
+        "category": "control",
+        "name": "RNase A",
+        "uniprot": "P61823",
+        "pdb": "7RSA",
+        "chain": "A",
+        "wetlab": "X-ray RNase A",
+        "note": "high-resolution classic; precision guard",
+    },
+    {
+        "id": "insulin",
+        "category": "drug",
+        "name": "Insulin",
+        "uniprot": "P01308",
+        "pdb": "4INS",
+        "chain": "A",
+        "wetlab": "X-ray insulin",
+        "note": "peptide hormone / drug",
+    },
+    {
+        "id": "hiv_rt",
+        "category": "drug",
+        "name": "HIV-1 reverse transcriptase (p66 fragment)",
+        "uniprot": "P03366",
+        "pdb": "1RTD",
+        "chain": "A",
+        "wetlab": "X-ray HIV-1 RT",
+        "note": "antiviral drug target",
+    },
 ]
 
 # ---------------------------------------------------------------------------

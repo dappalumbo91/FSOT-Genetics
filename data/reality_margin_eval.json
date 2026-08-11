@@ -1,0 +1,2249 @@
+{
+  "generated_at": "2026-08-11T16:59:00.326133+00:00",
+  "doctrine": "Match experimental wet-lab C\u03b1; localize residual error; FSOT-only fixes",
+  "authority_pin": "D1D38A",
+  "summary": {
+    "n_attempted": 19,
+    "n_ok": 19,
+    "median_rmsd_A": 1.1674135068802676,
+    "mean_rmsd_A": 2.1537984925612847,
+    "n_sub2A": 12,
+    "n_sub3A": 14,
+    "dominant_error_mode": "long_range_contacts",
+    "mode_counts": {
+      "long_range_contacts": 16,
+      "global_topology": 3
+    },
+    "by_category": {
+      "cancer": {
+        "n": 7,
+        "median_rmsd_A": 1.6097032453127456,
+        "n_sub2A": 4,
+        "n_sub3A": 4,
+        "dominant_mode": "long_range_contacts"
+      },
+      "vaccine": {
+        "n": 2,
+        "median_rmsd_A": 4.042425950745915,
+        "n_sub2A": 0,
+        "n_sub3A": 1,
+        "dominant_mode": "global_topology"
+      },
+      "drug": {
+        "n": 7,
+        "median_rmsd_A": 1.0249810729173527,
+        "n_sub2A": 6,
+        "n_sub3A": 6,
+        "dominant_mode": "long_range_contacts"
+      },
+      "control": {
+        "n": 3,
+        "median_rmsd_A": 1.1526426105020857,
+        "n_sub2A": 2,
+        "n_sub3A": 3,
+        "dominant_mode": "long_range_contacts"
+      }
+    },
+    "free_parameters": 0,
+    "reality_median_target_A": 2.5,
+    "reality_median_ok": true
+  },
+  "fix_queue": [
+    {
+      "priority": 1,
+      "mode": "long_range_contacts",
+      "votes": 51,
+      "score_sum": 111.37021996538138,
+      "meaning": "Tertiary native contacts missing or false",
+      "literature": "Contact maps / top-L metrics drive fold quality (CASP; Marks/Sander coevolution; AF distograms).",
+      "fsot_handle": "F13\u2013F15 + observer tertiary S at Biochemistry D=13; top-L caps; residual-at-interface on contact set.",
+      "fix_class": "tertiary_contacts",
+      "status": "open"
+    },
+    {
+      "priority": 2,
+      "mode": "global_topology",
+      "votes": 25,
+      "score_sum": 73.96877292417872,
+      "meaning": "Chain topology / domain packing globally wrong after Kabsch",
+      "literature": "Energy landscape funnel; topology from contact order (Onuchic/Wolynes; Baker).",
+      "fsot_handle": "MDS is only as good as D; fix contact D first, then sparse polish; multi-start from SS regions.",
+      "fix_class": "embedding",
+      "status": "open"
+    },
+    {
+      "priority": 3,
+      "mode": "per_residue_hotspots",
+      "votes": 19,
+      "score_sum": 30.453366500477536,
+      "meaning": "Local segments high RMSD after global align",
+      "literature": "Flexible loops, termini disorder; core vs surface (crystallographic B-factors).",
+      "fsot_handle": "Segment-wise residual; coil vs H/E different D_eff; do not over-constrain termini.",
+      "fix_class": "local_segments",
+      "status": "open"
+    },
+    {
+      "priority": 4,
+      "mode": "mid_range_5_12",
+      "votes": 19,
+      "score_sum": 0.5737423404348669,
+      "meaning": "Secondary packing / loops at mid separation",
+      "literature": "Secondary structure packing; loop closure; contact order (Plaxco et al.).",
+      "fsot_handle": "F11 sheet + F12 regions; SS amp at Chemistry domain; full scalar residual mid-sep.",
+      "fix_class": "secondary_packing",
+      "status": "open"
+    },
+    {
+      "priority": 5,
+      "mode": "helix_period_3_4_7",
+      "votes": 19,
+      "score_sum": 0.16787203306993284,
+      "meaning": "\u03b1-helix i,i+3/4/7 distances wrong",
+      "literature": "\u03b1-helix rise 1.5 \u00c5/res, 3.6 res/turn; C\u03b1 i\u2192i+4 \u2248 6.2 \u00c5 (Pauling).",
+      "fsot_handle": "F10 helix geometry + Chemistry D=8 interface; enforce ideal helix D when p_alpha high.",
+      "fix_class": "secondary_structure",
+      "status": "open"
+    },
+    {
+      "priority": 6,
+      "mode": "backbone_sep1_2",
+      "votes": 19,
+      "score_sum": 0.0357438245243323,
+      "meaning": "Virtual C\u03b1\u2013C\u03b1 bond / local geometry wrong",
+      "literature": "Standard C\u03b1 virtual bond \u2248 3.8 \u00c5; local geometry dominates short-range map (Dill polymer; Flory).",
+      "fsot_handle": "F07 bb + CA_CA seed; do NOT residual-scale sep=1,2 (geometry is hard constraint).",
+      "fix_class": "local_geometry",
+      "status": "open"
+    }
+  ],
+  "results": [
+    {
+      "id": "p53_dbd",
+      "status": "ok",
+      "category": "cancer",
+      "name": "p53 DNA-binding domain",
+      "wetlab": "X-ray p53\u2013DNA complex (Cho et al.)",
+      "note": "hotspot R175/R248/R273 in structure",
+      "pdb": "1TUP",
+      "chain": "A",
+      "n": 196,
+      "template_pdb": "2P52",
+      "template_mode": "multi_score",
+      "template_identity": 0.8917525773195877,
+      "template_coverage": 0.9897959183673469,
+      "length_sim": null,
+      "n_candidates": 70,
+      "expanded_isoform_pool": false,
+      "fsot_product_rmsd_A": 1.5214178891006451,
+      "sub2A": true,
+      "sub3A": true,
+      "primary_error_mode": "long_range_contacts",
+      "ranked_modes": [
+        "long_range_contacts",
+        "global_topology",
+        "per_residue_hotspots",
+        "mid_range_5_12",
+        "helix_period_3_4_7",
+        "backbone_sep1_2"
+      ],
+      "per_res_p90_A": 1.4205626444732449,
+      "contact_mae_A": 0.37226100371210785,
+      "rg_err_A": 0.04463405316495184,
+      "hotspots_top5": [
+        {
+          "i": 0,
+          "aa": "S",
+          "err_A": 12.63868040503394
+        },
+        {
+          "i": 26,
+          "aa": "K",
+          "err_A": 7.056622783214411
+        },
+        {
+          "i": 1,
+          "aa": "S",
+          "err_A": 6.345648314827318
+        },
+        {
+          "i": 24,
+          "aa": "T",
+          "err_A": 5.870601085546389
+        },
+        {
+          "i": 25,
+          "aa": "A",
+          "err_A": 4.873315375594018
+        }
+      ],
+      "distance_bins": [
+        {
+          "mode": "backbone_sep1_2",
+          "sep_lo": 1,
+          "sep_hi": 3,
+          "n_pairs": 389,
+          "mean_abs_dA": 0.15425447515366816,
+          "median_abs_dA": 0.05523824136540734,
+          "p90_abs_dA": 0.427718978008644,
+          "contribution_proxy": 0.001561979145011894
+        },
+        {
+          "mode": "helix_period_3_4_7",
+          "sep_lo": 3,
+          "sep_hi": 5,
+          "n_pairs": 574,
+          "mean_abs_dA": 0.38931779553535983,
+          "median_abs_dA": 0.16395388819570655,
+          "p90_abs_dA": 0.8670477822174341,
+          "contribution_proxy": 0.005817066186935041
+        },
+        {
+          "mode": "mid_range_5_12",
+          "sep_lo": 5,
+          "sep_hi": 13,
+          "n_pairs": 1500,
+          "mean_abs_dA": 0.4460185672527529,
+          "median_abs_dA": 0.22907186427304893,
+          "p90_abs_dA": 0.9441160260502574,
+          "contribution_proxy": 0.01741534389002315
+        },
+        {
+          "mode": "long_range_contacts",
+          "sep_lo": 13,
+          "sep_hi": 196,
+          "n_pairs": 16836,
+          "mean_abs_dA": 0.5881077848809516,
+          "median_abs_dA": 0.2895443484577367,
+          "p90_abs_dA": 1.2526350507302721,
+          "contribution_proxy": 0.2577411148025745
+        }
+      ],
+      "mode_scores": {
+        "backbone_sep1_2": 0.001561979145011894,
+        "helix_period_3_4_7": 0.005817066186935041,
+        "mid_range_5_12": 0.01741534389002315,
+        "long_range_contacts": 5.476940894024887,
+        "per_residue_hotspots": 1.5594888008951588,
+        "global_topology": 2.2512680810894823
+      },
+      "free_parameters": 0,
+      "elapsed_s": 16.170112399966456
+    },
+    {
+      "id": "kras",
+      "status": "ok",
+      "category": "cancer",
+      "name": "KRAS G-domain",
+      "wetlab": "X-ray KRAS (GDP)",
+      "note": "G12/G13/Q61 oncogenic sites",
+      "pdb": "4OBE",
+      "chain": "A",
+      "n": 169,
+      "template_pdb": "1AA9",
+      "template_mode": "multi_score",
+      "template_identity": 0.9349112426035503,
+      "template_coverage": 1.0,
+      "length_sim": null,
+      "n_candidates": 36,
+      "expanded_isoform_pool": false,
+      "fsot_product_rmsd_A": 1.6097032453127456,
+      "sub2A": true,
+      "sub3A": true,
+      "primary_error_mode": "long_range_contacts",
+      "ranked_modes": [
+        "long_range_contacts",
+        "per_residue_hotspots",
+        "global_topology",
+        "mid_range_5_12",
+        "helix_period_3_4_7",
+        "backbone_sep1_2"
+      ],
+      "per_res_p90_A": 2.5423233630038564,
+      "contact_mae_A": 0.408259723455955,
+      "rg_err_A": 0.1107247931933113,
+      "hotspots_top5": [
+        {
+          "i": 52,
+          "aa": "L",
+          "err_A": 8.106598167029956
+        },
+        {
+          "i": 53,
+          "aa": "D",
+          "err_A": 5.811794156325687
+        },
+        {
+          "i": 51,
+          "aa": "L",
+          "err_A": 5.633599773552626
+        },
+        {
+          "i": 54,
+          "aa": "I",
+          "err_A": 4.5133051818477465
+        },
+        {
+          "i": 55,
+          "aa": "L",
+          "err_A": 4.367017239342129
+        }
+      ],
+      "distance_bins": [
+        {
+          "mode": "backbone_sep1_2",
+          "sep_lo": 1,
+          "sep_hi": 3,
+          "n_pairs": 315,
+          "mean_abs_dA": 0.14394908383767274,
+          "median_abs_dA": 0.06469668787875138,
+          "p90_abs_dA": 0.35240045099900774,
+          "contribution_proxy": 0.0017935984102237614
+        },
+        {
+          "mode": "helix_period_3_4_7",
+          "sep_lo": 3,
+          "sep_hi": 5,
+          "n_pairs": 463,
+          "mean_abs_dA": 0.4554989746175867,
+          "median_abs_dA": 0.2526289179821912,
+          "p90_abs_dA": 1.1161199927982135,
+          "contribution_proxy": 0.008342076074836544
+        },
+        {
+          "mode": "mid_range_5_12",
+          "sep_lo": 5,
+          "sep_hi": 13,
+          "n_pairs": 1204,
+          "mean_abs_dA": 0.6228337136683146,
+          "median_abs_dA": 0.3722472038151379,
+          "p90_abs_dA": 1.6632816119022997,
+          "contribution_proxy": 0.029662267760636477
+        },
+        {
+          "mode": "long_range_contacts",
+          "sep_lo": 13,
+          "sep_hi": 159,
+          "n_pairs": 10731,
+          "mean_abs_dA": 0.7983760410460171,
+          "median_abs_dA": 0.47108312957096743,
+          "p90_abs_dA": 1.9616517031528637,
+          "contribution_proxy": 0.3388858548500775
+        }
+      ],
+      "mode_scores": {
+        "backbone_sep1_2": 0.0017935984102237614,
+        "helix_period_3_4_7": 0.008342076074836544,
+        "mid_range_5_12": 0.029662267760636477,
+        "long_range_contacts": 5.6213594147840205,
+        "per_residue_hotspots": 1.8822175172604334,
+        "global_topology": 1.66762647891744
+      },
+      "free_parameters": 0,
+      "elapsed_s": 17.22455240006093
+    },
+    {
+      "id": "egfr_kinase",
+      "status": "ok",
+      "category": "cancer",
+      "name": "EGFR kinase domain",
+      "wetlab": "X-ray EGFR kinase",
+      "note": "L858R / T790M drug sites in kinase",
+      "pdb": "2ITX",
+      "chain": "A",
+      "n": 307,
+      "template_pdb": "3POZ",
+      "template_mode": "multi_medoid_isoform",
+      "template_identity": 0.972027972027972,
+      "template_coverage": 0.9315960912052117,
+      "length_sim": null,
+      "n_candidates": 4,
+      "expanded_isoform_pool": true,
+      "fsot_product_rmsd_A": 4.958333850256404,
+      "sub2A": false,
+      "sub3A": false,
+      "primary_error_mode": "long_range_contacts",
+      "ranked_modes": [
+        "long_range_contacts",
+        "global_topology",
+        "per_residue_hotspots",
+        "mid_range_5_12",
+        "helix_period_3_4_7",
+        "backbone_sep1_2"
+      ],
+      "per_res_p90_A": 6.308083149385926,
+      "contact_mae_A": 0.7127089058780752,
+      "rg_err_A": 0.2067178696052423,
+      "hotspots_top5": [
+        {
+          "i": 0,
+          "aa": "E",
+          "err_A": 35.1017489971257
+        },
+        {
+          "i": 1,
+          "aa": "A",
+          "err_A": 27.990215055745796
+        },
+        {
+          "i": 2,
+          "aa": "P",
+          "err_A": 22.191722361603155
+        },
+        {
+          "i": 166,
+          "aa": "K",
+          "err_A": 18.97380499653926
+        },
+        {
+          "i": 165,
+          "aa": "E",
+          "err_A": 18.66399640357757
+        }
+      ],
+      "distance_bins": [
+        {
+          "mode": "backbone_sep1_2",
+          "sep_lo": 1,
+          "sep_hi": 3,
+          "n_pairs": 611,
+          "mean_abs_dA": 0.24954584957949477,
+          "median_abs_dA": 0.04774362580993241,
+          "p90_abs_dA": 0.535149981749341,
+          "contribution_proxy": 0.0016177626722094804
+        },
+        {
+          "mode": "helix_period_3_4_7",
+          "sep_lo": 3,
+          "sep_hi": 5,
+          "n_pairs": 907,
+          "mean_abs_dA": 0.7870817486196696,
+          "median_abs_dA": 0.18804766706953302,
+          "p90_abs_dA": 2.083389410553285,
+          "contribution_proxy": 0.007574437352099655
+        },
+        {
+          "mode": "mid_range_5_12",
+          "sep_lo": 5,
+          "sep_hi": 13,
+          "n_pairs": 2388,
+          "mean_abs_dA": 0.9582682731380042,
+          "median_abs_dA": 0.22561768729873677,
+          "p90_abs_dA": 2.863734550205334,
+          "contribution_proxy": 0.024279776297398956
+        },
+        {
+          "mode": "long_range_contacts",
+          "sep_lo": 13,
+          "sep_hi": 307,
+          "n_pairs": 43365,
+          "mean_abs_dA": 1.869282968401028,
+          "median_abs_dA": 0.7058959725544796,
+          "p90_abs_dA": 4.871413437990534,
+          "contribution_proxy": 0.8600776233669384
+        }
+      ],
+      "mode_scores": {
+        "backbone_sep1_2": 0.0016177626722094804,
+        "helix_period_3_4_7": 0.007574437352099655,
+        "mid_range_5_12": 0.024279776297398956,
+        "long_range_contacts": 6.572786529245014,
+        "per_residue_hotspots": 1.7220076762667547,
+        "global_topology": 4.705412115190567
+      },
+      "free_parameters": 0,
+      "elapsed_s": 47.57710769993719
+    },
+    {
+      "id": "braf_kinase",
+      "status": "ok",
+      "category": "cancer",
+      "name": "BRAF kinase",
+      "wetlab": "X-ray BRAF kinase",
+      "note": "V600E melanoma hotspot",
+      "pdb": "1UWH",
+      "chain": "B",
+      "n": 264,
+      "template_pdb": "1UWJ",
+      "template_mode": "multi_medoid_isoform",
+      "template_identity": 0.9885931558935361,
+      "template_coverage": 0.9962121212121212,
+      "length_sim": null,
+      "n_candidates": 9,
+      "expanded_isoform_pool": true,
+      "fsot_product_rmsd_A": 1.0881546105123467,
+      "sub2A": true,
+      "sub3A": true,
+      "primary_error_mode": "long_range_contacts",
+      "ranked_modes": [
+        "long_range_contacts",
+        "per_residue_hotspots",
+        "global_topology",
+        "mid_range_5_12",
+        "helix_period_3_4_7",
+        "backbone_sep1_2"
+      ],
+      "per_res_p90_A": 0.756178124711419,
+      "contact_mae_A": 0.21539392866527987,
+      "rg_err_A": 0.14011830426115424,
+      "hotspots_top5": [
+        {
+          "i": 153,
+          "aa": "L",
+          "err_A": 11.095131011373384
+        },
+        {
+          "i": 154,
+          "aa": "S",
+          "err_A": 9.645524061485384
+        },
+        {
+          "i": 152,
+          "aa": "V",
+          "err_A": 3.4846203018326767
+        },
+        {
+          "i": 155,
+          "aa": "G",
+          "err_A": 2.980123566516425
+        },
+        {
+          "i": 38,
+          "aa": "N",
+          "err_A": 2.866456286286548
+        }
+      ],
+      "distance_bins": [
+        {
+          "mode": "backbone_sep1_2",
+          "sep_lo": 1,
+          "sep_hi": 3,
+          "n_pairs": 525,
+          "mean_abs_dA": 0.12268677738836632,
+          "median_abs_dA": 0.0314375013946222,
+          "p90_abs_dA": 0.2211836812995028,
+          "contribution_proxy": 0.0009241643441358516
+        },
+        {
+          "mode": "helix_period_3_4_7",
+          "sep_lo": 3,
+          "sep_hi": 5,
+          "n_pairs": 778,
+          "mean_abs_dA": 0.2661393099843857,
+          "median_abs_dA": 0.13344134056465107,
+          "p90_abs_dA": 0.5253358643492537,
+          "contribution_proxy": 0.002970850309456096
+        },
+        {
+          "mode": "mid_range_5_12",
+          "sep_lo": 5,
+          "sep_hi": 13,
+          "n_pairs": 2044,
+          "mean_abs_dA": 0.297840171398936,
+          "median_abs_dA": 0.14896912638983384,
+          "p90_abs_dA": 0.5809713182669776,
+          "contribution_proxy": 0.008734867285632247
+        },
+        {
+          "mode": "long_range_contacts",
+          "sep_lo": 13,
+          "sep_hi": 264,
+          "n_pairs": 31626,
+          "mean_abs_dA": 0.40696250946097245,
+          "median_abs_dA": 0.24175959455294205,
+          "p90_abs_dA": 0.8204548020709588,
+          "contribution_proxy": 0.1846676469842274
+        }
+      ],
+      "mode_scores": {
+        "backbone_sep1_2": 0.0009241643441358516,
+        "helix_period_3_4_7": 0.002970850309456096,
+        "mid_range_5_12": 0.008734867285632247,
+        "long_range_contacts": 5.343243393831326,
+        "per_residue_hotspots": 1.2970466217125538,
+        "global_topology": 0.547431674551083
+      },
+      "free_parameters": 0,
+      "elapsed_s": 32.783239100012
+    },
+    {
+      "id": "abl1_kinase",
+      "status": "ok",
+      "category": "cancer",
+      "name": "ABL1 kinase (imatinib target)",
+      "wetlab": "X-ray ABL\u2013imatinib",
+      "note": "CML drug target",
+      "pdb": "2HYY",
+      "chain": "A",
+      "n": 263,
+      "template_pdb": "2XYN",
+      "template_mode": "multi_score",
+      "template_identity": 0.9312977099236641,
+      "template_coverage": 0.9961977186311787,
+      "length_sim": null,
+      "n_candidates": 13,
+      "expanded_isoform_pool": false,
+      "fsot_product_rmsd_A": 4.929161222476251,
+      "sub2A": false,
+      "sub3A": false,
+      "primary_error_mode": "long_range_contacts",
+      "ranked_modes": [
+        "long_range_contacts",
+        "global_topology",
+        "per_residue_hotspots",
+        "mid_range_5_12",
+        "helix_period_3_4_7",
+        "backbone_sep1_2"
+      ],
+      "per_res_p90_A": 2.9436532927855494,
+      "contact_mae_A": 0.7935290063921087,
+      "rg_err_A": 0.07155121397527964,
+      "hotspots_top5": [
+        {
+          "i": 154,
+          "aa": "G",
+          "err_A": 32.25054579104208
+        },
+        {
+          "i": 153,
+          "aa": "T",
+          "err_A": 31.31897769847946
+        },
+        {
+          "i": 155,
+          "aa": "D",
+          "err_A": 27.908136699103927
+        },
+        {
+          "i": 152,
+          "aa": "M",
+          "err_A": 24.9283425239027
+        },
+        {
+          "i": 151,
+          "aa": "L",
+          "err_A": 22.515126801511077
+        }
+      ],
+      "distance_bins": [
+        {
+          "mode": "backbone_sep1_2",
+          "sep_lo": 1,
+          "sep_hi": 3,
+          "n_pairs": 523,
+          "mean_abs_dA": 0.09748237870614399,
+          "median_abs_dA": 0.044258704517364134,
+          "p90_abs_dA": 0.23192037844489022,
+          "contribution_proxy": 0.0007370828559515579
+        },
+        {
+          "mode": "helix_period_3_4_7",
+          "sep_lo": 3,
+          "sep_hi": 5,
+          "n_pairs": 775,
+          "mean_abs_dA": 0.3890976260963561,
+          "median_abs_dA": 0.15329447664311946,
+          "p90_abs_dA": 0.6719153775708846,
+          "contribution_proxy": 0.004359621509992569
+        },
+        {
+          "mode": "mid_range_5_12",
+          "sep_lo": 5,
+          "sep_hi": 13,
+          "n_pairs": 2036,
+          "mean_abs_dA": 0.6107450369497781,
+          "median_abs_dA": 0.18616101834940046,
+          "p90_abs_dA": 1.4529396936676449,
+          "contribution_proxy": 0.01797737274255444
+        },
+        {
+          "mode": "long_range_contacts",
+          "sep_lo": 13,
+          "sep_hi": 263,
+          "n_pairs": 31375,
+          "mean_abs_dA": 0.956250552954078,
+          "median_abs_dA": 0.28819614968888274,
+          "p90_abs_dA": 1.8203541232500058,
+          "contribution_proxy": 0.43375444344914915
+        }
+      ],
+      "mode_scores": {
+        "backbone_sep1_2": 0.0007370828559515579,
+        "helix_period_3_4_7": 0.004359621509992569,
+        "mid_range_5_12": 0.01797737274255444,
+        "long_range_contacts": 6.208272042997152,
+        "per_residue_hotspots": 1.4185020689713033,
+        "global_topology": 1.520205245755814
+      },
+      "free_parameters": 0,
+      "elapsed_s": 12.87517240003217
+    },
+    {
+      "id": "bcl2",
+      "status": "ok",
+      "category": "cancer",
+      "name": "BCL-2",
+      "wetlab": "NMR BCL-2",
+      "note": "apoptosis / venetoclax target family",
+      "pdb": "1G5M",
+      "chain": "A",
+      "n": 164,
+      "template_pdb": "1YSG",
+      "template_mode": "multi_medoid_neighborhood",
+      "template_identity": 0.6441717791411042,
+      "template_coverage": 0.9939024390243902,
+      "length_sim": null,
+      "n_candidates": 56,
+      "expanded_isoform_pool": false,
+      "fsot_product_rmsd_A": 3.493815972076089,
+      "sub2A": false,
+      "sub3A": false,
+      "primary_error_mode": "global_topology",
+      "ranked_modes": [
+        "global_topology",
+        "long_range_contacts",
+        "per_residue_hotspots",
+        "mid_range_5_12",
+        "helix_period_3_4_7",
+        "backbone_sep1_2"
+      ],
+      "per_res_p90_A": 4.573043698042391,
+      "contact_mae_A": 1.4585005936475544,
+      "rg_err_A": 0.2508023389616767,
+      "hotspots_top5": [
+        {
+          "i": 158,
+          "aa": "Y",
+          "err_A": 22.72620278216364
+        },
+        {
+          "i": 157,
+          "aa": "L",
+          "err_A": 17.112741422028382
+        },
+        {
+          "i": 156,
+          "aa": "E",
+          "err_A": 8.922116424282091
+        },
+        {
+          "i": 31,
+          "aa": "D",
+          "err_A": 8.476544746473248
+        },
+        {
+          "i": 24,
+          "aa": "G",
+          "err_A": 6.775894173380726
+        }
+      ],
+      "distance_bins": [
+        {
+          "mode": "backbone_sep1_2",
+          "sep_lo": 1,
+          "sep_hi": 3,
+          "n_pairs": 315,
+          "mean_abs_dA": 0.24389156817480204,
+          "median_abs_dA": 0.08527045165395641,
+          "p90_abs_dA": 0.6008483265620747,
+          "contribution_proxy": 0.0030388767839508975
+        },
+        {
+          "mode": "helix_period_3_4_7",
+          "sep_lo": 3,
+          "sep_hi": 5,
+          "n_pairs": 463,
+          "mean_abs_dA": 0.7809032945074106,
+          "median_abs_dA": 0.45758080908324494,
+          "p90_abs_dA": 1.7499183905208626,
+          "contribution_proxy": 0.014301579263357109
+        },
+        {
+          "mode": "mid_range_5_12",
+          "sep_lo": 5,
+          "sep_hi": 13,
+          "n_pairs": 1204,
+          "mean_abs_dA": 0.9038057074425089,
+          "median_abs_dA": 0.5086721336420927,
+          "p90_abs_dA": 2.0789207638971323,
+          "contribution_proxy": 0.04304347422019622
+        },
+        {
+          "mode": "long_range_contacts",
+          "sep_lo": 13,
+          "sep_hi": 159,
+          "n_pairs": 10731,
+          "mean_abs_dA": 1.614769602847458,
+          "median_abs_dA": 1.011780890748149,
+          "p90_abs_dA": 3.559359826911452,
+          "contribution_proxy": 0.6854195881553764
+        }
+      ],
+      "mode_scores": {
+        "backbone_sep1_2": 0.0030388767839508975,
+        "helix_period_3_4_7": 0.014301579263357109,
+        "mid_range_5_12": 0.04304347422019622,
+        "long_range_contacts": 7.112473640922428,
+        "per_residue_hotspots": 1.7121426820125747,
+        "global_topology": 12.43977226373751
+      },
+      "free_parameters": 0,
+      "elapsed_s": 10.065369899966754
+    },
+    {
+      "id": "sars2_rbd",
+      "status": "ok",
+      "category": "vaccine",
+      "name": "SARS-CoV-2 spike RBD",
+      "wetlab": "X-ray RBD\u2013ACE2 (Lan et al. Nature 2020)",
+      "note": "vaccine antigen / neutralizing Ab target",
+      "pdb": "6M0J",
+      "chain": "E",
+      "n": 194,
+      "template_pdb": "3D0G",
+      "template_mode": "multi_medoid_neighborhood",
+      "template_identity": 0.7426900584795322,
+      "template_coverage": 0.8814432989690721,
+      "length_sim": null,
+      "n_candidates": 16,
+      "expanded_isoform_pool": false,
+      "fsot_product_rmsd_A": 5.756314589580856,
+      "sub2A": false,
+      "sub3A": false,
+      "primary_error_mode": "global_topology",
+      "ranked_modes": [
+        "global_topology",
+        "long_range_contacts",
+        "per_residue_hotspots",
+        "mid_range_5_12",
+        "helix_period_3_4_7",
+        "backbone_sep1_2"
+      ],
+      "per_res_p90_A": 4.403016814438029,
+      "contact_mae_A": 3.437421664581889,
+      "rg_err_A": 1.3544833029288519,
+      "hotspots_top5": [
+        {
+          "i": 193,
+          "aa": "G",
+          "err_A": 43.19287536727381
+        },
+        {
+          "i": 192,
+          "aa": "C",
+          "err_A": 35.99809963408667
+        },
+        {
+          "i": 191,
+          "aa": "V",
+          "err_A": 30.523768489275145
+        },
+        {
+          "i": 190,
+          "aa": "T",
+          "err_A": 23.41930183528042
+        },
+        {
+          "i": 189,
+          "aa": "A",
+          "err_A": 18.050978509181483
+        }
+      ],
+      "distance_bins": [
+        {
+          "mode": "backbone_sep1_2",
+          "sep_lo": 1,
+          "sep_hi": 3,
+          "n_pairs": 385,
+          "mean_abs_dA": 0.2738401103092346,
+          "median_abs_dA": 0.04683319267843533,
+          "p90_abs_dA": 0.8489780826731267,
+          "contribution_proxy": 0.0028012658749350444
+        },
+        {
+          "mode": "helix_period_3_4_7",
+          "sep_lo": 3,
+          "sep_hi": 5,
+          "n_pairs": 568,
+          "mean_abs_dA": 1.0002839997377748,
+          "median_abs_dA": 0.34311252633528255,
+          "p90_abs_dA": 2.568034621186123,
+          "contribution_proxy": 0.015096219360480818
+        },
+        {
+          "mode": "mid_range_5_12",
+          "sep_lo": 5,
+          "sep_hi": 13,
+          "n_pairs": 1484,
+          "mean_abs_dA": 1.4543730165823345,
+          "median_abs_dA": 0.4375627024600348,
+          "p90_abs_dA": 3.509251185317005,
+          "contribution_proxy": 0.05734641185588756
+        },
+        {
+          "mode": "long_range_contacts",
+          "sep_lo": 13,
+          "sep_hi": 194,
+          "n_pairs": 16471,
+          "mean_abs_dA": 2.17061458178576,
+          "median_abs_dA": 0.5395845784096487,
+          "p90_abs_dA": 3.9285617214791912,
+          "contribution_proxy": 0.9499466674618253
+        }
+      ],
+      "mode_scores": {
+        "backbone_sep1_2": 0.0028012658749350444,
+        "helix_period_3_4_7": 0.015096219360480818,
+        "mid_range_5_12": 0.05734641185588756,
+        "long_range_contacts": 9.026543589775674,
+        "per_residue_hotspots": 1.5029476460692934,
+        "global_topology": 24.70838239042313
+      },
+      "free_parameters": 0,
+      "elapsed_s": 27.687325300066732
+    },
+    {
+      "id": "ha_h3",
+      "status": "ok",
+      "category": "vaccine",
+      "name": "Influenza HA (H3)",
+      "wetlab": "X-ray hemagglutinin",
+      "note": "flu vaccine antigen",
+      "pdb": "4WE8",
+      "chain": "A",
+      "n": 491,
+      "template_pdb": "11MS",
+      "template_mode": "multi_score",
+      "template_identity": 0.946611909650924,
+      "template_coverage": 0.9918533604887984,
+      "length_sim": null,
+      "n_candidates": 126,
+      "expanded_isoform_pool": false,
+      "fsot_product_rmsd_A": 2.3285373119109734,
+      "sub2A": false,
+      "sub3A": true,
+      "primary_error_mode": "long_range_contacts",
+      "ranked_modes": [
+        "long_range_contacts",
+        "per_residue_hotspots",
+        "global_topology",
+        "mid_range_5_12",
+        "helix_period_3_4_7",
+        "backbone_sep1_2"
+      ],
+      "per_res_p90_A": 1.4026103938507652,
+      "contact_mae_A": 0.49770400387815433,
+      "rg_err_A": 0.3802418571537274,
+      "hotspots_top5": [
+        {
+          "i": 308,
+          "aa": "L",
+          "err_A": 21.14052224169925
+        },
+        {
+          "i": 307,
+          "aa": "K",
+          "err_A": 19.50013426183949
+        },
+        {
+          "i": 306,
+          "aa": "L",
+          "err_A": 18.83741595222387
+        },
+        {
+          "i": 309,
+          "aa": "A",
+          "err_A": 17.5716186266906
+        },
+        {
+          "i": 310,
+          "aa": "T",
+          "err_A": 17.241837907540308
+        }
+      ],
+      "distance_bins": [
+        {
+          "mode": "backbone_sep1_2",
+          "sep_lo": 1,
+          "sep_hi": 3,
+          "n_pairs": 955,
+          "mean_abs_dA": 0.11486466615317042,
+          "median_abs_dA": 0.019335863173251866,
+          "p90_abs_dA": 0.16549536749266222,
+          "contribution_proxy": 0.0004781000613503156
+        },
+        {
+          "mode": "helix_period_3_4_7",
+          "sep_lo": 3,
+          "sep_hi": 5,
+          "n_pairs": 1423,
+          "mean_abs_dA": 0.2622748274678181,
+          "median_abs_dA": 0.11113686595090755,
+          "p90_abs_dA": 0.36686667635490616,
+          "contribution_proxy": 0.0016266363879459433
+        },
+        {
+          "mode": "mid_range_5_12",
+          "sep_lo": 5,
+          "sep_hi": 13,
+          "n_pairs": 3764,
+          "mean_abs_dA": 0.36109168486281656,
+          "median_abs_dA": 0.14204630931973217,
+          "p90_abs_dA": 0.48365824050714185,
+          "contribution_proxy": 0.005923741187597864
+        },
+        {
+          "mode": "long_range_contacts",
+          "sep_lo": 13,
+          "sep_hi": 479,
+          "n_pairs": 108811,
+          "mean_abs_dA": 0.6359194635850618,
+          "median_abs_dA": 0.2888011194848019,
+          "p90_abs_dA": 0.9336904985634895,
+          "contribution_proxy": 0.3015809412971272
+        }
+      ],
+      "mode_scores": {
+        "backbone_sep1_2": 0.0004781000613503156,
+        "helix_period_3_4_7": 0.0016266363879459433,
+        "mid_range_5_12": 0.005923741187597864,
+        "long_range_contacts": 5.757531291730604,
+        "per_residue_hotspots": 1.1611881230905519,
+        "global_topology": 1.11872095239364
+      },
+      "free_parameters": 0,
+      "elapsed_s": 62.93496940005571
+    },
+    {
+      "id": "hiv_pr",
+      "status": "ok",
+      "category": "drug",
+      "name": "HIV-1 protease",
+      "wetlab": "X-ray HIV protease",
+      "note": "classic antiviral drug target",
+      "pdb": "1HVR",
+      "chain": "A",
+      "n": 98,
+      "template_pdb": "1WBM",
+      "template_mode": "multi_medoid_isoform",
+      "template_identity": 0.9795918367346939,
+      "template_coverage": 1.0,
+      "length_sim": null,
+      "n_candidates": 124,
+      "expanded_isoform_pool": true,
+      "fsot_product_rmsd_A": 0.3606396361821173,
+      "sub2A": true,
+      "sub3A": true,
+      "primary_error_mode": "long_range_contacts",
+      "ranked_modes": [
+        "long_range_contacts",
+        "per_residue_hotspots",
+        "global_topology",
+        "mid_range_5_12",
+        "helix_period_3_4_7",
+        "backbone_sep1_2"
+      ],
+      "per_res_p90_A": 0.5697425998019475,
+      "contact_mae_A": 0.14345669447418039,
+      "rg_err_A": 0.0550125863290436,
+      "hotspots_top5": [
+        {
+          "i": 66,
+          "aa": "G",
+          "err_A": 1.2921814987562186
+        },
+        {
+          "i": 15,
+          "aa": "G",
+          "err_A": 0.8765421670536995
+        },
+        {
+          "i": 16,
+          "aa": "G",
+          "err_A": 0.8493927986548057
+        },
+        {
+          "i": 38,
+          "aa": "P",
+          "err_A": 0.7260884654888459
+        },
+        {
+          "i": 39,
+          "aa": "G",
+          "err_A": 0.6971341895309418
+        }
+      ],
+      "distance_bins": [
+        {
+          "mode": "backbone_sep1_2",
+          "sep_lo": 1,
+          "sep_hi": 3,
+          "n_pairs": 193,
+          "mean_abs_dA": 0.08511294344425988,
+          "median_abs_dA": 0.05000307310026031,
+          "p90_abs_dA": 0.16536960776760065,
+          "contribution_proxy": 0.0017104121287736522
+        },
+        {
+          "mode": "helix_period_3_4_7",
+          "sep_lo": 3,
+          "sep_hi": 5,
+          "n_pairs": 280,
+          "mean_abs_dA": 0.14726751929788387,
+          "median_abs_dA": 0.11282546921225389,
+          "p90_abs_dA": 0.28755077602705653,
+          "contribution_proxy": 0.004293513682154048
+        },
+        {
+          "mode": "mid_range_5_12",
+          "sep_lo": 5,
+          "sep_hi": 13,
+          "n_pairs": 716,
+          "mean_abs_dA": 0.18678107196289145,
+          "median_abs_dA": 0.13522477391465504,
+          "p90_abs_dA": 0.3629305758035848,
+          "contribution_proxy": 0.013924952886862794
+        },
+        {
+          "mode": "long_range_contacts",
+          "sep_lo": 13,
+          "sep_hi": 98,
+          "n_pairs": 3655,
+          "mean_abs_dA": 0.22618403897403114,
+          "median_abs_dA": 0.16717714306806641,
+          "p90_abs_dA": 0.4815155350916463,
+          "contribution_proxy": 0.08607899442420698
+        }
+      ],
+      "mode_scores": {
+        "backbone_sep1_2": 0.0017104121287736522,
+        "helix_period_3_4_7": 0.004293513682154048,
+        "mid_range_5_12": 0.013924952886862794,
+        "long_range_contacts": 4.515249974612674,
+        "per_residue_hotspots": 1.7317811342643563,
+        "global_topology": 0.11828187112390331
+      },
+      "free_parameters": 0,
+      "elapsed_s": 26.228917800006457
+    },
+    {
+      "id": "ace2",
+      "status": "ok",
+      "category": "drug",
+      "name": "Human ACE2 (peptidase domain)",
+      "wetlab": "X-ray ACE2",
+      "note": "SARS-CoV-2 host receptor / drug target",
+      "pdb": "1R42",
+      "chain": "A",
+      "n": 597,
+      "template_pdb": "2X90",
+      "template_mode": "multi_medoid_neighborhood",
+      "template_identity": 0.48073394495412847,
+      "template_coverage": 0.9128978224455612,
+      "length_sim": null,
+      "n_candidates": 43,
+      "expanded_isoform_pool": false,
+      "fsot_product_rmsd_A": 5.1618128680402755,
+      "sub2A": false,
+      "sub3A": false,
+      "primary_error_mode": "global_topology",
+      "ranked_modes": [
+        "global_topology",
+        "long_range_contacts",
+        "per_residue_hotspots",
+        "mid_range_5_12",
+        "helix_period_3_4_7",
+        "backbone_sep1_2"
+      ],
+      "per_res_p90_A": 8.263805218978073,
+      "contact_mae_A": 1.7367684491953774,
+      "rg_err_A": 0.9919653710898686,
+      "hotspots_top5": [
+        {
+          "i": 596,
+          "aa": "D",
+          "err_A": 17.869062144415246
+        },
+        {
+          "i": 318,
+          "aa": "G",
+          "err_A": 13.687735225426595
+        },
+        {
+          "i": 514,
+          "aa": "A",
+          "err_A": 13.537862567508
+        },
+        {
+          "i": 317,
+          "aa": "P",
+          "err_A": 13.327282124242855
+        },
+        {
+          "i": 116,
+          "aa": "P",
+          "err_A": 13.294649371638528
+        }
+      ],
+      "distance_bins": [
+        {
+          "mode": "backbone_sep1_2",
+          "sep_lo": 1,
+          "sep_hi": 3,
+          "n_pairs": 1191,
+          "mean_abs_dA": 0.33343590899496023,
+          "median_abs_dA": 0.10718166475824287,
+          "p90_abs_dA": 0.8660980636979545,
+          "contribution_proxy": 0.0011142315923924413
+        },
+        {
+          "mode": "helix_period_3_4_7",
+          "sep_lo": 3,
+          "sep_hi": 5,
+          "n_pairs": 1777,
+          "mean_abs_dA": 1.0204814701244984,
+          "median_abs_dA": 0.4509662480662371,
+          "p90_abs_dA": 2.749379708110558,
+          "contribution_proxy": 0.00508796234778368
+        },
+        {
+          "mode": "mid_range_5_12",
+          "sep_lo": 5,
+          "sep_hi": 13,
+          "n_pairs": 4708,
+          "mean_abs_dA": 1.4063393231355865,
+          "median_abs_dA": 0.7252935858980392,
+          "p90_abs_dA": 3.7452920291958636,
+          "contribution_proxy": 0.0185770997178027
+        },
+        {
+          "mode": "long_range_contacts",
+          "sep_lo": 13,
+          "sep_hi": 597,
+          "n_pairs": 170820,
+          "mean_abs_dA": 2.8434183751830657,
+          "median_abs_dA": 1.7960313749014496,
+          "p90_abs_dA": 7.070498701741623,
+          "contribution_proxy": 1.3627959082087469
+        }
+      ],
+      "mode_scores": {
+        "backbone_sep1_2": 0.0011142315923924413,
+        "helix_period_3_4_7": 0.00508796234778368,
+        "mid_range_5_12": 0.0185770997178027,
+        "long_range_contacts": 8.040937891742484,
+        "per_residue_hotspots": 1.7035910626169466,
+        "global_topology": 10.998931006460781
+      },
+      "free_parameters": 0,
+      "elapsed_s": 86.63416719995439
+    },
+    {
+      "id": "dhfr",
+      "status": "ok",
+      "category": "drug",
+      "name": "Human DHFR",
+      "wetlab": "X-ray DHFR\u2013methotrexate",
+      "note": "classic antifolate drug target",
+      "pdb": "1U72",
+      "chain": "A",
+      "n": 186,
+      "template_pdb": "1DR1",
+      "template_mode": "multi_score",
+      "template_identity": 0.7663043478260869,
+      "template_coverage": 0.989247311827957,
+      "length_sim": null,
+      "n_candidates": 18,
+      "expanded_isoform_pool": false,
+      "fsot_product_rmsd_A": 1.0249810729173527,
+      "sub2A": true,
+      "sub3A": true,
+      "primary_error_mode": "long_range_contacts",
+      "ranked_modes": [
+        "long_range_contacts",
+        "global_topology",
+        "per_residue_hotspots",
+        "mid_range_5_12",
+        "helix_period_3_4_7",
+        "backbone_sep1_2"
+      ],
+      "per_res_p90_A": 1.271533351848692,
+      "contact_mae_A": 0.3920547428758487,
+      "rg_err_A": 0.044053862265096555,
+      "hotspots_top5": [
+        {
+          "i": 1,
+          "aa": "G",
+          "err_A": 5.044113572183377
+        },
+        {
+          "i": 0,
+          "aa": "V",
+          "err_A": 4.908894152026156
+        },
+        {
+          "i": 153,
+          "aa": "E",
+          "err_A": 3.810460496945175
+        },
+        {
+          "i": 129,
+          "aa": "H",
+          "err_A": 3.6323339869185474
+        },
+        {
+          "i": 2,
+          "aa": "S",
+          "err_A": 3.5855865772239803
+        }
+      ],
+      "distance_bins": [
+        {
+          "mode": "backbone_sep1_2",
+          "sep_lo": 1,
+          "sep_hi": 3,
+          "n_pairs": 369,
+          "mean_abs_dA": 0.13101240006220968,
+          "median_abs_dA": 0.05338818795934941,
+          "p90_abs_dA": 0.3162098242739305,
+          "contribution_proxy": 0.001397374714503277
+        },
+        {
+          "mode": "helix_period_3_4_7",
+          "sep_lo": 3,
+          "sep_hi": 5,
+          "n_pairs": 544,
+          "mean_abs_dA": 0.3173988050512241,
+          "median_abs_dA": 0.1930159563691407,
+          "p90_abs_dA": 0.6794415272893279,
+          "contribution_proxy": 0.004990893454383914
+        },
+        {
+          "mode": "mid_range_5_12",
+          "sep_lo": 5,
+          "sep_hi": 13,
+          "n_pairs": 1420,
+          "mean_abs_dA": 0.36571125160264534,
+          "median_abs_dA": 0.23450511735993018,
+          "p90_abs_dA": 0.7580241009113633,
+          "contribution_proxy": 0.0150106942211746
+        },
+        {
+          "mode": "long_range_contacts",
+          "sep_lo": 13,
+          "sep_hi": 186,
+          "n_pairs": 15051,
+          "mean_abs_dA": 0.5036604324548453,
+          "median_abs_dA": 0.3155153860341837,
+          "p90_abs_dA": 1.1048017195235857,
+          "contribution_proxy": 0.21911761963457846
+        }
+      ],
+      "mode_scores": {
+        "backbone_sep1_2": 0.001397374714503277,
+        "helix_period_3_4_7": 0.004990893454383914,
+        "mid_range_5_12": 0.0150106942211746,
+        "long_range_contacts": 5.476763760359889,
+        "per_residue_hotspots": 1.7474149977260445,
+        "global_topology": 3.680450095400652
+      },
+      "free_parameters": 0,
+      "elapsed_s": 16.732339499983937
+    },
+    {
+      "id": "cox2",
+      "status": "ok",
+      "category": "drug",
+      "name": "COX-2 (PTGS2)",
+      "wetlab": "X-ray COX-2",
+      "note": "NSAID / celecoxib target",
+      "pdb": "5KIR",
+      "chain": "A",
+      "n": 550,
+      "template_pdb": "3NTB",
+      "template_mode": "multi_score",
+      "template_identity": 0.8884826325411335,
+      "template_coverage": 0.9945454545454545,
+      "length_sim": null,
+      "n_candidates": 191,
+      "expanded_isoform_pool": false,
+      "fsot_product_rmsd_A": 0.4973142867234371,
+      "sub2A": true,
+      "sub3A": true,
+      "primary_error_mode": "long_range_contacts",
+      "ranked_modes": [
+        "long_range_contacts",
+        "per_residue_hotspots",
+        "global_topology",
+        "mid_range_5_12",
+        "helix_period_3_4_7",
+        "backbone_sep1_2"
+      ],
+      "per_res_p90_A": 0.6620751781290842,
+      "contact_mae_A": 0.1966639533017426,
+      "rg_err_A": 0.04341669052380226,
+      "hotspots_top5": [
+        {
+          "i": 549,
+          "aa": "P",
+          "err_A": 3.9343818584042993
+        },
+        {
+          "i": 144,
+          "aa": "V",
+          "err_A": 3.2733408171462526
+        },
+        {
+          "i": 467,
+          "aa": "V",
+          "err_A": 2.668723607998558
+        },
+        {
+          "i": 466,
+          "aa": "A",
+          "err_A": 2.194008030600204
+        },
+        {
+          "i": 143,
+          "aa": "I",
+          "err_A": 2.1924608482965326
+        }
+      ],
+      "distance_bins": [
+        {
+          "mode": "backbone_sep1_2",
+          "sep_lo": 1,
+          "sep_hi": 3,
+          "n_pairs": 1097,
+          "mean_abs_dA": 0.05927122371056697,
+          "median_abs_dA": 0.017106562378916834,
+          "p90_abs_dA": 0.14643338259753658,
+          "contribution_proxy": 0.00021494390879501477
+        },
+        {
+          "mode": "helix_period_3_4_7",
+          "sep_lo": 3,
+          "sep_hi": 5,
+          "n_pairs": 1636,
+          "mean_abs_dA": 0.16302988125737702,
+          "median_abs_dA": 0.10539573871055952,
+          "p90_abs_dA": 0.32876170902553303,
+          "contribution_proxy": 0.0008817087131803928
+        },
+        {
+          "mode": "mid_range_5_12",
+          "sep_lo": 5,
+          "sep_hi": 13,
+          "n_pairs": 4332,
+          "mean_abs_dA": 0.1933925515484332,
+          "median_abs_dA": 0.12691191323151063,
+          "p90_abs_dA": 0.40158247067428354,
+          "contribution_proxy": 0.0027695092010175627
+        },
+        {
+          "mode": "long_range_contacts",
+          "sep_lo": 13,
+          "sep_hi": 550,
+          "n_pairs": 144453,
+          "mean_abs_dA": 0.2623104092353964,
+          "median_abs_dA": 0.1839562925229572,
+          "p90_abs_dA": 0.5574883209185487,
+          "contribution_proxy": 0.12526124147200238
+        }
+      ],
+      "mode_scores": {
+        "backbone_sep1_2": 0.00021494390879501477,
+        "helix_period_3_4_7": 0.0008817087131803928,
+        "mid_range_5_12": 0.0027695092010175627,
+        "long_range_contacts": 5.258288831137381,
+        "per_residue_hotspots": 1.6622939079459504,
+        "global_topology": 0.7213316179048286
+      },
+      "free_parameters": 0,
+      "elapsed_s": 47.72414750000462
+    },
+    {
+      "id": "ubiquitin",
+      "status": "ok",
+      "category": "control",
+      "name": "Ubiquitin",
+      "wetlab": "X-ray ubiquitin (Vijay-Kumar)",
+      "note": "classic fold control",
+      "pdb": "1UBQ",
+      "chain": "A",
+      "n": 76,
+      "template_pdb": "1UD7",
+      "template_mode": "multi_score",
+      "template_identity": 0.9078947368421053,
+      "template_coverage": 1.0,
+      "length_sim": null,
+      "n_candidates": 21,
+      "expanded_isoform_pool": false,
+      "fsot_product_rmsd_A": 2.040644539074359,
+      "sub2A": false,
+      "sub3A": true,
+      "primary_error_mode": "long_range_contacts",
+      "ranked_modes": [
+        "long_range_contacts",
+        "global_topology",
+        "per_residue_hotspots",
+        "mid_range_5_12",
+        "helix_period_3_4_7",
+        "backbone_sep1_2"
+      ],
+      "per_res_p90_A": 1.7458366375767387,
+      "contact_mae_A": 0.2993080988977826,
+      "rg_err_A": 0.17430712581577446,
+      "hotspots_top5": [
+        {
+          "i": 75,
+          "aa": "G",
+          "err_A": 10.864578694988161
+        },
+        {
+          "i": 74,
+          "aa": "G",
+          "err_A": 8.533899323093168
+        },
+        {
+          "i": 73,
+          "aa": "R",
+          "err_A": 5.619738272258786
+        },
+        {
+          "i": 72,
+          "aa": "L",
+          "err_A": 3.2514295247329463
+        },
+        {
+          "i": 7,
+          "aa": "L",
+          "err_A": 2.2283052070012253
+        }
+      ],
+      "distance_bins": [
+        {
+          "mode": "backbone_sep1_2",
+          "sep_lo": 1,
+          "sep_hi": 3,
+          "n_pairs": 149,
+          "mean_abs_dA": 0.11876721025377276,
+          "median_abs_dA": 0.0442955013135542,
+          "p90_abs_dA": 0.2660161581308386,
+          "contribution_proxy": 0.003063766330992407
+        },
+        {
+          "mode": "helix_period_3_4_7",
+          "sep_lo": 3,
+          "sep_hi": 5,
+          "n_pairs": 214,
+          "mean_abs_dA": 0.36899222997538134,
+          "median_abs_dA": 0.22156241784390307,
+          "p90_abs_dA": 0.7190681957265713,
+          "contribution_proxy": 0.013671111013630817
+        },
+        {
+          "mode": "mid_range_5_12",
+          "sep_lo": 5,
+          "sep_hi": 13,
+          "n_pairs": 540,
+          "mean_abs_dA": 0.49119764463764526,
+          "median_abs_dA": 0.28406948221060446,
+          "p90_abs_dA": 0.7769424812950845,
+          "contribution_proxy": 0.04592221746958595
+        },
+        {
+          "mode": "long_range_contacts",
+          "sep_lo": 13,
+          "sep_hi": 76,
+          "n_pairs": 2016,
+          "mean_abs_dA": 0.6465500059205159,
+          "median_abs_dA": 0.2878974149056006,
+          "p90_abs_dA": 1.2629665607543945,
+          "contribution_proxy": 0.22566565303596955
+        }
+      ],
+      "mode_scores": {
+        "backbone_sep1_2": 0.003063766330992407,
+        "helix_period_3_4_7": 0.013671111013630817,
+        "mid_range_5_12": 0.04592221746958595,
+        "long_range_contacts": 4.932868488775857,
+        "per_residue_hotspots": 1.5324402579746352,
+        "global_topology": 3.8769399664633264
+      },
+      "free_parameters": 0,
+      "elapsed_s": 8.083233900018968
+    },
+    {
+      "id": "lysozyme",
+      "status": "ok",
+      "category": "control",
+      "name": "Human lysozyme",
+      "wetlab": "X-ray lysozyme",
+      "note": "classic structural biology control",
+      "pdb": "1LZ1",
+      "chain": "A",
+      "n": 130,
+      "template_pdb": "1BB6",
+      "template_mode": "multi_score",
+      "template_identity": 0.7301587301587301,
+      "template_coverage": 0.9692307692307692,
+      "length_sim": null,
+      "n_candidates": 25,
+      "expanded_isoform_pool": false,
+      "fsot_product_rmsd_A": 1.1526426105020857,
+      "sub2A": true,
+      "sub3A": true,
+      "primary_error_mode": "long_range_contacts",
+      "ranked_modes": [
+        "long_range_contacts",
+        "per_residue_hotspots",
+        "global_topology",
+        "mid_range_5_12",
+        "helix_period_3_4_7",
+        "backbone_sep1_2"
+      ],
+      "per_res_p90_A": 0.9974680383142128,
+      "contact_mae_A": 0.443148708280904,
+      "rg_err_A": 0.024936703538033456,
+      "hotspots_top5": [
+        {
+          "i": 79,
+          "aa": "S",
+          "err_A": 5.817331600593913
+        },
+        {
+          "i": 80,
+          "aa": "C",
+          "err_A": 5.7647931792463085
+        },
+        {
+          "i": 81,
+          "aa": "S",
+          "err_A": 4.916971439491241
+        },
+        {
+          "i": 82,
+          "aa": "A",
+          "err_A": 4.366340766170184
+        },
+        {
+          "i": 78,
+          "aa": "L",
+          "err_A": 4.013935376777943
+        }
+      ],
+      "distance_bins": [
+        {
+          "mode": "backbone_sep1_2",
+          "sep_lo": 1,
+          "sep_hi": 3,
+          "n_pairs": 235,
+          "mean_abs_dA": 0.11992913414038636,
+          "median_abs_dA": 0.05629436520817954,
+          "p90_abs_dA": 0.22953878311057688,
+          "contribution_proxy": 0.0019902087792522277
+        },
+        {
+          "mode": "helix_period_3_4_7",
+          "sep_lo": 3,
+          "sep_hi": 5,
+          "n_pairs": 343,
+          "mean_abs_dA": 0.4062515199390562,
+          "median_abs_dA": 0.14874481512367765,
+          "p90_abs_dA": 0.8604982067996592,
+          "contribution_proxy": 0.009840002213056726
+        },
+        {
+          "mode": "mid_range_5_12",
+          "sep_lo": 5,
+          "sep_hi": 13,
+          "n_pairs": 884,
+          "mean_abs_dA": 0.46785563063688057,
+          "median_abs_dA": 0.1808216079534528,
+          "p90_abs_dA": 1.1423317702617855,
+          "contribution_proxy": 0.029205873701221834
+        },
+        {
+          "mode": "long_range_contacts",
+          "sep_lo": 13,
+          "sep_hi": 119,
+          "n_pairs": 5671,
+          "mean_abs_dA": 0.5568726080299802,
+          "median_abs_dA": 0.2842544172265562,
+          "p90_abs_dA": 1.2272321864527633,
+          "contribution_proxy": 0.22300858414928448
+        }
+      ],
+      "mode_scores": {
+        "backbone_sep1_2": 0.0019902087792522277,
+        "helix_period_3_4_7": 0.009840002213056726,
+        "mid_range_5_12": 0.029205873701221834,
+        "long_range_contacts": 5.6241404857075,
+        "per_residue_hotspots": 1.640974868201282,
+        "global_topology": 0.3168860586068228
+      },
+      "free_parameters": 0,
+      "elapsed_s": 3.597897599916905
+    },
+    {
+      "id": "sod1",
+      "status": "ok",
+      "category": "cancer",
+      "name": "SOD1",
+      "wetlab": "X-ray SOD1",
+      "note": "ALS drivers; medical structure",
+      "pdb": "2C9V",
+      "chain": "A",
+      "n": 153,
+      "template_pdb": "1CBJ",
+      "template_mode": "multi_score",
+      "template_identity": 0.84,
+      "template_coverage": 0.9803921568627451,
+      "length_sim": null,
+      "n_candidates": 61,
+      "expanded_isoform_pool": false,
+      "fsot_product_rmsd_A": 1.1674135068802676,
+      "sub2A": true,
+      "sub3A": true,
+      "primary_error_mode": "long_range_contacts",
+      "ranked_modes": [
+        "long_range_contacts",
+        "per_residue_hotspots",
+        "global_topology",
+        "mid_range_5_12",
+        "helix_period_3_4_7",
+        "backbone_sep1_2"
+      ],
+      "per_res_p90_A": 0.6354325890157778,
+      "contact_mae_A": 0.20751559919892343,
+      "rg_err_A": 0.005891723200793564,
+      "hotspots_top5": [
+        {
+          "i": 0,
+          "aa": "A",
+          "err_A": 7.908847863583706
+        },
+        {
+          "i": 25,
+          "aa": "N",
+          "err_A": 7.713422918794193
+        },
+        {
+          "i": 23,
+          "aa": "E",
+          "err_A": 5.321410099397248
+        },
+        {
+          "i": 24,
+          "aa": "S",
+          "err_A": 5.0327039498213715
+        },
+        {
+          "i": 22,
+          "aa": "K",
+          "err_A": 2.6208768356736005
+        }
+      ],
+      "distance_bins": [
+        {
+          "mode": "backbone_sep1_2",
+          "sep_lo": 1,
+          "sep_hi": 3,
+          "n_pairs": 303,
+          "mean_abs_dA": 0.08983863249089337,
+          "median_abs_dA": 0.03213771496139817,
+          "p90_abs_dA": 0.16158710186191694,
+          "contribution_proxy": 0.0011628478638447048
+        },
+        {
+          "mode": "helix_period_3_4_7",
+          "sep_lo": 3,
+          "sep_hi": 5,
+          "n_pairs": 445,
+          "mean_abs_dA": 0.26423286584743405,
+          "median_abs_dA": 0.1024993398819003,
+          "p90_abs_dA": 0.386578692566892,
+          "contribution_proxy": 0.005023009325563166
+        },
+        {
+          "mode": "mid_range_5_12",
+          "sep_lo": 5,
+          "sep_hi": 13,
+          "n_pairs": 1156,
+          "mean_abs_dA": 0.32246300558297,
+          "median_abs_dA": 0.14434392936243157,
+          "p90_abs_dA": 0.496219974028687,
+          "contribution_proxy": 0.015924099041134322
+        },
+        {
+          "mode": "long_range_contacts",
+          "sep_lo": 13,
+          "sep_hi": 153,
+          "n_pairs": 9870,
+          "mean_abs_dA": 0.34159786142767046,
+          "median_abs_dA": 0.1627879566124708,
+          "p90_abs_dA": 0.5404253470277305,
+          "contribution_proxy": 0.1440288304622627
+        }
+      ],
+      "mode_scores": {
+        "backbone_sep1_2": 0.0011628478638447048,
+        "helix_period_3_4_7": 0.005023009325563166,
+        "mid_range_5_12": 0.015924099041134322,
+        "long_range_contacts": 4.828668612667722,
+        "per_residue_hotspots": 1.3338670087279645,
+        "global_topology": 0.20814635360046674
+      },
+      "free_parameters": 0,
+      "elapsed_s": 14.16822980006691
+    },
+    {
+      "id": "hbb",
+      "status": "ok",
+      "category": "drug",
+      "name": "Hemoglobin beta",
+      "wetlab": "X-ray deoxyHb",
+      "note": "sickle cell / medical classic",
+      "pdb": "1A3N",
+      "chain": "B",
+      "n": 145,
+      "template_pdb": "1A9W",
+      "template_mode": "multi_score",
+      "template_identity": 0.7622377622377622,
+      "template_coverage": 0.9862068965517241,
+      "length_sim": null,
+      "n_candidates": 168,
+      "expanded_isoform_pool": false,
+      "fsot_product_rmsd_A": 1.084145825664909,
+      "sub2A": true,
+      "sub3A": true,
+      "primary_error_mode": "long_range_contacts",
+      "ranked_modes": [
+        "long_range_contacts",
+        "global_topology",
+        "per_residue_hotspots",
+        "mid_range_5_12",
+        "helix_period_3_4_7",
+        "backbone_sep1_2"
+      ],
+      "per_res_p90_A": 1.3820097523084218,
+      "contact_mae_A": 0.5981938270321666,
+      "rg_err_A": 0.2104590811379392,
+      "hotspots_top5": [
+        {
+          "i": 144,
+          "aa": "H",
+          "err_A": 4.876984328249348
+        },
+        {
+          "i": 132,
+          "aa": "V",
+          "err_A": 3.3804498351812216
+        },
+        {
+          "i": 133,
+          "aa": "A",
+          "err_A": 2.724509198384055
+        },
+        {
+          "i": 19,
+          "aa": "D",
+          "err_A": 2.674836018920773
+        },
+        {
+          "i": 0,
+          "aa": "H",
+          "err_A": 2.6627847394977366
+        }
+      ],
+      "distance_bins": [
+        {
+          "mode": "backbone_sep1_2",
+          "sep_lo": 1,
+          "sep_hi": 3,
+          "n_pairs": 287,
+          "mean_abs_dA": 0.09825520834217862,
+          "median_abs_dA": 0.04122552031153415,
+          "p90_abs_dA": 0.2440441190335238,
+          "contribution_proxy": 0.0013412244848611302
+        },
+        {
+          "mode": "helix_period_3_4_7",
+          "sep_lo": 3,
+          "sep_hi": 5,
+          "n_pairs": 421,
+          "mean_abs_dA": 0.32474718862179863,
+          "median_abs_dA": 0.21006057341401174,
+          "p90_abs_dA": 0.7611609424543087,
+          "contribution_proxy": 0.006502666654448382
+        },
+        {
+          "mode": "mid_range_5_12",
+          "sep_lo": 5,
+          "sep_hi": 13,
+          "n_pairs": 1092,
+          "mean_abs_dA": 0.40574212851837316,
+          "median_abs_dA": 0.29236023146509105,
+          "p90_abs_dA": 0.8813706337278587,
+          "contribution_proxy": 0.02107350317917068
+        },
+        {
+          "mode": "long_range_contacts",
+          "sep_lo": 13,
+          "sep_hi": 145,
+          "n_pairs": 8778,
+          "mean_abs_dA": 0.6468886689732826,
+          "median_abs_dA": 0.49967525583296535,
+          "p90_abs_dA": 1.3695500071541267,
+          "contribution_proxy": 0.2700779422709857
+        }
+      ],
+      "mode_scores": {
+        "backbone_sep1_2": 0.0013412244848611302,
+        "helix_period_3_4_7": 0.006502666654448382,
+        "mid_range_5_12": 0.02107350317917068,
+        "long_range_contacts": 5.695857976199704,
+        "per_residue_hotspots": 1.6871982116159672,
+        "global_topology": 2.967507781286092
+      },
+      "free_parameters": 0,
+      "elapsed_s": 6.797267199959606
+    },
+    {
+      "id": "rnase",
+      "status": "ok",
+      "category": "control",
+      "name": "RNase A",
+      "wetlab": "X-ray RNase A",
+      "note": "high-resolution classic; precision guard",
+      "pdb": "7RSA",
+      "chain": "A",
+      "n": 124,
+      "template_pdb": "1B6V",
+      "template_mode": "multi_score",
+      "template_identity": 0.9435483870967742,
+      "template_coverage": 1.0,
+      "length_sim": null,
+      "n_candidates": 17,
+      "expanded_isoform_pool": false,
+      "fsot_product_rmsd_A": 0.774500576208004,
+      "sub2A": true,
+      "sub3A": true,
+      "primary_error_mode": "long_range_contacts",
+      "ranked_modes": [
+        "long_range_contacts",
+        "per_residue_hotspots",
+        "global_topology",
+        "mid_range_5_12",
+        "helix_period_3_4_7",
+        "backbone_sep1_2"
+      ],
+      "per_res_p90_A": 1.3466324289149845,
+      "contact_mae_A": 0.28070038734863706,
+      "rg_err_A": 0.0577559040847504,
+      "hotspots_top5": [
+        {
+          "i": 0,
+          "aa": "K",
+          "err_A": 1.9877664209146155
+        },
+        {
+          "i": 2,
+          "aa": "T",
+          "err_A": 1.7128515144978131
+        },
+        {
+          "i": 1,
+          "aa": "E",
+          "err_A": 1.620034158244859
+        },
+        {
+          "i": 13,
+          "aa": "D",
+          "err_A": 1.5468746350611615
+        },
+        {
+          "i": 6,
+          "aa": "K",
+          "err_A": 1.5148974727629962
+        }
+      ],
+      "distance_bins": [
+        {
+          "mode": "backbone_sep1_2",
+          "sep_lo": 1,
+          "sep_hi": 3,
+          "n_pairs": 235,
+          "mean_abs_dA": 0.07971304583962964,
+          "median_abs_dA": 0.03459458758002132,
+          "p90_abs_dA": 0.15648106783450336,
+          "contribution_proxy": 0.0013228278915551844
+        },
+        {
+          "mode": "helix_period_3_4_7",
+          "sep_lo": 3,
+          "sep_hi": 5,
+          "n_pairs": 343,
+          "mean_abs_dA": 0.17441154568370656,
+          "median_abs_dA": 0.10903654827173703,
+          "p90_abs_dA": 0.3516731400211833,
+          "contribution_proxy": 0.004224501106525765
+        },
+        {
+          "mode": "mid_range_5_12",
+          "sep_lo": 5,
+          "sep_hi": 13,
+          "n_pairs": 884,
+          "mean_abs_dA": 0.23607752812547994,
+          "median_abs_dA": 0.1506908062166019,
+          "p90_abs_dA": 0.4628388555045263,
+          "contribution_proxy": 0.014737132608073179
+        },
+        {
+          "mode": "long_range_contacts",
+          "sep_lo": 13,
+          "sep_hi": 119,
+          "n_pairs": 5671,
+          "mean_abs_dA": 0.38422864406554635,
+          "median_abs_dA": 0.194408513633185,
+          "p90_abs_dA": 1.1588220200464079,
+          "contribution_proxy": 0.15387053460177344
+        }
+      ],
+      "mode_scores": {
+        "backbone_sep1_2": 0.0013228278915551844,
+        "helix_period_3_4_7": 0.004224501106525765,
+        "mid_range_5_12": 0.014737132608073179,
+        "long_range_contacts": 5.392554115227721,
+        "per_residue_hotspots": 1.8906874612224926,
+        "global_topology": 0.6834577097111961
+      },
+      "free_parameters": 0,
+      "elapsed_s": 3.889766399981454
+    },
+    {
+      "id": "insulin",
+      "status": "ok",
+      "category": "drug",
+      "name": "Insulin",
+      "wetlab": "X-ray insulin",
+      "note": "peptide hormone / drug",
+      "pdb": "4INS",
+      "chain": "A",
+      "n": 21,
+      "template_pdb": "1APH",
+      "template_mode": "multi_score",
+      "template_identity": 0.9047619047619048,
+      "template_coverage": 1.0,
+      "length_sim": null,
+      "n_candidates": 13,
+      "expanded_isoform_pool": false,
+      "fsot_product_rmsd_A": 1.1390064394992834,
+      "sub2A": true,
+      "sub3A": true,
+      "primary_error_mode": "long_range_contacts",
+      "ranked_modes": [
+        "long_range_contacts",
+        "per_residue_hotspots",
+        "global_topology",
+        "mid_range_5_12",
+        "helix_period_3_4_7",
+        "backbone_sep1_2"
+      ],
+      "per_res_p90_A": 1.7978944796120309,
+      "contact_mae_A": 0.46092745536648394,
+      "rg_err_A": 0.37387611731017856,
+      "hotspots_top5": [
+        {
+          "i": 3,
+          "aa": "E",
+          "err_A": 2.3191391371015233
+        },
+        {
+          "i": 4,
+          "aa": "Q",
+          "err_A": 1.9413916865280576
+        },
+        {
+          "i": 2,
+          "aa": "V",
+          "err_A": 1.7978944796120309
+        },
+        {
+          "i": 13,
+          "aa": "Y",
+          "err_A": 1.4988410408836785
+        },
+        {
+          "i": 10,
+          "aa": "C",
+          "err_A": 1.345312810692769
+        }
+      ],
+      "distance_bins": [
+        {
+          "mode": "backbone_sep1_2",
+          "sep_lo": 1,
+          "sep_hi": 3,
+          "n_pairs": 39,
+          "mean_abs_dA": 0.1031661932564321,
+          "median_abs_dA": 0.05872660727693013,
+          "p90_abs_dA": 0.21901726166680133,
+          "contribution_proxy": 0.00912354090022869
+        },
+        {
+          "mode": "helix_period_3_4_7",
+          "sep_lo": 3,
+          "sep_hi": 5,
+          "n_pairs": 49,
+          "mean_abs_dA": 0.467738776515894,
+          "median_abs_dA": 0.36561698236527995,
+          "p90_abs_dA": 1.0326728559729605,
+          "contribution_proxy": 0.051970975168432666
+        },
+        {
+          "mode": "mid_range_5_12",
+          "sep_lo": 5,
+          "sep_hi": 13,
+          "n_pairs": 100,
+          "mean_abs_dA": 0.8297645948876295,
+          "median_abs_dA": 0.6120703667483269,
+          "p90_abs_dA": 1.6122405803341664,
+          "contribution_proxy": 0.18815523693597042
+        },
+        {
+          "mode": "long_range_contacts",
+          "sep_lo": 13,
+          "sep_hi": 21,
+          "n_pairs": 36,
+          "mean_abs_dA": 0.9609422575825732,
+          "median_abs_dA": 1.1024817191831815,
+          "p90_abs_dA": 1.6104483984014406,
+          "contribution_proxy": 0.07844426592510802
+        }
+      ],
+      "mode_scores": {
+        "backbone_sep1_2": 0.00912354090022869,
+        "helix_period_3_4_7": 0.051970975168432666,
+        "mid_range_5_12": 0.18815523693597042,
+        "long_range_contacts": 5.063181245101116,
+        "per_residue_hotspots": 1.5632184061631302,
+        "global_topology": 1.1591226665062746
+      },
+      "free_parameters": 0,
+      "elapsed_s": 3.9154914999380708
+    },
+    {
+      "id": "hiv_rt",
+      "status": "ok",
+      "category": "drug",
+      "name": "HIV-1 reverse transcriptase (p66 fragment)",
+      "wetlab": "X-ray HIV-1 RT",
+      "note": "antiviral drug target",
+      "pdb": "1RTD",
+      "chain": "A",
+      "n": 554,
+      "template_pdb": "6P1X",
+      "template_mode": "multi_medoid_isoform",
+      "template_identity": 0.9891696750902527,
+      "template_coverage": 1.0,
+      "length_sim": null,
+      "n_candidates": 85,
+      "expanded_isoform_pool": true,
+      "fsot_product_rmsd_A": 0.8336313057460096,
+      "sub2A": true,
+      "sub3A": true,
+      "primary_error_mode": "long_range_contacts",
+      "ranked_modes": [
+        "long_range_contacts",
+        "per_residue_hotspots",
+        "global_topology",
+        "mid_range_5_12",
+        "helix_period_3_4_7",
+        "backbone_sep1_2"
+      ],
+      "per_res_p90_A": 1.2922682915368395,
+      "contact_mae_A": 0.21129401537833148,
+      "rg_err_A": 0.06184930952730383,
+      "hotspots_top5": [
+        {
+          "i": 138,
+          "aa": "T",
+          "err_A": 3.869323762585802
+        },
+        {
+          "i": 136,
+          "aa": "N",
+          "err_A": 2.8325583108238446
+        },
+        {
+          "i": 285,
+          "aa": "T",
+          "err_A": 2.6658073827176367
+        },
+        {
+          "i": 137,
+          "aa": "E",
+          "err_A": 2.6524598651394307
+        },
+        {
+          "i": 469,
+          "aa": "T",
+          "err_A": 2.1332121998508686
+        }
+      ],
+      "distance_bins": [
+        {
+          "mode": "backbone_sep1_2",
+          "sep_lo": 1,
+          "sep_hi": 3,
+          "n_pairs": 1105,
+          "mean_abs_dA": 0.09710649516140306,
+          "median_abs_dA": 0.05058774133389754,
+          "p90_abs_dA": 0.23230760914865223,
+          "contribution_proxy": 0.00034961578136477204
+        },
+        {
+          "mode": "helix_period_3_4_7",
+          "sep_lo": 3,
+          "sep_hi": 5,
+          "n_pairs": 1648,
+          "mean_abs_dA": 0.24158515732590802,
+          "median_abs_dA": 0.1686475336630613,
+          "p90_abs_dA": 0.4855243948832427,
+          "contribution_proxy": 0.0012972029456694875
+        },
+        {
+          "mode": "mid_range_5_12",
+          "sep_lo": 5,
+          "sep_hi": 13,
+          "n_pairs": 4364,
+          "mean_abs_dA": 0.28544919732921537,
+          "median_abs_dA": 0.21100923967908258,
+          "p90_abs_dA": 0.5919416633700973,
+          "contribution_proxy": 0.004058766232925934
+        },
+        {
+          "mode": "long_range_contacts",
+          "sep_lo": 13,
+          "sep_hi": 554,
+          "n_pairs": 146611,
+          "mean_abs_dA": 0.4422603460129913,
+          "median_abs_dA": 0.32467094542769104,
+          "p90_abs_dA": 0.9908035027518309,
+          "contribution_proxy": 0.21126377115989609
+        }
+      ],
+      "mode_scores": {
+        "backbone_sep1_2": 0.00034961578136477204,
+        "helix_period_3_4_7": 0.0012972029456694875,
+        "mid_range_5_12": 0.004058766232925934,
+        "long_range_contacts": 5.422557786538228,
+        "per_residue_hotspots": 1.7043580477401419,
+        "global_topology": 0.27889859505571857
+      },
+      "free_parameters": 0,
+      "elapsed_s": 103.90116150001995
+    }
+  ]
+}

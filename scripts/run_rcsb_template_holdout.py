@@ -11,6 +11,7 @@ real observed data as input to a zero-parameter map; no trained weights.
 from __future__ import annotations
 
 import json
+import math
 import sys
 import urllib.request
 from datetime import datetime, timezone
@@ -40,6 +41,12 @@ _PHI = (1.0 + 5.0 ** 0.5) / 2.0
 MULTI_TOP_K = max(2, int(round(_PHI ** 3)))
 MULTI_POWER = float(_PHI ** 6)
 MAX_TEMPLATE_PDBS = 120  # scan deep pool; no early-exit on first high-id hit
+# Domain-scale agreement: exp(-|ln(L_t/L_q)|) — penalize full-chain vs domain mismatch
+# (data geometry, not a free weight). Prefer same-span measured constructs.
+def _length_sim(n_query: int, n_tmpl: int) -> float:
+    if n_query < 1 or n_tmpl < 1:
+        return 0.0
+    return float(math.exp(-abs(math.log(n_tmpl / n_query))))
 # M1: when high-id pool is empty (kinases: all hits >0.95), allow near-isoforms
 # still excluding self PDB. Seed: 1 - 1/φ³ ≈ 0.764 is min-id floor elsewhere;
 # upper soft cap for expansion = 1 - 1/φ^7 ≈ 0.966 → use 0.99 for crystal isoforms.
@@ -338,9 +345,16 @@ def collect_template_candidates(
             model = build_from_template(len(sequence), tcoords, pairs)
             if not model_is_sane(model, len(sequence)):
                 continue
+            lsim = _length_sim(len(sequence), len(tseq))
+            # Hard reject extreme length mismatch (e.g. antibody vs RBD domain)
+            if lsim < 1.0 / _PHI:  # ratio outside [1/φ, φ]
+                continue
+            score = coverage * identity * lsim
             out.append(
                 {
-                    "score": coverage * identity,
+                    "score": score,
+                    "score_seq": coverage * identity,
+                    "length_sim": lsim,
                     "pdb_id": pdb,
                     "chain": chain,
                     "model": model,
@@ -348,6 +362,7 @@ def collect_template_candidates(
                     "coverage": coverage,
                     "pairs": pairs,
                     "tcoords": tcoords,
+                    "tmpl_len": len(tseq),
                 }
             )
         if len(seen) >= max_pdbs:

@@ -124,13 +124,14 @@ Ranked by medical impact × solvability under pure FSOT.
 ## Solve queue (FSOT-only, one mechanism at a time)
 
 ```text
-[1] M1  Wrong homolog authority     → density / domain-Pfam template select
-[2] M2  Coverage holes (EGFR)       → domain-scoped RCSB + PF07714
-[3] M3+M8 Eval scope honesty        → domain-scoped AF + product metrics
-[4] M7  Variant specificity         → pop-AF data demotion + benign panel
-[5] M4  Conformation classes        → multi-template density clusters
-[6] M5  Precision polish            → ChemLink residual SS only, gated
-[7] M6  Bulk wall                   → research many-body; not product
+[1] M1  Wrong homolog authority     → SHIPPED (+ length-sim domain score)
+[2] M2  Coverage holes (EGFR)       → improved via isoform expand; still ~5 Å
+[3] Reality margins                 → long_range_contacts dominant on product path
+[4] Vaccine antigens (RBD)          → still ~5.8 Å; need sarbecovirus RBD pool
+[5] M7  Variant specificity         → pop-AF data demotion + benign panel
+[6] M4  Conformation classes        → multi-template density clusters
+[7] M5  Precision polish            → ChemLink residual SS only, gated
+[8] M6  Bulk wall                   → research many-body; not product
 ```
 
 **Hard gate for any ship:** product freeze H2H median **≤ 1.16 Å** and wet-lab ABL1 **improves** if M1 ships; no silent regressions on RNase/CaM-class winners.

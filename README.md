@@ -108,6 +108,14 @@ python scripts/run_wetlab_af_eval.py
 `docs/MECHANISM_GAP_MAP.md` — wrong-template (M1), coverage holes (M2), domain scope (M3),
 conformation (M4), precision (M5), bulk wall (M6), variant false + (M7).
 
+**Reality match** (experimental wet-lab only — not AF leaderboard):
+
+```powershell
+python scripts/run_reality_margin_eval.py
+# → data/reality_margin_eval.json  (median vs wet lab ~1.17 Å)
+# → predictions/reports/REALITY_MARGIN_EVAL.md
+```
+
 ### Research oracle (Python — metrics only)
 
 ```powershell

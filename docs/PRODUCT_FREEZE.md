@@ -10,11 +10,12 @@ Source: `data/product_vs_alphafold.json` (commit lineage through multi-template 
 | metric | value |
 |--------|------:|
 | AlphaFold median Cα RMSD | **0.47 Å** |
-| FSOT **product** median | **1.16 Å** |
-| FSOT template median | 1.18 Å |
+| FSOT **product** median | **1.15 Å** (reality-first M1 + length-sim) |
+| FSOT template median | ~1.20 Å |
 | FSOT bulk (orphan) median | 13.57 Å |
 | Product within 1.5 Å of AF | **10/10** |
 | Product sub-2 Å | **9/10** |
+| **Wet-lab reality panel median** | **1.17 Å** (`reality_margin_eval`) |
 
 Notable product Cα RMSDs:
 
