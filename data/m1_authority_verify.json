@@ -3,9 +3,9 @@
     {
       "name": "ABL1",
       "status": "ok",
-      "rmsd": 4.929161222476251,
-      "tmpl": "2XYN",
-      "mode": "multi_score",
+      "rmsd": 4.926161110354934,
+      "tmpl": "3HMI",
+      "mode": "data_authority_measured",
       "n_cand": 13,
       "expanded": false,
       "cap": 0.95
@@ -13,9 +13,9 @@
     {
       "name": "BCL2",
       "status": "ok",
-      "rmsd": 3.493815972076089,
-      "tmpl": "1YSG",
-      "mode": "multi_medoid_neighborhood",
+      "rmsd": 3.752983516620023,
+      "tmpl": "8HLN",
+      "mode": "data_authority_measured",
       "n_cand": 56,
       "expanded": false,
       "cap": 0.95
@@ -23,9 +23,9 @@
     {
       "name": "RBD",
       "status": "ok",
-      "rmsd": 5.756314589580856,
-      "tmpl": "3D0G",
-      "mode": "multi_medoid_neighborhood",
+      "rmsd": 5.6795330096739916,
+      "tmpl": "3SCI",
+      "mode": "data_authority_measured",
       "n_cand": 16,
       "expanded": false,
       "cap": 0.95
@@ -33,9 +33,9 @@
     {
       "name": "BRAF",
       "status": "ok",
-      "rmsd": 1.0881546105123467,
+      "rmsd": 1.1213830844545678,
       "tmpl": "1UWJ",
-      "mode": "multi_medoid_isoform",
+      "mode": "data_authority_measured",
       "n_cand": 9,
       "expanded": true,
       "cap": 0.99
@@ -43,9 +43,9 @@
     {
       "name": "EGFR",
       "status": "ok",
-      "rmsd": 4.958333850256404,
-      "tmpl": "3POZ",
-      "mode": "multi_medoid_isoform",
+      "rmsd": 2.512195884551846,
+      "tmpl": "9BY6",
+      "mode": "data_authority_measured",
       "n_cand": 4,
       "expanded": true,
       "cap": 0.99
@@ -57,7 +57,7 @@
       "status": "ok",
       "rmsd": 0.774500576208004,
       "tmpl": "1B6V",
-      "mode": "multi_score",
+      "mode": "data_authority_measured",
       "n_cand": 17,
       "expanded": false,
       "cap": 0.95
@@ -65,9 +65,9 @@
     {
       "name": "CaM",
       "status": "ok",
-      "rmsd": 0.9405273795002844,
+      "rmsd": 0.8922759818896333,
       "tmpl": "1CLM",
-      "mode": "multi_score",
+      "mode": "data_authority_measured",
       "n_cand": 10,
       "expanded": false,
       "cap": 0.95
@@ -75,26 +75,26 @@
     {
       "name": "Ubq",
       "status": "ok",
-      "rmsd": 2.040644539074359,
+      "rmsd": 2.025587072375234,
       "tmpl": "1UD7",
-      "mode": "multi_score",
+      "mode": "data_authority_measured",
       "n_cand": 21,
       "expanded": false,
       "cap": 0.95
     }
   ],
-  "freeze_median": 1.1487082611913826,
+  "freeze_median": 1.1487082611913828,
   "freeze_rmsds": [
     1.1447739118806795,
-    1.084145825664909,
-    1.299109259762334,
-    1.1674135068802676,
-    1.1526426105020857,
+    1.080760616751466,
+    1.3020616472741238,
+    1.1674135068802707,
+    1.152642610502086,
     0.774500576208004,
-    2.040644539074359,
+    2.025587072375234,
     1.1390064394992834,
-    1.5214178891006451,
-    0.9405273795002844
+    2.6013650533378136,
+    0.8922759818896333
   ],
   "ok": true
 }

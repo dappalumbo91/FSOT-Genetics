@@ -26,6 +26,10 @@ from fsot_structure_engine import CA_CA, predict_ca_coords, target_rg_fsot  # no
 from run_fsot_vs_alphafold_structure import kabsch_rmsd, parse_pdb_ca  # noqa: E402
 from run_rcsb_holdout import bootstrap_median, fetch_pdb, git_commit  # noqa: E402
 
+sys.path.insert(0, str(ROOT / "vendor"))
+import fsot_compute as _fc  # noqa: E402
+from full_scalar_law import residual_scale as _residual_scale  # noqa: E402
+
 MANIFEST_EVAL = ROOT / "data" / "rcsb_live_api_holdout_eval.json"
 OUTPUT = ROOT / "data" / "rcsb_template_holdout_eval.json"
 CACHE = Path.home() / ".cache" / "fsot-genetics" / "rcsb_live_api_holdout"
@@ -41,24 +45,14 @@ _PHI = (1.0 + 5.0 ** 0.5) / 2.0
 MULTI_TOP_K = max(2, int(round(_PHI ** 3)))
 MULTI_POWER = float(_PHI ** 6)
 MAX_TEMPLATE_PDBS = 120  # scan deep pool; no early-exit on first high-id hit
-# Domain-scale agreement: exp(-|ln(L_t/L_q)|) — penalize full-chain vs domain mismatch
-# (data geometry, not a free weight). Prefer same-span measured constructs.
-def _length_sim(n_query: int, n_tmpl: int) -> float:
-    if n_query < 1 or n_tmpl < 1:
-        return 0.0
-    return float(math.exp(-abs(math.log(n_tmpl / n_query))))
-# M1: when high-id pool is empty (kinases: all hits >0.95), allow near-isoforms
-# still excluding self PDB. Seed: 1 - 1/φ³ ≈ 0.764 is min-id floor elsewhere;
-# upper soft cap for expansion = 1 - 1/φ^7 ≈ 0.966 → use 0.99 for crystal isoforms.
+# Isoform expand when pool starved (still exclude self PDB) — data coverage, not residual invent
 IDENTITY_CAP_EXPAND = 0.99
-# If greedy seq-score is below this, structural medoid may override (M1).
-# Above: trust high-id multi-fill (protects RNase/CaM winners).
-# Seed: 1/φ ≈ 0.618 is too low; 1 - 1/e ≈ 0.632; use φ^-0.5? Keep 0.85 proven.
-SCORE_TRUST_GREEDY = 0.85
-# Kabsch Å: greedy vs structural medoid — only clear disagreement switches
-# (≈3 Å avoids mild Hb multi-state noise; BCL-2-class is ~7–8 Å)
-STRUCT_DISAGREE_A = float(_PHI ** 2) + 0.5 / _PHI  # ≈ 2.927
-STRUCT_NEIGH_A = STRUCT_DISAGREE_A + 0.5
+# Clash floor seed (same as residual physics / fuse)
+_CLASH = float(_fc.E) + float(_fc.PHI)
+# Residual factors: archive law 1+|S|·P_NEW on named pin domains only
+_R_BOND = _residual_scale(abs(float(_fc.domain_scalar("Physical_Chemistry"))))
+_R_CLASH = _residual_scale(abs(float(_fc.domain_scalar("Chemistry"))))
+_R_FOLD = _residual_scale(abs(float(_fc.domain_scalar("Biochemistry"))))
 
 def _post(url: str, body: dict, timeout: int = 60) -> dict:
     request = urllib.request.Request(
@@ -345,16 +339,12 @@ def collect_template_candidates(
             model = build_from_template(len(sequence), tcoords, pairs)
             if not model_is_sane(model, len(sequence)):
                 continue
-            lsim = _length_sim(len(sequence), len(tseq))
-            # Hard reject extreme length mismatch (e.g. antibody vs RBD domain)
-            if lsim < 1.0 / _PHI:  # ratio outside [1/φ, φ]
-                continue
-            score = coverage * identity * lsim
+            # Data eligibility only: id × coverage (alignment observables).
+            # Ranking is residual-at-interface energy — NOT free geometric scores.
+            score_data = coverage * identity
             out.append(
                 {
-                    "score": score,
-                    "score_seq": coverage * identity,
-                    "length_sim": lsim,
+                    "score": score_data,
                     "pdb_id": pdb,
                     "chain": chain,
                     "model": model,
@@ -370,59 +360,156 @@ def collect_template_candidates(
     return out
 
 
-def select_measured_authority(
-    cands: list[dict],
-    *,
-    force_structural: bool = False,
-) -> tuple[list[dict], str, dict]:
-    """M1: choose measured template pool for multi-fill (native-free).
+def residual_interface_energy(X: np.ndarray) -> float:
+    """FSOT residual-at-interface energy of a measured transfer (native-free).
 
-    - High seq-score winners (score ≥ SCORE_TRUST_GREEDY): score multi-fill (proven),
-      unless force_structural (expanded near-isoform kinase pools).
-    - If greedy disagrees structurally with high-coverage medoid and score is
-      moderate: multi-fill the medoid structural neighborhood (BCL-2-class).
-    - Always returns ordered list (ref first) for multi_template_build.
+    Archive law: each force residual_r = 1 + |S_domain| · P_NEW
+      bond  ← Physical_Chemistry · Σ (L − CA_CA)²
+      clash ← Chemistry · Σ soft clash
+      fold  ← Biochemistry · (Rg − target_rg_fsot)²
+
+    Lower energy ⇒ measured map sits better under the full scalar residual law.
+    Wrong conformation / wrong domain ⇒ higher residual energy (wrong interface).
     """
-    greedy = max(cands, key=lambda c: c["score"])
-    if len(cands) < 3:
-        return [greedy], "single_or_tiny_pool", greedy
+    n = len(X)
+    if n < 3:
+        return 1e30
+    # bonds
+    d = X[1:] - X[:-1]
+    L = np.linalg.norm(d, axis=1)
+    e_bond = float(_R_BOND * np.sum((L - CA_CA) ** 2))
+    # clashes (non-bonded)
+    e_clash = 0.0
+    # subsample for speed on long chains
+    step = max(1, n // 80)
+    for i in range(0, n, step):
+        for j in range(i + 2, n, step):
+            dist = float(np.linalg.norm(X[i] - X[j]))
+            if dist < _CLASH:
+                e_clash += (_CLASH - dist) ** 2
+    e_clash *= _R_CLASH
+    # fold observation: Rg vs FSOT seed target
+    rg = float(np.sqrt(((X - X.mean(0)) ** 2).sum(axis=1).mean()))
+    trg = float(target_rg_fsot(n))
+    e_fold = float(_R_FOLD * (rg - trg) ** 2)
+    return e_bond + e_clash + e_fold
 
-    hc = [c for c in cands if c["coverage"] >= 0.90] or cands
-    mi = structural_medoid_index([c["model"] for c in hc])
-    med = hc[mi]
-    d_gm = float(kabsch_rmsd(greedy["model"], med["model"]))
 
-    use_medoid = force_structural or (
-        greedy["score"] < SCORE_TRUST_GREEDY and d_gm > STRUCT_DISAGREE_A
+def select_measured_authority(cands: list[dict]) -> tuple[list[dict], str, dict, str]:
+    """FSOT residual law at the correct interface; returns (ordered, mode, primary, fill).
+
+    fill ∈ {"score_power", "residual_weight"}:
+      score_power — strong data: measured id×cov order; multi_template_build(score^φ⁶)
+      residual_weight — remote data: residual energy ranks; multi_fill w∝1/E
+
+    Residual energy NEVER overrides a clear sequence-homolog primary. That was
+    residual applied at the wrong interface (geometry invent over measured).
+    """
+    for c in cands:
+        c["residual_energy"] = residual_interface_energy(c["model"])
+    best_data = max(float(c["score"]) for c in cands)
+
+    # Strong homolog data: measured alignment is authority
+    if best_data >= 1.0 / _PHI:
+        by_data = sorted(cands, key=lambda c: -float(c["score"]))
+        return by_data, "data_authority_measured", by_data[0], "score_power"
+
+    # Remote / moderate: residual-at-interface ranks inside data band
+    thr = best_data / _PHI
+    data_pool = [c for c in cands if float(c["score"]) >= thr]
+    if len(data_pool) < 2:
+        data_pool = sorted(cands, key=lambda c: -float(c["score"]))[
+            : max(MULTI_TOP_K, 4)
+        ]
+    ordered = sorted(
+        data_pool, key=lambda c: (float(c["residual_energy"]), -float(c["score"]))
     )
-    if not use_medoid:
-        ordered = sorted(cands, key=lambda c: c["score"], reverse=True)
-        return ordered, "multi_score", greedy
+    return ordered, "residual_at_remote_interface", ordered[0], "residual_weight"
 
-    neigh = [
-        c
-        for c in cands
-        if float(kabsch_rmsd(c["model"], med["model"])) <= STRUCT_NEIGH_A
-    ]
-    if len(neigh) < 2:
-        ordered = sorted(cands, key=lambda c: c["score"], reverse=True)
-        return ordered, "multi_score_fallback", greedy
-    ordered = [med] + [
-        c
-        for c in sorted(neigh, key=lambda x: x["score"], reverse=True)
-        if c is not med
-    ]
-    tag = "multi_medoid_isoform" if force_structural else "multi_medoid_neighborhood"
-    return ordered, tag, med
+
+def multi_template_build_residual(
+    n: int,
+    ordered: list[dict],
+    *,
+    top_k: int = MULTI_TOP_K,
+) -> np.ndarray:
+    """Multi-fill measured Cα weighted by residual law: w ∝ 1 / residual_energy.
+
+    Reference frame = residual-best template. Still only experimental coords.
+    """
+    top = ordered[:top_k]
+    if not top:
+        raise ValueError("empty template list")
+    # invert residual energy for weights (pin-stable, no free temp)
+    energies = np.array([max(float(c["residual_energy"]), 1e-12) for c in top])
+    # residual-weighted: lower E → higher weight; scale by domain fold residual
+    wts = _R_FOLD / energies
+    wts = wts / wts.sum()
+
+    ref = top[0]
+    ref_coord = np.full((n, 3), np.nan)
+    for qi, ti in ref["pairs"]:
+        ref_coord[qi] = ref["tcoords"][ti]
+    ref_idx = np.where(~np.isnan(ref_coord[:, 0]))[0]
+    acc = np.zeros((n, 3))
+    wsum = np.zeros(n)
+    for c, w in zip(top, wts):
+        raw = np.full((n, 3), np.nan)
+        for qi, ti in c["pairs"]:
+            raw[qi] = c["tcoords"][ti]
+        common = np.array(
+            [i for i in ref_idx if not np.isnan(raw[i, 0])], dtype=int
+        )
+        if len(common) < 8:
+            continue
+        P = raw[common] - raw[common].mean(0)
+        Q = ref_coord[common] - ref_coord[common].mean(0)
+        R = _kabsch_R(P, Q)
+        t = ref_coord[common].mean(0) - (raw[common].mean(0) @ R.T)
+        for qi, ti in c["pairs"]:
+            xyz = c["tcoords"][ti] @ R.T + t
+            acc[qi] += float(w) * xyz
+            wsum[qi] += float(w)
+    coord = np.full((n, 3), np.nan)
+    covered = wsum > 0
+    if not np.any(covered):
+        return ref["model"]
+    coord[covered] = acc[covered] / wsum[covered, None]
+    aligned = list(np.where(covered)[0])
+    for a, b in zip(aligned, aligned[1:]):
+        if b > a + 1:
+            pa, pb = coord[a], coord[b]
+            for k, qi in enumerate(range(a + 1, b), 1):
+                coord[qi] = pa + (pb - pa) * (k / (b - a))
+    first, last = aligned[0], aligned[-1]
+    if first > 0:
+        step = (
+            (coord[aligned[1]] - coord[first])
+            if len(aligned) > 1
+            else np.array([CA_CA, 0.0, 0.0])
+        )
+        step = step / (np.linalg.norm(step) + 1e-9)
+        for qi in range(first - 1, -1, -1):
+            coord[qi] = coord[qi + 1] - CA_CA * step
+    if last < n - 1:
+        step = (
+            (coord[last] - coord[aligned[-2]])
+            if len(aligned) > 1
+            else np.array([CA_CA, 0.0, 0.0])
+        )
+        step = step / (np.linalg.norm(step) + 1e-9)
+        for qi in range(last + 1, n):
+            coord[qi] = coord[qi - 1] + CA_CA * step
+    return coord - coord.mean(axis=0)
 
 
 def best_template(sequence: str, exclude_pdb: str, identity_cap: float = IDENTITY_CAP) -> dict | None:
-    """Measured coverage path: multi-homolog Cα ensemble + M1 authority select.
+    """Measured homologs ranked by residual-at-interface (correct FSOT).
 
-    Collects the full fair homolog pool (no early-exit on first high-id hit).
-    If the pool is starved (kinase near-isoforms all > identity_cap), expands
-    to IDENTITY_CAP_EXPAND while still excluding self PDB, then forces structural
-    medoid multi-fill so one bad high-id crystal cannot dominate.
+    1. Fair pool: alignment data (id, coverage), exclude self, optional isoform expand.
+    2. Residual energy E = r_bond·bonds + r_clash·clash + r_fold·Rg  (named domains).
+    3. Authority = lowest E measured map; multi-fill residual-weighted measured Cα.
+    4. Product physics (fuse) still residual-weights bond/clash/anchor on that map.
     """
     cands = collect_template_candidates(sequence, exclude_pdb, identity_cap)
     expanded = False
@@ -434,15 +521,15 @@ def best_template(sequence: str, exclude_pdb: str, identity_cap: float = IDENTIT
     if not cands:
         return None
 
-    ordered, mode_auth, primary = select_measured_authority(
-        cands, force_structural=expanded and len(cands) >= 3
-    )
+    ordered, mode_auth, primary, fill = select_measured_authority(cands)
     n = len(sequence)
     if len(ordered) >= 2:
-        # Score path: keep seed top_k=φ³. Medoid path: allow up to 8 neighbors.
-        tk = 8 if "medoid" in mode_auth else MULTI_TOP_K
-        tk = min(tk, len(ordered))
-        model = multi_template_build(n, ordered, top_k=tk)
+        tk = min(MULTI_TOP_K, len(ordered))
+        if fill == "residual_weight":
+            model = multi_template_build_residual(n, ordered, top_k=tk)
+        else:
+            # Strong data: score-powered multi-fill (measured authority, no residual re-rank)
+            model = multi_template_build(n, ordered, top_k=tk)
         mode = mode_auth
         n_used = tk
     else:
@@ -460,6 +547,7 @@ def best_template(sequence: str, exclude_pdb: str, identity_cap: float = IDENTIT
         "model": model,
         "identity": primary["identity"],
         "coverage": primary["coverage"],
+        "residual_energy": primary.get("residual_energy"),
         "template_mode": mode,
         "n_templates_used": n_used,
         "n_candidates": len(cands),
@@ -467,6 +555,11 @@ def best_template(sequence: str, exclude_pdb: str, identity_cap: float = IDENTIT
         "expanded_isoform_pool": expanded,
         "multi_top_k": MULTI_TOP_K,
         "multi_power": MULTI_POWER,
+        "residual": {
+            "Physical_Chemistry": _R_BOND,
+            "Chemistry": _R_CLASH,
+            "Biochemistry": _R_FOLD,
+        },
     }
 
 
