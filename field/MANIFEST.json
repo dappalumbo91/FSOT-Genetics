@@ -1,9 +1,9 @@
 {
-  "pack_name": "FSOT-Genetics-field-ac02f8b-dirty",
-  "generated_at": "2026-08-11T13:35:24.470482+00:00",
+  "pack_name": "FSOT-Genetics-field-4a04db0-dirty",
+  "generated_at": "2026-08-11T13:35:58.528071+00:00",
   "git": {
-    "sha": "ac02f8b",
-    "sha_full": "ac02f8bdd3d4b057d94cb98def12bf7c53d227b9",
+    "sha": "4a04db0",
+    "sha_full": "4a04db02781f7050d3108701604f4be38c53e819",
     "branch": "main",
     "dirty": true
   },
@@ -25,12 +25,12 @@
   "files": [
     {
       "path": "console.html",
-      "sha256": "38036e9fe9c512a24f67cef672c10951fffb0040b7450672d78549a12e018822",
+      "sha256": "d0bd37361e28d00c99a45cfc5325c635e1aaa6965740448747a0d800783ab3c2",
       "bytes": 31552
     },
     {
       "path": "console_data.json",
-      "sha256": "f808cde4b95cc507ed16f3a34629f5b1075b39979ce6d1884e5e4e76cb7fc1ac",
+      "sha256": "a8f8f6ce6a30081ed9128014d6f8f3c684f781f398c4531753a638cad7e0febf",
       "bytes": 13937
     },
     {
@@ -40,8 +40,8 @@
     },
     {
       "path": "docs/FIELD_READY.md",
-      "sha256": "4c4e6b10f51837056ea87036f62176b7357bf2f1b028ef9a6bdc4f66782ac134",
-      "bytes": 3283
+      "sha256": "cc4d94e3294f6265e0707234e7ad2529d6d97d175ce4b4a081aa03eeac4c855f",
+      "bytes": 3221
     },
     {
       "path": "docs/PARITY_ZIG_PYTHON.md",
@@ -95,7 +95,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "ac383c2708935bb325b3bea1248ea5c99874bb29071b3b19ebbfedbdc9923a9f",
+      "sha256": "e4cb051e7fb99f7e3e44027fa394d48b8e31162c115f6ef52bc13766313b64ac",
       "bytes": 1466
     }
   ],
