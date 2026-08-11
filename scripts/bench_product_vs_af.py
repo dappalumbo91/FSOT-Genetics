@@ -20,6 +20,7 @@ from run_fsot_vs_alphafold_structure import (  # noqa: E402
     kabsch_rmsd,
 )
 from run_rcsb_template_holdout import best_template, nw_align  # noqa: E402
+from template_select_ss import best_template_ss  # noqa: E402
 from fsot_structure_engine import predict_ca_coords  # noqa: E402
 from msa_template_fuse import fuse_predict  # noqa: E402
 from msa_uniref import build_uniref_msa_features  # noqa: E402
@@ -57,8 +58,6 @@ def main() -> int:
             continue
         seq, nat = hit
         af = af_rmsd(acc, seq, nat)
-        # Fair AF H2H: identity_cap 0.95 excludes near-identical redeposits
-        # (Opus protocol that scored 1.2A median / 9-of-10 within 1.5A of AF)
         t = best_template(seq, pdb, identity_cap=0.95)
         bulk = predict_ca_coords(
             seq, rounds=24, canonicalize_chirality=True, observer_bulk_dim=25
