@@ -1,0 +1,1750 @@
+{
+  "threshold_A": 1.2,
+  "n_high": 10,
+  "hypothesis_counts": {
+    "termini_disorder": 5,
+    "data_best_vs_residual_best_disagree": 9,
+    "dominant_channel_bond": 6,
+    "dominant_channel_fold_Rg": 4,
+    "tertiary_contact_map_weak": 1,
+    "remote_homolog_map": 1
+  },
+  "systems": [
+    {
+      "id": "p53_dbd",
+      "name": "p53 DNA-binding domain",
+      "category": "cancer",
+      "wetlab": "X-ray p53\u2013DNA complex (Cho et al.)",
+      "n": 196,
+      "rmsd_A": 2.6013650533378136,
+      "template_pdb": "3Q01",
+      "template_mode": "data_authority_measured",
+      "template_identity": 0.9435897435897436,
+      "template_coverage": 0.9948979591836735,
+      "template_residual_energy": 600.9044442288033,
+      "n_candidates": 70,
+      "primary_error_mode": "long_range_contacts",
+      "ranked_modes": [
+        "long_range_contacts",
+        "global_topology",
+        "per_residue_hotspots",
+        "mid_range_5_12",
+        "helix_period_3_4_7",
+        "backbone_sep1_2"
+      ],
+      "mode_scores": {
+        "backbone_sep1_2": 0.0021455538582362908,
+        "helix_period_3_4_7": 0.008872607832666253,
+        "mid_range_5_12": 0.027987631185219904,
+        "long_range_contacts": 5.717609433414881,
+        "per_residue_hotspots": 1.5410244483892586,
+        "global_topology": 1.8860830552272796
+      },
+      "per_res_p90_A": 2.0162651671269884,
+      "contact_mae_A": 0.44097307286456866,
+      "rg_err_A": 0.5144690477168012,
+      "channel_breakdown_product": {
+        "e_bond_Physical_Chemistry": 32.67235982288187,
+        "e_clash_Chemistry": 0.7910864189134353,
+        "e_fold_Biochemistry": 0.06516985535083185,
+        "rg_A": 16.6133754675571,
+        "target_rg_A": 16.857673644396087,
+        "total": 33.52861609714614
+      },
+      "channel_breakdown_template": {
+        "e_bond_Physical_Chemistry": 202.75847645376018,
+        "e_clash_Chemistry": 2.0276245317217225,
+        "e_fold_Biochemistry": 0.04911532519835614,
+        "rg_A": 16.645590887930922,
+        "target_rg_A": 16.857673644396087,
+        "total": 204.83521631068027
+      },
+      "termini_hotspots": {
+        "n_term": 2,
+        "c_term": 8,
+        "core": 5,
+        "frac_termini": 0.6666666666666666
+      },
+      "top5_data_templates": [
+        {
+          "pdb": "3Q01",
+          "score": 0.9387755102040817,
+          "E_res": 600.9044442288033,
+          "id": 0.9435897435897436,
+          "cov": 0.9948979591836735
+        },
+        {
+          "pdb": "3Q01",
+          "score": 0.9387755102040817,
+          "E_res": 423.33486952817987,
+          "id": 0.9435897435897436,
+          "cov": 0.9948979591836735
+        },
+        {
+          "pdb": "3Q05",
+          "score": 0.9387755102040817,
+          "E_res": 728.9264964208527,
+          "id": 0.9435897435897436,
+          "cov": 0.9948979591836735
+        },
+        {
+          "pdb": "3Q05",
+          "score": 0.9387755102040817,
+          "E_res": 486.0733087953807,
+          "id": 0.9435897435897436,
+          "cov": 0.9948979591836735
+        },
+        {
+          "pdb": "3Q05",
+          "score": 0.9387755102040817,
+          "E_res": 700.2172132780693,
+          "id": 0.9435897435897436,
+          "cov": 0.9948979591836735
+        }
+      ],
+      "top5_residual_templates": [
+        {
+          "pdb": "1HU8",
+          "score": 0.8469387755102041,
+          "E_res": 19.382091195630966,
+          "id": 0.8972972972972973,
+          "cov": 0.9438775510204082
+        },
+        {
+          "pdb": "1HU8",
+          "score": 0.8469387755102041,
+          "E_res": 19.670503221667996,
+          "id": 0.8972972972972973,
+          "cov": 0.9438775510204082
+        },
+        {
+          "pdb": "1HU8",
+          "score": 0.8469387755102041,
+          "E_res": 20.355276227892052,
+          "id": 0.8972972972972973,
+          "cov": 0.9438775510204082
+        },
+        {
+          "pdb": "2P52",
+          "score": 0.8826530612244898,
+          "E_res": 21.997336618928102,
+          "id": 0.8917525773195877,
+          "cov": 0.9897959183673469
+        },
+        {
+          "pdb": "2IOI",
+          "score": 0.8520408163265306,
+          "E_res": 32.48055096880432,
+          "id": 0.8978494623655914,
+          "cov": 0.9489795918367347
+        }
+      ],
+      "multi_system_domains": {
+        "Physical_Chemistry": {
+          "D_eff": 8,
+          "S": 0.33401327040170914,
+          "abs_S": 0.33401327040170914
+        },
+        "Chemistry": {
+          "D_eff": 8,
+          "S": 0.4078840642307454,
+          "abs_S": 0.4078840642307454
+        },
+        "Molecular_Chemistry": {
+          "D_eff": 9,
+          "S": 0.3345733830778106,
+          "abs_S": 0.3345733830778106
+        },
+        "Biochemistry": {
+          "D_eff": 13,
+          "S": 0.3062212293865662,
+          "abs_S": 0.3062212293865662
+        },
+        "Condensed_Matter": {
+          "D_eff": 14,
+          "S": 0.3384059955797751,
+          "abs_S": 0.3384059955797751
+        },
+        "Atomic_Physics": {
+          "D_eff": 7,
+          "S": 0.7358238658627416,
+          "abs_S": 0.7358238658627416
+        }
+      },
+      "routing": {
+        "chem_D": 9,
+        "ss_D": 9,
+        "region_D": 13,
+        "pack_D": 13
+      },
+      "hypothesis": [
+        "termini_disorder",
+        "data_best_vs_residual_best_disagree",
+        "dominant_channel_bond"
+      ]
+    },
+    {
+      "id": "kras",
+      "name": "KRAS G-domain",
+      "category": "cancer",
+      "wetlab": "X-ray KRAS (GDP)",
+      "n": 169,
+      "rmsd_A": 1.5943404330807454,
+      "template_pdb": "1AA9",
+      "template_mode": "data_authority_measured",
+      "template_identity": 0.9349112426035503,
+      "template_coverage": 1.0,
+      "template_residual_energy": 10.706879584531777,
+      "n_candidates": 36,
+      "primary_error_mode": "long_range_contacts",
+      "ranked_modes": [
+        "long_range_contacts",
+        "per_residue_hotspots",
+        "global_topology",
+        "mid_range_5_12",
+        "helix_period_3_4_7",
+        "backbone_sep1_2"
+      ],
+      "mode_scores": {
+        "backbone_sep1_2": 0.0017955938422018868,
+        "helix_period_3_4_7": 0.008279792461363037,
+        "mid_range_5_12": 0.02943491685241603,
+        "long_range_contacts": 5.617838919208522,
+        "per_residue_hotspots": 1.8896237968703147,
+        "global_topology": 1.6517020916064218
+      },
+      "per_res_p90_A": 2.5594642386406474,
+      "contact_mae_A": 0.4092763363474939,
+      "rg_err_A": 0.09118660907131115,
+      "channel_breakdown_product": {
+        "e_bond_Physical_Chemistry": 2.1402775811703636,
+        "e_clash_Chemistry": 0.007351707949757649,
+        "e_fold_Biochemistry": 2.1740783490409585,
+        "rg_A": 14.669797542569867,
+        "target_rg_A": 16.08082167972928,
+        "total": 4.3217076381610795
+      },
+      "channel_breakdown_template": {
+        "e_bond_Physical_Chemistry": 29.59074423780826,
+        "e_clash_Chemistry": 0.38441420995602965,
+        "e_fold_Biochemistry": 2.2203152251843563,
+        "rg_A": 14.654872111987578,
+        "target_rg_A": 16.08082167972928,
+        "total": 32.195473672948644
+      },
+      "termini_hotspots": {
+        "n_term": 0,
+        "c_term": 3,
+        "core": 12,
+        "frac_termini": 0.2
+      },
+      "top5_data_templates": [
+        {
+          "pdb": "1AA9",
+          "score": 0.9349112426035503,
+          "E_res": 10.706879584531777,
+          "id": 0.9349112426035503,
+          "cov": 1.0
+        },
+        {
+          "pdb": "121P",
+          "score": 0.9230769230769231,
+          "E_res": 2.270678626726947,
+          "id": 0.9397590361445783,
+          "cov": 0.9822485207100592
+        },
+        {
+          "pdb": "1BKD",
+          "score": 0.9230769230769231,
+          "E_res": 1.2342643706032086,
+          "id": 0.9397590361445783,
+          "cov": 0.9822485207100592
+        },
+        {
+          "pdb": "1CRP",
+          "score": 0.9230769230769231,
+          "E_res": 1.907638938248226,
+          "id": 0.9397590361445783,
+          "cov": 0.9822485207100592
+        },
+        {
+          "pdb": "1CRQ",
+          "score": 0.9230769230769231,
+          "E_res": 1.7021094216535557,
+          "id": 0.9397590361445783,
+          "cov": 0.9822485207100592
+        }
+      ],
+      "top5_residual_templates": [
+        {
+          "pdb": "1BKD",
+          "score": 0.9230769230769231,
+          "E_res": 1.2342643706032086,
+          "id": 0.9397590361445783,
+          "cov": 0.9822485207100592
+        },
+        {
+          "pdb": "1CRQ",
+          "score": 0.9230769230769231,
+          "E_res": 1.7021094216535557,
+          "id": 0.9397590361445783,
+          "cov": 0.9822485207100592
+        },
+        {
+          "pdb": "1CRR",
+          "score": 0.9230769230769231,
+          "E_res": 1.7290926348770896,
+          "id": 0.9397590361445783,
+          "cov": 0.9822485207100592
+        },
+        {
+          "pdb": "1CRP",
+          "score": 0.9230769230769231,
+          "E_res": 1.907638938248226,
+          "id": 0.9397590361445783,
+          "cov": 0.9822485207100592
+        },
+        {
+          "pdb": "1GNQ",
+          "score": 0.9230769230769231,
+          "E_res": 2.030251169962771,
+          "id": 0.9397590361445783,
+          "cov": 0.9822485207100592
+        }
+      ],
+      "multi_system_domains": {
+        "Physical_Chemistry": {
+          "D_eff": 8,
+          "S": 0.33401327040170914,
+          "abs_S": 0.33401327040170914
+        },
+        "Chemistry": {
+          "D_eff": 8,
+          "S": 0.4078840642307454,
+          "abs_S": 0.4078840642307454
+        },
+        "Molecular_Chemistry": {
+          "D_eff": 9,
+          "S": 0.3345733830778106,
+          "abs_S": 0.3345733830778106
+        },
+        "Biochemistry": {
+          "D_eff": 13,
+          "S": 0.3062212293865662,
+          "abs_S": 0.3062212293865662
+        },
+        "Condensed_Matter": {
+          "D_eff": 14,
+          "S": 0.3384059955797751,
+          "abs_S": 0.3384059955797751
+        },
+        "Atomic_Physics": {
+          "D_eff": 7,
+          "S": 0.7358238658627416,
+          "abs_S": 0.7358238658627416
+        }
+      },
+      "routing": {
+        "chem_D": 9,
+        "ss_D": 9,
+        "region_D": 13,
+        "pack_D": 13
+      },
+      "hypothesis": [
+        "data_best_vs_residual_best_disagree",
+        "dominant_channel_fold_Rg"
+      ]
+    },
+    {
+      "id": "egfr_kinase",
+      "name": "EGFR kinase domain",
+      "category": "cancer",
+      "wetlab": "X-ray EGFR kinase",
+      "n": 307,
+      "rmsd_A": 2.512195884551846,
+      "template_pdb": "9BY6",
+      "template_mode": "data_authority_measured",
+      "template_identity": 0.9572368421052632,
+      "template_coverage": 0.990228013029316,
+      "template_residual_energy": 43.21567476491164,
+      "n_candidates": 4,
+      "primary_error_mode": "long_range_contacts",
+      "ranked_modes": [
+        "long_range_contacts",
+        "global_topology",
+        "per_residue_hotspots",
+        "mid_range_5_12",
+        "helix_period_3_4_7",
+        "backbone_sep1_2"
+      ],
+      "mode_scores": {
+        "backbone_sep1_2": 0.0016289489328621856,
+        "helix_period_3_4_7": 0.006078009460283258,
+        "mid_range_5_12": 0.017794749954045,
+        "long_range_contacts": 5.977182081922734,
+        "per_residue_hotspots": 1.7778942425777937,
+        "global_topology": 1.8381885408876355
+      },
+      "per_res_p90_A": 3.2945415516854344,
+      "contact_mae_A": 0.4788784247287442,
+      "rg_err_A": 0.23989779528836763,
+      "channel_breakdown_product": {
+        "e_bond_Physical_Chemistry": 19.953881493754775,
+        "e_clash_Chemistry": 0.1641199773128299,
+        "e_fold_Biochemistry": 0.026734130941390943,
+        "rg_A": 19.60248409757763,
+        "target_rg_A": 19.446014529829373,
+        "total": 20.144735602008996
+      },
+      "channel_breakdown_template": {
+        "e_bond_Physical_Chemistry": 295.2486128180143,
+        "e_clash_Chemistry": 1.7692162998769727,
+        "e_fold_Biochemistry": 0.030675334104111683,
+        "rg_A": 19.61362127722999,
+        "target_rg_A": 19.446014529829373,
+        "total": 297.04850445199537
+      },
+      "termini_hotspots": {
+        "n_term": 0,
+        "c_term": 13,
+        "core": 2,
+        "frac_termini": 0.8666666666666667
+      },
+      "top5_data_templates": [
+        {
+          "pdb": "9BY6",
+          "score": 0.9478827361563518,
+          "E_res": 43.21567476491164,
+          "id": 0.9572368421052632,
+          "cov": 0.990228013029316
+        },
+        {
+          "pdb": "3W33",
+          "score": 0.9250814332247557,
+          "E_res": 360.50030040257684,
+          "id": 0.9826989619377162,
+          "cov": 0.9413680781758957
+        },
+        {
+          "pdb": "1XKK",
+          "score": 0.9055374592833876,
+          "E_res": 389.32118888266785,
+          "id": 0.9619377162629758,
+          "cov": 0.9413680781758957
+        },
+        {
+          "pdb": "3POZ",
+          "score": 0.9055374592833876,
+          "E_res": 343.41359356845027,
+          "id": 0.972027972027972,
+          "cov": 0.9315960912052117
+        }
+      ],
+      "top5_residual_templates": [
+        {
+          "pdb": "9BY6",
+          "score": 0.9478827361563518,
+          "E_res": 43.21567476491164,
+          "id": 0.9572368421052632,
+          "cov": 0.990228013029316
+        },
+        {
+          "pdb": "3POZ",
+          "score": 0.9055374592833876,
+          "E_res": 343.41359356845027,
+          "id": 0.972027972027972,
+          "cov": 0.9315960912052117
+        },
+        {
+          "pdb": "3W33",
+          "score": 0.9250814332247557,
+          "E_res": 360.50030040257684,
+          "id": 0.9826989619377162,
+          "cov": 0.9413680781758957
+        },
+        {
+          "pdb": "1XKK",
+          "score": 0.9055374592833876,
+          "E_res": 389.32118888266785,
+          "id": 0.9619377162629758,
+          "cov": 0.9413680781758957
+        }
+      ],
+      "multi_system_domains": {
+        "Physical_Chemistry": {
+          "D_eff": 8,
+          "S": 0.33401327040170914,
+          "abs_S": 0.33401327040170914
+        },
+        "Chemistry": {
+          "D_eff": 8,
+          "S": 0.4078840642307454,
+          "abs_S": 0.4078840642307454
+        },
+        "Molecular_Chemistry": {
+          "D_eff": 9,
+          "S": 0.3345733830778106,
+          "abs_S": 0.3345733830778106
+        },
+        "Biochemistry": {
+          "D_eff": 13,
+          "S": 0.3062212293865662,
+          "abs_S": 0.3062212293865662
+        },
+        "Condensed_Matter": {
+          "D_eff": 14,
+          "S": 0.3384059955797751,
+          "abs_S": 0.3384059955797751
+        },
+        "Atomic_Physics": {
+          "D_eff": 7,
+          "S": 0.7358238658627416,
+          "abs_S": 0.7358238658627416
+        }
+      },
+      "routing": {
+        "chem_D": 9,
+        "ss_D": 9,
+        "region_D": 13,
+        "pack_D": 13
+      },
+      "hypothesis": [
+        "termini_disorder",
+        "dominant_channel_bond"
+      ]
+    },
+    {
+      "id": "abl1_kinase",
+      "name": "ABL1 kinase (imatinib target)",
+      "category": "cancer",
+      "wetlab": "X-ray ABL\u2013imatinib",
+      "n": 263,
+      "rmsd_A": 4.926161110354934,
+      "template_pdb": "3HMI",
+      "template_mode": "data_authority_measured",
+      "template_identity": 0.9315589353612167,
+      "template_coverage": 1.0,
+      "template_residual_energy": 6.278041508171961,
+      "n_candidates": 13,
+      "primary_error_mode": "long_range_contacts",
+      "ranked_modes": [
+        "long_range_contacts",
+        "global_topology",
+        "per_residue_hotspots",
+        "mid_range_5_12",
+        "helix_period_3_4_7",
+        "backbone_sep1_2"
+      ],
+      "mode_scores": {
+        "backbone_sep1_2": 0.0007497928538717195,
+        "helix_period_3_4_7": 0.004329892221914849,
+        "mid_range_5_12": 0.017883135878271016,
+        "long_range_contacts": 6.205574293051554,
+        "per_residue_hotspots": 1.4133873166150586,
+        "global_topology": 1.5710272622198376
+      },
+      "per_res_p90_A": 2.882702762117614,
+      "contact_mae_A": 0.7917931080691714,
+      "rg_err_A": 0.062470273054827885,
+      "channel_breakdown_product": {
+        "e_bond_Physical_Chemistry": 1.130768552939423,
+        "e_clash_Chemistry": 0.0,
+        "e_fold_Biochemistry": 0.001956328076058004,
+        "rg_A": 18.55400178863511,
+        "target_rg_A": 18.5116747688451,
+        "total": 1.1327248810154809
+      },
+      "channel_breakdown_template": {
+        "e_bond_Physical_Chemistry": 13.622610715491778,
+        "e_clash_Chemistry": 0.0,
+        "e_fold_Biochemistry": 0.0015974470944263395,
+        "rg_A": 18.54992288849361,
+        "target_rg_A": 18.5116747688451,
+        "total": 13.624208162586203
+      },
+      "termini_hotspots": {
+        "n_term": 0,
+        "c_term": 0,
+        "core": 15,
+        "frac_termini": 0.0
+      },
+      "top5_data_templates": [
+        {
+          "pdb": "3HMI",
+          "score": 0.9315589353612167,
+          "E_res": 6.278041508171961,
+          "id": 0.9315589353612167,
+          "cov": 1.0
+        },
+        {
+          "pdb": "2XYN",
+          "score": 0.9277566539923954,
+          "E_res": 7.680368574811615,
+          "id": 0.9312977099236641,
+          "cov": 0.9961977186311787
+        },
+        {
+          "pdb": "2XYN",
+          "score": 0.9277566539923954,
+          "E_res": 5.00945866972362,
+          "id": 0.9312977099236641,
+          "cov": 0.9961977186311787
+        },
+        {
+          "pdb": "2XYN",
+          "score": 0.9277566539923954,
+          "E_res": 2.032156326081163,
+          "id": 0.9312977099236641,
+          "cov": 0.9961977186311787
+        },
+        {
+          "pdb": "4XLI",
+          "score": 0.9163498098859316,
+          "E_res": 72.94712728819873,
+          "id": 0.926923076923077,
+          "cov": 0.9885931558935361
+        }
+      ],
+      "top5_residual_templates": [
+        {
+          "pdb": "2XYN",
+          "score": 0.9277566539923954,
+          "E_res": 2.032156326081163,
+          "id": 0.9312977099236641,
+          "cov": 0.9961977186311787
+        },
+        {
+          "pdb": "2XYN",
+          "score": 0.9277566539923954,
+          "E_res": 5.00945866972362,
+          "id": 0.9312977099236641,
+          "cov": 0.9961977186311787
+        },
+        {
+          "pdb": "3HMI",
+          "score": 0.9315589353612167,
+          "E_res": 6.278041508171961,
+          "id": 0.9315589353612167,
+          "cov": 1.0
+        },
+        {
+          "pdb": "2XYN",
+          "score": 0.9277566539923954,
+          "E_res": 7.680368574811615,
+          "id": 0.9312977099236641,
+          "cov": 0.9961977186311787
+        },
+        {
+          "pdb": "4XLI",
+          "score": 0.9125475285171103,
+          "E_res": 37.759442477141604,
+          "id": 0.9266409266409267,
+          "cov": 0.9847908745247148
+        }
+      ],
+      "multi_system_domains": {
+        "Physical_Chemistry": {
+          "D_eff": 8,
+          "S": 0.33401327040170914,
+          "abs_S": 0.33401327040170914
+        },
+        "Chemistry": {
+          "D_eff": 8,
+          "S": 0.4078840642307454,
+          "abs_S": 0.4078840642307454
+        },
+        "Molecular_Chemistry": {
+          "D_eff": 9,
+          "S": 0.3345733830778106,
+          "abs_S": 0.3345733830778106
+        },
+        "Biochemistry": {
+          "D_eff": 13,
+          "S": 0.3062212293865662,
+          "abs_S": 0.3062212293865662
+        },
+        "Condensed_Matter": {
+          "D_eff": 14,
+          "S": 0.3384059955797751,
+          "abs_S": 0.3384059955797751
+        },
+        "Atomic_Physics": {
+          "D_eff": 7,
+          "S": 0.7358238658627416,
+          "abs_S": 0.7358238658627416
+        }
+      },
+      "routing": {
+        "chem_D": 9,
+        "ss_D": 9,
+        "region_D": 13,
+        "pack_D": 13
+      },
+      "hypothesis": [
+        "data_best_vs_residual_best_disagree",
+        "dominant_channel_bond"
+      ]
+    },
+    {
+      "id": "bcl2",
+      "name": "BCL-2",
+      "category": "cancer",
+      "wetlab": "NMR BCL-2",
+      "n": 164,
+      "rmsd_A": 3.752983516620023,
+      "template_pdb": "8HLN",
+      "template_mode": "data_authority_measured",
+      "template_identity": 0.8943661971830986,
+      "template_coverage": 0.8658536585365854,
+      "template_residual_energy": 138.94458165896015,
+      "n_candidates": 56,
+      "primary_error_mode": "long_range_contacts",
+      "ranked_modes": [
+        "long_range_contacts",
+        "global_topology",
+        "per_residue_hotspots",
+        "mid_range_5_12",
+        "helix_period_3_4_7",
+        "backbone_sep1_2"
+      ],
+      "mode_scores": {
+        "backbone_sep1_2": 0.003546988708464201,
+        "helix_period_3_4_7": 0.016699512869332214,
+        "mid_range_5_12": 0.0625162166229779,
+        "long_range_contacts": 6.830036874887986,
+        "per_residue_hotspots": 1.8299363981877272,
+        "global_topology": 5.292576382996364
+      },
+      "per_res_p90_A": 5.908411468160254,
+      "contact_mae_A": 1.174671366094017,
+      "rg_err_A": 0.5338610593619997,
+      "channel_breakdown_product": {
+        "e_bond_Physical_Chemistry": 16.428761993719387,
+        "e_clash_Chemistry": 0.5998458072485348,
+        "e_fold_Biochemistry": 0.6300210180992127,
+        "rg_A": 15.168246838920378,
+        "target_rg_A": 15.927828317485218,
+        "total": 17.658628819067136
+      },
+      "channel_breakdown_template": {
+        "e_bond_Physical_Chemistry": 333.92247432607496,
+        "e_clash_Chemistry": 19.046209264887462,
+        "e_fold_Biochemistry": 0.6347991725100486,
+        "rg_A": 15.165371901407124,
+        "target_rg_A": 15.927828317485218,
+        "total": 353.60348276347247
+      },
+      "termini_hotspots": {
+        "n_term": 0,
+        "c_term": 4,
+        "core": 11,
+        "frac_termini": 0.26666666666666666
+      },
+      "top5_data_templates": [
+        {
+          "pdb": "8HLN",
+          "score": 0.774390243902439,
+          "E_res": 138.94458165896015,
+          "id": 0.8943661971830986,
+          "cov": 0.8658536585365854
+        },
+        {
+          "pdb": "6QGK",
+          "score": 0.7682926829268293,
+          "E_res": 190.77444067946357,
+          "id": 0.8873239436619719,
+          "cov": 0.8658536585365854
+        },
+        {
+          "pdb": "6QGH",
+          "score": 0.7621951219512195,
+          "E_res": 270.31435916347897,
+          "id": 0.8928571428571429,
+          "cov": 0.8536585365853658
+        },
+        {
+          "pdb": "6QGG",
+          "score": 0.7621951219512194,
+          "E_res": 181.97290221023124,
+          "id": 0.8992805755395683,
+          "cov": 0.8475609756097561
+        },
+        {
+          "pdb": "6QGJ",
+          "score": 0.7560975609756098,
+          "E_res": 233.64877541246085,
+          "id": 0.9051094890510949,
+          "cov": 0.8353658536585366
+        }
+      ],
+      "top5_residual_templates": [
+        {
+          "pdb": "2PON",
+          "score": 0.6280487804878049,
+          "E_res": 12.234228162893286,
+          "id": 0.6645161290322581,
+          "cov": 0.9451219512195121
+        },
+        {
+          "pdb": "3PL7",
+          "score": 0.5548780487804879,
+          "E_res": 65.23739127903664,
+          "id": 0.65,
+          "cov": 0.8536585365853658
+        },
+        {
+          "pdb": "1BXL",
+          "score": 0.6402439024390243,
+          "E_res": 70.47379429043488,
+          "id": 0.6441717791411042,
+          "cov": 0.9939024390243902
+        },
+        {
+          "pdb": "2O1Y",
+          "score": 0.6402439024390243,
+          "E_res": 74.56644380988513,
+          "id": 0.6441717791411042,
+          "cov": 0.9939024390243902
+        },
+        {
+          "pdb": "1YSN",
+          "score": 0.6402439024390243,
+          "E_res": 74.58282669692,
+          "id": 0.6441717791411042,
+          "cov": 0.9939024390243902
+        }
+      ],
+      "multi_system_domains": {
+        "Physical_Chemistry": {
+          "D_eff": 8,
+          "S": 0.33401327040170914,
+          "abs_S": 0.33401327040170914
+        },
+        "Chemistry": {
+          "D_eff": 8,
+          "S": 0.4078840642307454,
+          "abs_S": 0.4078840642307454
+        },
+        "Molecular_Chemistry": {
+          "D_eff": 9,
+          "S": 0.3345733830778106,
+          "abs_S": 0.3345733830778106
+        },
+        "Biochemistry": {
+          "D_eff": 13,
+          "S": 0.3062212293865662,
+          "abs_S": 0.3062212293865662
+        },
+        "Condensed_Matter": {
+          "D_eff": 14,
+          "S": 0.3384059955797751,
+          "abs_S": 0.3384059955797751
+        },
+        "Atomic_Physics": {
+          "D_eff": 7,
+          "S": 0.7358238658627416,
+          "abs_S": 0.7358238658627416
+        }
+      },
+      "routing": {
+        "chem_D": 9,
+        "ss_D": 9,
+        "region_D": 13,
+        "pack_D": 13
+      },
+      "hypothesis": [
+        "data_best_vs_residual_best_disagree",
+        "dominant_channel_bond"
+      ]
+    },
+    {
+      "id": "sars2_rbd",
+      "name": "SARS-CoV-2 spike RBD",
+      "category": "vaccine",
+      "wetlab": "X-ray RBD\u2013ACE2 (Lan et al. Nature 2020)",
+      "n": 194,
+      "rmsd_A": 5.6795330096739916,
+      "template_pdb": "3SCI",
+      "template_mode": "data_authority_measured",
+      "template_identity": 0.75,
+      "template_coverage": 0.8865979381443299,
+      "template_residual_energy": 165.47517862373422,
+      "n_candidates": 16,
+      "primary_error_mode": "global_topology",
+      "ranked_modes": [
+        "global_topology",
+        "long_range_contacts",
+        "per_residue_hotspots",
+        "mid_range_5_12",
+        "helix_period_3_4_7",
+        "backbone_sep1_2"
+      ],
+      "mode_scores": {
+        "backbone_sep1_2": 0.002836337547243051,
+        "helix_period_3_4_7": 0.015264035058324415,
+        "mid_range_5_12": 0.05738529116568292,
+        "long_range_contacts": 8.989275009273342,
+        "per_residue_hotspots": 1.4924592315402376,
+        "global_topology": 24.30284987758926
+      },
+      "per_res_p90_A": 4.2062250126480265,
+      "contact_mae_A": 3.4038758844668404,
+      "rg_err_A": 1.351154908516346,
+      "channel_breakdown_product": {
+        "e_bond_Physical_Chemistry": 9.501328101321452,
+        "e_clash_Chemistry": 0.9444698428844912,
+        "e_fold_Biochemistry": 7.7699640315538145,
+        "rg_A": 19.470239187824046,
+        "target_rg_A": 16.80272737349294,
+        "total": 18.215761975759758
+      },
+      "channel_breakdown_template": {
+        "e_bond_Physical_Chemistry": 138.32309275403014,
+        "e_clash_Chemistry": 25.825442343184996,
+        "e_fold_Biochemistry": 7.724405506350773,
+        "rg_A": 19.46240732592282,
+        "target_rg_A": 16.80272737349294,
+        "total": 171.8729406035659
+      },
+      "termini_hotspots": {
+        "n_term": 2,
+        "c_term": 6,
+        "core": 7,
+        "frac_termini": 0.5333333333333333
+      },
+      "top5_data_templates": [
+        {
+          "pdb": "3SCI",
+          "score": 0.6649484536082474,
+          "E_res": 165.47517862373422,
+          "id": 0.75,
+          "cov": 0.8865979381443299
+        },
+        {
+          "pdb": "3SCI",
+          "score": 0.6649484536082474,
+          "E_res": 165.57693083940092,
+          "id": 0.75,
+          "cov": 0.8865979381443299
+        },
+        {
+          "pdb": "2AJF",
+          "score": 0.6597938144329897,
+          "E_res": 185.03441674509602,
+          "id": 0.7441860465116279,
+          "cov": 0.8865979381443299
+        },
+        {
+          "pdb": "2AJF",
+          "score": 0.6597938144329897,
+          "E_res": 173.3460816439782,
+          "id": 0.7441860465116279,
+          "cov": 0.8865979381443299
+        },
+        {
+          "pdb": "3SCJ",
+          "score": 0.6597938144329897,
+          "E_res": 178.45438508592332,
+          "id": 0.7441860465116279,
+          "cov": 0.8865979381443299
+        }
+      ],
+      "top5_residual_templates": [
+        {
+          "pdb": "3D0G",
+          "score": 0.654639175257732,
+          "E_res": 160.9563447548061,
+          "id": 0.7426900584795322,
+          "cov": 0.8814432989690721
+        },
+        {
+          "pdb": "3D0H",
+          "score": 0.654639175257732,
+          "E_res": 161.83587983218882,
+          "id": 0.7426900584795322,
+          "cov": 0.8814432989690721
+        },
+        {
+          "pdb": "3SCL",
+          "score": 0.654639175257732,
+          "E_res": 162.6485141804912,
+          "id": 0.7426900584795322,
+          "cov": 0.8814432989690721
+        },
+        {
+          "pdb": "3D0G",
+          "score": 0.654639175257732,
+          "E_res": 164.18680749644884,
+          "id": 0.7426900584795322,
+          "cov": 0.8814432989690721
+        },
+        {
+          "pdb": "3SCL",
+          "score": 0.654639175257732,
+          "E_res": 164.4050703462602,
+          "id": 0.7426900584795322,
+          "cov": 0.8814432989690721
+        }
+      ],
+      "multi_system_domains": {
+        "Physical_Chemistry": {
+          "D_eff": 8,
+          "S": 0.33401327040170914,
+          "abs_S": 0.33401327040170914
+        },
+        "Chemistry": {
+          "D_eff": 8,
+          "S": 0.4078840642307454,
+          "abs_S": 0.4078840642307454
+        },
+        "Molecular_Chemistry": {
+          "D_eff": 9,
+          "S": 0.3345733830778106,
+          "abs_S": 0.3345733830778106
+        },
+        "Biochemistry": {
+          "D_eff": 13,
+          "S": 0.3062212293865662,
+          "abs_S": 0.3062212293865662
+        },
+        "Condensed_Matter": {
+          "D_eff": 14,
+          "S": 0.3384059955797751,
+          "abs_S": 0.3384059955797751
+        },
+        "Atomic_Physics": {
+          "D_eff": 7,
+          "S": 0.7358238658627416,
+          "abs_S": 0.7358238658627416
+        }
+      },
+      "routing": {
+        "chem_D": 9,
+        "ss_D": 9,
+        "region_D": 13,
+        "pack_D": 13
+      },
+      "hypothesis": [
+        "termini_disorder",
+        "tertiary_contact_map_weak",
+        "data_best_vs_residual_best_disagree",
+        "dominant_channel_bond"
+      ]
+    },
+    {
+      "id": "ha_h3",
+      "name": "Influenza HA (H3)",
+      "category": "vaccine",
+      "wetlab": "X-ray hemagglutinin",
+      "n": 491,
+      "rmsd_A": 2.3285373119110533,
+      "template_pdb": "11MS",
+      "template_mode": "data_authority_measured",
+      "template_identity": 0.946611909650924,
+      "template_coverage": 0.9918533604887984,
+      "template_residual_energy": 372.51987232823956,
+      "n_candidates": 126,
+      "primary_error_mode": "long_range_contacts",
+      "ranked_modes": [
+        "long_range_contacts",
+        "per_residue_hotspots",
+        "global_topology",
+        "mid_range_5_12",
+        "helix_period_3_4_7",
+        "backbone_sep1_2"
+      ],
+      "mode_scores": {
+        "backbone_sep1_2": 0.00047810006135039175,
+        "helix_period_3_4_7": 0.0016266363879460493,
+        "mid_range_5_12": 0.005923741187598348,
+        "long_range_contacts": 5.757531291730681,
+        "per_residue_hotspots": 1.1611881230905539,
+        "global_topology": 1.1187209523936268
+      },
+      "per_res_p90_A": 1.4026103938507757,
+      "contact_mae_A": 0.49770400387822744,
+      "rg_err_A": 0.3802418571537274,
+      "channel_breakdown_product": {
+        "e_bond_Physical_Chemistry": 4.487248632424954,
+        "e_clash_Chemistry": 0.22522974863924658,
+        "e_fold_Biochemistry": 260.400855917153,
+        "rg_A": 38.023752021780005,
+        "target_rg_A": 22.5812363383045,
+        "total": 265.11333429821724
+      },
+      "channel_breakdown_template": {
+        "e_bond_Physical_Chemistry": 97.30479502282037,
+        "e_clash_Chemistry": 6.69062067583546,
+        "e_fold_Biochemistry": 260.4138455462869,
+        "rg_A": 38.024137178060364,
+        "target_rg_A": 22.5812363383045,
+        "total": 364.40926124494274
+      },
+      "termini_hotspots": {
+        "n_term": 0,
+        "c_term": 1,
+        "core": 14,
+        "frac_termini": 0.06666666666666667
+      },
+      "top5_data_templates": [
+        {
+          "pdb": "11MS",
+          "score": 0.9389002036659877,
+          "E_res": 372.51987232823956,
+          "id": 0.946611909650924,
+          "cov": 0.9918533604887984
+        },
+        {
+          "pdb": "11MS",
+          "score": 0.9389002036659877,
+          "E_res": 365.7507238931885,
+          "id": 0.946611909650924,
+          "cov": 0.9918533604887984
+        },
+        {
+          "pdb": "11MS",
+          "score": 0.9389002036659877,
+          "E_res": 358.2170009405533,
+          "id": 0.946611909650924,
+          "cov": 0.9918533604887984
+        },
+        {
+          "pdb": "11MT",
+          "score": 0.9389002036659877,
+          "E_res": 362.12902483523885,
+          "id": 0.946611909650924,
+          "cov": 0.9918533604887984
+        },
+        {
+          "pdb": "11MT",
+          "score": 0.9389002036659877,
+          "E_res": 361.09725615230417,
+          "id": 0.946611909650924,
+          "cov": 0.9918533604887984
+        }
+      ],
+      "top5_residual_templates": [
+        {
+          "pdb": "7VDF",
+          "score": 0.8472505091649695,
+          "E_res": 257.28842969174553,
+          "id": 0.859504132231405,
+          "cov": 0.9857433808553971
+        },
+        {
+          "pdb": "7VDF",
+          "score": 0.8472505091649695,
+          "E_res": 258.21771927618397,
+          "id": 0.859504132231405,
+          "cov": 0.9857433808553971
+        },
+        {
+          "pdb": "6MXU",
+          "score": 0.879837067209776,
+          "E_res": 258.31972966904226,
+          "id": 0.8870636550308009,
+          "cov": 0.9918533604887984
+        },
+        {
+          "pdb": "7VDF",
+          "score": 0.8472505091649695,
+          "E_res": 259.35593832333143,
+          "id": 0.859504132231405,
+          "cov": 0.9857433808553971
+        },
+        {
+          "pdb": "6MXU",
+          "score": 0.8778004073319755,
+          "E_res": 260.74984068388204,
+          "id": 0.8868312757201646,
+          "cov": 0.9898167006109979
+        }
+      ],
+      "multi_system_domains": {
+        "Physical_Chemistry": {
+          "D_eff": 8,
+          "S": 0.33401327040170914,
+          "abs_S": 0.33401327040170914
+        },
+        "Chemistry": {
+          "D_eff": 8,
+          "S": 0.4078840642307454,
+          "abs_S": 0.4078840642307454
+        },
+        "Molecular_Chemistry": {
+          "D_eff": 9,
+          "S": 0.3345733830778106,
+          "abs_S": 0.3345733830778106
+        },
+        "Biochemistry": {
+          "D_eff": 13,
+          "S": 0.3062212293865662,
+          "abs_S": 0.3062212293865662
+        },
+        "Condensed_Matter": {
+          "D_eff": 14,
+          "S": 0.3384059955797751,
+          "abs_S": 0.3384059955797751
+        },
+        "Atomic_Physics": {
+          "D_eff": 7,
+          "S": 0.7358238658627416,
+          "abs_S": 0.7358238658627416
+        }
+      },
+      "routing": {
+        "chem_D": 9,
+        "ss_D": 9,
+        "region_D": 13,
+        "pack_D": 13
+      },
+      "hypothesis": [
+        "data_best_vs_residual_best_disagree",
+        "dominant_channel_fold_Rg"
+      ]
+    },
+    {
+      "id": "ace2",
+      "name": "Human ACE2 (peptidase domain)",
+      "category": "drug",
+      "wetlab": "X-ray ACE2",
+      "n": 597,
+      "rmsd_A": 4.743775444392744,
+      "template_pdb": "2C6N",
+      "template_mode": "residual_at_remote_interface",
+      "template_identity": 0.514336917562724,
+      "template_coverage": 0.9346733668341709,
+      "template_residual_energy": 679.4278913165039,
+      "n_candidates": 43,
+      "primary_error_mode": "long_range_contacts",
+      "ranked_modes": [
+        "long_range_contacts",
+        "global_topology",
+        "per_residue_hotspots",
+        "mid_range_5_12",
+        "helix_period_3_4_7",
+        "backbone_sep1_2"
+      ],
+      "mode_scores": {
+        "backbone_sep1_2": 0.0009601888935224038,
+        "helix_period_3_4_7": 0.004451648745140477,
+        "mid_range_5_12": 0.014992216949660866,
+        "long_range_contacts": 7.188148459304307,
+        "per_residue_hotspots": 1.6721202914010176,
+        "global_topology": 5.4510383350847125
+      },
+      "per_res_p90_A": 7.263203466142794,
+      "contact_mae_A": 1.024788620697168,
+      "rg_err_A": 1.0754446694287694,
+      "channel_breakdown_product": {
+        "e_bond_Physical_Chemistry": 60.774412266519896,
+        "e_clash_Chemistry": 1.7373657177693713,
+        "e_fold_Biochemistry": 0.06757573839462186,
+        "rg_A": 23.782128311802467,
+        "target_rg_A": 24.030895013085996,
+        "total": 62.57935372268389
+      },
+      "channel_breakdown_template": {
+        "e_bond_Physical_Chemistry": 674.1735600727908,
+        "e_clash_Chemistry": 31.62374713067903,
+        "e_fold_Biochemistry": 0.06920274317935957,
+        "rg_A": 23.77915137597854,
+        "target_rg_A": 24.030895013085996,
+        "total": 705.8665099466492
+      },
+      "termini_hotspots": {
+        "n_term": 2,
+        "c_term": 4,
+        "core": 9,
+        "frac_termini": 0.4
+      },
+      "top5_data_templates": [
+        {
+          "pdb": "2XY9",
+          "score": 0.4891122278056952,
+          "E_res": 1156.2357527987745,
+          "id": 0.5478424015009381,
+          "cov": 0.8927973199329984
+        },
+        {
+          "pdb": "4APH",
+          "score": 0.48743718592964824,
+          "E_res": 1111.8372612816675,
+          "id": 0.5449438202247191,
+          "cov": 0.8944723618090452
+        },
+        {
+          "pdb": "4APJ",
+          "score": 0.48743718592964824,
+          "E_res": 1119.1498911643787,
+          "id": 0.5459662288930581,
+          "cov": 0.8927973199329984
+        },
+        {
+          "pdb": "1O86",
+          "score": 0.48576214405360135,
+          "E_res": 1148.952287230874,
+          "id": 0.5482041587901701,
+          "cov": 0.8860971524288107
+        },
+        {
+          "pdb": "1O8A",
+          "score": 0.48576214405360135,
+          "E_res": 1143.7094889823352,
+          "id": 0.5482041587901701,
+          "cov": 0.8860971524288107
+        }
+      ],
+      "top5_residual_templates": [
+        {
+          "pdb": "2C6N",
+          "score": 0.4807370184254607,
+          "E_res": 679.4278913165039,
+          "id": 0.514336917562724,
+          "cov": 0.9346733668341709
+        },
+        {
+          "pdb": "2C6F",
+          "score": 0.48408710217755435,
+          "E_res": 699.463518341395,
+          "id": 0.516994633273703,
+          "cov": 0.9363484087102177
+        },
+        {
+          "pdb": "2C6N",
+          "score": 0.48408710217755435,
+          "E_res": 721.6717949019423,
+          "id": 0.516994633273703,
+          "cov": 0.9363484087102177
+        },
+        {
+          "pdb": "2C6F",
+          "score": 0.48408710217755435,
+          "E_res": 729.4426235630934,
+          "id": 0.516994633273703,
+          "cov": 0.9363484087102177
+        },
+        {
+          "pdb": "3NXQ",
+          "score": 0.4807370184254607,
+          "E_res": 786.7177882637321,
+          "id": 0.514336917562724,
+          "cov": 0.9346733668341709
+        }
+      ],
+      "multi_system_domains": {
+        "Physical_Chemistry": {
+          "D_eff": 8,
+          "S": 0.33401327040170914,
+          "abs_S": 0.33401327040170914
+        },
+        "Chemistry": {
+          "D_eff": 8,
+          "S": 0.4078840642307454,
+          "abs_S": 0.4078840642307454
+        },
+        "Molecular_Chemistry": {
+          "D_eff": 9,
+          "S": 0.3345733830778106,
+          "abs_S": 0.3345733830778106
+        },
+        "Biochemistry": {
+          "D_eff": 13,
+          "S": 0.3062212293865662,
+          "abs_S": 0.3062212293865662
+        },
+        "Condensed_Matter": {
+          "D_eff": 14,
+          "S": 0.3384059955797751,
+          "abs_S": 0.3384059955797751
+        },
+        "Atomic_Physics": {
+          "D_eff": 7,
+          "S": 0.7358238658627416,
+          "abs_S": 0.7358238658627416
+        }
+      },
+      "routing": {
+        "chem_D": 9,
+        "ss_D": 9,
+        "region_D": 13,
+        "pack_D": 13
+      },
+      "hypothesis": [
+        "termini_disorder",
+        "remote_homolog_map",
+        "data_best_vs_residual_best_disagree",
+        "dominant_channel_bond"
+      ]
+    },
+    {
+      "id": "ubiquitin",
+      "name": "Ubiquitin",
+      "category": "control",
+      "wetlab": "X-ray ubiquitin (Vijay-Kumar)",
+      "n": 76,
+      "rmsd_A": 2.025587072375234,
+      "template_pdb": "1UD7",
+      "template_mode": "data_authority_measured",
+      "template_identity": 0.9078947368421053,
+      "template_coverage": 1.0,
+      "template_residual_energy": 1.4144448812592627,
+      "n_candidates": 21,
+      "primary_error_mode": "long_range_contacts",
+      "ranked_modes": [
+        "long_range_contacts",
+        "global_topology",
+        "per_residue_hotspots",
+        "mid_range_5_12",
+        "helix_period_3_4_7",
+        "backbone_sep1_2"
+      ],
+      "mode_scores": {
+        "backbone_sep1_2": 0.002974506933600132,
+        "helix_period_3_4_7": 0.0132865543120212,
+        "mid_range_5_12": 0.045113539023831965,
+        "long_range_contacts": 4.908091971538303,
+        "per_residue_hotspots": 1.5267680152022869,
+        "global_topology": 3.977735985152897
+      },
+      "per_res_p90_A": 1.722116954324581,
+      "contact_mae_A": 0.28145847710392374,
+      "rg_err_A": 0.19242958603711102,
+      "channel_breakdown_product": {
+        "e_bond_Physical_Chemistry": 0.5303268863190349,
+        "e_clash_Chemistry": 0.021266051473399997,
+        "e_fold_Biochemistry": 1.4910267915269868,
+        "rg_A": 11.300465290170573,
+        "target_rg_A": 12.468994494611536,
+        "total": 2.042619729319422
+      },
+      "channel_breakdown_template": {
+        "e_bond_Physical_Chemistry": 8.110203696484037,
+        "e_clash_Chemistry": 0.7612183043410947,
+        "e_fold_Biochemistry": 1.5189875846703962,
+        "rg_A": 11.289559635645356,
+        "target_rg_A": 12.468994494611536,
+        "total": 10.390409585495528
+      },
+      "termini_hotspots": {
+        "n_term": 0,
+        "c_term": 6,
+        "core": 9,
+        "frac_termini": 0.4
+      },
+      "top5_data_templates": [
+        {
+          "pdb": "1UD7",
+          "score": 0.9078947368421053,
+          "E_res": 1.4144448812592627,
+          "id": 0.9078947368421053,
+          "cov": 1.0
+        },
+        {
+          "pdb": "1C3T",
+          "score": 0.8947368421052632,
+          "E_res": 2.4055105379157067,
+          "id": 0.8947368421052632,
+          "cov": 1.0
+        },
+        {
+          "pdb": "1SIF",
+          "score": 0.8421052631578948,
+          "E_res": 31.143325487892213,
+          "id": 0.9014084507042254,
+          "cov": 0.9342105263157895
+        },
+        {
+          "pdb": "1BT0",
+          "score": 0.5921052631578948,
+          "E_res": 1.517457631249697,
+          "id": 0.6164383561643836,
+          "cov": 0.9605263157894737
+        },
+        {
+          "pdb": "1NDD",
+          "score": 0.5789473684210527,
+          "E_res": 2.157741853958642,
+          "id": 0.5789473684210527,
+          "cov": 1.0
+        }
+      ],
+      "top5_residual_templates": [
+        {
+          "pdb": "1R4M",
+          "score": 0.5789473684210527,
+          "E_res": 1.3564085420701764,
+          "id": 0.5789473684210527,
+          "cov": 1.0
+        },
+        {
+          "pdb": "1R4M",
+          "score": 0.5789473684210527,
+          "E_res": 1.371813143298991,
+          "id": 0.5789473684210527,
+          "cov": 1.0
+        },
+        {
+          "pdb": "1R4M",
+          "score": 0.5789473684210527,
+          "E_res": 1.3736065657058887,
+          "id": 0.5789473684210527,
+          "cov": 1.0
+        },
+        {
+          "pdb": "1R4M",
+          "score": 0.5789473684210527,
+          "E_res": 1.4041127298534453,
+          "id": 0.5789473684210527,
+          "cov": 1.0
+        },
+        {
+          "pdb": "1UD7",
+          "score": 0.9078947368421053,
+          "E_res": 1.4144448812592627,
+          "id": 0.9078947368421053,
+          "cov": 1.0
+        }
+      ],
+      "multi_system_domains": {
+        "Physical_Chemistry": {
+          "D_eff": 8,
+          "S": 0.33401327040170914,
+          "abs_S": 0.33401327040170914
+        },
+        "Chemistry": {
+          "D_eff": 8,
+          "S": 0.4078840642307454,
+          "abs_S": 0.4078840642307454
+        },
+        "Molecular_Chemistry": {
+          "D_eff": 9,
+          "S": 0.3345733830778106,
+          "abs_S": 0.3345733830778106
+        },
+        "Biochemistry": {
+          "D_eff": 13,
+          "S": 0.3062212293865662,
+          "abs_S": 0.3062212293865662
+        },
+        "Condensed_Matter": {
+          "D_eff": 14,
+          "S": 0.3384059955797751,
+          "abs_S": 0.3384059955797751
+        },
+        "Atomic_Physics": {
+          "D_eff": 7,
+          "S": 0.7358238658627416,
+          "abs_S": 0.7358238658627416
+        }
+      },
+      "routing": {
+        "chem_D": 9,
+        "ss_D": 9,
+        "region_D": 13,
+        "pack_D": 13
+      },
+      "hypothesis": [
+        "termini_disorder",
+        "data_best_vs_residual_best_disagree",
+        "dominant_channel_fold_Rg"
+      ]
+    },
+    {
+      "id": "hiv_rt",
+      "name": "HIV-1 reverse transcriptase (p66 fragment)",
+      "category": "drug",
+      "wetlab": "X-ray HIV-1 RT",
+      "n": 554,
+      "rmsd_A": 5.459889276362316,
+      "template_pdb": "1HVU",
+      "template_mode": "data_authority_measured",
+      "template_identity": 0.9891696750902527,
+      "template_coverage": 1.0,
+      "template_residual_energy": 106.00606445565295,
+      "n_candidates": 85,
+      "primary_error_mode": "long_range_contacts",
+      "ranked_modes": [
+        "long_range_contacts",
+        "per_residue_hotspots",
+        "global_topology",
+        "mid_range_5_12",
+        "helix_period_3_4_7",
+        "backbone_sep1_2"
+      ],
+      "mode_scores": {
+        "backbone_sep1_2": 0.0005044648539954584,
+        "helix_period_3_4_7": 0.0022228600766742075,
+        "mid_range_5_12": 0.007099686272956819,
+        "long_range_contacts": 7.091899476463068,
+        "per_residue_hotspots": 1.816558678462426,
+        "global_topology": 1.7963238529979517
+      },
+      "per_res_p90_A": 9.037007333907683,
+      "contact_mae_A": 0.6320877491075997,
+      "rg_err_A": 0.8928756361638079,
+      "channel_breakdown_product": {
+        "e_bond_Physical_Chemistry": 0.892377455517831,
+        "e_clash_Chemistry": 0.13727874151840852,
+        "e_fold_Biochemistry": 104.97647666361824,
+        "rg_A": 33.27073528177761,
+        "target_rg_A": 23.46584262088867,
+        "total": 106.00613286065449
+      },
+      "channel_breakdown_template": {
+        "e_bond_Physical_Chemistry": 0.8923774555178317,
+        "e_clash_Chemistry": 0.13727874151840852,
+        "e_fold_Biochemistry": 104.97647666361824,
+        "rg_A": 33.27073528177761,
+        "target_rg_A": 23.46584262088867,
+        "total": 106.00613286065449
+      },
+      "termini_hotspots": {
+        "n_term": 0,
+        "c_term": 0,
+        "core": 15,
+        "frac_termini": 0.0
+      },
+      "top5_data_templates": [
+        {
+          "pdb": "1HVU",
+          "score": 0.9891696750902527,
+          "E_res": 106.00606445565295,
+          "id": 0.9891696750902527,
+          "cov": 1.0
+        },
+        {
+          "pdb": "1HVU",
+          "score": 0.9891696750902527,
+          "E_res": 106.00606349480906,
+          "id": 0.9891696750902527,
+          "cov": 1.0
+        },
+        {
+          "pdb": "1HVU",
+          "score": 0.9891696750902527,
+          "E_res": 106.0069080888751,
+          "id": 0.9891696750902527,
+          "cov": 1.0
+        },
+        {
+          "pdb": "1HVU",
+          "score": 0.9891696750902527,
+          "E_res": 106.00573174554194,
+          "id": 0.9891696750902527,
+          "cov": 1.0
+        },
+        {
+          "pdb": "1N5Y",
+          "score": 0.9891696750902527,
+          "E_res": 98.56260350685108,
+          "id": 0.9891696750902527,
+          "cov": 1.0
+        }
+      ],
+      "top5_residual_templates": [
+        {
+          "pdb": "3KK3",
+          "score": 0.9891696750902527,
+          "E_res": 83.3270424550645,
+          "id": 0.9891696750902527,
+          "cov": 1.0
+        },
+        {
+          "pdb": "1DLO",
+          "score": 0.9873646209386282,
+          "E_res": 85.46522653685066,
+          "id": 0.9873646209386282,
+          "cov": 1.0
+        },
+        {
+          "pdb": "5J2P",
+          "score": 0.9891696750902527,
+          "E_res": 86.15753953984262,
+          "id": 0.9891696750902527,
+          "cov": 1.0
+        },
+        {
+          "pdb": "3KK2",
+          "score": 0.9891696750902527,
+          "E_res": 86.91981873997695,
+          "id": 0.9891696750902527,
+          "cov": 1.0
+        },
+        {
+          "pdb": "5J2M",
+          "score": 0.9891696750902527,
+          "E_res": 86.92226244506278,
+          "id": 0.9891696750902527,
+          "cov": 1.0
+        }
+      ],
+      "multi_system_domains": {
+        "Physical_Chemistry": {
+          "D_eff": 8,
+          "S": 0.33401327040170914,
+          "abs_S": 0.33401327040170914
+        },
+        "Chemistry": {
+          "D_eff": 8,
+          "S": 0.4078840642307454,
+          "abs_S": 0.4078840642307454
+        },
+        "Molecular_Chemistry": {
+          "D_eff": 9,
+          "S": 0.3345733830778106,
+          "abs_S": 0.3345733830778106
+        },
+        "Biochemistry": {
+          "D_eff": 13,
+          "S": 0.3062212293865662,
+          "abs_S": 0.3062212293865662
+        },
+        "Condensed_Matter": {
+          "D_eff": 14,
+          "S": 0.3384059955797751,
+          "abs_S": 0.3384059955797751
+        },
+        "Atomic_Physics": {
+          "D_eff": 7,
+          "S": 0.7358238658627416,
+          "abs_S": 0.7358238658627416
+        }
+      },
+      "routing": {
+        "chem_D": 9,
+        "ss_D": 9,
+        "region_D": 13,
+        "pack_D": 13
+      },
+      "hypothesis": [
+        "data_best_vs_residual_best_disagree",
+        "dominant_channel_fold_Rg"
+      ]
+    }
+  ],
+  "h2h_above_threshold": [
+    {
+      "name": "Carbonic anhydrase II",
+      "rmsd": 1.3020616472741238,
+      "template": "1CRM"
+    },
+    {
+      "name": "Ubiquitin",
+      "rmsd": 2.025587072375234,
+      "template": "1UD7"
+    },
+    {
+      "name": "p53 DNA-binding",
+      "rmsd": 2.6013650533378136,
+      "template": "3Q01"
+    }
+  ],
+  "fsot_application": "data authority when strong; residual channels bond/clash/Rg; multi-system D_eff from pin",
+  "next_levers": [
+    "termini_disorder \u2192 soft termini rebuild (seed CA_CA walk) only where residual fold stress high at ends",
+    "data_best_vs_residual_best_disagree \u2192 residual among near-ties only (already gated)",
+    "tertiary_contact_map_weak \u2192 ChemLink long-range residual at Biochemistry D=13 on measured contacts only",
+    "global_Rg_mismatch \u2192 domain-split assembly for multi-domain chains"
+  ]
+}

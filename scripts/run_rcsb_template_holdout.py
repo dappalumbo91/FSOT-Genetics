@@ -409,18 +409,32 @@ def select_measured_authority(cands: list[dict]) -> tuple[list[dict], str, dict,
         c["residual_energy"] = residual_interface_energy(c["model"])
     best_data = max(float(c["score"]) for c in cands)
 
-    # Strong homolog data: measured alignment is authority
+    by_data = sorted(cands, key=lambda c: -float(c["score"]))
+    data_best = by_data[0]
+    res_best = min(cands, key=lambda c: float(c["residual_energy"]))
+
+    # Strong homolog data: measured alignment is authority —
+    # residual may replace primary ONLY if data-best is residual-unfit:
+    # E_data / E_res > φ  AND residual-best still data-plausible (score ≥ best/φ)
+    e_d = float(data_best["residual_energy"])
+    e_r = float(res_best["residual_energy"])
     if best_data >= 1.0 / _PHI:
-        by_data = sorted(cands, key=lambda c: -float(c["score"]))
-        return by_data, "data_authority_measured", by_data[0], "score_power"
+        if (
+            e_r > 0
+            and e_d / e_r > _PHI
+            and float(res_best["score"]) >= best_data / _PHI
+            and res_best is not data_best
+        ):
+            # data-best fails residual interface; residual-best stays data-plausible
+            ordered = [res_best] + [c for c in by_data if c is not res_best]
+            return ordered, "residual_override_unfit_data", res_best, "score_power"
+        return by_data, "data_authority_measured", data_best, "score_power"
 
     # Remote / moderate: residual-at-interface ranks inside data band
     thr = best_data / _PHI
     data_pool = [c for c in cands if float(c["score"]) >= thr]
     if len(data_pool) < 2:
-        data_pool = sorted(cands, key=lambda c: -float(c["score"]))[
-            : max(MULTI_TOP_K, 4)
-        ]
+        data_pool = by_data[: max(MULTI_TOP_K, 4)]
     ordered = sorted(
         data_pool, key=lambda c: (float(c["residual_energy"]), -float(c["score"]))
     )

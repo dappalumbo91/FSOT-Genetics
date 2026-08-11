@@ -220,31 +220,53 @@ def select_regime(
     return "bulk_single"
 
 
+def _termini_bond_stress(X: np.ndarray) -> tuple[float, float]:
+    """Mean |L−CA_CA| in termini vs core — residual interface diagnosis."""
+    n = len(X)
+    if n < 8:
+        return 0.0, 0.0
+    bonds = np.linalg.norm(X[1:] - X[:-1], axis=1)
+    err = np.abs(bonds - CA_CA)
+    band = max(3, n // 10)
+    term_idx = list(range(0, min(band, len(err)))) + list(
+        range(max(0, len(err) - band), len(err))
+    )
+    core_idx = list(range(band, max(band + 1, len(err) - band)))
+    if not core_idx:
+        core_idx = list(range(len(err)))
+    t = float(np.mean(err[term_idx])) if term_idx else 0.0
+    c = float(np.mean(err[core_idx])) if core_idx else 1e-9
+    return t, c
+
+
 def fuse_predict(
     sequence: str,
     template_model: np.ndarray,
     features: MsaFeatures | None,
 ) -> dict[str, Any]:
-    """Product path near AF: measured template + physics (+ optional MSA packing).
+    """Product path: measured template + residual-weighted physics.
 
-    Energy = bond + clash + template fidelity ‖X−X0‖² so we never drift off the
-    measured homolog (archive spirit: measured authority stays primary).
+    Energy uses residual_r on bond/clash/anchor (named domains). Soft termini
+    only when termini bond stress exceeds core × r_bond (Physical_Chemistry
+    residual-at-interface) — multi-system behavior, not a free switch.
     """
+    from run_rcsb_template_holdout import soft_flexible_termini  # noqa: WPS433
+
     X0 = template_model
     X_phys = fuse_relax(X0, None)
     X_fuse = fuse_relax(X0, features)
 
     def _energy(X: np.ndarray) -> float:
+        # Residual-weighted energy — same interfaces as fuse_relax
         n = len(X)
         bonds = np.linalg.norm(X[1:] - X[:-1], axis=1)
-        e = float(((bonds - CA_CA) ** 2).sum())
-        # fidelity to measured template (primary authority)
-        e += float(ANCHOR_W * ((X - X0) ** 2).sum())
+        e = float(_R_BOND * ((bonds - CA_CA) ** 2).sum())
+        e += float(ANCHOR_W * _R_ANCHOR * ((X - X0) ** 2).sum())
         for i in range(0, n, max(1, n // 40)):
             for j in range(i + 2, n, max(1, n // 40)):
                 d = float(np.linalg.norm(X[i] - X[j]))
                 if d < CLASH_FLOOR:
-                    e += (CLASH_FLOOR - d) ** 2
+                    e += float(_R_CLASH * (CLASH_FLOOR - d) ** 2)
         return e
 
     cands = [
@@ -252,6 +274,20 @@ def fuse_predict(
         ("template_physics", X_phys, _energy(X_phys)),
         ("template_msa_fuse", X_fuse, _energy(X_fuse)),
     ]
+    # Soft termini candidates when residual bond stress localizes to ends
+    soft_applied = False
+    for label, Xb, _eb in list(cands):
+        t_stress, c_stress = _termini_bond_stress(Xb)
+        if t_stress > c_stress * _R_BOND and c_stress > 0:
+            n = len(Xb)
+            n_term = max(1, n // 20)
+            c_term = max(2, n // 15)
+            Xs = soft_flexible_termini(Xb, n_term=n_term, c_term=c_term)
+            # re-physics after termini rebuild (bond residual again)
+            Xs = fuse_relax(Xs, None if "msa" not in label else features)
+            cands.append((label + "_soft_termini", Xs, _energy(Xs)))
+            soft_applied = True
+
     chosen, X, e_best = min(cands, key=lambda c: c[2])
     conf = fused_confidence(features, provenance=None)
     return {
@@ -260,13 +296,14 @@ def fuse_predict(
         "regime": chosen,
         "energy_best": e_best,
         "energies": {c[0]: c[2] for c in cands},
+        "soft_termini_considered": soft_applied,
         "n_evo_clamps": int(
             len(top_coevolution_pairs(features, top_n=len(sequence)))
             if features is not None and features.depth_ok
             else 0
         ),
         "free_parameters": 0,
-        "engine": "fsot_template_product_v5_residual",
+        "engine": "fsot_template_product_v6_multisystem",
         "contact_scale_A": CONTACT_SCALE,
         "clash_floor_A": CLASH_FLOOR,
         "iters": ITERS,
@@ -276,7 +313,8 @@ def fuse_predict(
             "Biochemistry": _R_ANCHOR,
         },
         "formula": (
-            "measured_homolog_Cα + residual-weighted physics; "
-            "force*=(1+|S|·P_NEW); S=K(T1+T2+T3) pin domains"
+            "measured_homolog_Cα + residual-weighted multi-system physics; "
+            "termini soft if bond residual localizes to ends; "
+            "S=K(T1+T2+T3) pin domains"
         ),
     }

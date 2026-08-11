@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-11T17:32:00.923634+00:00",
+  "generated_at": "2026-08-11T18:04:16.692813+00:00",
   "summary": {
     "n": 10,
     "alphafold_median_A": 0.4706172512401575,
@@ -53,7 +53,7 @@
       "fsot_template_rmsd_A": 1.2139189898466674,
       "fsot_product_rmsd_A": 1.152642610502086,
       "fsot_bulk_rmsd_A": 11.534684051709375,
-      "template_pdb": "1BB6",
+      "template_pdb": "135L",
       "regime": "template_physics"
     },
     {
@@ -77,10 +77,10 @@
     {
       "name": "Insulin",
       "alphafold_rmsd_A": 4.51096053472208,
-      "fsot_template_rmsd_A": 1.1404987047518027,
-      "fsot_product_rmsd_A": 1.1390064394992834,
+      "fsot_template_rmsd_A": 0.8674096876817413,
+      "fsot_product_rmsd_A": 0.8690358937981676,
       "fsot_bulk_rmsd_A": 5.511783547243767,
-      "template_pdb": "1APH",
+      "template_pdb": "2A3G",
       "regime": "template_physics"
     },
     {
@@ -89,7 +89,7 @@
       "fsot_template_rmsd_A": 2.7695272979669325,
       "fsot_product_rmsd_A": 2.6013650533378136,
       "fsot_bulk_rmsd_A": 15.673411039452464,
-      "template_pdb": "3Q01",
+      "template_pdb": "1HU8",
       "regime": "template_physics"
     },
     {
