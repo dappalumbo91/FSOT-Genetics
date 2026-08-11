@@ -35,6 +35,7 @@ sys.path.insert(0, str(ROOT / "vendor"))
 
 import fsot_compute as fc  # noqa: E402
 from fsot_structure_engine import CA_CA  # noqa: E402
+from full_scalar_law import residual_scale  # noqa: E402
 from msa_pipeline import EVO_AMP, MsaFeatures, conservation_confidence  # noqa: E402
 
 PI = float(fc.PI)
@@ -47,6 +48,12 @@ GATE = max(7, int(math.ceil(PI * math.sqrt(E))))
 ANCHOR_W = 1.0 / PHI  # strong template memory
 LR = 1.0 / (PI * E)  # ~0.117
 ITERS = int(round((E ** PI) * PHI * PHI))  # ~61 soft-clamp steps
+
+# Archive residual law: force_channel *= (1 + |S_domain| · P_NEW)
+# Named domains from pin table only — zero free parameters.
+_R_BOND = residual_scale(abs(float(fc.domain_scalar("Physical_Chemistry"))))  # backbone
+_R_CLASH = residual_scale(abs(float(fc.domain_scalar("Chemistry"))))  # local steric
+_R_ANCHOR = residual_scale(abs(float(fc.domain_scalar("Biochemistry"))))  # measured fold
 
 
 def top_coevolution_pairs(
@@ -100,9 +107,21 @@ def fuse_relax(
     lr: float = LR,
     anchor_w: float = ANCHOR_W,
 ) -> np.ndarray:
-    """Template-anchored physics relax with optional coevolution soft clamps."""
+    """Template-anchored physics with residual-weighted force channels.
+
+    measured = template Cα (homolog authority)
+    residual_r = 1 + |S_domain| · P_NEW  (archive law)
+      bond   ← Physical_Chemistry
+      clash  ← Chemistry
+      anchor ← Biochemistry  (holds measured fold; residual strengthens fidelity)
+    MSA coevolution is data polish only — not a free residual invent.
+    """
     X = X0.copy()
     n = len(X)
+    # residual law on named domains (precomputed pin scalars)
+    w_anchor = anchor_w * _R_ANCHOR
+    r_bond = _R_BOND
+    r_clash = _R_CLASH
     evo_pairs: list[tuple[int, int, float]] = []
     if features is not None and features.depth_ok and features.coevolution.max() > 0:
         raw_pairs = top_coevolution_pairs(features, top_n=n)
@@ -112,14 +131,14 @@ def fuse_relax(
             evo_pairs = [(i, j, EVO_AMP * (s / mean_top)) for i, j, s in raw_pairs]
 
     for _ in range(iters):
-        G = anchor_w * (X - X0)
-        # bonds
+        G = w_anchor * (X - X0)
+        # bonds — Physical_Chemistry residual
         d = X[1:] - X[:-1]
         L = np.linalg.norm(d, axis=1) + 1e-9
-        f = ((L - CA_CA) / L)[:, None] * d
+        f = ((L - CA_CA) / L)[:, None] * d * r_bond
         G[:-1] -= f
         G[1:] += f
-        # clashes
+        # clashes — Chemistry residual
         diff = X[:, None, :] - X[None, :, :]
         D = np.linalg.norm(diff, axis=2)
         np.fill_diagonal(D, 1e9)
@@ -128,7 +147,7 @@ def fuse_relax(
         D[idx + 1, idx] = 1e9
         mask = D < CLASH_FLOOR
         if mask.any():
-            coef = np.where(mask, (D - CLASH_FLOOR) / (D + 1e-9), 0.0)
+            coef = np.where(mask, (D - CLASH_FLOOR) / (D + 1e-9), 0.0) * r_clash
             G += np.einsum("ij,ijk->ik", coef, diff)
         # coevolution packing polish ONLY — never rewire topology.
         # Only act on pairs already near contact (clash < d < φ·F08).
@@ -247,9 +266,17 @@ def fuse_predict(
             else 0
         ),
         "free_parameters": 0,
-        "engine": "fsot_template_product_v4",
+        "engine": "fsot_template_product_v5_residual",
         "contact_scale_A": CONTACT_SCALE,
         "clash_floor_A": CLASH_FLOOR,
         "iters": ITERS,
-        "formula": "measured_homolog_Cα + FSOT physics/pack; S=K(T1+T2+T3) domain pin",
+        "residual": {
+            "Physical_Chemistry": _R_BOND,
+            "Chemistry": _R_CLASH,
+            "Biochemistry": _R_ANCHOR,
+        },
+        "formula": (
+            "measured_homolog_Cα + residual-weighted physics; "
+            "force*=(1+|S|·P_NEW); S=K(T1+T2+T3) pin domains"
+        ),
     }
