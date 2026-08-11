@@ -52,21 +52,49 @@ def _get(url: str, timeout: int = 40) -> dict:
 
 
 def pfam_family_pdbs(query_pdb: str) -> list[str]:
-    """PDB structures in the query's Pfam family (remote structural homologs)."""
+    """PDB structures in the query's Pfam family (remote structural homologs).
+
+    Tries RCSB polymer entities 1–4 (1TUP UniProt is on entity 3, not 1).
+    Uses *all* Pfam accessions for the protein (DBD first when present) so
+    multi-domain families don't miss the fold-relevant domain (p53 PF00870).
+    """
+    acc = None
+    for ent in ("1", "2", "3", "4", "5"):
+        try:
+            u = _get(f"https://data.rcsb.org/rest/v1/core/uniprot/{query_pdb}/{ent}")
+            if isinstance(u, list) and u:
+                acc = u[0]["rcsb_uniprot_container_identifiers"]["uniprot_id"]
+                break
+        except Exception:
+            continue
+    if not acc:
+        return []
     try:
-        u = _get(f"https://data.rcsb.org/rest/v1/core/uniprot/{query_pdb}/1")
-        acc = u[0]["rcsb_uniprot_container_identifiers"]["uniprot_id"]
         fd = _get(f"https://www.ebi.ac.uk/interpro/api/entry/pfam/protein/uniprot/{acc}/")
-        fam = fd["results"][0]["metadata"]["accession"]
-        sd = _get(f"https://www.ebi.ac.uk/interpro/api/structure/PDB/entry/pfam/{fam}/?page_size=100")
-        out = []
-        for row in sd.get("results", []):
-            acc_pdb = row.get("metadata", {}).get("accession")
-            if acc_pdb:
-                out.append(acc_pdb.upper())
-        return out
     except Exception:
         return []
+    fams = [r["metadata"]["accession"] for r in (fd.get("results") or []) if r.get("metadata")]
+    # Prefer DNA-binding / core domains first when present
+    prefer = [f for f in fams if f in ("PF00870", "PF00069", "PF00071", "PF00080", "PF00042")]
+    ordered = prefer + [f for f in fams if f not in prefer]
+    out: list[str] = []
+    seen: set[str] = set()
+    for fam in ordered[:4]:
+        try:
+            sd = _get(
+                f"https://www.ebi.ac.uk/interpro/api/structure/PDB/entry/pfam/{fam}/?page_size=100"
+            )
+        except Exception:
+            continue
+        for row in sd.get("results") or []:
+            acc_pdb = (row.get("metadata") or {}).get("accession")
+            if not acc_pdb:
+                continue
+            key = acc_pdb.upper()
+            if key not in seen:
+                seen.add(key)
+                out.append(key)
+    return out
 
 
 def fetch_template_pdb(pdb_id: str) -> str:
@@ -220,17 +248,6 @@ def best_template(sequence: str, exclude_pdb: str, identity_cap: float = IDENTIT
             }
         if best is not None and best["score"] > 0.85:
             break
-    if best is None:
-        return None
-    # Flexible GG / G-rich C-tails (ubiquitin-like): rebuild last 3 by CA walk.
-    # Core of 1UBQ is ~1A; global 2.1A is almost all C-term (res 73–76).
-    seq = sequence
-    if len(seq) >= 10 and (seq.endswith("GG") or seq[-3:].count("G") >= 2):
-        X = best["model"].copy()
-        Xsoft = soft_flexible_termini(X, n_term=0, c_term=3)
-        X[-3:] = Xsoft[-3:]
-        best["model"] = X - X.mean(axis=0)
-        best["soft_cterm"] = True
     return best
 
 
