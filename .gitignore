@@ -51,3 +51,6 @@ data/public/
 zig/.zig-cache/
 zig/zig-out/
 
+# Field console is generated but committed for demos; rebuild anytime:
+# python scripts/build_field_console.py
+

@@ -71,6 +71,16 @@ python scripts/parity_zig_python.py   # → PARITY_GATE PASS
 
 See `docs/PARITY_ZIG_PYTHON.md`.
 
+### Field console (visual — no framework)
+
+```powershell
+python scripts/build_field_console.py --open
+# or serve:  python scripts/serve_field_console.py
+```
+
+One dark scientific page: product vs AF table, medical variants, residual pin,
+3D Cα viewer, copy-paste commands. Checklist: `docs/FIELD_READY.md`.
+
 ### Research oracle (Python — metrics only)
 
 ```powershell
