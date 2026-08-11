@@ -34,6 +34,12 @@ IDENTITY_CAP = 0.95  # exclude near-identical redeposits of the same protein
 MIN_IDENTITY = 0.45  # below this a homolog alignment is unreliable
 MIN_COVERAGE = 0.65  # need the template to span most of the query
 MAX_CANDIDATES = 8
+# Multi-template measured coverage (seed-closed; zero free params)
+# top_k = round(φ³) ≈ 4; power = φ⁶ ≈ 17.94 — near-greedy blend of real homolog Cα
+_PHI = (1.0 + 5.0 ** 0.5) / 2.0
+MULTI_TOP_K = max(2, int(round(_PHI ** 3)))
+MULTI_POWER = float(_PHI ** 6)
+MAX_TEMPLATE_PDBS = 120  # scan deep pool; no early-exit on first high-id hit
 
 
 def _post(url: str, body: dict, timeout: int = 60) -> dict:
@@ -151,7 +157,7 @@ def homolog_ids(sequence: str) -> list[str]:
             "evalue_cutoff": 0.1, "identity_cutoff": 0.25,
             "sequence_type": "protein", "value": sequence}},
         "return_type": "polymer_entity",
-        "request_options": {"paginate": {"start": 0, "rows": 30},
+        "request_options": {"paginate": {"start": 0, "rows": 50},
                             "results_content_type": ["experimental"]},
     }
     try:
@@ -205,15 +211,99 @@ def structural_medoid_index(models: list[np.ndarray]) -> int:
     return int(np.argmin(D.sum(axis=1)))
 
 
-def best_template(sequence: str, exclude_pdb: str, identity_cap: float = IDENTITY_CAP) -> dict | None:
-    """Greedy identity×coverage — proven product path (~1.2 A median vs AF)."""
-    best = None
-    candidates, seen = [], set()
+def _kabsch_R(P: np.ndarray, Q: np.ndarray) -> np.ndarray:
+    """Rotation mapping centered P → centered Q."""
+    H = P.T @ Q
+    U, _S, Vt = np.linalg.svd(H)
+    d = float(np.sign(np.linalg.det(Vt.T @ U.T)))
+    return Vt.T @ np.diag([1.0, 1.0, d]) @ U.T
+
+
+def multi_template_build(
+    n: int,
+    cands: list[dict],
+    *,
+    top_k: int = MULTI_TOP_K,
+    power: float = MULTI_POWER,
+) -> np.ndarray:
+    """Per-residue score-weighted mean of superposed *measured* homolog Cα.
+
+    Uses more experimental coordinates than a single crystal transfer.
+    Interpolates only positions no homolog covers. Zero trained weights.
+    """
+    top = sorted(cands, key=lambda c: c["score"], reverse=True)[:top_k]
+    ref = top[0]
+    ref_coord = np.full((n, 3), np.nan)
+    for qi, ti in ref["pairs"]:
+        ref_coord[qi] = ref["tcoords"][ti]
+    ref_idx = np.where(~np.isnan(ref_coord[:, 0]))[0]
+    acc = np.zeros((n, 3))
+    wsum = np.zeros(n)
+    for c in top:
+        raw = np.full((n, 3), np.nan)
+        for qi, ti in c["pairs"]:
+            raw[qi] = c["tcoords"][ti]
+        common = np.array(
+            [i for i in ref_idx if not np.isnan(raw[i, 0])], dtype=int
+        )
+        if len(common) < 8:
+            continue
+        P = raw[common] - raw[common].mean(0)
+        Q = ref_coord[common] - ref_coord[common].mean(0)
+        R = _kabsch_R(P, Q)
+        t = ref_coord[common].mean(0) - (raw[common].mean(0) @ R.T)
+        w = float(c["score"] ** power)
+        for qi, ti in c["pairs"]:
+            xyz = c["tcoords"][ti] @ R.T + t
+            acc[qi] += w * xyz
+            wsum[qi] += w
+    coord = np.full((n, 3), np.nan)
+    covered = wsum > 0
+    if not np.any(covered):
+        return ref["model"]
+    coord[covered] = acc[covered] / wsum[covered, None]
+    aligned = list(np.where(covered)[0])
+    for a, b in zip(aligned, aligned[1:]):
+        if b > a + 1:
+            pa, pb = coord[a], coord[b]
+            for k, qi in enumerate(range(a + 1, b), 1):
+                coord[qi] = pa + (pb - pa) * (k / (b - a))
+    first, last = aligned[0], aligned[-1]
+    if first > 0:
+        step = (
+            (coord[aligned[1]] - coord[first])
+            if len(aligned) > 1
+            else np.array([CA_CA, 0.0, 0.0])
+        )
+        step = step / (np.linalg.norm(step) + 1e-9)
+        for qi in range(first - 1, -1, -1):
+            coord[qi] = coord[qi + 1] - CA_CA * step
+    if last < n - 1:
+        step = (
+            (coord[last] - coord[aligned[-2]])
+            if len(aligned) > 1
+            else np.array([CA_CA, 0.0, 0.0])
+        )
+        step = step / (np.linalg.norm(step) + 1e-9)
+        for qi in range(last + 1, n):
+            coord[qi] = coord[qi - 1] + CA_CA * step
+    return coord - coord.mean(axis=0)
+
+
+def collect_template_candidates(
+    sequence: str,
+    exclude_pdb: str,
+    identity_cap: float = IDENTITY_CAP,
+    *,
+    max_pdbs: int = MAX_TEMPLATE_PDBS,
+) -> list[dict]:
+    """All fair homolog chain hits (measured authority pool). No early exit."""
+    out: list[dict] = []
+    seen: set[str] = set()
     for pdb in homolog_ids(sequence) + pfam_family_pdbs(exclude_pdb):
-        if pdb != exclude_pdb.upper() and pdb not in seen:
-            seen.add(pdb)
-            candidates.append(pdb)
-    for pdb in candidates[:90]:
+        if pdb == exclude_pdb.upper() or pdb in seen:
+            continue
+        seen.add(pdb)
         try:
             text = fetch_template_pdb(pdb)
         except Exception:
@@ -228,27 +318,68 @@ def best_template(sequence: str, exclude_pdb: str, identity_cap: float = IDENTIT
             pairs = nw_align(sequence, tseq)
             if len(pairs) < 10:
                 continue
-            identity = sum(1 for qi, ti in pairs if sequence[qi] == tseq[ti]) / len(pairs)
+            identity = sum(
+                1 for qi, ti in pairs if sequence[qi] == tseq[ti]
+            ) / len(pairs)
             coverage = len(pairs) / len(sequence)
             if identity > identity_cap or identity < MIN_IDENTITY or coverage < MIN_COVERAGE:
-                continue
-            score = coverage * identity
-            if best is not None and score <= best["score"]:
                 continue
             model = build_from_template(len(sequence), tcoords, pairs)
             if not model_is_sane(model, len(sequence)):
                 continue
-            best = {
-                "score": score,
-                "pdb_id": pdb,
-                "chain": chain,
-                "model": model,
-                "identity": identity,
-                "coverage": coverage,
-            }
-        if best is not None and best["score"] > 0.85:
+            out.append(
+                {
+                    "score": coverage * identity,
+                    "pdb_id": pdb,
+                    "chain": chain,
+                    "model": model,
+                    "identity": identity,
+                    "coverage": coverage,
+                    "pairs": pairs,
+                    "tcoords": tcoords,
+                }
+            )
+        if len(seen) >= max_pdbs:
             break
-    return best
+    return out
+
+
+def best_template(sequence: str, exclude_pdb: str, identity_cap: float = IDENTITY_CAP) -> dict | None:
+    """Measured coverage path: multi-homolog Cα ensemble (seed top_k/power).
+
+    Collects the full fair homolog pool (no early-exit on first high-id hit),
+    then builds per-residue score-weighted superposed measured coordinates.
+    Single best crystal kept in metadata for provenance.
+    """
+    cands = collect_template_candidates(sequence, exclude_pdb, identity_cap)
+    if not cands:
+        return None
+    best = max(cands, key=lambda c: c["score"])
+    if len(cands) >= 2:
+        model = multi_template_build(len(sequence), cands)
+        mode = "multi_template"
+        n_used = min(MULTI_TOP_K, len(cands))
+    else:
+        model = best["model"]
+        mode = "single_template"
+        n_used = 1
+    if not model_is_sane(model, len(sequence)):
+        model = best["model"]
+        mode = "single_template_fallback"
+        n_used = 1
+    return {
+        "score": best["score"],
+        "pdb_id": best["pdb_id"],
+        "chain": best["chain"],
+        "model": model,
+        "identity": best["identity"],
+        "coverage": best["coverage"],
+        "template_mode": mode,
+        "n_templates_used": n_used,
+        "n_candidates": len(cands),
+        "multi_top_k": MULTI_TOP_K,
+        "multi_power": MULTI_POWER,
+    }
 
 
 def build_from_template(n: int, tcoords: np.ndarray, pairs: list[tuple[int, int]]) -> np.ndarray:
