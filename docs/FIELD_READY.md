@@ -37,13 +37,14 @@ GUI shows **frozen gates**. CLI/Zig **does** the science.
 | Medical CLI | `python scripts/fsot_predict.py --id 1UBQ` | Structure + regime |
 | Variant panel | `python scripts/run_medical_variant_panel.py` | Driver calls |
 
-### C. Packaging / ops (still open — prioritize in order)
+### C. Packaging / ops
 
-1. **One-button field pack** — zip: `field/`, `zig-out/bin/fsot_genetics_host`, pin JSON, PRODUCT_FREEZE, LICENSE  
-2. **Offline mode note** — 3Dmol CDN needs network; tables work offline; bake 3Dmol later if needed  
-3. **Version stamp** — git SHA + pin D1D38A on console header (partially: built_at)  
-4. **No silent network** — document which commands need RCSB/UniRef  
-5. **Claim boundaries** — FIELD console already lists honest limits; keep them  
+1. **One-button field pack** — `python scripts/build_field_pack.py`  
+   → `dist/FSOT-Genetics-field-<sha>.zip` (console + host exe + pin + freeze + data)  
+2. **Version stamp** — console shows git SHA + dirty flag + pin prefix  
+3. **Offline** — tables + host gate offline; 3Dmol CDN needs network once  
+4. **Network honesty** — full predict/template still needs RCSB/UniRef; pack does not  
+5. **Claim boundaries** — PRODUCT_FREEZE + console honest-limits section  
 
 ### D. Visual polish principles (so UI does not hurt)
 

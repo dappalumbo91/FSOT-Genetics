@@ -81,6 +81,13 @@ python scripts/build_field_console.py --open
 One dark scientific page: product vs AF table, medical variants, residual pin,
 3D Cα viewer, copy-paste commands. Checklist: `docs/FIELD_READY.md`.
 
+**USB / demo field pack** (console + host binary + pin + freeze):
+
+```powershell
+python scripts/build_field_pack.py
+# → dist/FSOT-Genetics-field-<gitsha>.zip
+```
+
 ### Research oracle (Python — metrics only)
 
 ```powershell

@@ -54,3 +54,6 @@ zig/zig-out/
 # Field console is generated but committed for demos; rebuild anytime:
 # python scripts/build_field_console.py
 
+# Field pack zips (rebuild with scripts/build_field_pack.py)
+dist/
+

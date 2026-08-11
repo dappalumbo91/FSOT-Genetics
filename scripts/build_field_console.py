@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import subprocess
 import sys
 import webbrowser
 from datetime import datetime, timezone
@@ -38,10 +39,52 @@ def _read_text(path: Path, max_chars: int = 400_000) -> str | None:
     return t[:max_chars]
 
 
+def git_stamp() -> dict[str, str | bool]:
+    """Return short/full SHA, dirty flag, branch (best-effort)."""
+    out: dict[str, str | bool] = {
+        "sha": "unknown",
+        "sha_full": "unknown",
+        "branch": "unknown",
+        "dirty": False,
+    }
+
+    def _run(args: list[str]) -> str | None:
+        try:
+            r = subprocess.run(
+                args,
+                cwd=ROOT,
+                capture_output=True,
+                text=True,
+                timeout=10,
+                check=False,
+            )
+            if r.returncode != 0:
+                return None
+            return (r.stdout or "").strip()
+        except Exception:
+            return None
+
+    full = _run(["git", "rev-parse", "HEAD"])
+    short = _run(["git", "rev-parse", "--short", "HEAD"])
+    branch = _run(["git", "rev-parse", "--abbrev-ref", "HEAD"])
+    dirty_s = _run(["git", "status", "--porcelain"])
+    if full:
+        out["sha_full"] = full
+    if short:
+        out["sha"] = short
+    if branch:
+        out["branch"] = branch
+    if dirty_s is not None:
+        out["dirty"] = bool(dirty_s.strip())
+    return out
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--open", action="store_true", help="Open in default browser")
     args = ap.parse_args(argv)
+
+    stamp = git_stamp()
 
     product = _load(ROOT / "data" / "product_vs_alphafold.json") or {}
     parity = _load(ROOT / "data" / "parity_zig_python.json") or {}
@@ -77,9 +120,14 @@ def main(argv: list[str] | None = None) -> int:
                 }
             )
 
+    pin_meta = _load(ROOT / "vendor" / "fsot_compute_AUTHORITY_PIN.json") or {}
+    pin_sha = (pin_meta.get("authority_sha256") or "D1D38A")[:12]
+
     payload = {
         "built_at": datetime.now(timezone.utc).isoformat(),
         "pin": "D1D38A",
+        "pin_sha256_prefix": pin_sha,
+        "git": stamp,
         "free_parameters": 0,
         "product": {
             "summary": ps,
@@ -228,9 +276,11 @@ def main(argv: list[str] | None = None) -> int:
   <div>
     <h1>FSOT-Genetics · Field Console</h1>
     <div class="sub">Zero free parameters · pin <code id="pin">D1D38A</code> · law S = K(T1+T2+T3)</div>
+    <div class="sub" id="git-line" style="margin-top:0.35rem;font-family:var(--mono);font-size:0.8rem;"></div>
   </div>
   <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
     <span class="badge" id="badge-parity">parity …</span>
+    <span class="badge neutral" id="badge-git">git …</span>
     <span class="badge neutral" id="badge-params">0 free params</span>
     <span class="badge neutral" id="badge-built">built …</span>
   </div>
@@ -302,7 +352,8 @@ def main(argv: list[str] | None = None) -> int:
 
 <footer>
   Built from local <code>data/*.json</code> · regenerate with <code>python scripts/build_field_console.py</code><br/>
-  FSOT-Genetics · github.com/dappalumbo91/FSOT-Genetics · pin D1D38A
+  FSOT-Genetics · github.com/dappalumbo91/FSOT-Genetics · pin D1D38A ·
+  <span id="foot-git"></span>
 </footer>
 
 <script>
@@ -350,6 +401,22 @@ function callClass(c) {{
     b.className = "badge bad";
   }}
   document.getElementById("badge-built").textContent = "built " + (DATA.built_at || "").slice(0,19).replace("T"," ") + "Z";
+  const g = DATA.git || {{}};
+  const dirty = g.dirty ? " dirty" : "";
+  const sha = g.sha || "unknown";
+  const branch = g.branch || "?";
+  const gitBadge = document.getElementById("badge-git");
+  gitBadge.textContent = "git " + sha + dirty;
+  if (g.dirty) gitBadge.className = "badge bad";
+  else gitBadge.className = "badge neutral";
+  const gitLine = document.getElementById("git-line");
+  if (gitLine) {{
+    gitLine.textContent =
+      "branch " + branch + " · " + (g.sha_full || sha) + (g.dirty ? " · WORKTREE DIRTY" : " · clean") +
+      " · pin " + (DATA.pin_sha256_prefix || "D1D38A") + "…";
+  }}
+  const foot = document.getElementById("foot-git");
+  if (foot) foot.textContent = "git " + sha + (g.dirty ? " (dirty)" : "");
 }})();
 
 // Product table

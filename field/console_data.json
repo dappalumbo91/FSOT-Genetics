@@ -1,6 +1,13 @@
 {
-  "built_at": "2026-08-11T13:24:18.616630+00:00",
+  "built_at": "2026-08-11T13:31:20.085009+00:00",
   "pin": "D1D38A",
+  "pin_sha256_prefix": "D1D38A185487",
+  "git": {
+    "sha": "5ee935e",
+    "sha_full": "5ee935ec526142e0daa79f794b717e7505801287",
+    "branch": "main",
+    "dirty": true
+  },
   "free_parameters": 0,
   "product": {
     "summary": {

@@ -1,0 +1,106 @@
+{
+  "pack_name": "FSOT-Genetics-field-5ee935e-dirty",
+  "generated_at": "2026-08-11T13:31:21.475629+00:00",
+  "git": {
+    "sha": "5ee935e",
+    "sha_full": "5ee935ec526142e0daa79f794b717e7505801287",
+    "branch": "main",
+    "dirty": true
+  },
+  "pin": "D1D38A",
+  "free_parameters": 0,
+  "parity": {
+    "status": "PASS",
+    "returncode": 0,
+    "tail": "                                 -1                -1     0.000e+00  PASS\ncodon_atg2                                   1                 1     0.000e+00  PASS\naa_len                                      22                22     0.000e+00  PASS\ntrit_pair                                   -1                -1     0.000e+00  PASS\ntrit_consensus                               1                 1     0.000e+00  PASS\naa_atg                                       M                 M                PASS\naa_translate                MALWMRLLPLLALLALWGPDPAMALWMRLLPLLALLALWGPDPA                PASS\n----------------------------------------------------------------------------------\nPARITY_GATE PASS \u2014 Zig host matches Python pin oracle\nWrote C:\\Users\\damia\\Desktop\\FSOT-Genetics\\data\\parity_zig_python.json\n"
+  },
+  "product_summary": {
+    "n": 10,
+    "alphafold_median_A": 0.4706172512401575,
+    "fsot_template_median_A": 1.183107520230453,
+    "fsot_product_median_A": 1.1600280586911782,
+    "fsot_bulk_median_A": 13.574035917440511,
+    "product_within_1p5A_of_alphafold": 10,
+    "product_sub2A": 9,
+    "free_parameters": 0
+  },
+  "files": [
+    {
+      "path": "console.html",
+      "sha256": "6844d7056cd8668e507e57eb46dad397195f002ca077c3b91eac56190ffbe29b",
+      "bytes": 31552
+    },
+    {
+      "path": "console_data.json",
+      "sha256": "1a0af766ee740d780d8c59c0493b5072146aa26637fd974219232ee5a108acd1",
+      "bytes": 13937
+    },
+    {
+      "path": "docs/PRODUCT_FREEZE.md",
+      "sha256": "f6ef9c0307c471c01b6e268ce43e7e0b92089b1fc0778a08911b0d2c9fc97418",
+      "bytes": 2164
+    },
+    {
+      "path": "docs/FIELD_READY.md",
+      "sha256": "4c4e6b10f51837056ea87036f62176b7357bf2f1b028ef9a6bdc4f66782ac134",
+      "bytes": 3283
+    },
+    {
+      "path": "docs/PARITY_ZIG_PYTHON.md",
+      "sha256": "15ac98b69ea0cdbefd32f5577bb017998a6de10d65e2df69cc4e804b9342f2e5",
+      "bytes": 2103
+    },
+    {
+      "path": "docs/BARE_METAL_GENETICS_ROADMAP.md",
+      "sha256": "2464fedce966a327e5ff191e754d26c844a4397ad2c2094016fa1dbff9f79780",
+      "bytes": 3966
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "5ad8c213095c573921d7388edf93f6a9f54490b8ebf3b165ae8ef1947cf70846",
+      "bytes": 11556
+    },
+    {
+      "path": "pin/fsot_compute_AUTHORITY_PIN.json",
+      "sha256": "3e2f485244372ad0b5dcbf74b77366de778382605a096ed77666b936558d9ad4",
+      "bytes": 1204
+    },
+    {
+      "path": "data/product_vs_alphafold.json",
+      "sha256": "519ef6575044f3f10170a8b4fabefb89b782f26985d864dcc901db4aa1f4a0ff",
+      "bytes": 3475
+    },
+    {
+      "path": "data/parity_zig_python.json",
+      "sha256": "a31a483cb38bbb7b56a2ed35f95836bdd782fde0ccaf193649ac85575836dfb0",
+      "bytes": 4136
+    },
+    {
+      "path": "data/medical_variant_panel.json",
+      "sha256": "94d8de40315c9c083e4f5c4a24d43484eae27dbfc14dc754c2de09d1f2b8a704",
+      "bytes": 54425
+    },
+    {
+      "path": "data/ubq_fsot.pdb",
+      "sha256": "e5c0d2aa15bda6196340f3e452f0b2e6ca815acc76d2b0a6dbd31d9cf3aaf091",
+      "bytes": 6237
+    },
+    {
+      "path": "data/1UBQ.pdb",
+      "sha256": "d4a6812d8951cf6594e6a0763f089e35f5a80b62acb3c117b2c5565228a7b161",
+      "bytes": 78570
+    },
+    {
+      "path": "bin/fsot_genetics_host.exe",
+      "sha256": "bd44b7b2be58b407753bbc781b96d958d9bbd98036b5864f681d67500c978745",
+      "bytes": 1046528
+    },
+    {
+      "path": "README.md",
+      "sha256": "d19836595cdba0c00580453ea5fb798a3dc63ffd4852f54b6946702149eaff11",
+      "bytes": 1466
+    }
+  ],
+  "how_to_open_console": "Open console.html in a browser",
+  "how_to_run_host": "bin/run_host_gate.cmd or bin/fsot_genetics_host*"
+}
