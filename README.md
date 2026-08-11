@@ -95,6 +95,14 @@ python scripts/run_field_stress_suite.py
 # → data/field_stress_suite.json  (all required gates PASS)
 ```
 
+**Wet-lab + AlphaFold multi-domain eval** (cancer / vaccine / drug / variants):
+
+```powershell
+python scripts/run_wetlab_af_eval.py
+# → data/wetlab_af_eval.json
+# → predictions/reports/WETLAB_AF_EVAL.md
+```
+
 ### Research oracle (Python — metrics only)
 
 ```powershell
