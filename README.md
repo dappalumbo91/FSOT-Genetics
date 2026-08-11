@@ -20,8 +20,12 @@ Zero free parameters. No neural-network claim path.
 |--|-----------|---------------|
 | Free / trained parameters | ~tens of millions of weights | **0** |
 | Method | Trained network + MSA | Closed-form scalar law; real data used as **input**, never training |
-| Cα RMSD — **template regime** (well-templated proteins) | ~0.4 Å | **~1.2 Å median; 9/10 within 1.5 Å of AlphaFold** |
-| Cα RMSD — **de-novo, single sequence** | — | **~11 Å** (proven single-sequence information ceiling) |
+| Cα RMSD — **product** (multi-template + residual physics) | ~0.47 Å median | **1.16 Å median; 10/10 within 1.5 Å of AF; 9/10 sub-2 Å** |
+| Cα RMSD — **de-novo, single sequence** | — | **~11–14 Å** (proven single-sequence information ceiling) |
+
+**Product freeze (2026-08-11):** further AF RMSD grinding paused.  
+Runtime moves to **Zig bare metal** (`zig/` host + QEMU Multiboot).  
+See `docs/PRODUCT_FREEZE.md` and `docs/BARE_METAL_GENETICS_ROADMAP.md`.
 
 We are **not** training nets. We use the zero-parameter scalar law as the map and
 real observed data (homolog structures, evolutionary alignments) as **input** —
@@ -47,6 +51,19 @@ fully deterministic, auditable, and reproducible.
 ---
 
 ## Quick start
+
+### Shipping runtime (Zig — preferred)
+
+```powershell
+cd zig
+zig build host          # product residual + codon + scalar gate
+zig build kernel        # freestanding Multiboot image
+.\run_qemu.ps1          # QEMU serial gate (if QEMU installed)
+```
+
+Host residual must match pin: `r_bond≈1.100 r_clash≈1.122 r_anchor≈1.092`.
+
+### Research oracle (Python — metrics only)
 
 ```powershell
 git clone https://github.com/dappalumbo91/FSOT-Genetics.git
