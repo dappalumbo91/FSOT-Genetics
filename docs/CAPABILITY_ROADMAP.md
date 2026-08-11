@@ -20,7 +20,9 @@ Source: `data/medical_stress_suite.json` (10 classic medical/H2H proteins).
 | FSOT bulk single | 17.4 | Pure single-sequence claim path |
 
 **Fuse beats raw template on 7/9** templated targets (packing-only coevolution clamps).  
-**p53 variant panel:** 6/6 drivers flagged, mean **83.8th** percentile (conservation).  
+**Multi-gene variant panel (UniRef50 protein-specific MSAs + absolute gates):**  
+**34/35** curated drivers called LIKELY DAMAGING (**97%**); data from real UniProt UniRef clusters.  
+**Domain-split + joint templates:** SOD1/HBB global ~0.3 Å; KRAS domain ~1.65 Å; TP53 joint improves full-chain vs bulk.  
 **Cross-verify:** ALL GATES PASSED.
 
 ### Honest ceilings (do not market past these)

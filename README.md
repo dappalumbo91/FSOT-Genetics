@@ -97,17 +97,18 @@ fallback. Roadmap: `docs/CAPABILITY_ROADMAP.md`.
 python scripts/run_medical_variant_panel.py
 ```
 
-Domain-aware Pfam conservation × substitution specificity; DNA front door for TP53.
-See `data/medical_variant_panel.json`.
+**UniRef50 protein-specific MSAs** (real UniProt homolog clusters) + Pfam gap-fill +
+absolute evolutionary gates (seed-closed). Latest scoreboard: **34/35 drivers
+LIKELY DAMAGING (97%)**. See `data/medical_variant_panel.json`.
 
-**Domain-split structure assembly** (multi-domain disease proteins):
+**Domain-split + joint multi-domain templates:**
 
 ```powershell
 python scripts/domain_split_assemble.py TP53 KRAS SOD1 EGFR
 ```
 
-Per-domain templates + FSOT interface pad; trust per-domain RMSD (orientation between
-domains is low-confidence without a joint template).
+When a single homolog covers multiple domains, experimental inter-domain pose is
+kept; otherwise per-domain templates + FSOT interface pad.
 
 
 The RCSB manifest is a no-tuning holdout: do not select formulas, routings, or

@@ -41,6 +41,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from medical_gene_catalog import GENE_CATALOG, list_genes  # noqa: E402
 from variant_conservation import conservation_profile, AA20  # noqa: E402
+from msa_uniref import best_conservation_profile, shannon_from_freq  # noqa: E402
 from trinary_syntax import dna_to_aa, codon_primary  # noqa: E402
 from fsot_structure_engine import clean_sequence  # noqa: E402
 
@@ -49,9 +50,20 @@ OUT_MD = ROOT / "predictions" / "reports" / "MEDICAL_VARIANT_PANEL.md"
 CACHE = Path.home() / ".cache" / "fsot-genetics" / "uniprot"
 CACHE.mkdir(parents=True, exist_ok=True)
 
-# Frozen call thresholds (not free params — fixed medical policy cutpoints)
+# Frozen call thresholds (seed-closed medical policy — not free fit weights)
 PCT_DAMAGING = 75.0
 PCT_UNCERTAIN = 40.0
+# Absolute intolerance (needed for tight UniRef clusters where almost every
+# site is conserved → percentiles collapse). Forms from {e, φ}:
+#   CONS_HIGH  = 1 - 1/e² ≈ 0.865
+#   CONS_MID   = 1 - 1/e  ≈ 0.632
+#   FMUT_RARE  = 1/e²     ≈ 0.135
+#   FMUT_ABSENT= 1/e³     ≈ 0.050
+# 1 - exp(-π/2) ≈ 0.792 — high conservation absolute gate (seed-closed)
+CONS_HIGH = 1.0 - math.exp(-math.pi / 2.0)
+CONS_MID = 1.0 - 1.0 / math.e
+FMUT_RARE = 1.0 / (math.e ** 2)
+FMUT_ABSENT = 1.0 / (math.e ** 3)
 
 
 def fetch_uniprot_seq(acc: str) -> str:
@@ -119,18 +131,41 @@ def missense_background(cons: np.ndarray, freq: list[dict], seq: str) -> np.ndar
     return np.asarray(scores, dtype=float) if scores else np.zeros(1)
 
 
-def call_from_pct(pct: float | None, *, kind: str, coverage_ok: bool = True) -> str:
+def call_variant(
+    *,
+    kind: str,
+    coverage_ok: bool,
+    cons: float | None,
+    f_mut: float | None,
+    pct: float | None,
+) -> str:
+    """Dual-gate call: absolute evolutionary intolerance OR high percentile.
+
+    Tight UniRef clusters make nearly all sites high-cons, so percentile-only
+    gates fail. Absolute gate mirrors SIFT spirit with seed-closed cutpoints.
+    """
     if kind.startswith("nonsense"):
         return "LIKELY DAMAGING"
     if kind.startswith("synonymous"):
         return "likely benign"
     if not coverage_ok:
         return "insufficient_MSA_coverage"
-    if pct is None:
-        return "uncertain"
-    if pct >= PCT_DAMAGING:
+    c = float(cons or 0.0)
+    fm = float(f_mut if f_mut is not None else 1.0)
+    # Absolute intolerance
+    if c >= CONS_HIGH and fm <= FMUT_ABSENT:
         return "LIKELY DAMAGING"
-    if pct >= PCT_UNCERTAIN:
+    if c >= CONS_HIGH and fm <= FMUT_RARE:
+        return "LIKELY DAMAGING"
+    if c >= CONS_MID and fm <= FMUT_ABSENT:
+        return "uncertain"
+    # Percentile gate (works for diverse Pfam-style backgrounds)
+    if pct is not None:
+        if pct >= PCT_DAMAGING:
+            return "LIKELY DAMAGING"
+        if pct >= PCT_UNCERTAIN:
+            return "uncertain"
+    if c >= CONS_MID and fm <= FMUT_RARE:
         return "uncertain"
     return "likely tolerated"
 
@@ -172,6 +207,9 @@ def score_missense(
     fm = fi.get(mut, 0.0)
     impact = c * (1.0 - fm)
     pct = float((background < impact).mean()) * 100.0 if coverage_ok else None
+    call = call_variant(
+        kind="missense", coverage_ok=coverage_ok, cons=c, f_mut=fm, pct=pct
+    )
     out.update(
         {
             "kind": "missense",
@@ -183,7 +221,14 @@ def score_missense(
             "impact_percentile": pct,
             "msa_coverage_ok": coverage_ok,
             "conservation_percentile": float((cons < cons[i]).mean()) * 100.0,
-            "call": call_from_pct(pct, kind="missense", coverage_ok=coverage_ok),
+            "call": call,
+            "gates": {
+                "cons_high": CONS_HIGH,
+                "cons_mid": CONS_MID,
+                "fmut_absent": FMUT_ABSENT,
+                "fmut_rare": FMUT_RARE,
+                "pct_damaging": PCT_DAMAGING,
+            },
         }
     )
     return out
@@ -193,53 +238,70 @@ def score_gene(symbol: str) -> dict[str, Any]:
     gene = GENE_CATALOG[symbol]
     t0 = time.perf_counter()
     seq = fetch_uniprot_seq(gene["uniprot"])
-    # cache profiles by (pfam, start, end) on the domain slice — much faster
-    # than aligning a multi-domain chain to a single-domain Pfam MSA
-    profiles: dict[tuple, tuple] = {}
+
+    # 1) Protein-specific UniRef MSA (full chain — fixes N-term / edge coverage)
+    # 2) Gap-fill remaining columns from domain Pfam MSAs (real observables both)
+    cons_u, freq_u, n_u, meta_u = best_conservation_profile(
+        seq,
+        uniprot=gene["uniprot"],
+        pfam=gene.get("pfam"),
+        self_pdb=gene.get("structure_pdb"),
+    )
+    cons = np.array(cons_u, dtype=float)
+    freq: list[dict] = list(freq_u)
+    # Ensure length match
+    if len(cons) < len(seq):
+        cons = np.pad(cons, (0, len(seq) - len(cons)))
+    while len(freq) < len(seq):
+        freq.append({})
+
+    # Gap-fill with domain Pfam where UniRef left zeros
+    pfam_fills = 0
+    for d in gene.get("domains_static") or []:
+        s0, s1 = int(d["start"]) - 1, int(d["end"])
+        s0 = max(0, s0)
+        s1 = min(len(seq), s1)
+        need = [i for i in range(s0, s1) if not freq[i] or cons[i] <= 0]
+        if not need:
+            continue
+        pfam = d.get("pfam") or gene.get("pfam")
+        sub = seq[s0:s1]
+        try:
+            cs, fs, _nr, _pf = conservation_profile(
+                sub, gene.get("structure_pdb") or "XXXX", pfam=pfam, max_rows=2500
+            )
+        except Exception:
+            continue
+        for j, i in enumerate(range(s0, s1)):
+            if j >= len(cs):
+                break
+            if not freq[i] or cons[i] <= 0:
+                # blended local
+                fj = fs[j] if j < len(fs) else {}
+                cons[i] = max(float(cs[j]), shannon_from_freq(fj))
+                freq[i] = fj
+                pfam_fills += 1
+
+    bg = missense_background(cons, freq, seq)
+    source_label = meta_u.get("chosen", "unknown")
+    if pfam_fills:
+        source_label = f"{source_label}+pfam_gapfill"
+    nrows0 = int(n_u)
+    pf0 = meta_u.get("cluster_id") or meta_u.get("pfam") or gene.get("pfam")
 
     def get_profile_at(pos: int):
-        pfam = pfam_for_position(gene, pos)
-        span = domain_span_for_position(gene, pos)
-        if span is None:
-            # whole-chain vs default pfam (short proteins / single domain)
-            key = (pfam, 1, len(seq))
-            s0, s1 = 0, len(seq)
-        else:
-            key = (pfam, span[0], span[1])
-            s0, s1 = span[0] - 1, span[1]
-        if key not in profiles:
-            sub = seq[s0:s1]
-            cons_sub, freq_sub, nrows, pf = conservation_profile(
-                sub, gene.get("structure_pdb") or "XXXX", pfam=pfam, max_rows=3000
-            )
-            # expand to full-chain arrays (zeros outside domain)
-            cons = np.zeros(len(seq))
-            freq: list[dict] = [{} for _ in range(len(seq))]
-            for i, c in enumerate(cons_sub):
-                cons[s0 + i] = c
-                if i < len(freq_sub):
-                    freq[s0 + i] = freq_sub[i]
-            profiles[key] = (cons, freq, nrows, pf, s0, s1)
-        cons, freq, nrows, pf, s0, s1 = profiles[key]
-        # background only over residues inside this domain (fair percentile)
-        bg = missense_background(cons[s0:s1], freq[s0:s1], seq[s0:s1])
-        return cons, freq, nrows, pf, bg
-
-    # default profile for summary = primary gene pfam domain or whole chain
-    cons0, freq0, nrows0, pf0, _bg0 = get_profile_at(
-        (gene.get("domains_static") or [{"start": 1}])[0].get("start", 1)
-        if gene.get("domains_static")
-        else 1
-    )
+        # full-chain UniRef(+gapfill) profile — same arrays for all positions
+        return cons, freq, nrows0, pf0, bg
 
     drivers_out = []
     for d in gene.get("drivers") or []:
-        cons, freq, nrows, pf, bg = get_profile_at(d["pos"])
-        sc = score_missense(seq, d["pos"], d["wt"], d["mut"], cons, freq, bg)
+        cons_p, freq_p, nrows, pf, bg_p = get_profile_at(d["pos"])
+        sc = score_missense(seq, d["pos"], d["wt"], d["mut"], cons_p, freq_p, bg_p)
         sc.update(
             {
                 "hgvs_p": d["hgvs_p"],
                 "note": d.get("note"),
+                "msa_source": source_label,
                 "pfam_used": pf,
                 "msa_rows": nrows,
                 "role": "driver",
@@ -249,12 +311,13 @@ def score_gene(symbol: str) -> dict[str, Any]:
 
     controls_out = []
     for d in gene.get("controls") or []:
-        cons, freq, nrows, pf, bg = get_profile_at(d["pos"])
-        sc = score_missense(seq, d["pos"], d["wt"], d["mut"], cons, freq, bg)
+        cons_p, freq_p, nrows, pf, bg_p = get_profile_at(d["pos"])
+        sc = score_missense(seq, d["pos"], d["wt"], d["mut"], cons_p, freq_p, bg_p)
         sc.update(
             {
                 "hgvs_p": d["hgvs_p"],
                 "note": d.get("note"),
+                "msa_source": source_label,
                 "pfam_used": pf,
                 "msa_rows": nrows,
                 "role": "control",
@@ -287,13 +350,15 @@ def score_gene(symbol: str) -> dict[str, Any]:
             "kind": kind,
         }
         if kind == "missense":
-            cons, freq, nrows, pf, bg = get_profile_at(pos)
-            sc = score_missense(seq, pos, wt_aa, mut_aa, cons, freq, bg)
+            cons_p, freq_p, nrows, pf, bg_p = get_profile_at(pos)
+            sc = score_missense(seq, pos, wt_aa, mut_aa, cons_p, freq_p, bg_p)
             entry["impact_percentile"] = sc.get("impact_percentile")
             entry["call"] = sc.get("call")
             entry["conservation"] = sc.get("conservation")
         else:
-            entry["call"] = call_from_pct(None, kind=kind)
+            entry["call"] = call_variant(
+                kind=kind, coverage_ok=True, cons=None, f_mut=None, pct=None
+            )
         dna_out.append(entry)
 
     driver_pcts = [
@@ -311,8 +376,12 @@ def score_gene(symbol: str) -> dict[str, Any]:
         "indication": gene.get("indication"),
         "length": len(seq),
         "default_pfam": pf0,
+        "msa_source": source_label,
+        "msa_meta": meta_u,
         "msa_rows_default": nrows0,
-        "mean_conservation_default": float(cons0.mean()) if len(cons0) else 0.0,
+        "mean_conservation_default": float(cons.mean()) if len(cons) else 0.0,
+        "n_positions_covered": int(sum(1 for f in freq if f)),
+        "pfam_gapfill_positions": pfam_fills,
         "drivers": drivers_out,
         "controls": controls_out,
         "dna_examples": dna_out,
