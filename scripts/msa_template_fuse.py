@@ -206,20 +206,21 @@ def fuse_predict(
     template_model: np.ndarray,
     features: MsaFeatures | None,
 ) -> dict[str, Any]:
-    """One-shot fused coordinates + confidence for a templated target.
+    """Product path near AF: measured template + physics (+ optional MSA packing).
 
-    Compares physics-only vs packing-fuse on an *intrinsic* energy proxy
-    (bond + clash + near-contact evo residual) and keeps the lower-energy
-    model — never uses the native structure for selection.
+    Energy = bond + clash + template fidelity ‖X−X0‖² so we never drift off the
+    measured homolog (archive spirit: measured authority stays primary).
     """
-    X_phys = fuse_relax(template_model, None)
-    X_fuse = fuse_relax(template_model, features)
+    X0 = template_model
+    X_phys = fuse_relax(X0, None)
+    X_fuse = fuse_relax(X0, features)
 
     def _energy(X: np.ndarray) -> float:
         n = len(X)
         bonds = np.linalg.norm(X[1:] - X[:-1], axis=1)
         e = float(((bonds - CA_CA) ** 2).sum())
-        # sparse clash sample
+        # fidelity to measured template (primary authority)
+        e += float(ANCHOR_W * ((X - X0) ** 2).sum())
         for i in range(0, n, max(1, n // 40)):
             for j in range(i + 2, n, max(1, n // 40)):
                 d = float(np.linalg.norm(X[i] - X[j]))
@@ -227,26 +228,28 @@ def fuse_predict(
                     e += (CLASH_FLOOR - d) ** 2
         return e
 
-    e_phys, e_fuse = _energy(X_phys), _energy(X_fuse)
-    if features is not None and features.depth_ok and e_fuse <= e_phys * PHI:
-        X, chosen = X_fuse, "template_msa_fuse"
-    else:
-        X, chosen = X_phys, "template_physics"
+    cands = [
+        ("template_raw", X0 - X0.mean(0), _energy(X0 - X0.mean(0))),
+        ("template_physics", X_phys, _energy(X_phys)),
+        ("template_msa_fuse", X_fuse, _energy(X_fuse)),
+    ]
+    chosen, X, e_best = min(cands, key=lambda c: c[2])
     conf = fused_confidence(features, provenance=None)
     return {
         "ca_coords": X,
         "confidence": conf,
         "regime": chosen,
-        "energy_physics": e_phys,
-        "energy_fuse": e_fuse,
+        "energy_best": e_best,
+        "energies": {c[0]: c[2] for c in cands},
         "n_evo_clamps": int(
             len(top_coevolution_pairs(features, top_n=len(sequence)))
             if features is not None and features.depth_ok
             else 0
         ),
         "free_parameters": 0,
-        "engine": "fsot_template_msa_fuse_v2_packing_only",
+        "engine": "fsot_template_product_v4",
         "contact_scale_A": CONTACT_SCALE,
         "clash_floor_A": CLASH_FLOOR,
         "iters": ITERS,
+        "formula": "measured_homolog_Cα + FSOT physics/pack; S=K(T1+T2+T3) domain pin",
     }
