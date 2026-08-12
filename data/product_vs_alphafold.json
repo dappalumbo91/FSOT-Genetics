@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-12T21:57:13.882838+00:00",
+  "generated_at": "2026-08-12T22:45:17.277098+00:00",
   "summary": {
     "n": 10,
     "alphafold_median_A": 0.4706172512401575,
@@ -7,7 +7,7 @@
     "fsot_product_median_A": 1.1456219583995506,
     "fsot_bulk_median_A": 13.574035917440511,
     "product_within_1p5A_of_alphafold": 10,
-    "product_sub2A": 9,
+    "product_sub2A": 10,
     "free_parameters": 0
   },
   "results": [
@@ -86,10 +86,10 @@
     {
       "name": "p53 DNA-binding",
       "alphafold_rmsd_A": 6.187575266577746,
-      "fsot_template_rmsd_A": 2.7695272979669325,
-      "fsot_product_rmsd_A": 2.6026159490185337,
+      "fsot_template_rmsd_A": 1.6278727598106162,
+      "fsot_product_rmsd_A": 1.5747902176702686,
       "fsot_bulk_rmsd_A": 15.673411039452464,
-      "template_pdb": "3Q01",
+      "template_pdb": "2P52",
       "regime": "template_physics"
     },
     {

@@ -66,7 +66,7 @@ Ranked by medical impact × solvability under pure FSOT.
 | **What failed** | Single template (or multi-fill near high-id) freezes **one** biological state |
 | **FSOT handle** | Multi-template **ensemble** residual: weight templates by Biochemistry residual + ChemLink class; optional soft termini (seed-closed); do **not** average open+closed indiscriminately — cluster by structural density first (M1) |
 | **Success metric** | p53/BRAF product **&lt; 2.0 Å** without tanking RNase/CaM class winners |
-| **Status** | **OPEN** (depends on M1) |
+| **Status** | **PARTIAL** — p53 2.60→**1.57 Å** (3Q01 residual-unfit E=601 → 2P52 E=22). BRAF/kinase state still open. |
 
 ### M5 — Precision gap on already-correct topology
 

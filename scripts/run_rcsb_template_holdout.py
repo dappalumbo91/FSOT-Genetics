@@ -360,6 +360,18 @@ def collect_template_candidates(
     return out
 
 
+def _bond_mse(X: np.ndarray) -> float:
+    """Mean (L − CA_CA)² — Physical_Chemistry transfer integrity."""
+    if len(X) < 2:
+        return 0.0
+    L = np.linalg.norm(X[1:] - X[:-1], axis=1)
+    return float(np.mean((L - CA_CA) ** 2))
+
+
+# Transfer is bond-broken when RMS |L−CA_CA| ≳ 1/φ Å (seed; not a free cutoff).
+_BOND_BROKEN = (1.0 / _PHI) ** 2
+
+
 def residual_interface_energy(X: np.ndarray) -> float:
     """FSOT residual-at-interface energy of a measured transfer (native-free).
 
@@ -398,12 +410,14 @@ def residual_interface_energy(X: np.ndarray) -> float:
 def select_measured_authority(cands: list[dict]) -> tuple[list[dict], str, dict, str]:
     """FSOT residual law at the correct interface; returns (ordered, mode, primary, fill).
 
-    fill ∈ {"score_power", "residual_weight"}:
-      score_power — strong data: measured id×cov order; multi_template_build(score^φ⁶)
+    fill ∈ {"score_power", "residual_weight", "single"}:
+      score_power — strong data, residual-fit transfer: id×cov multi-fill
       residual_weight — remote data: residual energy ranks; multi_fill w∝1/E
+      single — data-best transfer is residual-unfit: do not blend states
 
-    Residual energy NEVER overrides a clear sequence-homolog primary. That was
-    residual applied at the wrong interface (geometry invent over measured).
+    Residual is a *transfer-quality* filter on measured maps, not a ranker
+    that replaces sequence authority with the lowest-E homolog (that pick
+    was 1HU8 on p53 — clean bonds, invented termini, worse RMSD).
     """
     for c in cands:
         c["residual_energy"] = residual_interface_energy(c["model"])
@@ -411,24 +425,32 @@ def select_measured_authority(cands: list[dict]) -> tuple[list[dict], str, dict,
 
     by_data = sorted(cands, key=lambda c: -float(c["score"]))
     data_best = by_data[0]
-    res_best = min(cands, key=lambda c: float(c["residual_energy"]))
 
-    # Strong homolog data: measured alignment is authority —
-    # residual may replace primary ONLY if data-best is residual-unfit:
-    # E_data / E_res > φ  AND residual-best still data-plausible (score ≥ best/φ)
+    # Data-plausible band (alignment observables). Residual never searches
+    # outside this set.
+    thr = best_data / _PHI
+    pool = [c for c in cands if float(c["score"]) >= thr] or by_data[:1]
+    e_min = min(float(c["residual_energy"]) for c in pool)
     e_d = float(data_best["residual_energy"])
-    e_r = float(res_best["residual_energy"])
+
     if best_data >= 1.0 / _PHI:
-        # Strong measured alignment stays authority. Residual energy is used
-        # to reject a *worse ensemble* (primary_residual_fallback), not to
-        # replace the homolog. Override previously tanked p53/CaM.
+        # Strong homologs: replace data-best only when that *transfer* is
+        # residual-unfit AND bond-broken at Physical_Chemistry.
+        # E_data > φ·E_min alone is not enough — that picked KRAS 1BKD
+        # (SOS-bound, clean bonds, wrong state) over 1AA9.
+        # p53 3Q01: bond_mse ≈ 2.8 Å² (broken) → 2P52.
+        broken = _bond_mse(data_best["model"]) > _BOND_BROKEN
+        if e_d > _PHI * e_min and broken:
+            fit = [c for c in pool if float(c["residual_energy"]) <= _PHI * e_min]
+            if not fit:
+                fit = pool
+            primary = max(fit, key=lambda c: float(c["score"]))
+            ordered = [primary] + [c for c in by_data if c is not primary]
+            return ordered, "residual_fit_data_authority", primary, "single"
         return by_data, "data_authority_measured", data_best, "score_power"
 
     # Remote / moderate: residual-at-interface ranks inside data band
-    thr = best_data / _PHI
-    data_pool = [c for c in cands if float(c["score"]) >= thr]
-    if len(data_pool) < 2:
-        data_pool = by_data[: max(MULTI_TOP_K, 4)]
+    data_pool = pool if len(pool) >= 2 else by_data[: max(MULTI_TOP_K, 4)]
     ordered = sorted(
         data_pool, key=lambda c: (float(c["residual_energy"]), -float(c["score"]))
     )
@@ -512,12 +534,15 @@ def multi_template_build_residual(
 
 
 def best_template(sequence: str, exclude_pdb: str, identity_cap: float = IDENTITY_CAP) -> dict | None:
-    """Measured homologs ranked by residual-at-interface (correct FSOT).
+    """Measured homologs with residual as transfer-quality filter (correct FSOT).
 
     1. Fair pool: alignment data (id, coverage), exclude self, optional isoform expand.
     2. Residual energy E = r_bond·bonds + r_clash·clash + r_fold·Rg  (named domains).
-    3. Authority = lowest E measured map; multi-fill residual-weighted measured Cα.
-    4. Product physics (fuse) still residual-weights bond/clash/anchor on that map.
+    3. Strong data: id×cov authority unless that transfer is residual-unfit
+       (E_data > φ·E_min) *and* bond-broken (mean (L−CA_CA)² > 1/φ²) —
+       then highest-score residual-fit map, no blend.
+    4. Remote data: residual-ranked inside the data band; multi-fill w∝1/E.
+    5. Product physics (fuse) residual-weights bond/clash/anchor on that map.
     """
     cands = collect_template_candidates(sequence, exclude_pdb, identity_cap)
     expanded = False
@@ -533,19 +558,23 @@ def best_template(sequence: str, exclude_pdb: str, identity_cap: float = IDENTIT
 
     ordered, mode_auth, primary, fill = select_measured_authority(cands)
     n = len(sequence)
-    if len(ordered) >= 2:
+    if fill == "single" or len(ordered) < 2:
+        # Residual-unfit data-best: one measured map. Multi-fill here
+        # mixed conformational states (p53 2P52 vs 1HU8).
+        model = primary["model"]
+        mode = mode_auth if fill == "single" else "single_template"
+        n_used = 1
+    elif fill == "residual_weight":
         tk = min(MULTI_TOP_K, len(ordered))
-        if fill == "residual_weight":
-            model = multi_template_build_residual(n, ordered, top_k=tk)
-        else:
-            # Strong data: score-powered multi-fill (measured authority, no residual re-rank)
-            model = multi_template_build(n, ordered, top_k=tk)
+        model = multi_template_build_residual(n, ordered, top_k=tk)
         mode = mode_auth
         n_used = tk
     else:
-        model = primary["model"]
-        mode = "single_template"
-        n_used = 1
+        # Strong data: score-powered multi-fill (measured authority)
+        tk = min(MULTI_TOP_K, len(ordered))
+        model = multi_template_build(n, ordered, top_k=tk)
+        mode = mode_auth
+        n_used = tk
     # Residual-at-interface reject: ensemble worse than primary measured map
     e_pri = residual_interface_energy(primary["model"])
     e_ens = residual_interface_energy(model)

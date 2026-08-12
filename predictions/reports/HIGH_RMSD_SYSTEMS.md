@@ -11,7 +11,7 @@ Source: `data/high_rmsd_system_diagnosis.json` + product path after multi-system
 | abl1 | 4.93 | long_range | 0.00 | bond | data≠residual; kinase state |
 | ace2 | 4.74 | long_range | 0.40 | bond | termini + remote + data≠residual |
 | bcl2 | 3.75 | long_range | 0.27 | bond | data≠residual |
-| p53_dbd | 2.60 | long_range | 0.67 | bond | **termini_disorder** dominant |
+| p53_dbd | 1.57 | long_range | 0.67 | bond | residual-unfit 3Q01 → 2P52 |
 | egfr | 2.51 | long_range | 0.87 | bond | **termini_disorder** |
 | ha_h3 | 2.33 | long_range | 0.07 | fold_Rg | multi-domain packing |
 | ubiquitin | 2.03 | long_range | 0.40 | fold_Rg | C-term flexibility |
@@ -40,13 +40,14 @@ Source: `data/high_rmsd_system_diagnosis.json` + product path after multi-system
 4. **tertiary long_range** (almost all)  
    Next: ChemLink residual on measured long-range contacts only (Biochemistry D=13) — not bulk invent.
 
-## Gate after multi-system product v6
+## Gate after residual-fit data authority
 
 | Guard | RMSD |
 |-------|-----:|
 | Product H2H median | **1.15 Å** |
-| RNase | 0.77 |
-| CaM | 0.89 |
-| Insulin (override) | **0.87** |
+| RNase | 0.44 |
+| CaM | 0.76 |
+| Insulin | **1.14** |
+| p53 (2P52 residual-fit) | **1.57** |
 
 Re-run: `python scripts/diagnose_high_rmsd_systems.py`

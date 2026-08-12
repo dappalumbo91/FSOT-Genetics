@@ -1,37 +1,40 @@
-# Product freeze — structure path (2026-08-11)
+# Product freeze — structure path (2026-08-12)
 
-**Status:** Python research ceiling for this cycle. Further RMSD chasing vs AlphaFold is **paused**.  
+**Status:** Residual-fit transfer filter on measured authority. Gate still holds.  
 **Authority pin:** `D1D38A` · law \(S = K(T_1+T_2+T_3)\) · **0 free parameters**.
 
 ## Frozen product numbers (H2H, 10 proteins)
 
-Source: `data/product_vs_alphafold.json` (commit lineage through multi-template coverage).
+Source: `data/product_vs_alphafold.json` (residual-fit data authority).
 
 | metric | value |
 |--------|------:|
 | AlphaFold median Cα RMSD | **0.47 Å** |
-| FSOT **product** median | **1.15 Å** (reality-first M1 + length-sim) |
-| FSOT template median | ~1.20 Å |
+| FSOT **product** median | **1.15 Å** |
+| FSOT template median | **1.17 Å** |
 | FSOT bulk (orphan) median | 13.57 Å |
 | Product within 1.5 Å of AF | **10/10** |
-| Product sub-2 Å | **9/10** |
+| Product sub-2 Å | **10/10** |
 | **Wet-lab reality panel median** | **1.17 Å** (`reality_margin_eval`) |
 
 Notable product Cα RMSDs:
 
 | protein | product Å | AF Å |
 |---------|----------:|-----:|
-| Hemoglobin α | 1.02 | 0.27 |
-| RNase A | 0.77 | 0.33 |
-| Calmodulin | 0.82 | 6.45 (product wins) |
 | Insulin | 1.14 | 4.51 (product wins) |
-| Ubiquitin | 1.78 | 0.88 |
-| p53 DNA-binding | 2.60 | 6.19 (product wins) |
+| RNase A | 0.44 | 0.33 |
+| Calmodulin | 0.76 | 6.45 (product wins) |
+| Lysozyme | 1.14 | 0.42 |
+| Hemoglobin α | 1.15 | 0.27 |
+| Ubiquitin | 1.50 | 0.88 |
+| p53 DNA-binding | 1.57 | 6.19 (product wins) |
+| Carbonic anhydrase II | 1.30 | 0.36 (best fair homolog; id cap) |
 
 ## What the product *is*
 
 ```
-measured homolog Cα (multi-template ensemble)
+measured homolog Cα
+  (id×cov authority; residual-fit filter if data-best transfer is unfit)
   → residual-weighted physics
       bond   ← Physical_Chemistry · residual (1+|S|·P_NEW)
       clash  ← Chemistry
@@ -56,4 +59,4 @@ measured homolog Cα (multi-template ensemble)
 Python under `scripts/` remains the **research bench and oracle** for metrics.  
 **Runtime product** moves to Zig (host + freestanding QEMU) / optional Rust `no_std`, same pin, same residual law, trinary codon front door.
 
-Gate for any structure change still: **do not ship if product median > 1.16 Å** on this freeze set (or a newly preregistered holdout).
+Gate for any structure change still: **do not ship if product median > 1.15 Å** on this freeze set (or a newly preregistered holdout).
