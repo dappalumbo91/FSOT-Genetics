@@ -33,7 +33,9 @@ def eval_case(pdb, ch, name, excl):
     t = best_template(seq, excl, identity_cap=0.95)
     if not t:
         return {"name": name, "status": "no_template"}
-    prod = fuse_predict(seq, t["model"], None)
+    prod = fuse_predict(
+        seq, t["model"], None, tertiary_contacts=t.get("tertiary_contacts")
+    )
     r = float(kabsch_rmsd(prod["ca_coords"], nat))
     return {
         "name": name,
@@ -72,7 +74,9 @@ def main() -> int:
         t = best_template(seq, pdb, identity_cap=0.95)
         if not t:
             continue
-        prod = fuse_predict(seq, t["model"], None)
+        prod = fuse_predict(
+            seq, t["model"], None, tertiary_contacts=t.get("tertiary_contacts")
+        )
         r = float(kabsch_rmsd(prod["ca_coords"], nat))
         rmsds.append(r)
         print(f"  {name}: {r:.2f}  {t.get('template_mode')} n={t.get('n_candidates')}")

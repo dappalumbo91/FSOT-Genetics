@@ -54,6 +54,11 @@ ITERS = int(round((E ** PI) * PHI * PHI))  # ~61 soft-clamp steps
 _R_BOND = residual_scale(abs(float(fc.domain_scalar("Physical_Chemistry"))))  # backbone
 _R_CLASH = residual_scale(abs(float(fc.domain_scalar("Chemistry"))))  # local steric
 _R_ANCHOR = residual_scale(abs(float(fc.domain_scalar("Biochemistry"))))  # measured fold
+# Lean ChemLink: tertiaryBiochem D=13, disulfide Atomic_Physics D=7
+_R_TERT = residual_scale(abs(float(fc.domain_scalar("Biochemistry"))))
+_R_SS = residual_scale(abs(float(fc.domain_scalar("Atomic_Physics"))))
+# F13 gate at Biochemistry D_eff=13
+_TERT_GATE = max(7, int(math.ceil(float(fc.ETA_EFF) * 13.0)))
 
 
 def top_coevolution_pairs(
@@ -99,6 +104,51 @@ def template_coevolution_agreement(
     return hits / len(pairs)
 
 
+def _contacts_from_measured(
+    X0: np.ndarray,
+    sequence: str | None,
+    extra: list[tuple[int, int, float]] | None,
+) -> tuple[list[tuple[int, int, float, float]], int]:
+    """Build residual-tagged springs from *measured* homolog geometry.
+
+    Returns (i, j, d_measured, residual_r) and count of SS links.
+    Backbone sep≤2 never included (Lean: no residual on backbone).
+    """
+    n = len(X0)
+    springs: list[tuple[int, int, float, float]] = []
+    n_ss = 0
+    # Consensus / extra measured tertiary (already filtered)
+    raw_t: list[tuple[int, int, float]] = []
+    if extra:
+        for i, j, d0 in extra:
+            if abs(j - i) <= 2:
+                continue
+            raw_t.append((i, j, float(d0)))
+    else:
+        for i in range(n):
+            for j in range(i + _TERT_GATE, n):
+                d0 = float(np.linalg.norm(X0[i] - X0[j]))
+                if d0 < CONTACT_SCALE:
+                    raw_t.append((i, j, d0))
+    # Top-L measured contacts only (CASP-style data cap — not a free graph)
+    raw_t.sort(key=lambda t: t[2])
+    for i, j, d0 in raw_t[: max(n, 1)]:
+        springs.append((i, j, d0, _R_TERT))
+    # Disulfide: Cys–Cys close in measured map — Atomic_Physics residual
+    if sequence and len(sequence) == n:
+        cys = [i for i, a in enumerate(sequence.upper()) if a == "C"]
+        for a in range(len(cys)):
+            for b in range(a + 1, len(cys)):
+                i, j = cys[a], cys[b]
+                if abs(j - i) < 3:
+                    continue
+                d0 = float(np.linalg.norm(X0[i] - X0[j]))
+                if d0 < CONTACT_SCALE:  # measured SS-like Cα span
+                    springs.append((i, j, d0, _R_SS))
+                    n_ss += 1
+    return springs, n_ss
+
+
 def fuse_relax(
     X0: np.ndarray,
     features: MsaFeatures | None = None,
@@ -106,33 +156,35 @@ def fuse_relax(
     iters: int = ITERS,
     lr: float = LR,
     anchor_w: float = ANCHOR_W,
+    sequence: str | None = None,
+    tertiary_contacts: list[tuple[int, int, float]] | None = None,
 ) -> np.ndarray:
-    """Template-anchored physics with residual-weighted force channels.
+    """Template-anchored physics with residual-weighted ChemLink channels.
 
-    measured = template Cα (homolog authority)
-    residual_r = 1 + |S_domain| · P_NEW  (archive law)
-      bond   ← Physical_Chemistry
-      clash  ← Chemistry
-      anchor ← Biochemistry  (holds measured fold; residual strengthens fidelity)
-    MSA coevolution is data polish only — not a free residual invent.
+    measured = homolog Cα (real observable)
+    residual_r = 1 + |S_domain| · P_NEW  (Lean ChemLink D_eff)
+      bond     ← Physical_Chemistry  (sep=1; geometry)
+      clash    ← Chemistry
+      tertiary ← Biochemistry D=13 on *measured* long-range contacts only
+      disulfide← Atomic_Physics on measured Cys–Cys close pairs
+    Backbone is not residual-invented. No false contact graphs.
     """
     X = X0.copy()
     n = len(X)
-    # residual law on named domains (precomputed pin scalars)
     w_anchor = anchor_w * _R_ANCHOR
     r_bond = _R_BOND
     r_clash = _R_CLASH
+    springs, _n_ss = _contacts_from_measured(X0, sequence, tertiary_contacts)
     evo_pairs: list[tuple[int, int, float]] = []
     if features is not None and features.depth_ok and features.coevolution.max() > 0:
         raw_pairs = top_coevolution_pairs(features, top_n=n)
-        # Normalize weights by top mean so evo_amp sets scale
         if raw_pairs:
             mean_top = float(np.mean([p[2] for p in raw_pairs])) + 1e-12
             evo_pairs = [(i, j, EVO_AMP * (s / mean_top)) for i, j, s in raw_pairs]
 
     for _ in range(iters):
         G = w_anchor * (X - X0)
-        # bonds — Physical_Chemistry residual
+        # bonds — Physical_Chemistry residual (geometry channel)
         d = X[1:] - X[:-1]
         L = np.linalg.norm(d, axis=1) + 1e-9
         f = ((L - CA_CA) / L)[:, None] * d * r_bond
@@ -149,16 +201,21 @@ def fuse_relax(
         if mask.any():
             coef = np.where(mask, (D - CLASH_FLOOR) / (D + 1e-9), 0.0) * r_clash
             G += np.einsum("ij,ijk->ik", coef, diff)
-        # coevolution packing polish ONLY — never rewire topology.
-        # Only act on pairs already near contact (clash < d < φ·F08).
-        # Distant coevolving pairs are reported in confidence, not forced.
-        d_hi = CONTACT_SCALE * PHI  # ~13.8 A soft envelope
+        # Measured tertiary / SS — residual at ChemLink interface, target = measured d
+        for i, j, d0, r_link in springs:
+            vec = X[j] - X[i]
+            dist = float(np.linalg.norm(vec) + 1e-9)
+            pull = (r_link / PHI) * (dist - d0) / dist
+            force = pull * vec
+            G[i] -= force
+            G[j] += force
+        # MSA polish: data only, already-near-contact envelope
+        d_hi = CONTACT_SCALE * PHI
         for i, j, w in evo_pairs:
             vec = X[j] - X[i]
             dist = float(np.linalg.norm(vec) + 1e-9)
             if dist <= CLASH_FLOOR or dist >= d_hi:
                 continue
-            # gentle spring toward F08 contact scale
             pull = (w / PHI) * (dist - CONTACT_SCALE) / dist
             force = pull * vec
             G[i] -= force
@@ -243,18 +300,25 @@ def fuse_predict(
     sequence: str,
     template_model: np.ndarray,
     features: MsaFeatures | None,
+    *,
+    tertiary_contacts: list[tuple[int, int, float]] | None = None,
 ) -> dict[str, Any]:
-    """Product path: measured template + residual-weighted physics.
+    """Product path: measured template + residual-weighted ChemLink physics.
 
     Energy uses residual_r on bond/clash/anchor (named domains). Soft termini
     only when termini bond stress exceeds core × r_bond (Physical_Chemistry
-    residual-at-interface) — multi-system behavior, not a free switch.
+    residual-at-interface). Tertiary springs use measured homolog distances
+    at Biochemistry D=13 (Lean ChemLink.tertiaryBiochem).
     """
     from run_rcsb_template_holdout import soft_flexible_termini  # noqa: WPS433
 
     X0 = template_model
-    X_phys = fuse_relax(X0, None)
-    X_fuse = fuse_relax(X0, features)
+    X_phys = fuse_relax(
+        X0, None, sequence=sequence, tertiary_contacts=tertiary_contacts
+    )
+    X_fuse = fuse_relax(
+        X0, features, sequence=sequence, tertiary_contacts=tertiary_contacts
+    )
 
     def _energy(X: np.ndarray) -> float:
         # Residual-weighted energy — same interfaces as fuse_relax

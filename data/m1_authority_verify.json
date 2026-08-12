@@ -3,7 +3,7 @@
     {
       "name": "ABL1",
       "status": "ok",
-      "rmsd": 4.926161110354934,
+      "rmsd": 4.921700793808678,
       "tmpl": "2XYN",
       "mode": "residual_override_unfit_data",
       "n_cand": 13,
@@ -13,17 +13,17 @@
     {
       "name": "BCL2",
       "status": "ok",
-      "rmsd": 3.752983516620023,
+      "rmsd": 5.787762799569349,
       "tmpl": "2PON",
       "mode": "residual_override_unfit_data",
-      "n_cand": 56,
+      "n_cand": 102,
       "expanded": false,
       "cap": 0.95
     },
     {
       "name": "RBD",
       "status": "ok",
-      "rmsd": 5.6795330096739916,
+      "rmsd": 5.6952549503122984,
       "tmpl": "3SCI",
       "mode": "data_authority_measured",
       "n_cand": 16,
@@ -33,17 +33,17 @@
     {
       "name": "BRAF",
       "status": "ok",
-      "rmsd": 1.1213830844545678,
-      "tmpl": "1UWJ",
+      "rmsd": 4.559538592327746,
+      "tmpl": "8CHF",
       "mode": "residual_override_unfit_data",
       "n_cand": 9,
-      "expanded": true,
-      "cap": 0.99
+      "expanded": false,
+      "cap": 0.95
     },
     {
       "name": "EGFR",
       "status": "ok",
-      "rmsd": 2.512195884551846,
+      "rmsd": 2.5151002816933166,
       "tmpl": "9BY6",
       "mode": "data_authority_measured",
       "n_cand": 4,
@@ -55,7 +55,7 @@
     {
       "name": "RNase",
       "status": "ok",
-      "rmsd": 0.774500576208004,
+      "rmsd": 0.7738775551616985,
       "tmpl": "1B6V",
       "mode": "data_authority_measured",
       "n_cand": 17,
@@ -65,17 +65,17 @@
     {
       "name": "CaM",
       "status": "ok",
-      "rmsd": 0.8922759818896333,
-      "tmpl": "1CLM",
+      "rmsd": 7.776312866815197,
+      "tmpl": "1AHR",
       "mode": "data_authority_measured",
-      "n_cand": 10,
-      "expanded": false,
-      "cap": 0.95
+      "n_cand": 11,
+      "expanded": true,
+      "cap": 0.99
     },
     {
       "name": "Ubq",
       "status": "ok",
-      "rmsd": 2.025587072375234,
+      "rmsd": 2.0220544851653215,
       "tmpl": "1UD7",
       "mode": "data_authority_measured",
       "n_cand": 21,
@@ -83,18 +83,18 @@
       "cap": 0.95
     }
   ],
-  "freeze_median": 1.1487082611913828,
+  "freeze_median": 1.1449293389224144,
   "freeze_rmsds": [
-    1.1447739118806795,
-    1.080760616751466,
-    1.3020616472741238,
-    1.1674135068802707,
-    1.152642610502086,
-    0.774500576208004,
-    2.025587072375234,
-    0.8690358937981676,
-    2.6013650533378136,
-    0.8922759818896333
+    1.1478448600546138,
+    1.077856745648792,
+    1.2989877416691955,
+    1.1663324945301607,
+    1.1420138177902148,
+    0.7738775551616985,
+    2.0220544851653215,
+    0.8674096876817422,
+    2.6010987601081803,
+    0.9031629713349127
   ],
-  "ok": true
+  "ok": false
 }

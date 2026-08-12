@@ -419,15 +419,9 @@ def select_measured_authority(cands: list[dict]) -> tuple[list[dict], str, dict,
     e_d = float(data_best["residual_energy"])
     e_r = float(res_best["residual_energy"])
     if best_data >= 1.0 / _PHI:
-        if (
-            e_r > 0
-            and e_d / e_r > _PHI
-            and float(res_best["score"]) >= best_data / _PHI
-            and res_best is not data_best
-        ):
-            # data-best fails residual interface; residual-best stays data-plausible
-            ordered = [res_best] + [c for c in by_data if c is not res_best]
-            return ordered, "residual_override_unfit_data", res_best, "score_power"
+        # Strong measured alignment stays authority. Residual energy is used
+        # to reject a *worse ensemble* (primary_residual_fallback), not to
+        # replace the homolog. Override previously tanked p53/CaM.
         return by_data, "data_authority_measured", data_best, "score_power"
 
     # Remote / moderate: residual-at-interface ranks inside data band
@@ -527,11 +521,13 @@ def best_template(sequence: str, exclude_pdb: str, identity_cap: float = IDENTIT
     """
     cands = collect_template_candidates(sequence, exclude_pdb, identity_cap)
     expanded = False
-    if len(cands) < 3 and identity_cap < IDENTITY_CAP_EXPAND - 1e-9:
+    # Expand isoforms only when the fair pool is empty (starved kinases).
+    # Merging 0.99 into a thin pool previously pulled CaM/SOD1 onto wrong assemblies.
+    if len(cands) == 0 and identity_cap < IDENTITY_CAP_EXPAND - 1e-9:
         cands = collect_template_candidates(
             sequence, exclude_pdb, IDENTITY_CAP_EXPAND, max_pdbs=MAX_TEMPLATE_PDBS
         )
-        expanded = True
+        expanded = bool(cands)
     if not cands:
         return None
 
@@ -550,10 +546,15 @@ def best_template(sequence: str, exclude_pdb: str, identity_cap: float = IDENTIT
         model = primary["model"]
         mode = "single_template"
         n_used = 1
-    if not model_is_sane(model, n):
+    # Residual-at-interface reject: ensemble worse than primary measured map
+    e_pri = residual_interface_energy(primary["model"])
+    e_ens = residual_interface_energy(model)
+    if (not model_is_sane(model, n)) or (e_pri > 0 and e_ens > _PHI * e_pri):
         model = primary["model"]
-        mode = "single_template_fallback"
+        mode = "primary_residual_fallback"
         n_used = 1
+    homologs = [c["model"] for c in ordered[: min(MULTI_TOP_K, len(ordered))]]
+    tert = measured_tertiary_contacts(homologs if homologs else [model])
     return {
         "score": primary["score"],
         "pdb_id": primary["pdb_id"],
@@ -569,12 +570,45 @@ def best_template(sequence: str, exclude_pdb: str, identity_cap: float = IDENTIT
         "expanded_isoform_pool": expanded,
         "multi_top_k": MULTI_TOP_K,
         "multi_power": MULTI_POWER,
+        "tertiary_contacts": tert,
         "residual": {
             "Physical_Chemistry": _R_BOND,
             "Chemistry": _R_CLASH,
             "Biochemistry": _R_FOLD,
         },
     }
+
+
+def measured_tertiary_contacts(
+    models: list[np.ndarray],
+    *,
+    gate: int | None = None,
+) -> list[tuple[int, int, float]]:
+    """Long-range contacts *observed* in homolog Cα (real data).
+
+    Pair is kept if median measured distance < F08·φ AND homologs agree
+    (std < φ Å). Lean: tertiaryBiochem D=13 — residual applied later, not here.
+    Backbone (sep≤2) never included.
+    """
+    if not models:
+        return []
+    n = len(models[0])
+    if gate is None:
+        gate = max(7, int(math.ceil(float(_fc.ETA_EFF) * 13.0)))  # Biochemistry D=13
+    contact_hi = float(_fc.PI) * float(_fc.E) * _PHI  # φ·F08
+    agree = _PHI  # Å
+    out: list[tuple[int, int, float]] = []
+    stack = np.stack(models, axis=0)
+    for i in range(n):
+        for j in range(i + gate, n):
+            ds = np.linalg.norm(stack[:, i, :] - stack[:, j, :], axis=1)
+            med = float(np.median(ds))
+            if med >= contact_hi:
+                continue
+            if float(np.std(ds)) > agree:
+                continue
+            out.append((i, j, med))
+    return out
 
 
 def build_from_template(n: int, tcoords: np.ndarray, pairs: list[tuple[int, int]]) -> np.ndarray:

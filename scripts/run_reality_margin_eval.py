@@ -76,7 +76,9 @@ def run_case(case: dict[str, Any]) -> dict[str, Any]:
             "wetlab": case.get("wetlab"),
             "elapsed_s": time.perf_counter() - t0,
         }
-    prod = fuse_predict(seq, tmpl["model"], None)
+    prod = fuse_predict(
+        seq, tmpl["model"], None, tertiary_contacts=tmpl.get("tertiary_contacts")
+    )
     X = prod["ca_coords"]
     rmsd = float(kabsch_rmsd(X, nat))
     # Error margin on experimental sequence (product model)

@@ -110,7 +110,12 @@ def main(argv: list[str] | None = None) -> int:
     }
 
     if tmpl is not None:
-        fused = fuse_predict(seq, tmpl["model"], feat if feat and feat.depth_ok else None)
+        fused = fuse_predict(
+            seq,
+            tmpl["model"],
+            feat if feat and feat.depth_ok else None,
+            tertiary_contacts=tmpl.get("tertiary_contacts"),
+        )
         X = fused["ca_coords"]
         report.update(
             {
