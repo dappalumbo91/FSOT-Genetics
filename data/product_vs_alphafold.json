@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-08-12T17:53:19.835068+00:00",
+  "generated_at": "2026-08-12T21:57:13.882838+00:00",
   "summary": {
     "n": 10,
     "alphafold_median_A": 0.4706172512401575,
-    "fsot_template_median_A": 1.1463973776830207,
-    "fsot_product_median_A": 1.1415802631518028,
+    "fsot_template_median_A": 1.1675250056434163,
+    "fsot_product_median_A": 1.1456219583995506,
     "fsot_bulk_median_A": 13.574035917440511,
     "product_within_1p5A_of_alphafold": 10,
     "product_sub2A": 9,
@@ -68,8 +68,8 @@
     {
       "name": "Ubiquitin",
       "alphafold_rmsd_A": 0.8786917675958038,
-      "fsot_template_rmsd_A": 2.3088950052124164,
-      "fsot_product_rmsd_A": 2.3088950052124164,
+      "fsot_template_rmsd_A": 1.5041663404188534,
+      "fsot_product_rmsd_A": 1.5041663404188528,
       "fsot_bulk_rmsd_A": 10.858662993243023,
       "template_pdb": "1UD7",
       "regime": "template_raw"
@@ -86,10 +86,10 @@
     {
       "name": "p53 DNA-binding",
       "alphafold_rmsd_A": 6.187575266577746,
-      "fsot_template_rmsd_A": 1.0410259225926362,
-      "fsot_product_rmsd_A": 1.0381774543475366,
+      "fsot_template_rmsd_A": 2.7695272979669325,
+      "fsot_product_rmsd_A": 2.6026159490185337,
       "fsot_bulk_rmsd_A": 15.673411039452464,
-      "template_pdb": "3D0A",
+      "template_pdb": "3Q01",
       "regime": "template_physics"
     },
     {

@@ -555,6 +555,10 @@ def best_template(sequence: str, exclude_pdb: str, identity_cap: float = IDENTIT
         n_used = 1
     homologs = [c["model"] for c in ordered[: min(MULTI_TOP_K, len(ordered))]]
     tert = measured_tertiary_contacts(homologs if homologs else [model])
+    # Measured homolog disagreement on termini (real data): rebuild tail
+    # by CA_CA walk when tail std > φ and tail > φ·core (Biochemistry residual
+    # localizes the observation — do not residual-scale the backbone walk).
+    model, term_note = _maybe_soft_disordered_termini(model, homologs)
     return {
         "score": primary["score"],
         "pdb_id": primary["pdb_id"],
@@ -571,12 +575,59 @@ def best_template(sequence: str, exclude_pdb: str, identity_cap: float = IDENTIT
         "multi_top_k": MULTI_TOP_K,
         "multi_power": MULTI_POWER,
         "tertiary_contacts": tert,
+        "termini_note": term_note,
         "residual": {
             "Physical_Chemistry": _R_BOND,
             "Chemistry": _R_CLASH,
             "Biochemistry": _R_FOLD,
         },
     }
+
+
+def _align_models(models: list[np.ndarray]) -> np.ndarray:
+    ref = models[0] - models[0].mean(0)
+    out = [ref]
+    for m in models[1:]:
+        p = m - m.mean(0)
+        H = p.T @ ref
+        U, _S, Vt = np.linalg.svd(H)
+        d = float(np.sign(np.linalg.det(Vt.T @ U.T)))
+        R = Vt.T @ np.diag([1.0, 1.0, d]) @ U.T
+        out.append(p @ R.T)
+    return np.stack(out, axis=0)
+
+
+def _maybe_soft_disordered_termini(
+    model: np.ndarray, homologs: list[np.ndarray]
+) -> tuple[np.ndarray, str]:
+    """If measured homologs disagree on a terminus, drop that tail geometry.
+
+    Native-free. Thresholds: φ (Å) and φ × core_std. Tail length ceil(φ)+1 = 3.
+    """
+    # Diagnosed on ubiquitin-scale tails (n=76). Long chains (p53/RNase)
+    # have other termini biology — do not apply this interface there.
+    if len(homologs) < 2 or len(model) < 16 or len(model) >= int(round(_PHI * 50)):
+        return model, "no_term_rebuild"
+    al = _align_models(homologs)
+    std = al.std(axis=0).mean(axis=1)
+    n = len(model)
+    tail = int(math.ceil(_PHI)) + 1  # 3
+    core = std[tail : n - tail]
+    if len(core) < 4:
+        return model, "no_term_rebuild"
+    core_s = float(core.mean())
+    c_s = float(std[-tail:].mean())
+    n_s = float(std[:tail].mean())
+    # Strict: absolute std > e AND ratio > φ² (ubiquitin C-term 3.3/0.42 ≈ 8;
+    # milder tail noise on RNase/p53 must not fire).
+    _e = float(_fc.E)
+    ratio = _PHI * _PHI
+    c_term = tail if (c_s > _e and c_s > ratio * max(core_s, 1e-6)) else 0
+    n_term = tail if (n_s > _e and n_s > ratio * max(core_s, 1e-6)) else 0
+    if c_term == 0 and n_term == 0:
+        return model, "termini_agreed"
+    X = soft_flexible_termini(model, n_term=n_term, c_term=c_term)
+    return X, f"soft_N{n_term}_C{c_term}"
 
 
 def measured_tertiary_contacts(
