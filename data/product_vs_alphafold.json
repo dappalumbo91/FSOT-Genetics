@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-13T00:58:55.444025+00:00",
+  "generated_at": "2026-08-13T02:37:48.496547+00:00",
   "summary": {
     "n": 10,
     "alphafold_median_A": 0.4706172512401575,
@@ -7,7 +7,7 @@
     "fsot_product_median_A": 0.400364478275016,
     "fsot_bulk_median_A": 13.574035917440511,
     "product_within_1p5A_of_alphafold": 10,
-    "product_sub2A": 9,
+    "product_sub2A": 10,
     "free_parameters": 0
   },
   "results": [
@@ -68,19 +68,19 @@
     {
       "name": "Ubiquitin",
       "alphafold_rmsd_A": 0.8786917675958038,
-      "fsot_template_rmsd_A": 1.1248894845661672,
-      "fsot_product_rmsd_A": 1.095983561763855,
+      "fsot_template_rmsd_A": 0.9099039672144991,
+      "fsot_product_rmsd_A": 0.9075633091860303,
       "fsot_bulk_rmsd_A": 10.858662993243023,
-      "template_pdb": "2FUH",
+      "template_pdb": "2FID",
       "regime": "template_physics"
     },
     {
       "name": "Insulin",
       "alphafold_rmsd_A": 4.51096053472208,
-      "fsot_template_rmsd_A": 1.63249926881281,
-      "fsot_product_rmsd_A": 1.4527408917371063,
+      "fsot_template_rmsd_A": 1.4857098838347007,
+      "fsot_product_rmsd_A": 1.0004831229294535,
       "fsot_bulk_rmsd_A": 5.511783547243767,
-      "template_pdb": "1A7F",
+      "template_pdb": "1OS4",
       "regime": "template_physics"
     },
     {
@@ -95,10 +95,10 @@
     {
       "name": "Calmodulin",
       "alphafold_rmsd_A": 6.453900855719977,
-      "fsot_template_rmsd_A": 2.401584205245525,
-      "fsot_product_rmsd_A": 2.556851610161132,
+      "fsot_template_rmsd_A": 0.7978493863717252,
+      "fsot_product_rmsd_A": 1.1589495088621138,
       "fsot_bulk_rmsd_A": 17.497890964874788,
-      "template_pdb": "2R28",
+      "template_pdb": "1EXR",
       "regime": "template_physics"
     }
   ]

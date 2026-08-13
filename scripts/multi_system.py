@@ -629,6 +629,45 @@ def transfer_sidechain_atoms(
     return out
 
 
+def consensus_sidechain_atoms(
+    qseq: str,
+    tmpls: list[dict[str, Any]],
+    q_ca_product: np.ndarray,
+) -> list[list[tuple[str, np.ndarray]]]:
+    """trit_consensus of SC heavy atoms in the product residue frame.
+
+    Homologs that agree (local std < φ Å) are Superposed→collapsed to the
+    mean; disagreeing rotamers stay on the primary (first) map.
+    """
+    if not tmpls:
+        return [[] for _ in qseq]
+    placed = [transfer_sidechain_atoms(qseq, t, q_ca_product) for t in tmpls]
+    primary = placed[0]
+    if len(placed) == 1:
+        return primary
+    out: list[list[tuple[str, np.ndarray]]] = [[] for _ in qseq]
+    for i in range(len(qseq)):
+        by_name: dict[str, list[np.ndarray]] = {}
+        for pred in placed:
+            if i >= len(pred):
+                continue
+            for name, xyz in pred[i]:
+                by_name.setdefault(name, []).append(xyz)
+        prim = {n: x for n, x in primary[i]} if i < len(primary) else {}
+        for name, xyzs in by_name.items():
+            if len(xyzs) < 2:
+                if name in prim:
+                    out[i].append((name, prim[name]))
+                continue
+            stack = np.stack(xyzs, axis=0)
+            std = float(stack.std(axis=0).mean())
+            if std < PHI:
+                out[i].append((name, stack.mean(axis=0)))
+            elif name in prim:
+                out[i].append((name, prim[name]))
+    return out
+
+
 def transfer_backbone_atoms(
     qseq: str,
     tmpl: dict[str, Any],

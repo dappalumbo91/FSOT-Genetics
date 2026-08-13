@@ -334,6 +334,24 @@ def multi_template_build(
     return coord - coord.mean(axis=0)
 
 
+def pdb_is_ensemble(text: str) -> bool:
+    """NMR / multi-model files are Superposed (trit 0), not a collapsed crystal.
+
+    2LGF CaM: residual E=0.08 (ideal local bonds) but 14 Å from the holo
+    crystal. Residual must not rank an ensemble over a measured collapse.
+    """
+    head = text[:5000].upper()
+    if "EXPDTA" in head and "NMR" in head:
+        return True
+    if text.count("ENDMDL") >= 2:
+        return True
+    up = text.upper()
+    if up.count("\nMODEL ") >= 2 or up.startswith("MODEL "):
+        # single-model X-ray often has one MODEL record; require 2+
+        return up.count("\nMODEL ") >= 2
+    return False
+
+
 def collect_template_candidates(
     sequence: str,
     exclude_pdb: str,
@@ -388,6 +406,7 @@ def collect_template_candidates(
                     "pairs": pairs,
                     "tcoords": tcoords,
                     "tmpl_len": len(tseq),
+                    "ensemble": pdb_is_ensemble(text),
                 }
             )
         if len(seen) >= max_pdbs:
@@ -557,8 +576,11 @@ def select_measured_authority(cands: list[dict]) -> tuple[list[dict], str, dict,
     # trit_consensus: cluster by Kabsch ≤ φ² (same collapse). Largest
     # cluster is the default observation; every cluster keeps a residual-
     # best representative (CaM compact / extended / apo are one apparatus).
+    # NMR ensembles are Superposed — scored, never residual-best/primary.
     same_prot = [c for c in cands if float(c["identity"]) >= IDENTITY_CAP]
     if same_prot:
+        crystals = [c for c in same_prot if not c.get("ensemble")]
+        authority = crystals or same_prot
         remaining = list(same_prot)
         clusters: list[list[dict]] = []
         while remaining:
@@ -589,24 +611,71 @@ def select_measured_authority(cands: list[dict]) -> tuple[list[dict], str, dict,
             seen_pdb.add(pid)
             reps.append(c)
 
-        # Always keep data-best (1A00 Hb 0.27 Å) and residual-best.
-        _add(max(same_prot, key=lambda c: float(c["score"])))
-        _add(min(same_prot, key=lambda c: float(c["residual_energy"])))
+        def _mind(c: dict) -> float:
+            ds = []
+            for r in reps:
+                try:
+                    ds.append(float(kabsch_rmsd(c["model"], r["model"])))
+                except Exception:
+                    ds.append(0.0)
+            return min(ds) if ds else 1e9
+
+        # Data-best and residual-best among crystals (not ensembles).
+        _add(max(authority, key=lambda c: float(c["score"])))
+        _add(min(authority, key=lambda c: float(c["residual_energy"])))
         n_cl = min(len(clusters), max(MULTI_TOP_K, int(round(_PHI ** 4))))
         for cl in clusters[:n_cl]:
             intact = [c for c in cl if _measured_bond_mse(c) <= _BOND_BROKEN]
-            use = intact or cl
-            _add(
-                min(use, key=lambda c: (float(c["residual_energy"]), -float(c["score"])))
+            use = [c for c in (intact or cl) if not c.get("ensemble")] or (
+                intact or cl
             )
-        primary = max(same_prot, key=lambda c: float(c["score"]))
+            seed = min(
+                use, key=lambda c: (float(c["residual_energy"]), -float(c["score"]))
+            )
+            _add(seed)
+            # φ² merges CaM 2R28 (2.2 Å) with 3CLN (0.52 Å). A crystal
+            # more than φ from the seed is the other collapse in the ball.
+            far = []
+            for c in use:
+                if c is seed:
+                    continue
+                try:
+                    d = float(kabsch_rmsd(c["model"], seed["model"]))
+                except Exception:
+                    continue
+                if d > _PHI:
+                    far.append(c)
+            if far:
+                _add(
+                    min(
+                        far,
+                        key=lambda c: (
+                            float(c["residual_energy"]),
+                            -float(c["score"]),
+                        ),
+                    )
+                )
+                _add(max(far, key=lambda c: float(c["score"])))
+        # Data-plausible crystals outside the 0.95 cap (1CLM id 0.90).
+        extra = [
+            c
+            for c in cands
+            if float(c["score"]) >= best_data / _PHI
+            and float(c["identity"]) < IDENTITY_CAP
+            and not c.get("ensemble")
+            and _measured_bond_mse(c) <= _BOND_BROKEN
+            and str(c["pdb_id"]) not in seen_pdb
+        ]
+        if extra and _mind(min(extra, key=lambda c: float(c["residual_energy"]))) > _PHI:
+            _add(min(extra, key=lambda c: float(c["residual_energy"])))
+        primary = max(authority, key=lambda c: float(c["score"]))
         # If data-best transfer is residual-unfit, default collapse is
         # residual-best (RNase 1A2W 15 Å vs a real RNase crystal).
         e_d = float(primary["residual_energy"])
-        e_m = min(float(c["residual_energy"]) for c in same_prot)
+        e_m = min(float(c["residual_energy"]) for c in authority)
         if e_d > _PHI * e_m:
             primary = min(
-                same_prot, key=lambda c: (float(c["residual_energy"]), -float(c["score"]))
+                authority, key=lambda c: (float(c["residual_energy"]), -float(c["score"]))
             )
         primary = dict(primary)
         primary["state_reps"] = reps
@@ -836,7 +905,20 @@ def best_template(sequence: str, exclude_pdb: str, identity_cap: float = IDENTIT
         "state_reps": [
             {"pdb_id": r["pdb_id"], "model": r["model"], "score": r["score"]}
             for r in (primary.get("state_reps") or [])
-        ],
+        ]
+        + (
+            [
+                {
+                    "pdb_id": flip["pdb_id"],
+                    "model": flip["model"],
+                    "score": flip["score"],
+                }
+            ]
+            if flip is not None
+            and str(flip["pdb_id"])
+            not in {str(r["pdb_id"]) for r in (primary.get("state_reps") or [])}
+            else []
+        ),
         "termini_note": term_note,
         "residual": {
             "Physical_Chemistry": _R_BOND,

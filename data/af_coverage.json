@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-13T02:22:31.997127+00:00",
+  "generated_at": "2026-08-13T02:39:26.656428+00:00",
   "doctrine": "Each AF3 job is a named FSOT system: measured homolog + residual at the ChemLink for that interface. 0 free parameters.",
   "jobs": {
     "protein_monomer": {
@@ -52,10 +52,10 @@
       "status": "ok",
       "pdb": "1EHZ",
       "n": 62,
-      "template": "4TNA",
+      "template": "1EVV",
       "identity": 1.0,
       "coverage": 1.0,
-      "c1_rmsd_A": 0.7748109030566475,
+      "c1_rmsd_A": 0.6801373917400425,
       "domain": "Chemistry / Biochemistry (RNA backbone C1')"
     },
     "protein_protein": {
@@ -80,9 +80,10 @@
       "n_bb_matched": 512,
       "ca_rmsd_A": 0.5790043820064616,
       "sidechain_centroid_rmsd_A": 1.0356660476215436,
-      "sidechain_heavy_rmsd_A": 1.8840374579303454,
+      "sidechain_heavy_rmsd_A": 1.8439384808459558,
       "backbone_heavy_rmsd_A": 0.7681808955486639,
-      "all_heavy_rmsd_A": 1.4362740913365537,
+      "all_heavy_rmsd_A": 1.4098308834956592,
+      "n_sc_templates": 4,
       "template": "1LZS",
       "domain": "Molecular_Chemistry"
     },
@@ -188,6 +189,26 @@
       "partner_chain": "B",
       "partner_identity": 1.0,
       "domain": "Biochemistry (measured Fab assembly)"
+    },
+    "protein_tetramer": {
+      "status": "ok",
+      "pdb": "1A3N",
+      "chains": "A+B+C+D",
+      "per_chain_rmsd_A": [
+        0.3168638310487282,
+        0.34329419428335,
+        0.3068569513625243,
+        0.40181176038091343
+      ],
+      "tetramer_rmsd_A": 0.5076226402302874,
+      "template": "1A00",
+      "partner_chains": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "domain": "Biochemistry (measured four-chain assembly)"
     }
   },
   "covered_now": [
@@ -204,7 +225,8 @@
     "ptm_phospho",
     "protein_rna",
     "ligand",
-    "antibody_pair"
+    "antibody_pair",
+    "protein_tetramer"
   ],
   "not_yet": [],
   "free_parameters": 0

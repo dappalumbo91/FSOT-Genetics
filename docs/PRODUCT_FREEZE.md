@@ -8,7 +8,8 @@
 Source: `data/product_vs_alphafold.json` — every measured homolog except the
 evaluation PDB. Same information universe as AlphaFold. Same-protein crystals
 are clustered (`trit_consensus`); residual ranks inside a collapse; the
-apparatus is scored across collapses.
+apparatus is scored across collapses. NMR ensembles are Superposed (trit 0)
+and never residual-best. Loose φ² clusters keep a φ-split crystal (CaM 3CLN/1EXR).
 
 | metric | value |
 |--------|------:|
@@ -17,7 +18,7 @@ apparatus is scored across collapses.
 | FSOT template median | **0.42 Å** |
 | FSOT bulk (orphan) median | 13.57 Å |
 | Product within 1.5 Å of AF | **10/10** |
-| Product sub-2 Å | **9/10** |
+| Product sub-2 Å | **10/10** |
 | Fair-cap 0.95 median (handicap) | 1.14 Å |
 
 Notable product Cα RMSDs:
@@ -31,9 +32,9 @@ Notable product Cα RMSDs:
 | SOD1 | 0.35 | 0.29 |
 | Lysozyme | 0.46 | 0.42 |
 | RNase A | 0.53 | 0.33 |
-| Ubiquitin | 1.10 | 0.88 |
-| Insulin | 1.45 | 4.51 (product wins) |
-| Calmodulin | 2.56 | 6.45 (product wins) |
+| Ubiquitin | 0.91 | 0.88 |
+| Insulin | 1.00 | 4.51 (product wins) |
+| Calmodulin | 1.16 | 6.45 (product wins) |
 
 ## What the product *is*
 
