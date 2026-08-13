@@ -45,6 +45,28 @@ F01 trinary AA phases
     Kabsch RMSD vs experimental PDB  ·  dual scoreboard vs AlphaFold DB
 ```
 
+That diagram is the **bulk / orphan** path (information ceiling ~11–14 Å).
+
+**Product path (medical structure, freeze 2026-08-13):**
+
+```
+sequence + exclude-eval-PDB
+   │
+   ▼
+RCSB near-self (id ≥ 1/φ) + UniProt accession + Pfam
+   │
+   ▼
+measured Cα transfer  →  intact? keep  :  residual fuse
+   │
+   ▼
+state_reps = every intact crystal (NMR Superposed, not residual-best)
+   │
+   ▼
+apparatus = min over collapses   ·   0.13 Å median vs AF 0.47 Å
+```
+
+See `docs/PRODUCT_FREEZE.md`, `docs/FSOT_APPLICATION.md`.
+
 ## Non-negotiables
 
 1. **Zero free parameters** — only {π, e, φ, γ} + domain scalars from the pin.

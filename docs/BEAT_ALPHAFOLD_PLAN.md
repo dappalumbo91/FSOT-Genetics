@@ -1,5 +1,7 @@
 # FSOT vs AlphaFold — The Genetics Re-Proof Plan
 
+> **Status 2026-08-13:** same-data **product** median Cα **0.13 Å** vs AlphaFold **0.47 Å** on the 10-protein freeze (`docs/PRODUCT_FREEZE.md`). That is not CASP/CAMEO. Blind public benchmarks below remain the re-proof bar. Bulk de-novo remains ~11–14 Å.
+
 > **Theory under test:** **FSOT** — *Fluid Space Time Omni Theory*, the zero-free-parameter theory of everything created by **Damian Arthur Palumbo**.
 >
 > **Re-proof domain:** Genetics & molecular biology.

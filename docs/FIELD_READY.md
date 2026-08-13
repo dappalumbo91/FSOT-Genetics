@@ -26,7 +26,7 @@ GUI shows **frozen gates**. CLI/Zig **does** the science.
 | Zig ≡ Python | `python scripts/parity_zig_python.py` | Residual/codon law not drifted |
 | Zig host | `cd zig && zig build host` | `FSOT_STAGE_GENETICS_OK` |
 | QEMU (if installed) | `cd zig && .\run_qemu.ps1` | Serial `FSOT_STAGE_GENETICS_OK` |
-| Product freeze | `data/product_vs_alphafold.json` | Median ≤ **1.16 Å** (see PRODUCT_FREEZE) |
+| Product freeze | `data/product_vs_alphafold.json` | Median ≤ **0.47 Å** AF (freeze **0.13 Å**; see PRODUCT_FREEZE) |
 
 ### B. Field surfaces (what a human sees)
 

@@ -1,6 +1,8 @@
 # Mechanism gap map — where FSOT fails and what to solve
 
-**Source:** `data/wetlab_af_eval.json` (2026-08-11) + product freeze + error-margin doctrine.  
+**Current freeze (2026-08-13):** same-data product median **0.13 Å** vs AF **0.47 Å**. Remaining H2H/coverage gaps: `docs/OPEN.md`.
+
+**Source (this ledger):** `data/wetlab_af_eval.json` (2026-08-11) + older product freeze + error-margin doctrine. The table below is the **broader medical set**, not the 10-protein H2H.  
 **Rule:** fix **one mechanism at a time** under \(S=K(T_1+T_2+T_3)\), pin `D1D38A`, **0 free parameters**.  
 **Attitude:** failures are **diagnostic**, not embarrassment — they tell us which FSOT interface is wrong.
 

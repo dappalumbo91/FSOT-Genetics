@@ -1,5 +1,7 @@
 # Product freeze — structure path (2026-08-13)
 
+**Marked results.** Do not silently overwrite this table. Remaining misses: `docs/OPEN.md`. Audit: `docs/AUDIT.md`.
+
 **Status:** Same-data product (exclude eval PDB only).  
 **Authority pin:** `D1D38A` · law \(S = K(T_1+T_2+T_3)\) · **0 free parameters**.
 

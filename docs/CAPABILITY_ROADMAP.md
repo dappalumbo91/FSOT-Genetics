@@ -8,6 +8,8 @@
 
 ## Live stress scoreboard (this campaign)
 
+**Product freeze (2026-08-13):** same-data median **0.13 Å** vs AF 0.47 — `docs/PRODUCT_FREEZE.md`. The table below is the older `medical_stress_suite.json` snapshot (fair-cap / fuse era), kept for regime comparison.
+
 Source: `data/medical_stress_suite.json` (10 classic medical/H2H proteins).
 
 | Regime | Median Cα RMSD (Å) | Role |
