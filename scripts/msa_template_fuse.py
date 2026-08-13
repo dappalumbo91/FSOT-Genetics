@@ -35,7 +35,7 @@ sys.path.insert(0, str(ROOT / "vendor"))
 
 import fsot_compute as fc  # noqa: E402
 from fsot_structure_engine import CA_CA  # noqa: E402
-from full_scalar_law import residual_scale  # noqa: E402
+from full_scalar_law import chem_link_domain, residual_scale  # noqa: E402
 from msa_pipeline import EVO_AMP, MsaFeatures, conservation_confidence  # noqa: E402
 
 PI = float(fc.PI)
@@ -57,8 +57,21 @@ _R_ANCHOR = residual_scale(abs(float(fc.domain_scalar("Biochemistry"))))  # meas
 # Lean ChemLink: tertiaryBiochem D=13, disulfide Atomic_Physics D=7
 _R_TERT = residual_scale(abs(float(fc.domain_scalar("Biochemistry"))))
 _R_SS = residual_scale(abs(float(fc.domain_scalar("Atomic_Physics"))))
+_R_SALT = residual_scale(abs(float(fc.domain_scalar("Electromagnetism"))))
+_R_PACK = residual_scale(abs(float(fc.domain_scalar("Condensed_Matter"))))
+_R_HBOND = residual_scale(abs(float(fc.domain_scalar("Chemistry"))))
+_R_MOL = residual_scale(abs(float(fc.domain_scalar("Molecular_Chemistry"))))
 # F13 gate at Biochemistry D_eff=13
 _TERT_GATE = max(7, int(math.ceil(float(fc.ETA_EFF) * 13.0)))
+
+_R_BY_LINK = {
+    "disulfide_covalent": _R_SS,
+    "salt_bridge_electrostatic": _R_SALT,
+    "hydrophobic_packing": _R_PACK,
+    "hbond_secondary": _R_HBOND,
+    "molecular_sidechain": _R_MOL,
+    "tertiary_biochem": _R_TERT,
+}
 
 
 def top_coevolution_pairs(
@@ -104,6 +117,33 @@ def template_coevolution_agreement(
     return hits / len(pairs)
 
 
+def _pair_residual(
+    i: int,
+    j: int,
+    sequence: str,
+    props,
+) -> tuple[float, str]:
+    """Named-domain residual for a measured pair (Lean ChemLink)."""
+    sep = abs(j - i)
+    a1 = a2 = ""
+    pa = pb = ba = bb = 0.0
+    if sequence and props is not None and max(i, j) < len(sequence):
+        a1, a2 = sequence[i], sequence[j]
+        pa, pb = props[i].p_alpha, props[j].p_alpha
+        ba, bb = props[i].p_beta, props[j].p_beta
+    _sc, link = chem_link_domain(
+        sep,
+        _TERT_GATE,
+        aa1=a1,
+        aa2=a2,
+        p_alpha_i=pa,
+        p_alpha_j=pb,
+        p_beta_i=ba,
+        p_beta_j=bb,
+    )
+    return _R_BY_LINK.get(link, _R_TERT), link
+
+
 def _contacts_from_measured(
     X0: np.ndarray,
     sequence: str | None,
@@ -111,13 +151,25 @@ def _contacts_from_measured(
 ) -> tuple[list[tuple[int, int, float, float]], int]:
     """Build residual-tagged springs from *measured* homolog geometry.
 
-    Returns (i, j, d_measured, residual_r) and count of SS links.
-    Backbone sep≤2 never included (Lean: no residual on backbone).
+    Target is always the measured Cα distance (data). Residual only
+    *weights* the spring at the ChemLink domain for that pair:
+      salt     ← Electromagnetism
+      disulfide← Atomic_Physics
+      hbond    ← Chemistry (helix 3/4/7, sheet)
+      pack     ← Condensed_Matter
+      tertiary ← Biochemistry
+    Backbone sep≤2 never included. No invented contact graph.
     """
     n = len(X0)
     springs: list[tuple[int, int, float, float]] = []
     n_ss = 0
-    # Consensus / extra measured tertiary (already filtered)
+    seq = (sequence or "").upper()
+    props = None
+    if seq and len(seq) == n:
+        from fsot_structure_engine import SsPropensity  # noqa: WPS433
+
+        props = [SsPropensity.from_expanded_amino_acid(a) for a in seq]
+
     raw_t: list[tuple[int, int, float]] = []
     if extra:
         for i, j, d0 in extra:
@@ -130,22 +182,38 @@ def _contacts_from_measured(
                 d0 = float(np.linalg.norm(X0[i] - X0[j]))
                 if d0 < CONTACT_SCALE:
                     raw_t.append((i, j, d0))
-    # Top-L measured contacts only (CASP-style data cap — not a free graph)
     raw_t.sort(key=lambda t: t[2])
+    seen: set[tuple[int, int]] = set()
     for i, j, d0 in raw_t[: max(n, 1)]:
-        springs.append((i, j, d0, _R_TERT))
-    # Disulfide: Cys–Cys close in measured map — Atomic_Physics residual
-    if sequence and len(sequence) == n:
-        cys = [i for i, a in enumerate(sequence.upper()) if a == "C"]
-        for a in range(len(cys)):
-            for b in range(a + 1, len(cys)):
-                i, j = cys[a], cys[b]
-                if abs(j - i) < 3:
+        r_link, link = _pair_residual(i, j, seq, props)
+        springs.append((i, j, d0, r_link))
+        seen.add((i, j))
+        if link == "disulfide_covalent":
+            n_ss += 1
+
+    # Precision channels not always in the top-L tertiary cap.
+    if seq and len(seq) == n and props is not None:
+        salt_hi = CONTACT_SCALE * PHI
+        for i in range(n):
+            for j in range(i + 3, n):
+                if (i, j) in seen:
                     continue
                 d0 = float(np.linalg.norm(X0[i] - X0[j]))
-                if d0 < CONTACT_SCALE:  # measured SS-like Cα span
-                    springs.append((i, j, d0, _R_SS))
+                r_link, link = _pair_residual(i, j, seq, props)
+                if link == "disulfide_covalent" and d0 < CONTACT_SCALE:
+                    springs.append((i, j, d0, r_link))
                     n_ss += 1
+                    seen.add((i, j))
+                elif link == "salt_bridge_electrostatic" and d0 < salt_hi:
+                    springs.append((i, j, d0, r_link))
+                    seen.add((i, j))
+                elif (
+                    link == "hbond_secondary"
+                    and abs(j - i) in (3, 4, 7)
+                    and d0 < CONTACT_SCALE
+                ):
+                    springs.append((i, j, d0, r_link))
+                    seen.add((i, j))
     return springs, n_ss
 
 
@@ -165,9 +233,12 @@ def fuse_relax(
     residual_r = 1 + |S_domain| · P_NEW  (Lean ChemLink D_eff)
       bond     ← Physical_Chemistry  (sep=1; geometry)
       clash    ← Chemistry
-      tertiary ← Biochemistry D=13 on *measured* long-range contacts only
+      salt     ← Electromagnetism on measured opposite-charge contacts
+      hbond    ← Chemistry on measured helix 3/4/7
+      pack     ← Condensed_Matter on measured hydrophobic contacts
+      tertiary ← Biochemistry D=13 on remaining measured long-range
       disulfide← Atomic_Physics on measured Cys–Cys close pairs
-    Backbone is not residual-invented. No false contact graphs.
+    Target = measured d. Residual only weights. No invented graph.
     """
     X = X0.copy()
     n = len(X)
@@ -314,6 +385,7 @@ def fuse_predict(
     from run_rcsb_template_holdout import soft_flexible_termini  # noqa: WPS433
 
     X0 = template_model
+    springs, _n_ss = _contacts_from_measured(X0, sequence, tertiary_contacts)
     X_phys = fuse_relax(
         X0, None, sequence=sequence, tertiary_contacts=tertiary_contacts
     )
@@ -332,6 +404,9 @@ def fuse_predict(
                 d = float(np.linalg.norm(X[i] - X[j]))
                 if d < CLASH_FLOOR:
                     e += float(_R_CLASH * (CLASH_FLOOR - d) ** 2)
+        for i, j, d0, r_link in springs:
+            d = float(np.linalg.norm(X[i] - X[j]))
+            e += float(r_link * (d - d0) ** 2)
         return e
 
     cands = [
@@ -383,7 +458,7 @@ def fuse_predict(
             else 0
         ),
         "free_parameters": 0,
-        "engine": "fsot_template_product_v6_multisystem",
+        "engine": "fsot_template_product_v7_chemlink",
         "contact_scale_A": CONTACT_SCALE,
         "clash_floor_A": CLASH_FLOOR,
         "iters": ITERS,

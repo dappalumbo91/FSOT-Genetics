@@ -75,8 +75,8 @@ Ranked by medical impact × solvability under pure FSOT.
 | **Evidence** | Ubiquitin 1.78 vs AF 0.88; lysozyme 1.15 vs 0.42; DHFR 1.02 vs 0.74 |
 | **What failed** | Topology OK; local geometry / packing / flexible termini lag AF’s learned polish |
 | **FSOT handle** | Residual-weighted physics **channels** already on (bond/clash/anchor); next: per-pair ChemLink residual on **SS / salt / hbond only** (not shotgun springs); MSA packing polish only in near-contact envelope (already); C-term soft rebuild only when multi-template variance high |
-| **Success metric** | Controls median **≤ 1.0 Å** without median product &gt; 1.16 on freeze H2H |
-| **Status** | **OPEN — second wave** (do not thrash before M1–M2) |
+| **Success metric** | Controls median **≤ 1.0 Å** without median product &gt; 1.15 on freeze H2H |
+| **Status** | **PARTIAL** — measured pairs now residual-weighted at the named ChemLink (salt / H-bond / pack / SS / tertiary). Ubq 1.50→1.48 (physics accepted), CaM 0.76→0.74. Remaining vs AF is fair-homolog + Cα ceiling, not a missing domain. |
 
 ### M6 — Bulk de-novo information wall
 

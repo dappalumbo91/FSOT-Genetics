@@ -23,10 +23,10 @@ Notable product Cα RMSDs:
 |---------|----------:|-----:|
 | Insulin | 1.14 | 4.51 (product wins) |
 | RNase A | 0.44 | 0.33 |
-| Calmodulin | 0.76 | 6.45 (product wins) |
-| Lysozyme | 1.14 | 0.42 |
-| Hemoglobin α | 1.15 | 0.27 |
-| Ubiquitin | 1.50 | 0.88 |
+| Calmodulin | 0.74 | 6.45 (product wins) |
+| Lysozyme | 1.15 | 0.42 |
+| Hemoglobin α | 1.14 | 0.27 |
+| Ubiquitin | 1.48 | 0.88 |
 | p53 DNA-binding | 1.57 | 6.19 (product wins) |
 | Carbonic anhydrase II | 1.30 | 0.36 (best fair homolog; id cap) |
 
