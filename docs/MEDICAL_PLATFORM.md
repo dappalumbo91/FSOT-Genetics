@@ -97,23 +97,37 @@ card (explainable)
 
 ---
 
-## 5. “Simulate how this patient responds to this drug”
+## 5. Dose, toxicity, and “response” — derive vs market
 
-The useful reading of that sentence is **pharmacogenomic residual**, not a molecular movie of the patient.
+The freeze doctrine already says this: **measured data is authority; residual scales the correct interface; we evaluate against wet-lab; we do not sell an unvalidated clinical act.**
 
-Lawful version (can be built from what we have):
+Labeled dose, boxed warnings, CYP substrate/inhibitor tables, CPIC allele–dose pairs, ChEMBL activities, and FDA SPL/SMILES are **public measurements**, the same kind of object as a PDB crystal. Using them as *input* is lawful. Fitting a new weight from them to RMSD or to AUC is not.
 
-1. Map the variant onto the product structure (codon → residue → site class: DNA-contact, metal, pocket, hinge, Superposed loop).
-2. Place the **medicine** as a Molecular_Chemistry / Electromagnetism observer (SMILES → ChemLink, same as BEN/ATP/Zn).
-3. Report whether the variant sits on that observer interface, and whether the apparatus is the drug-relevant collapse (e.g. KRAS G12C + sotorasib cysteine; ABL1 DFG-out + imatinib-class).
-4. Combine with conservation: common polymorphism at a non-interface site demotes; invariant DNA-contact promotes.
+### What we *can* hit (research metrics, same pin)
 
-Unlawful version (do not build, do not market):
+| Layer | Data (authority) | FSOT interface | Evaluable number |
+|-------|------------------|----------------|------------------|
+| Drug chemistry | SMILES / InChI / CCD | Molecular_Chemistry observer (already BEN/ATP) | site geometry vs co-crystal |
+| On-target pose | PDB ligand complex | same as ligand job | site RMSD / contact MAE |
+| Patient variant on that pose | VCF / HGVS | codon → residue on product map | “on-site / off-site / Superposed” |
+| Metabolizer gene | CYP/VKORC1/… structures + PharmGKB *as data* | Atomic_Physics / EM at catalytic residues | allele sits on catalytic apparatus or not |
+| Labeled dose / tox | FDA label, CPIC, DailyMed | **not invented from \(S\)** — attached as measured observation | concordance: do we retrieve the right label given the allele? |
 
-- “We simulated your genome under this pill and predicted your outcome.”
-- PK/PD, dose, toxicity, time course from FSOT scalars alone.
+So: we *derive* whether this genotype occupies the interface those labels assumed. We *retrieve* dose/toxicity as measured authority. We *evaluate* retrieval + interface occupancy against public tables. That is the same loop as Cα vs native.
 
-A **secondary platform** is then: same engine, different intake (med list + VCF), different card (drug–variant–state). Not a second theory.
+A residual-only “first-principles milligram” (π, e, φ → 80 mg) is the bulk-orphan of pharmacology: the information is not in the scalar. The information is in the trial and the label, the way the fold is in the crystal.
+
+### Why we still must not *market* a dosing/toxicity product
+
+Not because the stack is forbidden. Because **marketing a dose or a tox call is a clinical act**. It needs field study: independent cohorts, discordance review, intended-use lock, and (in the US) device/CDS pathway. That is the same rule as “do not ship a structure change that tanks the freeze” — validation before claim.
+
+Build the bench. Score it on public labels. Do not print “take 20 mg” on a patient card until that gate exists.
+
+### Unlawful (do not build)
+
+- A fitted neural PK model inside this repo (breaks 0 free parameters).
+- Inventing clearance or QT risk from \(S\) with no measured metabolizer/structure/label.
+- Calling the research card a diagnosis or a prescription.
 
 ---
 
