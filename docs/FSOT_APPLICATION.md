@@ -46,6 +46,7 @@ It does **not** invent new ranking free-forms (length×score, medoid shotguns, e
 | `score = id × cov × length_sim` | free geometric invent, not residual law |
 | residual rank over **full** pool | residual at wrong interface → CaM apo/holo flip |
 | residual override of high-id primary | invents state against measured sequence authority |
+| blend / discard context-flips | DFG-in and DFG-out are `trit_not` of one apparatus (0 = Superposed). Residual must not pick between them. |
 | medoid-all / soft disagree switches | geometric shotgun, not \(S=K(T_1+T_2+T_3)\) |
 
 ## Ship gate

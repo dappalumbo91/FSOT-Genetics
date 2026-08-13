@@ -72,7 +72,11 @@ def main() -> int:
             except Exception:
                 feat = None
             prod = fuse_predict(
-                seq, t["model"], feat, tertiary_contacts=t.get("tertiary_contacts")
+                seq,
+                t["model"],
+                feat,
+                tertiary_contacts=t.get("tertiary_contacts"),
+                flip_model=t.get("flip_model"),
             )
             rp = float(kabsch_rmsd(prod["ca_coords"], nat))
             rt = float(kabsch_rmsd(t["model"], nat))

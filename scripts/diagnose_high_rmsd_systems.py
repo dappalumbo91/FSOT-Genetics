@@ -111,11 +111,17 @@ def main() -> int:
                 }
             )
             continue
-        prod = fuse_predict(seq, tmpl["model"], None)
+        prod = fuse_predict(
+            seq, tmpl["model"], None, flip_model=tmpl.get("flip_model")
+        )
         X = prod["ca_coords"]
         rmsd = float(kabsch_rmsd(X, nat))
-        if rmsd <= THRESH:
-            continue  # only high-error systems
+        rmsd_flip = None
+        if prod.get("ca_coords_flip") is not None:
+            rmsd_flip = float(kabsch_rmsd(prod["ca_coords_flip"], nat))
+        rmsd_app = rmsd if rmsd_flip is None else min(rmsd, rmsd_flip)
+        if rmsd_app <= THRESH:
+            continue  # only high-error systems (apparatus = both collapses)
         margin = analyze_one(
             case["name"],
             f"{case['pdb']}:{case['chain']}",
@@ -155,6 +161,9 @@ def main() -> int:
             "wetlab": case.get("wetlab"),
             "n": len(seq),
             "rmsd_A": rmsd,
+            "rmsd_flip_A": rmsd_flip,
+            "rmsd_apparatus_A": rmsd_app,
+            "flip_pdb": tmpl.get("flip_pdb"),
             "template_pdb": tmpl.get("pdb_id"),
             "template_mode": tmpl.get("template_mode"),
             "template_identity": tmpl.get("identity"),

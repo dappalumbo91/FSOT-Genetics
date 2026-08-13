@@ -302,6 +302,7 @@ def fuse_predict(
     features: MsaFeatures | None,
     *,
     tertiary_contacts: list[tuple[int, int, float]] | None = None,
+    flip_model: np.ndarray | None = None,
 ) -> dict[str, Any]:
     """Product path: measured template + residual-weighted ChemLink physics.
 
@@ -338,6 +339,19 @@ def fuse_predict(
         ("template_physics", X_phys, _energy(X_phys)),
         ("template_msa_fuse", X_fuse, _energy(X_fuse)),
     ]
+    # Context flip: same apparatus, trit_not observer frame. Residual
+    # energy must not discard it as a worse fold (ABL1 3GVU vs 3HMI)
+    # and must not win the pick (that was 1HU8 over 2P52).
+    flip_coords = None
+    flip_energy = None
+    if flip_model is not None and len(flip_model) == len(X0):
+        Xf0 = flip_model - flip_model.mean(0)
+        Xf = fuse_relax(flip_model, None, sequence=sequence)
+        e0, ef = _energy(Xf0), _energy(Xf)
+        if ef <= e0:
+            flip_coords, flip_energy = Xf, ef
+        else:
+            flip_coords, flip_energy = Xf0, e0
     # Soft termini candidates when residual bond stress localizes to ends
     soft_applied = False
     for label, Xb, _eb in list(cands):
@@ -361,6 +375,8 @@ def fuse_predict(
         "energy_best": e_best,
         "energies": {c[0]: c[2] for c in cands},
         "soft_termini_considered": soft_applied,
+        "ca_coords_flip": flip_coords,
+        "energy_flip": flip_energy,
         "n_evo_clamps": int(
             len(top_coevolution_pairs(features, top_n=len(sequence)))
             if features is not None and features.depth_ok

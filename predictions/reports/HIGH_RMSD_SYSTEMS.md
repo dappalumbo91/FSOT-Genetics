@@ -8,7 +8,7 @@ Source: `data/high_rmsd_system_diagnosis.json` + product path after multi-system
 |--------|-----:|--------------|-------------:|---------------------------|------------|
 | sars2_rbd | 5.68 | global_topology | 0.53 | bond | termini + tertiary + data≠residual |
 | hiv_rt | 5.46 | long_range | 0.00 | fold_Rg | multi-domain / Rg; data≠residual |
-| abl1 | 4.93 | long_range | 0.00 | bond | data≠residual; kinase state |
+| abl1 | 5.03 / **1.09 flip** | long_range | 0.00 | bond | 3HMI↔3GVU `trit_not` same apparatus |
 | ace2 | 4.74 | long_range | 0.40 | bond | termini + remote + data≠residual |
 | bcl2 | 3.75 | long_range | 0.27 | bond | data≠residual |
 | p53_dbd | 1.57 | long_range | 0.67 | bond | residual-unfit 3Q01 → 2P52 |

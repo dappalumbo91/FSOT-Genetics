@@ -69,12 +69,13 @@ def _get(url: str, timeout: int = 40) -> dict:
         return json.loads(response.read())
 
 
-def pfam_family_pdbs(query_pdb: str) -> list[str]:
+def pfam_family_pdbs(query_pdb: str, *, pages: int = 1) -> list[str]:
     """PDB structures in the query's Pfam family (remote structural homologs).
 
     Tries RCSB polymer entities 1–4 (1TUP UniProt is on entity 3, not 1).
     Uses *all* Pfam accessions for the protein (DBD first when present) so
     multi-domain families don't miss the fold-relevant domain (p53 PF00870).
+    Pages InterPro only when `pages` > 1 (starved / all-broken pools).
     """
     acc = None
     for ent in ("1", "2", "3", "4", "5"):
@@ -97,21 +98,27 @@ def pfam_family_pdbs(query_pdb: str) -> list[str]:
     ordered = prefer + [f for f in fams if f not in prefer]
     out: list[str] = []
     seen: set[str] = set()
+    pages = max(1, int(pages))
     for fam in ordered[:4]:
-        try:
-            sd = _get(
-                f"https://www.ebi.ac.uk/interpro/api/structure/PDB/entry/pfam/{fam}/?page_size=100"
-            )
-        except Exception:
-            continue
-        for row in sd.get("results") or []:
-            acc_pdb = (row.get("metadata") or {}).get("accession")
-            if not acc_pdb:
-                continue
-            key = acc_pdb.upper()
-            if key not in seen:
-                seen.add(key)
-                out.append(key)
+        for page in range(1, pages + 1):
+            try:
+                sd = _get(
+                    f"https://www.ebi.ac.uk/interpro/api/structure/PDB/entry/pfam/{fam}/"
+                    f"?page_size=100&page={page}"
+                )
+            except Exception:
+                break
+            rows = sd.get("results") or []
+            if not rows:
+                break
+            for row in rows:
+                acc_pdb = (row.get("metadata") or {}).get("accession")
+                if not acc_pdb:
+                    continue
+                key = acc_pdb.upper()
+                if key not in seen:
+                    seen.add(key)
+                    out.append(key)
     return out
 
 
@@ -163,25 +170,45 @@ def nw_align(a: str, b: str) -> list[tuple[int, int]]:
     return pairs[::-1]
 
 
-def homolog_ids(sequence: str) -> list[str]:
-    query = {
-        "query": {"type": "terminal", "service": "sequence", "parameters": {
-            "evalue_cutoff": 0.1, "identity_cutoff": 0.25,
-            "sequence_type": "protein", "value": sequence}},
-        "return_type": "polymer_entity",
-        "request_options": {"paginate": {"start": 0, "rows": 80},
-                            "results_content_type": ["experimental"]},
-    }
-    try:
-        data = _post("https://search.rcsb.org/rcsbsearch/v2/query", query)
-    except Exception:
-        return []
+def homolog_ids(sequence: str, *, pages: int = 1) -> list[str]:
+    """RCSB sequence search. Extra pages only when the caller asks
+    (starved / all-broken pools). Default one page keeps freeze winners.
+    """
     ids, seen = [], set()
-    for hit in data.get("result_set", []):
-        pdb = hit["identifier"].split("_")[0].upper()
-        if pdb not in seen:
-            seen.add(pdb)
-            ids.append(pdb)
+    rows = 80
+    pages = max(1, int(pages))
+    for page in range(pages):
+        query = {
+            "query": {
+                "type": "terminal",
+                "service": "sequence",
+                "parameters": {
+                    "evalue_cutoff": 0.1,
+                    "identity_cutoff": 0.25,
+                    "sequence_type": "protein",
+                    "value": sequence,
+                },
+            },
+            "return_type": "polymer_entity",
+            "request_options": {
+                "paginate": {"start": page * rows, "rows": rows},
+                "results_content_type": ["experimental"],
+            },
+        }
+        try:
+            data = _post("https://search.rcsb.org/rcsbsearch/v2/query", query)
+        except Exception:
+            break
+        hits = data.get("result_set", [])
+        if not hits:
+            break
+        for hit in hits:
+            pdb = hit["identifier"].split("_")[0].upper()
+            if pdb not in seen:
+                seen.add(pdb)
+                ids.append(pdb)
+        if len(hits) < rows:
+            break
     return ids
 
 
@@ -308,11 +335,14 @@ def collect_template_candidates(
     identity_cap: float = IDENTITY_CAP,
     *,
     max_pdbs: int = MAX_TEMPLATE_PDBS,
+    search_pages: int = 1,
 ) -> list[dict]:
     """All fair homolog chain hits (measured authority pool). No early exit."""
     out: list[dict] = []
     seen: set[str] = set()
-    for pdb in homolog_ids(sequence) + pfam_family_pdbs(exclude_pdb):
+    for pdb in homolog_ids(sequence, pages=search_pages) + pfam_family_pdbs(
+        exclude_pdb, pages=search_pages
+    ):
         if pdb == exclude_pdb.upper() or pdb in seen:
             continue
         seen.add(pdb)
@@ -405,6 +435,98 @@ def residual_interface_energy(X: np.ndarray) -> float:
     trg = float(target_rg_fsot(n))
     e_fold = float(_R_FOLD * (rg - trg) ** 2)
     return e_bond + e_clash + e_fold
+
+
+# Blend only near-identical collapses. Context-flips (DFG-in/out, RAS
+# switch) are the same apparatus under trit_not — detected separately,
+# never averaged. Radius φ² Å; tighter φ tanked ubiquitin C-term (1.50→2.31).
+_STATE_RADIUS = _PHI * _PHI
+_FLIP_LOCAL = _PHI * _PHI
+
+
+def same_state_cluster(primary: dict, cands: list[dict]) -> list[dict]:
+    """Keep measured maps in the primary's *collapsed* neighborhood.
+
+    Radius φ Å (seed). Context-flips of the same apparatus stay out of
+    the blend — they are trit_not, not a second fold.
+    """
+    pref = primary["model"]
+    out = [primary]
+    for c in cands:
+        if c is primary:
+            continue
+        try:
+            d = float(kabsch_rmsd(c["model"], pref))
+        except Exception:
+            continue
+        if d <= _STATE_RADIUS:
+            out.append(c)
+    return out
+
+
+def _kabsch_onto(P: np.ndarray, Q: np.ndarray) -> np.ndarray:
+    p = P - P.mean(0)
+    q = Q - Q.mean(0)
+    H = p.T @ q
+    U, _S, Vt = np.linalg.svd(H)
+    d = float(np.sign(np.linalg.det(Vt.T @ U.T)))
+    R = Vt.T @ np.diag([1.0, 1.0, d]) @ U.T
+    return p @ R.T + Q.mean(0)
+
+
+def _measured_bond_mse(c: dict) -> float:
+    """Physical_Chemistry on *aligned* residues only — ignore interpolated gaps."""
+    X = c["model"]
+    measured = {int(qi) for qi, _ti in c.get("pairs") or []}
+    if len(measured) < 2:
+        return _bond_mse(X)
+    errs = []
+    for i in range(len(X) - 1):
+        if i in measured and (i + 1) in measured:
+            L = float(np.linalg.norm(X[i + 1] - X[i]))
+            errs.append((L - CA_CA) ** 2)
+    return float(np.mean(errs)) if errs else 0.0
+
+
+def context_flip_partner(primary: dict, cands: list[dict]) -> dict | None:
+    """Other collapse of the same trinary apparatus (trit_not).
+
+    Same apparatus: ≥ 1/φ² of residues agree within φ Å after Kabsch.
+    Context flip: some residues move more than φ² Å (local observer
+    collapse), even if global RMSD is only ~2–3 Å (kinase DFG, RAS switch).
+    Residual energy must not pick between these — they are +1/−1 of one trit.
+    """
+    pref = primary["model"]
+    best_s = float(primary["score"])
+    thr = best_s / _PHI
+    hit = None
+    hit_core = 0.0
+    for c in cands:
+        if c is primary or float(c["score"]) < thr:
+            continue
+        try:
+            g = float(kabsch_rmsd(c["model"], pref))
+            mapped = _kabsch_onto(c["model"], pref)
+        except Exception:
+            continue
+        # Same collapse with a wiggly loop is not trit_not (2XYN vs 3HMI).
+        if g < _PHI:
+            continue
+        d = np.linalg.norm(pref - mapped, axis=1)
+        core = float(np.mean(d <= _PHI))
+        flip_frac = float(np.mean(d > _PHI))
+        # Broken interpolated transfers look "far" — not a real flip.
+        if _measured_bond_mse(c) > _BOND_BROKEN:
+            continue
+        # Same apparatus: core ≥ 1/φ². Kinase DFG-in/out rotates a lobe
+        # so only ~½ of Cα stay within φ (3GVU core=0.50 < 1/φ).
+        # 1/φ was too strict and dropped the real trit_not.
+        if core >= 1.0 / (_PHI * _PHI) and flip_frac >= 1.0 / (_PHI ** 4):
+            # Strongest trit_not = largest global RMSD among intact maps.
+            if hit is None or g > hit_core:
+                hit = c
+                hit_core = g
+    return hit
 
 
 def select_measured_authority(cands: list[dict]) -> tuple[list[dict], str, dict, str]:
@@ -546,21 +668,60 @@ def best_template(sequence: str, exclude_pdb: str, identity_cap: float = IDENTIT
     """
     cands = collect_template_candidates(sequence, exclude_pdb, identity_cap)
     expanded = False
-    # Expand isoforms only when the fair pool is empty (starved kinases).
-    # Merging 0.99 into a thin pool previously pulled CaM/SOD1 onto wrong assemblies.
-    if len(cands) == 0 and identity_cap < IDENTITY_CAP_EXPAND - 1e-9:
-        cands = collect_template_candidates(
+    # Expand isoforms when the fair pool is empty *or* starved
+    # (< φ³ homologs). Empty-only left HIV-RT on a 67% distant RT
+    # while 98% same-protein crystals sat behind the cap.
+    # Do not expand a healthy fair pool (that pulled CaM onto 1AHR).
+    starved = len(cands) < MULTI_TOP_K
+    if starved and identity_cap < IDENTITY_CAP_EXPAND - 1e-9:
+        extra = collect_template_candidates(
             sequence, exclude_pdb, IDENTITY_CAP_EXPAND, max_pdbs=MAX_TEMPLATE_PDBS
         )
-        expanded = bool(cands)
+        if extra:
+            cands = extra
+            expanded = True
+    # Deep search only when the shallow fair pool has no intact transfer
+    # in the data band (RBD: every SARS1 map is bond-broken). Always-on
+    # pagination added p53 4MZI — residual-fit, wrong state, 1.57→2.38.
+    if cands:
+        for c in cands:
+            if "residual_energy" not in c:
+                c["residual_energy"] = residual_interface_energy(c["model"])
+        best_data = max(float(c["score"]) for c in cands)
+        data_best = max(cands, key=lambda c: float(c["score"]))
+        thr = best_data / _PHI
+        pool = [c for c in cands if float(c["score"]) >= thr] or [data_best]
+        e_min = min(float(c["residual_energy"]) for c in pool)
+        intact = [
+            c
+            for c in pool
+            if float(c["residual_energy"]) <= _PHI * e_min
+            and _bond_mse(c["model"]) <= _BOND_BROKEN
+        ]
+        if _bond_mse(data_best["model"]) > _BOND_BROKEN and not intact:
+            deep = collect_template_candidates(
+                sequence,
+                exclude_pdb,
+                identity_cap,
+                max_pdbs=MAX_TEMPLATE_PDBS,
+                search_pages=max(2, int(round(_PHI + 1))),
+            )
+            seen = {(c["pdb_id"], c["chain"]) for c in cands}
+            for c in deep:
+                key = (c["pdb_id"], c["chain"])
+                if key not in seen:
+                    cands.append(c)
+                    seen.add(key)
     if not cands:
         return None
 
     ordered, mode_auth, primary, fill = select_measured_authority(cands)
     n = len(sequence)
+    # Blend uses the selected order (score or residual). Context-flips are
+    # attached separately — they are trit_not of this apparatus, not a
+    # second fold to average.
+    cluster = same_state_cluster(primary, ordered)
     if fill == "single" or len(ordered) < 2:
-        # Residual-unfit data-best: one measured map. Multi-fill here
-        # mixed conformational states (p53 2P52 vs 1HU8).
         model = primary["model"]
         mode = mode_auth if fill == "single" else "single_template"
         n_used = 1
@@ -570,7 +731,6 @@ def best_template(sequence: str, exclude_pdb: str, identity_cap: float = IDENTIT
         mode = mode_auth
         n_used = tk
     else:
-        # Strong data: score-powered multi-fill (measured authority)
         tk = min(MULTI_TOP_K, len(ordered))
         model = multi_template_build(n, ordered, top_k=tk)
         mode = mode_auth
@@ -584,6 +744,7 @@ def best_template(sequence: str, exclude_pdb: str, identity_cap: float = IDENTIT
         n_used = 1
     homologs = [c["model"] for c in ordered[: min(MULTI_TOP_K, len(ordered))]]
     tert = measured_tertiary_contacts(homologs if homologs else [model])
+    flip = context_flip_partner(primary, ordered)
     # Measured homolog disagreement on termini (real data): rebuild tail
     # by CA_CA walk when tail std > φ and tail > φ·core (Biochemistry residual
     # localizes the observation — do not residual-scale the backbone walk).
@@ -604,6 +765,9 @@ def best_template(sequence: str, exclude_pdb: str, identity_cap: float = IDENTIT
         "multi_top_k": MULTI_TOP_K,
         "multi_power": MULTI_POWER,
         "tertiary_contacts": tert,
+        "flip_model": None if flip is None else flip["model"],
+        "flip_pdb": None if flip is None else flip["pdb_id"],
+        "flip_score": None if flip is None else flip["score"],
         "termini_note": term_note,
         "residual": {
             "Physical_Chemistry": _R_BOND,
