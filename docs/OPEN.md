@@ -23,6 +23,8 @@ This list is what to clear next. One mechanism at a time. Pin `D1D38A`. 0 free p
 
 See `docs/MECHANISM_GAP_MAP.md`. Still open there: EGFR coverage, variant P72R specificity, vaccine-antigen domain scope, CASP/CAMEO blind.
 
+Medical expansion (not Ångström work): `docs/MEDICAL_PLATFORM.md`. First gate there is **P72R must not be LIKELY DAMAGING**.
+
 ## Anti-goals (do not “fix” these)
 
 - Bulk 11–14 Å (information ceiling).

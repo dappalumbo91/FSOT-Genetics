@@ -10,6 +10,7 @@ Zero free parameters. No trained weights. No neural-network claim path.
 | **Scalar law** | \(S = K(T_1 + T_2 + T_3)\) |
 | **Mathematical hub** | [FSOT-2.1-Lean](https://github.com/dappalumbo91/FSOT-2.1-Lean) — this repo derives genetics/protein formulas from that formal engine and carries a byte-identical pin |
 | **Results freeze** | 2026-08-13 · `data/product_vs_alphafold.json` · `docs/PRODUCT_FREEZE.md` |
+| **Next (medical)** | `docs/MEDICAL_PLATFORM.md` — patient/drug card, not more Ångströms |
 
 ---
 
@@ -263,7 +264,8 @@ FSOTGenetics/                    Lean ChemLink / Observer / ZeroFreeParams
 docs/PRODUCT_FREEZE.md           marked results
 docs/AF_COVERAGE.md              AF3 job table
 docs/FSOT_APPLICATION.md         do not invert residual
-docs/OPEN.md                     remaining failures (next pass)
+docs/OPEN.md                     remaining structure misses
+docs/MEDICAL_PLATFORM.md         patient / drug / species orientation
 docs/MECHANISM_GAP_MAP.md        historical wet-lab mechanisms
 data/product_vs_alphafold.json   freeze numbers
 data/af_coverage.json            coverage numbers
