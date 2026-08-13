@@ -76,7 +76,7 @@ Ranked by medical impact × solvability under pure FSOT.
 | **What failed** | Topology OK; local geometry / packing / flexible termini lag AF’s learned polish |
 | **FSOT handle** | Residual-weighted physics **channels** already on (bond/clash/anchor); next: per-pair ChemLink residual on **SS / salt / hbond only** (not shotgun springs); MSA packing polish only in near-contact envelope (already); C-term soft rebuild only when multi-template variance high |
 | **Success metric** | Controls median **≤ 1.0 Å** without median product &gt; 1.15 on freeze H2H |
-| **Status** | **PARTIAL** — measured pairs now residual-weighted at the named ChemLink (salt / H-bond / pack / SS / tertiary). Ubq 1.50→1.48 (physics accepted), CaM 0.76→0.74. Remaining vs AF is fair-homolog + Cα ceiling, not a missing domain. |
+| **Status** | **PARTIAL** — ChemLink routing + Pauling polish on already-helical measured pairs (sep=2 hard geometry; i,i+3/4/7 snap to F10 when within φ of Pauling). Freeze **1.15→1.14 Å**. AF still tighter on near-self crystals; we still win p53/CaM/insulin (wrong AF state). |
 
 ### M6 — Bulk de-novo information wall
 

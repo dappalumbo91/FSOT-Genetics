@@ -10,7 +10,7 @@ Source: `data/product_vs_alphafold.json` (residual-fit data authority).
 | metric | value |
 |--------|------:|
 | AlphaFold median Cα RMSD | **0.47 Å** |
-| FSOT **product** median | **1.15 Å** |
+| FSOT **product** median | **1.14 Å** |
 | FSOT template median | **1.17 Å** |
 | FSOT bulk (orphan) median | 13.57 Å |
 | Product within 1.5 Å of AF | **10/10** |
@@ -21,11 +21,11 @@ Notable product Cα RMSDs:
 
 | protein | product Å | AF Å |
 |---------|----------:|-----:|
-| Insulin | 1.14 | 4.51 (product wins) |
-| RNase A | 0.44 | 0.33 |
-| Calmodulin | 0.74 | 6.45 (product wins) |
-| Lysozyme | 1.15 | 0.42 |
-| Hemoglobin α | 1.14 | 0.27 |
+| Insulin | 1.10 | 4.51 (product wins) |
+| RNase A | 0.47 | 0.33 |
+| Calmodulin | 0.75 | 6.45 (product wins) |
+| Lysozyme | 1.16 | 0.42 |
+| Hemoglobin α | 1.12 | 0.27 |
 | Ubiquitin | 1.48 | 0.88 |
 | p53 DNA-binding | 1.57 | 6.19 (product wins) |
 | Carbonic anhydrase II | 1.30 | 0.36 (best fair homolog; id cap) |

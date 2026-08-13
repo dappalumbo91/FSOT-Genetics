@@ -73,6 +73,18 @@ _R_BY_LINK = {
     "tertiary_biochem": _R_TERT,
 }
 
+# F10 Pauling helix Cα (same constants as chem_link_target_distance)
+_HELIX_RISE = 1.5
+_HELIX_RAD = 2.3
+_HELIX_TURN = 100.0 * PI / 180.0
+
+
+def _pauling_ca(sep: int) -> float:
+    return math.sqrt(
+        (sep * _HELIX_RISE) ** 2
+        + (2 * _HELIX_RAD * math.sin(sep * _HELIX_TURN / 2.0)) ** 2
+    )
+
 
 def top_coevolution_pairs(
     features: MsaFeatures, *, gate: int = GATE, top_n: int | None = None
@@ -186,7 +198,12 @@ def _contacts_from_measured(
     seen: set[tuple[int, int]] = set()
     for i, j, d0 in raw_t[: max(n, 1)]:
         r_link, link = _pair_residual(i, j, seq, props)
-        springs.append((i, j, d0, r_link))
+        tgt = d0
+        if link == "hbond_secondary" and abs(j - i) in (3, 4, 7):
+            dh = _pauling_ca(abs(j - i))
+            if abs(d0 - dh) < PHI:
+                tgt = dh
+        springs.append((i, j, tgt, r_link))
         seen.add((i, j))
         if link == "disulfide_covalent":
             n_ss += 1
@@ -212,9 +229,41 @@ def _contacts_from_measured(
                     and abs(j - i) in (3, 4, 7)
                     and d0 < CONTACT_SCALE
                 ):
-                    springs.append((i, j, d0, r_link))
+                    # AF-precision pattern: if the measured pair is already
+                    # helical, polish to Pauling (Chemistry geometry), else
+                    # keep measured (do not invent a helix in a loop).
+                    dh = _pauling_ca(abs(j - i))
+                    tgt = dh if abs(d0 - dh) < PHI else d0
+                    springs.append((i, j, tgt, r_link))
                     seen.add((i, j))
     return springs, n_ss
+
+
+def _sep2_helix_springs(X0: np.ndarray, sequence: str | None) -> list[tuple[int, int, float, float]]:
+    """sep=2 Physical_Chemistry hard geometry on already-helical measured pairs.
+
+    Lean: do not residual-scale sep=1,2. Weight = 1. Target = Pauling i→i+2
+    only when both p_alpha > 1/e and measured d is within φ of Pauling.
+    """
+    if not sequence:
+        return []
+    n = len(X0)
+    seq = sequence.upper()
+    if len(seq) != n or n < 3:
+        return []
+    from fsot_structure_engine import SsPropensity  # noqa: WPS433
+
+    props = [SsPropensity.from_expanded_amino_acid(a) for a in seq]
+    gate = 1.0 / E
+    dh = _pauling_ca(2)
+    out: list[tuple[int, int, float, float]] = []
+    for i in range(n - 2):
+        if props[i].p_alpha <= gate or props[i + 2].p_alpha <= gate:
+            continue
+        d0 = float(np.linalg.norm(X0[i + 2] - X0[i]))
+        if abs(d0 - dh) < PHI:
+            out.append((i, i + 2, dh, 1.0))
+    return out
 
 
 def fuse_relax(
@@ -246,6 +295,7 @@ def fuse_relax(
     r_bond = _R_BOND
     r_clash = _R_CLASH
     springs, _n_ss = _contacts_from_measured(X0, sequence, tertiary_contacts)
+    springs = list(springs) + _sep2_helix_springs(X0, sequence)
     evo_pairs: list[tuple[int, int, float]] = []
     if features is not None and features.depth_ok and features.coevolution.max() > 0:
         raw_pairs = top_coevolution_pairs(features, top_n=n)
@@ -255,10 +305,10 @@ def fuse_relax(
 
     for _ in range(iters):
         G = w_anchor * (X - X0)
-        # bonds — Physical_Chemistry residual (geometry channel)
+        # bonds — Physical_Chemistry *hard* geometry (Lean: no residual on sep=1)
         d = X[1:] - X[:-1]
         L = np.linalg.norm(d, axis=1) + 1e-9
-        f = ((L - CA_CA) / L)[:, None] * d * r_bond
+        f = ((L - CA_CA) / L)[:, None] * d
         G[:-1] -= f
         G[1:] += f
         # clashes — Chemistry residual
@@ -386,6 +436,7 @@ def fuse_predict(
 
     X0 = template_model
     springs, _n_ss = _contacts_from_measured(X0, sequence, tertiary_contacts)
+    springs = list(springs) + _sep2_helix_springs(X0, sequence)
     X_phys = fuse_relax(
         X0, None, sequence=sequence, tertiary_contacts=tertiary_contacts
     )
