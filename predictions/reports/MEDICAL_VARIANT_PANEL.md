@@ -1,40 +1,87 @@
 # Medical variant panel — multi-gene FSOT conservation
 
-Generated: `2026-08-11T04:44:30.424562+00:00`  
+Generated: `2026-08-13T04:26:56.891956+00:00`  
 Free parameters: **0**  
 Genes: **8**  
 Drivers scored: **35**  
 Drivers called LIKELY DAMAGING: **34** (97%)  
-Mean driver impact percentile: **62.23935264546526**
+Mean driver impact percentile: **62.239352645465274**
 
-Thresholds: ≥75 LIKELY DAMAGING · 40–75 uncertain · <40 likely tolerated
+Thresholds: ≥75 LIKELY DAMAGING · 40–75 uncertain · <40 likely tolerated · population AF ≥ 1/φ³ → `common_polymorphism`
 
-## TP53 — Tumor protein p53
+## BRAF — Serine/threonine-protein kinase B-raf
 
-UniProt `P04637` · n=393 · Pfam `UniRef50_P04637` · MSA rows=169 · mean cons=0.92
+UniProt `P15056` · n=766 · Pfam `UniRef50_P15056` · MSA rows=304 · mean cons=0.94
 
-Indication: cancer hotspot / Li-Fraumeni
+Indication: melanoma / MAPK
 
-Mean driver percentile: **54.96948478065393** · LIKELY DAMAGING 7/7
+Mean driver percentile: **67.52782740140168** · LIKELY DAMAGING 3/3
 
 | HGVS | cons | impact% | call | note |
 |------|-----:|--------:|------|------|
-| p.R175H | 0.99 | 62 | LIKELY DAMAGING | structural Zn node |
-| p.G245S | 1.00 | 64 | LIKELY DAMAGING | structural |
-| p.R248Q | 0.97 | 40 | LIKELY DAMAGING | DNA contact |
-| p.R248W | 0.97 | 41 | LIKELY DAMAGING | DNA contact |
-| p.R249S | 1.00 | 64 | LIKELY DAMAGING | structural |
-| p.R273H | 0.99 | 48 | LIKELY DAMAGING | DNA contact |
-| p.R282W | 1.00 | 64 | LIKELY DAMAGING | structural |
+| p.V600E | 1.00 | 67 | LIKELY DAMAGING | activation loop classic |
+| p.V600K | 1.00 | 67 | LIKELY DAMAGING | activation loop |
+| p.G469A | 1.00 | 69 | LIKELY DAMAGING | P-loop |
 
-DNA front door:
+## BRCA1 — Breast cancer type 1 susceptibility protein
 
-- `c.524G>A` CGC→CAC R175H (missense) → **LIKELY DAMAGING**
-- `c.733G>A` GGC→AGC G245S (missense) → **LIKELY DAMAGING**
-- `c.742C>T` CGG→TGG R248W (missense) → **LIKELY DAMAGING**
-- `c.818G>A` CGT→CAT R273H (missense) → **LIKELY DAMAGING**
-- `c.844C>T` CGG→TGG R282W (missense) → **LIKELY DAMAGING**
-- `c.744G>A` CGG→CGA R248= (synonymous) → **likely benign**
+UniProt `P38398` · n=1863 · Pfam `UniRef50_P38398` · MSA rows=148 · mean cons=0.88
+
+Indication: hereditary breast/ovarian cancer
+
+Mean driver percentile: **82.90872107805747** · LIKELY DAMAGING 5/5
+
+| HGVS | cons | impact% | call | note |
+|------|-----:|--------:|------|------|
+| p.C61G | 0.98 | 72 | LIKELY DAMAGING | RING Zn finger pathogenic |
+| p.C64Y | 1.00 | 86 | LIKELY DAMAGING | RING Zn finger |
+| p.R1699W | 1.00 | 86 | LIKELY DAMAGING | BRCT pathogenic |
+| p.A1708E | 1.00 | 86 | LIKELY DAMAGING | BRCT pathogenic |
+| p.M1775R | 1.00 | 86 | LIKELY DAMAGING | BRCT pathogenic |
+
+## CFTR — Cystic fibrosis transmembrane conductance regulator
+
+UniProt `P13569` · n=1480 · Pfam `UniRef50_P13569` · MSA rows=597 · mean cons=0.82
+
+Indication: cystic fibrosis
+
+Mean driver percentile: **83.71977240398293** · LIKELY DAMAGING 4/4
+
+| HGVS | cons | impact% | call | note |
+|------|-----:|--------:|------|------|
+| p.G551D | 1.00 | 93 | LIKELY DAMAGING | gating (ivacaftor) |
+| p.R117H | 0.98 | 68 | LIKELY DAMAGING | mild/variable |
+| p.N1303K | 1.00 | 90 | LIKELY DAMAGING | NBD2 classic |
+| p.G542X | 0.50 | 100 | LIKELY DAMAGING | nonsense (special) |
+
+## EGFR — Epidermal growth factor receptor
+
+UniProt `P00533` · n=1210 · Pfam `UniRef50_P00533` · MSA rows=526 · mean cons=0.89
+
+Indication: NSCLC / kinase inhibitors
+
+Mean driver percentile: **74.33558068725532** · LIKELY DAMAGING 4/4
+
+| HGVS | cons | impact% | call | note |
+|------|-----:|--------:|------|------|
+| p.G719S | 1.00 | 78 | LIKELY DAMAGING | exon 18 |
+| p.T790M | 0.99 | 62 | LIKELY DAMAGING | gatekeeper resistance |
+| p.L858R | 1.00 | 78 | LIKELY DAMAGING | exon 21 classic |
+| p.L861Q | 1.00 | 78 | LIKELY DAMAGING | exon 21 |
+
+## HBB — Hemoglobin subunit beta
+
+UniProt `P68871` · n=147 · Pfam `UniRef50_P68871` · MSA rows=1161 · mean cons=0.82
+
+Indication: sickle cell / hemoglobinopathy
+
+Mean driver percentile: **39.921231650554965** · LIKELY DAMAGING 2/3
+
+| HGVS | cons | impact% | call | note |
+|------|-----:|--------:|------|------|
+| p.E7V | 0.86 | 50 | LIKELY DAMAGING | sickle cell HbS |
+| p.E7K | 0.86 | 49 | LIKELY DAMAGING | HbC |
+| p.E122Q | 0.67 | 21 | uncertain | HbD Punjab |
 
 ## KRAS — GTPase KRas
 
@@ -68,79 +115,33 @@ Mean driver percentile: **69.11312371838689** · LIKELY DAMAGING 4/4
 | p.H47R | 1.00 | 73 | LIKELY DAMAGING | Cu ligand |
 | p.G38R | 0.98 | 68 | LIKELY DAMAGING | ALS |
 
-## HBB — Hemoglobin subunit beta
+## TP53 — Tumor protein p53
 
-UniProt `P68871` · n=147 · Pfam `UniRef50_P68871` · MSA rows=1161 · mean cons=0.82
+UniProt `P04637` · n=393 · Pfam `UniRef50_P04637` · MSA rows=169 · mean cons=0.92
 
-Indication: sickle cell / hemoglobinopathy
+Indication: cancer hotspot / Li-Fraumeni
 
-Mean driver percentile: **39.921231650554965** · LIKELY DAMAGING 2/3
-
-| HGVS | cons | impact% | call | note |
-|------|-----:|--------:|------|------|
-| p.E7V | 0.86 | 50 | LIKELY DAMAGING | sickle cell HbS |
-| p.E7K | 0.86 | 49 | LIKELY DAMAGING | HbC |
-| p.E122Q | 0.67 | 21 | uncertain | HbD Punjab |
-
-## EGFR — Epidermal growth factor receptor
-
-UniProt `P00533` · n=1210 · Pfam `UniRef50_P00533` · MSA rows=526 · mean cons=0.89
-
-Indication: NSCLC / kinase inhibitors
-
-Mean driver percentile: **74.33558068725532** · LIKELY DAMAGING 4/4
+Mean driver percentile: **54.96948478065393** · LIKELY DAMAGING 7/7
 
 | HGVS | cons | impact% | call | note |
 |------|-----:|--------:|------|------|
-| p.G719S | 1.00 | 78 | LIKELY DAMAGING | exon 18 |
-| p.T790M | 0.99 | 62 | LIKELY DAMAGING | gatekeeper resistance |
-| p.L858R | 1.00 | 78 | LIKELY DAMAGING | exon 21 classic |
-| p.L861Q | 1.00 | 78 | LIKELY DAMAGING | exon 21 |
+| p.R175H | 0.99 | 62 | LIKELY DAMAGING | structural Zn node |
+| p.G245S | 1.00 | 64 | LIKELY DAMAGING | structural |
+| p.R248Q | 0.97 | 40 | LIKELY DAMAGING | DNA contact |
+| p.R248W | 0.97 | 41 | LIKELY DAMAGING | DNA contact |
+| p.R249S | 1.00 | 64 | LIKELY DAMAGING | structural |
+| p.R273H | 0.99 | 48 | LIKELY DAMAGING | DNA contact |
+| p.R282W | 1.00 | 64 | LIKELY DAMAGING | structural |
+| p.P72R | — | — | **common_polymorphism** | rs1042522 pop AF ~0.46 (control) |
 
-## BRAF — Serine/threonine-protein kinase B-raf
+DNA front door:
 
-UniProt `P15056` · n=766 · Pfam `UniRef50_P15056` · MSA rows=304 · mean cons=0.94
-
-Indication: melanoma / MAPK
-
-Mean driver percentile: **67.52782740140168** · LIKELY DAMAGING 3/3
-
-| HGVS | cons | impact% | call | note |
-|------|-----:|--------:|------|------|
-| p.V600E | 1.00 | 67 | LIKELY DAMAGING | activation loop classic |
-| p.V600K | 1.00 | 67 | LIKELY DAMAGING | activation loop |
-| p.G469A | 1.00 | 69 | LIKELY DAMAGING | P-loop |
-
-## CFTR — Cystic fibrosis transmembrane conductance regulator
-
-UniProt `P13569` · n=1480 · Pfam `UniRef50_P13569` · MSA rows=597 · mean cons=0.82
-
-Indication: cystic fibrosis
-
-Mean driver percentile: **83.71977240398293** · LIKELY DAMAGING 4/4
-
-| HGVS | cons | impact% | call | note |
-|------|-----:|--------:|------|------|
-| p.G551D | 1.00 | 93 | LIKELY DAMAGING | gating (ivacaftor) |
-| p.R117H | 0.98 | 68 | LIKELY DAMAGING | mild/variable |
-| p.N1303K | 1.00 | 90 | LIKELY DAMAGING | NBD2 classic |
-| p.G542X | 0.50 | 100 | LIKELY DAMAGING | nonsense (special) |
-
-## BRCA1 — Breast cancer type 1 susceptibility protein
-
-UniProt `P38398` · n=1863 · Pfam `UniRef50_P38398` · MSA rows=148 · mean cons=0.88
-
-Indication: hereditary breast/ovarian cancer
-
-Mean driver percentile: **82.90872107805747** · LIKELY DAMAGING 5/5
-
-| HGVS | cons | impact% | call | note |
-|------|-----:|--------:|------|------|
-| p.C61G | 0.98 | 72 | LIKELY DAMAGING | RING Zn finger pathogenic |
-| p.C64Y | 1.00 | 86 | LIKELY DAMAGING | RING Zn finger |
-| p.R1699W | 1.00 | 86 | LIKELY DAMAGING | BRCT pathogenic |
-| p.A1708E | 1.00 | 86 | LIKELY DAMAGING | BRCT pathogenic |
-| p.M1775R | 1.00 | 86 | LIKELY DAMAGING | BRCT pathogenic |
+- `c.524G>A` CGC→CAC R175H (missense) → **LIKELY DAMAGING**
+- `c.733G>A` GGC→AGC G245S (missense) → **LIKELY DAMAGING**
+- `c.742C>T` CGG→TGG R248W (missense) → **LIKELY DAMAGING**
+- `c.818G>A` CGT→CAT R273H (missense) → **LIKELY DAMAGING**
+- `c.844C>T` CGG→TGG R282W (missense) → **LIKELY DAMAGING**
+- `c.744G>A` CGG→CGA R248= (synonymous) → **likely benign**
 
 ## Honesty
 
