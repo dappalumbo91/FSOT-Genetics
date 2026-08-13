@@ -10,7 +10,7 @@ Zero free parameters. No trained weights. No neural-network claim path.
 | **Scalar law** | \(S = K(T_1 + T_2 + T_3)\) |
 | **Mathematical hub** | [FSOT-2.1-Lean](https://github.com/dappalumbo91/FSOT-2.1-Lean) — this repo derives genetics/protein formulas from that formal engine and carries a byte-identical pin |
 | **Results freeze** | 2026-08-13 · `data/product_vs_alphafold.json` · `docs/PRODUCT_FREEZE.md` |
-| **Next (medical)** | `docs/MEDICAL_PLATFORM.md` — patient/drug card, not more Ångströms |
+| **Next (medical)** | `docs/MEDICAL_PLATFORM.md` · experimental PGx `data/experimental_pgx.json` |
 
 ---
 

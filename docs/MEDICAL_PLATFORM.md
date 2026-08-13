@@ -123,6 +123,29 @@ Not because the stack is forbidden. Because **marketing a dose or a tox call is 
 
 Build the bench. Score it on public labels. Do not print “take 20 mg” on a patient card until that gate exists.
 
+### Experimental showing (what we *do* publish)
+
+Every card carries `docs/EXPERIMENTAL_DISCLOSURE.md`. We **show** predicted mechanism class against known public outcomes (`scripts/bench_experimental_pgx.py` → `data/experimental_pgx.json`). That is capability, with the same disclosure that goes on any experimental CDS research tool.
+
+**Refinement loop (why simulation is useful before field study):**
+
+```text
+known public outcome  (crystal + label + textbook mechanism)
+        │
+        ▼
+FSOT card: does this residue occupy that ChemLink?
+        │
+   concordant → interface is right; keep it
+   miss       → diagnostic (numbering, pose, Superposed state, wrong domain)
+        │
+        ▼
+tie the miss back to OPEN.md / MECHANISM_GAP_MAP
+```
+
+Same loop that moved structure 1.16 → 0.13 Å. Hits teach the genetics of a working interface. Misses are where we are not tight — and because the construction is named (DNA / metal / ligand / Superposed), we know *which* interface to refine.
+
+First freeze of that bench (`data/experimental_pgx.json`): **8/8** public mechanism classes. The first pass was 5/8 — misses were the loop working: DNA used too short a cutoff (C1′ at 12.4 Å needs \( \pi e \varphi \)), BRAF V600 is chain B, and L858R/V600E are **allosteric state** (cleft ~16 Å away), not first-shell binders. T790M and G12C *are* first-shell. P72R is not on the 1TUP DNA-binding chain. That is a mechanism, not a score chase.
+
 ### Unlawful (do not build)
 
 - A fitted neural PK model inside this repo (breaks 0 free parameters).
