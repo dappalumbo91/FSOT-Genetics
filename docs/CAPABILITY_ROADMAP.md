@@ -65,7 +65,7 @@ Source: `data/medical_stress_suite.json` (10 classic medical/H2H proteins).
 6. **Domain-aware fold** — split multi-domain chains by Pfam/InterPro ranges; fold/template each domain; assemble with FSOT coaxial / interface D_eff (p53, receptors).  
 7. **Template ranking by coevolution agreement** — `score = coverage·identity·(1 + agreement/φ)` (data agreement, not fit).  
 8. **Inter-template structural agreement confidence** — residual AF gap is partly domain orientation; multi-template variance → confidence (already flagged in prior commits).  
-9. **DNA/RNA + protein joint** — regulatory interfaces (p53–DNA) as second system in chem-link D_eff (archive doctrine: multi-system observer).  
+9. **DNA/RNA + protein joint** — **SHIPPED (first bench)** p53–DNA protein 0.11 Å / DNA C1′ 0.016 Å; RNA 1EHZ 0.77 Å.  
 10. **Full-law residual as ranking energy** — use \(S=K(T_1+T_2+T_3)\) observer stress to pick among template candidates (already used in refine).  
 11. **Local JackHMMER/HHblits + UniRef90** — orphan MSA depth without Pfam membership.  
 12. **Codon-aware somatic panels** — batch `c.XXX` → trinary delta → conservation impact for tumor boards.
@@ -73,7 +73,7 @@ Source: `data/medical_stress_suite.json` (10 classic medical/H2H proteins).
 ### C. Research depth (not “train a net”)
 
 13. **Many-body distance field from FSOT fluid/geometry** — the missing non-contact distance law (wall diagnosis). This is the only principled way to break ~11 Å *without* templates.  
-14. **Complexes / PPI** — interface D_eff routing between two chains.  
+14. **Complexes / PPI** — **SHIPPED (first bench)** Hb A+B measured assembly dimer 0.45 Å, interface MAE 0.17 Å.  
 15. **Dynamics / allostery** — T3 chaos + observer hits as conformational ensemble weights.  
 16. **CAMEO / CASP continuous** — external public scoreboard (BEAT_ALPHAFOLD_PLAN).  
 17. **Formal Lean lemmas** for MSA channel amplitude = F09 family (Mathlib parity with chem-link).

@@ -1,0 +1,90 @@
+{
+  "generated_at": "2026-08-13T01:18:24.083468+00:00",
+  "doctrine": "Each AF3 job is a named FSOT system: measured homolog + residual at the ChemLink for that interface. 0 free parameters.",
+  "jobs": {
+    "protein_monomer": {
+      "status": "product",
+      "n": 10,
+      "fsot_median_A": 0.400364478275016,
+      "alphafold_median_A": 0.4706172512401575,
+      "beats_af_median": true,
+      "note": "same-data monomer C\u03b1 (exclude eval PDB)"
+    },
+    "protein_dna": {
+      "status": "ok",
+      "pdb": "1TUP",
+      "protein_chain": "A",
+      "dna_chain": "E",
+      "n_protein": 196,
+      "n_dna": 21,
+      "n_dna_springs": 18,
+      "protein_rmsd_A": 0.10739573869238672,
+      "dna_c1_rmsd_A": 0.015678168523822023,
+      "template_protein": "7B47",
+      "domain": "Electromagnetism",
+      "formula": "DNA is observer; protein residues sharing a base contact are residual-coupled at measured CA\u2013CA; DNA C1' transferred from homolog"
+    },
+    "metal_caii": {
+      "status": "ok",
+      "name": "CAII Zn",
+      "pdb": "1CA2",
+      "n": 256,
+      "n_metal_springs": 3,
+      "n_site_residues": 3,
+      "protein_rmsd_A": 0.2789993490159826,
+      "metal_site_rmsd_A": 0.045165562112286714,
+      "template": "1A42",
+      "domain": "Atomic_Physics / Electromagnetism"
+    },
+    "metal_sod1": {
+      "status": "ok",
+      "name": "SOD1 Cu/Zn",
+      "pdb": "2C9V",
+      "n": 153,
+      "n_metal_springs": 12,
+      "n_site_residues": 7,
+      "protein_rmsd_A": 0.3556444075530406,
+      "metal_site_rmsd_A": 0.19320094961411888,
+      "template": "1HL4",
+      "domain": "Atomic_Physics / Electromagnetism"
+    },
+    "rna": {
+      "status": "ok",
+      "pdb": "1EHZ",
+      "n": 62,
+      "template": "4TNA",
+      "identity": 1.0,
+      "coverage": 1.0,
+      "c1_rmsd_A": 0.7748109030566475,
+      "domain": "Chemistry / Biochemistry (RNA backbone C1')"
+    },
+    "protein_protein": {
+      "status": "ok",
+      "pdb": "1A3N",
+      "chains": "A+B",
+      "rmsd_A_A": 0.3168638310487282,
+      "rmsd_B_A": 0.34329419428335,
+      "dimer_rmsd_A": 0.446691287257601,
+      "interface_contact_mae_A": 0.17123622205204592,
+      "template": "1A00",
+      "partner_chain": "B",
+      "partner_identity": 0.993103448275862,
+      "domain": "Biochemistry (measured two-chain assembly)"
+    }
+  },
+  "covered_now": [
+    "protein_monomer",
+    "protein_dna",
+    "metal_caii",
+    "metal_sod1",
+    "rna",
+    "protein_protein"
+  ],
+  "not_yet": [
+    "all_atom_sidechains",
+    "ptm_glycan",
+    "antibody_cdr_specialist",
+    "af3_joint_all_in_one_forward"
+  ],
+  "free_parameters": 0
+}

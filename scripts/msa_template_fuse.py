@@ -289,6 +289,7 @@ def fuse_relax(
     anchor_w: float = ANCHOR_W,
     sequence: str | None = None,
     tertiary_contacts: list[tuple[int, int, float]] | None = None,
+    interface_springs: list[tuple[int, int, float, float]] | None = None,
 ) -> np.ndarray:
     """Template-anchored physics with residual-weighted ChemLink channels.
 
@@ -310,6 +311,8 @@ def fuse_relax(
     r_clash = _R_CLASH
     springs, _n_ss = _contacts_from_measured(X0, sequence, tertiary_contacts)
     springs = list(springs) + _sep2_ss_springs(X0, sequence)
+    if interface_springs:
+        springs = list(springs) + list(interface_springs)
     evo_pairs: list[tuple[int, int, float]] = []
     if features is not None and features.depth_ok and features.coevolution.max() > 0:
         raw_pairs = top_coevolution_pairs(features, top_n=n)
@@ -438,6 +441,7 @@ def fuse_predict(
     *,
     tertiary_contacts: list[tuple[int, int, float]] | None = None,
     flip_model: np.ndarray | None = None,
+    interface_springs: list[tuple[int, int, float, float]] | None = None,
 ) -> dict[str, Any]:
     """Product path: measured template + residual-weighted ChemLink physics.
 
@@ -451,11 +455,21 @@ def fuse_predict(
     X0 = template_model
     springs, _n_ss = _contacts_from_measured(X0, sequence, tertiary_contacts)
     springs = list(springs) + _sep2_ss_springs(X0, sequence)
+    if interface_springs:
+        springs = list(springs) + list(interface_springs)
     X_phys = fuse_relax(
-        X0, None, sequence=sequence, tertiary_contacts=tertiary_contacts
+        X0,
+        None,
+        sequence=sequence,
+        tertiary_contacts=tertiary_contacts,
+        interface_springs=interface_springs,
     )
     X_fuse = fuse_relax(
-        X0, features, sequence=sequence, tertiary_contacts=tertiary_contacts
+        X0,
+        features,
+        sequence=sequence,
+        tertiary_contacts=tertiary_contacts,
+        interface_springs=interface_springs,
     )
 
     def _energy(X: np.ndarray) -> float:
