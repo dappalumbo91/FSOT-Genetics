@@ -56,6 +56,15 @@ RNA3 = {
     "RA": "A", "RU": "U", "RG": "G", "RC": "C",
     "ADE": "A", "URA": "U", "GUA": "G", "CYT": "C",
 }
+# tRNA / rRNA modified bases — parent letter for alignment, C1' still measured.
+RNA_MOD = {
+    "PSU": "U", "H2U": "U", "5MU": "U", "4SU": "U", "DHU": "U",
+    "M2G": "G", "2MG": "G", "7MG": "G", "OMG": "G", "M1G": "G",
+    "1MG": "G", "M7G": "G", "YYG": "G", "YG": "G", "G7M": "G",
+    "OMC": "C", "5MC": "C", "5CM": "C", "4OC": "C",
+    "1MA": "A", "2MA": "A", "MIA": "A", "6MA": "A", "A2M": "A",
+}
+RNA_ALL = {**RNA3, **RNA_MOD}
 METALS = {"ZN", "CU", "FE", "FE2", "MG", "MN", "CA", "NI", "CO"}
 AA3 = {
     "ALA": "A", "ARG": "R", "ASN": "N", "ASP": "D", "CYS": "C",
@@ -75,7 +84,7 @@ def parse_na_c1(text: str, chain: str, table: dict[str, str]) -> tuple[str, np.n
     for line in text.splitlines():
         if line.startswith("ENDMDL"):
             break
-        if not line.startswith("ATOM"):
+        if not line.startswith(("ATOM", "HETATM")):
             continue
         if line[21] != chain:
             continue
@@ -102,7 +111,7 @@ def na_chains(text: str, table: dict[str, str]) -> list[str]:
     for line in text.splitlines():
         if line.startswith("ENDMDL"):
             break
-        if line.startswith("ATOM") and line[12:16].strip() in ("C1'", "C1*"):
+        if line.startswith(("ATOM", "HETATM")) and line[12:16].strip() in ("C1'", "C1*"):
             if line[17:20].strip() in table:
                 c = line[21]
                 if c not in seen:

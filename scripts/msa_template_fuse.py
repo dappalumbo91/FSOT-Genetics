@@ -450,9 +450,30 @@ def fuse_predict(
     residual-at-interface). Tertiary springs use measured homolog distances
     at Biochemistry D=13 (Lean ChemLink.tertiaryBiochem).
     """
-    from run_rcsb_template_holdout import soft_flexible_termini  # noqa: WPS433
+    from run_rcsb_template_holdout import (  # noqa: WPS433
+        _BOND_BROKEN,
+        _bond_mse,
+        soft_flexible_termini,
+    )
 
     X0 = template_model
+    # Intact measured transfer already satisfies Physical_Chemistry.
+    # Bond-idealizing it is the wrong interface (1EXR 0.80 → 1.16 Å).
+    intact0 = _bond_mse(X0) <= _BOND_BROKEN
+    if intact0:
+        Xr = X0 - X0.mean(0)
+        return {
+            "ca_coords": Xr,
+            "confidence": fused_confidence(features, provenance=None),
+            "regime": "template_raw",
+            "energy_best": 0.0,
+            "energies": {"template_raw": 0.0},
+            "soft_termini_considered": False,
+            "ca_coords_flip": None,
+            "energy_flip": None,
+            "n_evo_clamps": 0,
+            "intact_measured": True,
+        }
     springs, _n_ss = _contacts_from_measured(X0, sequence, tertiary_contacts)
     springs = list(springs) + _sep2_ss_springs(X0, sequence)
     if interface_springs:
@@ -476,7 +497,10 @@ def fuse_predict(
         # Residual-weighted energy — same interfaces as fuse_relax
         n = len(X)
         bonds = np.linalg.norm(X[1:] - X[:-1], axis=1)
-        e = float(_R_BOND * ((bonds - CA_CA) ** 2).sum())
+        e_bond = float(_R_BOND * ((bonds - CA_CA) ** 2).sum())
+        if intact0:
+            e_bond = 0.0
+        e = e_bond
         e += float(ANCHOR_W * _R_ANCHOR * ((X - X0) ** 2).sum())
         for i in range(0, n, max(1, n // 40)):
             for j in range(i + 2, n, max(1, n // 40)):

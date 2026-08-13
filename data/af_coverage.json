@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-13T02:39:26.656428+00:00",
+  "generated_at": "2026-08-13T02:54:25.268164+00:00",
   "doctrine": "Each AF3 job is a named FSOT system: measured homolog + residual at the ChemLink for that interface. 0 free parameters.",
   "jobs": {
     "protein_monomer": {
       "status": "product",
       "n": 10,
-      "fsot_median_A": 0.400364478275016,
+      "fsot_median_A": 0.2862112365115898,
       "alphafold_median_A": 0.4706172512401575,
       "beats_af_median": true,
       "note": "same-data monomer C\u03b1 (exclude eval PDB)"
@@ -75,16 +75,16 @@
       "status": "ok",
       "pdb": "1LZ1",
       "n": 130,
-      "n_sc": 130,
-      "n_heavy_matched": 500,
-      "n_bb_matched": 512,
-      "ca_rmsd_A": 0.5790043820064616,
-      "sidechain_centroid_rmsd_A": 1.0356660476215436,
-      "sidechain_heavy_rmsd_A": 1.8439384808459558,
-      "backbone_heavy_rmsd_A": 0.7681808955486639,
-      "all_heavy_rmsd_A": 1.4098308834956592,
-      "n_sc_templates": 4,
-      "template": "1LZS",
+      "n_sc": 117,
+      "n_heavy_matched": 498,
+      "n_bb_matched": 0,
+      "ca_rmsd_A": 0.2417668191902326,
+      "sidechain_centroid_rmsd_A": 0.9155744079632443,
+      "sidechain_heavy_rmsd_A": 1.3320056307534371,
+      "backbone_heavy_rmsd_A": null,
+      "all_heavy_rmsd_A": 1.3320056307534371,
+      "n_sc_templates": 7,
+      "template": "2MEE",
       "domain": "Molecular_Chemistry"
     },
     "ptm_glycan": {
@@ -209,6 +209,31 @@
         "D"
       ],
       "domain": "Biochemistry (measured four-chain assembly)"
+    },
+    "modified_na": {
+      "status": "ok",
+      "pdb": "1EHZ",
+      "n": 76,
+      "n_modified": 14,
+      "modified_names": [
+        "1MA",
+        "2MG",
+        "5MC",
+        "5MU",
+        "7MG",
+        "H2U",
+        "M2G",
+        "OMC",
+        "OMG",
+        "PSU",
+        "YYG"
+      ],
+      "c1_rmsd_A": 0.9279800292489643,
+      "modified_c1_rmsd_A": 1.567880584685369,
+      "template": "1EVV",
+      "identity": 1.0,
+      "coverage": 1.0,
+      "domain": "Chemistry (modified nucleotide C1')"
     }
   },
   "covered_now": [
@@ -226,7 +251,8 @@
     "protein_rna",
     "ligand",
     "antibody_pair",
-    "protein_tetramer"
+    "protein_tetramer",
+    "modified_na"
   ],
   "not_yet": [],
   "free_parameters": 0

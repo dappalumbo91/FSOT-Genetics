@@ -8,13 +8,14 @@ Source: `data/af_coverage.json` · `python scripts/bench_af_coverage.py`
 
 | AF3 job | Status | Wet-lab number | Interface |
 |---------|--------|----------------|-----------|
-| Protein monomer Cα | **product** | median **0.40 Å** (AF 0.47) | template + ChemLink |
+| Protein monomer Cα | **product** | median **0.29 Å** (AF 0.47) | template + ChemLink |
 | Protein–DNA | **ok** | p53 0.11 Å · DNA C1′ **0.016 Å** | Electromagnetism |
 | Metal / ion site | **ok** | CAII Zn site **0.045 Å** · SOD1 **0.19 Å** | Atomic_Physics / EM |
 | RNA fold | **ok** | tRNA 1EHZ C1′ **0.68 Å** (1EVV) | Chemistry / Biochemistry |
 | Protein–protein | **ok** | Hb A+B dimer **0.45 Å** · iface MAE **0.17 Å** | Biochemistry assembly |
 | Protein tetramer | **ok** | Hb A+B+C+D **0.51 Å** | Biochemistry assembly |
-| All-atom side chains | **ok** | lysozyme SC centroids **1.04 Å** · heavy **1.84 Å** · bb N/C/O **0.77 Å** (CA 0.58) | Molecular_Chemistry |
+| All-atom side chains | **ok** | lysozyme SC centroids **0.92 Å** · heavy **1.33 Å** (CA 0.24) | Molecular_Chemistry |
+| Modified nucleotides | **ok** | tRNA 1EHZ 14 mods · C1′ **0.93 Å** · modified sites **1.57 Å** | Chemistry |
 | PTM / glycan | **ok** | NA 1NCA 4 native / 10 tmpl NAG nodes; prot **0.55 Å** | Molecular_Chemistry |
 | PTM / phospho | **ok** | PKA 1ATP 2 SEP/TPO nodes; prot **0.77 Å** | Molecular_Chemistry |
 | Antibody CDR | **ok** | 1MLC CA **0.94 Å** · Superposed CDR **0.59 Å** | trit 0 on disagreeing loops |
@@ -35,3 +36,5 @@ Run: `python scripts/bench_af_coverage.py`
 - Ligand springs are first-shell (`e+φ ≈ 4.3 Å`), not the 8.5 Å contact envelope.
 - Joint applies DNA-observer springs per collapse and scores the apparatus (min over `state_reps`).
 - NMR ensembles are Superposed, never residual-best. Tetramer chains map 1:1 onto the homolog assembly.
+- Intact measured transfers stay raw (no CA–CA rebuild). Near-self search (id ≥ 1/φ) recovers crystals the default 0.25/80 list buried.
+- Modified tRNA bases are HETATM C1′ (PSU, H2U, YYG, …) mapped to the parent letter.

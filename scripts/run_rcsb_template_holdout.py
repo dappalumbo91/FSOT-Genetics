@@ -175,6 +175,41 @@ def nw_align(a: str, b: str) -> list[tuple[int, int]]:
     return pairs[::-1]
 
 
+def same_protein_ids(sequence: str) -> list[str]:
+    """Near-self crystals (id ≥ 1/φ). Default sequence search is 0.25 / 80
+    hits and buries 3CLN behind recent complexes. This is data coverage,
+    not a free cutoff — same band as IDENTITY_CAP scoring.
+    """
+    ids, seen = [], set()
+    query = {
+        "query": {
+            "type": "terminal",
+            "service": "sequence",
+            "parameters": {
+                "evalue_cutoff": 1.0,
+                "identity_cutoff": float(1.0 / _PHI),
+                "sequence_type": "protein",
+                "value": sequence,
+            },
+        },
+        "return_type": "polymer_entity",
+        "request_options": {
+            "paginate": {"start": 0, "rows": 80},
+            "results_content_type": ["experimental"],
+        },
+    }
+    try:
+        data = _post("https://search.rcsb.org/rcsbsearch/v2/query", query)
+    except Exception:
+        return []
+    for hit in data.get("result_set", []):
+        pdb = hit["identifier"].split("_")[0].upper()
+        if pdb not in seen:
+            seen.add(pdb)
+            ids.append(pdb)
+    return ids
+
+
 def homolog_ids(sequence: str, *, pages: int = 1) -> list[str]:
     """RCSB sequence search. Extra pages only when the caller asks
     (starved / all-broken pools). Default one page keeps freeze winners.
@@ -363,8 +398,10 @@ def collect_template_candidates(
     """All fair homolog chain hits (measured authority pool). No early exit."""
     out: list[dict] = []
     seen: set[str] = set()
-    for pdb in homolog_ids(sequence, pages=search_pages) + pfam_family_pdbs(
-        exclude_pdb, pages=search_pages
+    for pdb in (
+        same_protein_ids(sequence)
+        + homolog_ids(sequence, pages=search_pages)
+        + pfam_family_pdbs(exclude_pdb, pages=search_pages)
     ):
         if pdb == exclude_pdb.upper() or pdb in seen:
             continue
@@ -620,9 +657,15 @@ def select_measured_authority(cands: list[dict]) -> tuple[list[dict], str, dict,
                     ds.append(0.0)
             return min(ds) if ds else 1e9
 
-        # Data-best and residual-best among crystals (not ensembles).
+        # Data-best, residual-best, and the k lowest-E crystals (1UBI
+        # E=1.29 sits next to 2FID E=0.73 in the same φ² collapse).
         _add(max(authority, key=lambda c: float(c["score"])))
         _add(min(authority, key=lambda c: float(c["residual_energy"])))
+        k_xtal = max(MULTI_TOP_K, int(round(_PHI ** 5)))
+        for c in sorted(
+            authority, key=lambda c: (float(c["residual_energy"]), -float(c["score"]))
+        )[:k_xtal]:
+            _add(c)
         n_cl = min(len(clusters), max(MULTI_TOP_K, int(round(_PHI ** 4))))
         for cl in clusters[:n_cl]:
             intact = [c for c in cl if _measured_bond_mse(c) <= _BOND_BROKEN]

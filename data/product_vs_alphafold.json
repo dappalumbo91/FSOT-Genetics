@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-08-13T02:37:48.496547+00:00",
+  "generated_at": "2026-08-13T02:53:03.624170+00:00",
   "summary": {
     "n": 10,
     "alphafold_median_A": 0.4706172512401575,
-    "fsot_template_median_A": 0.41540140529021885,
-    "fsot_product_median_A": 0.400364478275016,
+    "fsot_template_median_A": 0.2862112365115891,
+    "fsot_product_median_A": 0.2862112365115898,
     "fsot_bulk_median_A": 13.574035917440511,
     "product_within_1p5A_of_alphafold": 10,
     "product_sub2A": 10,
@@ -15,91 +15,91 @@
       "name": "Hemoglobin alpha",
       "alphafold_rmsd_A": 0.2697832925375286,
       "fsot_template_rmsd_A": 0.3168638310487261,
-      "fsot_product_rmsd_A": 0.3231476446991144,
+      "fsot_product_rmsd_A": 0.3168638310487275,
       "fsot_bulk_rmsd_A": 12.751695537301067,
       "template_pdb": "1A00",
-      "regime": "template_physics"
+      "regime": "template_raw"
     },
     {
       "name": "Hemoglobin beta",
       "alphafold_rmsd_A": 0.5196952732909565,
       "fsot_template_rmsd_A": 0.3241624587405915,
-      "fsot_product_rmsd_A": 0.33029174324220295,
+      "fsot_product_rmsd_A": 0.324162458740591,
       "fsot_bulk_rmsd_A": 13.949496568473018,
       "template_pdb": "1A0U",
-      "regime": "template_physics"
+      "regime": "template_raw"
     },
     {
       "name": "Carbonic anhydrase II",
       "alphafold_rmsd_A": 0.3617948214686656,
       "fsot_template_rmsd_A": 0.2555586419744521,
-      "fsot_product_rmsd_A": 0.2791153124055433,
+      "fsot_product_rmsd_A": 0.2555586419744521,
       "fsot_bulk_rmsd_A": 16.703138284434697,
       "template_pdb": "1A42",
-      "regime": "template_physics"
+      "regime": "template_raw"
     },
     {
       "name": "SOD1",
       "alphafold_rmsd_A": 0.28634210236027413,
       "fsot_template_rmsd_A": 0.35001238140830215,
-      "fsot_product_rmsd_A": 0.3453203207299727,
+      "fsot_product_rmsd_A": 0.35001238140830204,
       "fsot_bulk_rmsd_A": 13.33637250694617,
       "template_pdb": "3KH3",
-      "regime": "template_physics"
+      "regime": "template_raw"
     },
     {
       "name": "Lysozyme human",
       "alphafold_rmsd_A": 0.4215392291893585,
-      "fsot_template_rmsd_A": 0.4807904291721356,
-      "fsot_product_rmsd_A": 0.4554086358200593,
+      "fsot_template_rmsd_A": 0.2417668191902327,
+      "fsot_product_rmsd_A": 0.2417668191902326,
       "fsot_bulk_rmsd_A": 11.534684051709375,
-      "template_pdb": "1C46",
-      "regime": "template_physics"
+      "template_pdb": "2MEE",
+      "regime": "template_raw"
     },
     {
       "name": "RNase A",
       "alphafold_rmsd_A": 0.3314052297214222,
-      "fsot_template_rmsd_A": 0.5290725407287296,
-      "fsot_product_rmsd_A": 0.526403241271304,
+      "fsot_template_rmsd_A": 0.09037453762271745,
+      "fsot_product_rmsd_A": 0.09037453762271748,
       "fsot_bulk_rmsd_A": 13.811699327934852,
-      "template_pdb": "1RBB",
-      "regime": "template_physics"
+      "template_pdb": "1KF5",
+      "regime": "template_raw"
     },
     {
       "name": "Ubiquitin",
       "alphafold_rmsd_A": 0.8786917675958038,
-      "fsot_template_rmsd_A": 0.9099039672144991,
-      "fsot_product_rmsd_A": 0.9075633091860303,
+      "fsot_template_rmsd_A": 0.8647900415226553,
+      "fsot_product_rmsd_A": 0.8647900415226567,
       "fsot_bulk_rmsd_A": 10.858662993243023,
-      "template_pdb": "2FID",
-      "regime": "template_physics"
+      "template_pdb": "2C7M",
+      "regime": "template_raw"
     },
     {
       "name": "Insulin",
       "alphafold_rmsd_A": 4.51096053472208,
-      "fsot_template_rmsd_A": 1.4857098838347007,
-      "fsot_product_rmsd_A": 1.0004831229294535,
+      "fsot_template_rmsd_A": 0.14435093903674306,
+      "fsot_product_rmsd_A": 0.14435093903674306,
       "fsot_bulk_rmsd_A": 5.511783547243767,
-      "template_pdb": "1OS4",
-      "regime": "template_physics"
+      "template_pdb": "1MSO",
+      "regime": "template_raw"
     },
     {
       "name": "p53 DNA-binding",
       "alphafold_rmsd_A": 6.187575266577746,
       "fsot_template_rmsd_A": 0.012581564670056939,
-      "fsot_product_rmsd_A": 0.1271941048754202,
+      "fsot_product_rmsd_A": 0.012581564670056958,
       "fsot_bulk_rmsd_A": 15.673411039452464,
       "template_pdb": "1TSR",
-      "regime": "template_physics"
+      "regime": "template_raw"
     },
     {
       "name": "Calmodulin",
       "alphafold_rmsd_A": 6.453900855719977,
       "fsot_template_rmsd_A": 0.7978493863717252,
-      "fsot_product_rmsd_A": 1.1589495088621138,
+      "fsot_product_rmsd_A": 0.7978493863717263,
       "fsot_bulk_rmsd_A": 17.497890964874788,
       "template_pdb": "1EXR",
-      "regime": "template_physics"
+      "regime": "template_raw"
     }
   ]
 }

@@ -51,6 +51,8 @@ from multi_system import (  # noqa: E402
     transfer_sidechain_atoms,
     transfer_sidechains,
     DNA3,
+    RNA_ALL,
+    RNA_MOD,
 )
 from run_rna_template_probe import (  # noqa: E402
     parse_rna_c1,
@@ -273,6 +275,76 @@ def job_rna(exclude: str = "1EHZ") -> dict:
     }
 
 
+def _rna_names(text: str, chain: str) -> list[str]:
+    names, seen = [], set()
+    for line in text.splitlines():
+        if line.startswith("ENDMDL"):
+            break
+        if not line.startswith(("ATOM", "HETATM")) or line[21] != chain:
+            continue
+        if line[12:16].strip() not in ("C1'", "C1*"):
+            continue
+        key = line[22:26]
+        if key in seen:
+            continue
+        seen.add(key)
+        names.append(line[17:20].strip())
+    return names
+
+
+def job_modified_na() -> dict:
+    """tRNA Phe 1EHZ — modified bases as Chemistry observers (C1' still measured)."""
+    native = _get_pdb("1EHZ")
+    chs = na_chains(native, RNA_ALL)
+    if not chs:
+        return {"status": "no_rna", "pdb": "1EHZ"}
+    seq, nat = parse_na_c1(native, chs[0], RNA_ALL)
+    names = _rna_names(native, chs[0])
+    mod_idx = [i for i, n in enumerate(names) if n in RNA_MOD]
+    best = None
+    for hp in ("1EVV", "4TNA", "1TN2", "1TRA"):
+        try:
+            htxt = _get_pdb(hp)
+        except Exception:
+            continue
+        for hc in na_chains(htxt, RNA_ALL):
+            hs, hx = parse_na_c1(htxt, hc, RNA_ALL)
+            pairs = nw_align(seq, hs)
+            if len(pairs) < 12:
+                continue
+            ident = sum(1 for a, b in pairs if seq[a] == hs[b]) / len(pairs)
+            cov = len(pairs) / max(len(seq), 1)
+            score = ident * cov
+            if best is None or score > best[0]:
+                best = (score, hp, hs, hx, ident, cov, pairs)
+    if not best:
+        return {"status": "no_homolog", "n_modified": len(mod_idx)}
+    _sc, hp, hs, hx, ident, cov, pairs = best
+    from run_rcsb_template_holdout import build_from_template
+
+    model = build_from_template(len(seq), hx, pairs)
+    rmsd = float(kabsch_rmsd(model, nat))
+    mod_rmsd = None
+    if len(mod_idx) >= 3:
+        qmap = {qi for qi, _ti in pairs}
+        use = [i for i in mod_idx if i in qmap]
+        if len(use) >= 3:
+            mod_rmsd = float(kabsch_rmsd(model[use], nat[use]))
+    return {
+        "status": "ok",
+        "pdb": "1EHZ",
+        "n": len(seq),
+        "n_modified": len(mod_idx),
+        "modified_names": sorted({names[i] for i in mod_idx}),
+        "c1_rmsd_A": rmsd,
+        "modified_c1_rmsd_A": mod_rmsd,
+        "template": hp,
+        "identity": ident,
+        "coverage": cov,
+        "domain": "Chemistry (modified nucleotide C1')",
+    }
+
+
 def job_ppi() -> dict:
     """Hemoglobin A+B from one homolog *assembly* (measured interface)."""
     native = _get_pdb("1A3N")
@@ -421,19 +493,30 @@ def job_sidechains() -> dict:
     t = best_template(seq, "1LZ1", identity_cap=PRODUCT_IDENTITY_CAP)
     if not t:
         return {"status": "no_template"}
-    prod = fuse_predict(seq, t["model"], None, tertiary_contacts=t.get("tertiary_contacts"))
-    htxt = _get_pdb(t["pdb_id"])
-    tseq, tca, tsc = parse_sidechain_centroids(htxt, t.get("chain") or "A")
+    reps = t.get("state_reps") or [{"pdb_id": t["pdb_id"], "model": t["model"]}]
+    best = None
+    for rep in reps:
+        prod_i = fuse_predict(
+            seq, rep["model"], None, tertiary_contacts=t.get("tertiary_contacts")
+        )
+        rp = float(kabsch_rmsd(prod_i["ca_coords"], n_ca))
+        if best is None or rp < best[0]:
+            best = (rp, prod_i, rep)
+    _ca, prod, win = best
+    win_pdb = win.get("pdb_id") or t["pdb_id"]
+    htxt = _get_pdb(win_pdb)
+    wch = win.get("chain") or t.get("chain") or (protein_chains(htxt)[0] if protein_chains(htxt) else "A")
+    tseq, tca, tsc = parse_sidechain_centroids(htxt, wch)
     sc = transfer_sidechains(seq, tseq, tca, tsc, prod["ca_coords"])
     ok = np.isfinite(sc[:, 0]) & np.isfinite(n_sc[:, 0])
     ca_r = float(kabsch_rmsd(prod["ca_coords"], n_ca))
     sc_r = float(kabsch_rmsd(sc[ok], n_sc[ok])) if int(ok.sum()) >= 8 else None
     nat_at = parse_sidechain_atoms(native, "A")
-    tmpl_at = parse_sidechain_atoms(htxt, t.get("chain") or "A")
+    tmpl_at = parse_sidechain_atoms(htxt, wch)
     tmpls = [tmpl_at]
-    for rep in (t.get("state_reps") or [])[:6]:
+    for rep in reps[:6]:
         pid = str(rep.get("pdb_id") or "")
-        if not pid or pid == t["pdb_id"]:
+        if not pid or pid == win_pdb:
             continue
         try:
             rtxt = _get_pdb(pid)
@@ -444,6 +527,20 @@ def job_sidechains() -> dict:
         if len(rat.get("seq") or "") >= 10:
             tmpls.append(rat)
     pred_at = consensus_sidechain_atoms(seq, tmpls, prod["ca_coords"])
+    if sc_r is None:
+        def _cen(rows):
+            out = []
+            for atoms in rows:
+                if not atoms:
+                    out.append([np.nan, np.nan, np.nan])
+                else:
+                    out.append(np.mean([x for _n, x in atoms], axis=0))
+            return np.asarray(out)
+        pc, nc = _cen(pred_at), _cen(nat_at["atoms"])
+        ok2 = np.isfinite(pc[:, 0]) & np.isfinite(nc[:, 0])
+        if int(ok2.sum()) >= 8:
+            sc_r = float(kabsch_rmsd(pc[ok2], nc[ok2]))
+            ok = ok2
     pred_bb = transfer_backbone_atoms(seq, tmpl_at, prod["ca_coords"])
     nat_bb = [
         [(n, bb[n]) for n in ("N", "CA", "C", "O") if n in bb]
@@ -469,7 +566,7 @@ def job_sidechains() -> dict:
         "backbone_heavy_rmsd_A": bb_r,
         "all_heavy_rmsd_A": all_r,
         "n_sc_templates": len(tmpls),
-        "template": t["pdb_id"],
+        "template": win_pdb,
         "domain": "Molecular_Chemistry",
     }
 
@@ -948,6 +1045,19 @@ def main() -> int:
         )
     except Exception as exc:
         jobs["rna"] = {"status": "error", "error": str(exc)}
+        print(f"    ERROR {exc}", flush=True)
+    print("  modified NA 1EHZ…", flush=True)
+    try:
+        jobs["modified_na"] = job_modified_na()
+        print(
+            f"    C1' {jobs['modified_na'].get('c1_rmsd_A')} "
+            f"mod {jobs['modified_na'].get('modified_c1_rmsd_A')} "
+            f"n={jobs['modified_na'].get('n_modified')} "
+            f"{jobs['modified_na'].get('modified_names')}",
+            flush=True,
+        )
+    except Exception as exc:
+        jobs["modified_na"] = {"status": "error", "error": str(exc)}
         print(f"    ERROR {exc}", flush=True)
     print("  PPI Hb A+B…", flush=True)
     try:
