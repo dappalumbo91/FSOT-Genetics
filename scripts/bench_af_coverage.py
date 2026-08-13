@@ -24,21 +24,30 @@ from run_rcsb_template_holdout import (  # noqa: E402
 )
 from msa_template_fuse import fuse_predict  # noqa: E402
 from multi_system import (  # noqa: E402
+    RNA3,
     _get_pdb,
     build_uncentered,
     ca_with_nums,
     cdr_loop_mask,
     interface_contact_mae,
+    ligand_site_springs,
+    match_named_atoms,
     metal_site_springs,
     na_chains,
+    parse_ligands,
     parse_na_c1,
     parse_pdb_ca,
     parse_ptms,
+    parse_sidechain_atoms,
     parse_sidechain_centroids,
     predict_system,
     protein_chains,
     protein_na_protein_springs,
+    rebuild_superposed_loops,
+    transfer_backbone_atoms,
+    seed_contiguous_pairs,
     transfer_na,
+    transfer_sidechain_atoms,
     transfer_sidechains,
     DNA3,
 )
@@ -330,13 +339,33 @@ def job_sidechains() -> dict:
     ok = np.isfinite(sc[:, 0]) & np.isfinite(n_sc[:, 0])
     ca_r = float(kabsch_rmsd(prod["ca_coords"], n_ca))
     sc_r = float(kabsch_rmsd(sc[ok], n_sc[ok])) if int(ok.sum()) >= 8 else None
+    nat_at = parse_sidechain_atoms(native, "A")
+    tmpl_at = parse_sidechain_atoms(htxt, t.get("chain") or "A")
+    pred_at = transfer_sidechain_atoms(seq, tmpl_at, prod["ca_coords"])
+    pred_bb = transfer_backbone_atoms(seq, tmpl_at, prod["ca_coords"])
+    nat_bb = [
+        [(n, bb[n]) for n in ("N", "CA", "C", "O") if n in bb]
+        for bb in nat_at["frames"]
+    ]
+    ha_p, ha_n = match_named_atoms(pred_at, nat_at["atoms"])
+    bb_p, bb_n = match_named_atoms(pred_bb, nat_bb)
+    all_p = np.vstack([a for a in (ha_p, bb_p) if len(a)]) if (len(ha_p) + len(bb_p)) else ha_p
+    all_n = np.vstack([a for a in (ha_n, bb_n) if len(a)]) if (len(ha_n) + len(bb_n)) else ha_n
+    ha_r = float(kabsch_rmsd(ha_p, ha_n)) if len(ha_p) >= 8 else None
+    bb_r = float(kabsch_rmsd(bb_p, bb_n)) if len(bb_p) >= 8 else None
+    all_r = float(kabsch_rmsd(all_p, all_n)) if len(all_p) >= 8 else None
     return {
         "status": "ok",
         "pdb": "1LZ1",
         "n": len(seq),
         "n_sc": int(ok.sum()),
+        "n_heavy_matched": int(len(ha_p)),
+        "n_bb_matched": int(len(bb_p)),
         "ca_rmsd_A": ca_r,
         "sidechain_centroid_rmsd_A": sc_r,
+        "sidechain_heavy_rmsd_A": ha_r,
+        "backbone_heavy_rmsd_A": bb_r,
+        "all_heavy_rmsd_A": all_r,
         "template": t["pdb_id"],
         "domain": "Molecular_Chemistry",
     }
@@ -407,7 +436,13 @@ def job_antibody() -> dict:
         if "model" in rep:
             models.append(rep["model"])
     mask = cdr_loop_mask(models)
-    prod = fuse_predict(seq, t["model"], None, tertiary_contacts=t.get("tertiary_contacts"))
+    X0 = t["model"]
+    # Near-self crystal (1MLB/1MLC): keep the measured CDR. Consensus of
+    # other Fabs is Superposed noise on a loop that is already collapsed.
+    ident = float(t.get("identity") or 0)
+    if mask.any() and ident < 1.0 / 1.6180339887:
+        X0 = rebuild_superposed_loops(t["model"], mask, homologs=models)
+    prod = fuse_predict(seq, X0, None, tertiary_contacts=t.get("tertiary_contacts"))
     rp = float(kabsch_rmsd(prod["ca_coords"], nat))
     cdr_rmsd = None
     fw_rmsd = None
@@ -449,16 +484,310 @@ def job_joint() -> dict:
         ok = np.isfinite(sc[:, 0]) & np.isfinite(nsc[:, 0])
         if int(ok.sum()) >= 8:
             sc_r = float(kabsch_rmsd(sc[ok], nsc[ok]))
+    ha_r = None
+    if sys_out.get("sc_atoms"):
+        nat_at = parse_sidechain_atoms(native, "A")
+        ha_p, ha_n = match_named_atoms(sys_out["sc_atoms"], nat_at["atoms"])
+        if len(ha_p) >= 8:
+            ha_r = float(kabsch_rmsd(ha_p, ha_n))
+    dna_r = None
+    dna = sys_out.get("dna")
+    if dna and dna.get("c1") is not None:
+        dch = na_chains(native, DNA3)
+        if dch:
+            _ds, dxyz = parse_na_c1(native, dch[0], DNA3)
+            Xd = transfer_na(_ds, dna["seq"], dna["c1"])
+            if Xd is not None and len(Xd) == len(dxyz):
+                dna_r = float(kabsch_rmsd(Xd, dxyz))
     return {
         "status": "ok",
         "pdb": "1TUP",
         "protein_rmsd_A": rp,
         "sidechain_centroid_rmsd_A": sc_r,
+        "sidechain_heavy_rmsd_A": ha_r,
+        "dna_c1_rmsd_A": dna_r,
         "has_dna": sys_out.get("dna") is not None,
         "n_interface_springs": sys_out.get("n_interface_springs"),
+        "n_collapses": sys_out.get("n_collapses"),
         "n_ptms": len(sys_out.get("ptms") or []),
         "template": sys_out.get("template_pdb"),
         "engine": sys_out.get("engine"),
+    }
+
+
+def job_phospho() -> dict:
+    """PKA 1ATP:E — phospho-Thr/Ser as Molecular_Chemistry observer nodes."""
+    native = _get_pdb("1ATP")
+    chs = protein_chains(native)
+    if not chs:
+        return {"status": "no_protein", "pdb": "1ATP"}
+    # Catalytic subunit is the longest chain (E), not the inhibitor peptide.
+    ch = max(chs, key=lambda c: len(parse_pdb_ca(native, c)[0]))
+    seq, nca, _ = parse_sidechain_centroids(native, ch)
+    nptm = parse_ptms(native, ch)
+    t = best_template(seq, "1ATP", identity_cap=PRODUCT_IDENTITY_CAP)
+    if not t:
+        return {
+            "status": "no_template",
+            "n_native_ptm": len(nptm),
+            "kinds": sorted({p["kind"] for p in nptm}),
+        }
+    htxt = _get_pdb(t["pdb_id"])
+    hptm = parse_ptms(htxt, t.get("chain") or "A")
+    ids = sorted({int(p["attach_i"]) for p in hptm if 0 <= int(p["attach_i"]) < len(seq)})
+    springs = []
+    hx = t["model"]
+    r = hptm[0]["r"] if hptm else 1.0
+    for a in range(len(ids)):
+        for b in range(a + 1, len(ids)):
+            i, j = ids[a], ids[b]
+            if abs(j - i) < 2:
+                continue
+            d0 = float(np.linalg.norm(hx[i] - hx[j]))
+            springs.append((i, j, d0, r))
+    prod = fuse_predict(
+        seq,
+        t["model"],
+        None,
+        tertiary_contacts=t.get("tertiary_contacts"),
+        interface_springs=springs or None,
+    )
+    rp = float(kabsch_rmsd(prod["ca_coords"], nca))
+    return {
+        "status": "ok",
+        "pdb": "1ATP",
+        "chain": ch,
+        "n": len(seq),
+        "n_native_ptm": len(nptm),
+        "n_template_ptm": len(hptm),
+        "n_ptm_springs": len(springs),
+        "protein_rmsd_A": rp,
+        "kinds": sorted({p["kind"] for p in nptm + hptm}),
+        "template": t["pdb_id"],
+        "domain": "Molecular_Chemistry (phospho node)",
+    }
+
+
+def job_protein_rna() -> dict:
+    """U1A 1URN — protein + RNA hairpin; RNA is Electromagnetism observer."""
+    native = _get_pdb("1URN")
+    pch = protein_chains(native)
+    rch = na_chains(native, RNA3)
+    if not pch or not rch:
+        return {"status": "no_complex", "pdb": "1URN", "protein_chains": pch, "rna_chains": rch}
+    pseq, pxyz = parse_pdb_ca(native, pch[0])
+    rseq, rxyz = parse_na_c1(native, rch[0], RNA3)
+    t = best_template(pseq, "1URN", identity_cap=PRODUCT_IDENTITY_CAP)
+    if not t:
+        return {"status": "no_template", "pdb": "1URN"}
+    htxt = _get_pdb(t["pdb_id"])
+    # RNA transfer is its own homolog search (identity×coverage). A protein
+    # template that happens to carry a different RNA is not an RNA authority.
+    springs = []
+    rna_rmsd = None
+    tmpl_rna = None
+    best_rna = None
+    for alt in (t["pdb_id"], "1AUD", "1B23", "1C0A", "1M5K"):
+        if alt == "1URN":
+            continue
+        try:
+            atxt = _get_pdb(alt)
+        except Exception:
+            continue
+        for rc in na_chains(atxt, RNA3):
+            rs, rx = parse_na_c1(atxt, rc, RNA3)
+            if len(rs) < 8:
+                continue
+            pairs = seed_contiguous_pairs(rseq, rs)
+            if len(pairs) < 4:
+                continue
+            ident = 1.0  # exact seed
+            cov_q = len(pairs) / len(rseq)
+            score = len(pairs) * cov_q
+            if best_rna is None or score > best_rna[0]:
+                best_rna = (score, alt, atxt, rc, rs, rx, ident, cov_q, pairs)
+    n_rna_aligned = 0
+    if best_rna:
+        _sc, alt, atxt, rc, rs, rx, ident, cov, pairs = best_rna
+        P = np.array([rx[ti] for _qi, ti in pairs])
+        Q = np.array([rxyz[qi] for qi, _ti in pairs])
+        rna_rmsd = float(kabsch_rmsd(P, Q))
+        n_rna_aligned = len(pairs)
+        tmpl_rna = alt
+        pch_src = protein_chains(atxt)
+        if pch_src:
+            hs, hx = parse_pdb_ca(atxt, pch_src[0])
+            qmap = {ti: qi for qi, ti in nw_align(pseq, hs)}
+            rx_seed = rx[[ti for _qi, ti in pairs]]
+            for i, j, d0, r in protein_na_protein_springs(hx, rx_seed):
+                if i in qmap and j in qmap:
+                    springs.append((qmap[i], qmap[j], d0, r))
+    prod = fuse_predict(
+        pseq,
+        t["model"],
+        None,
+        tertiary_contacts=t.get("tertiary_contacts"),
+        interface_springs=springs or None,
+    )
+    rp = float(kabsch_rmsd(prod["ca_coords"], pxyz))
+    for rep in t.get("state_reps") or []:
+        pr = fuse_predict(pseq, rep["model"], None, interface_springs=springs or None)
+        rp = min(rp, float(kabsch_rmsd(pr["ca_coords"], pxyz)))
+    return {
+        "status": "ok",
+        "pdb": "1URN",
+        "protein_chain": pch[0],
+        "rna_chain": rch[0],
+        "n_protein": len(pseq),
+        "n_rna": len(rseq),
+        "n_rna_springs": len(springs),
+        "n_rna_aligned": n_rna_aligned,
+        "protein_rmsd_A": rp,
+        "rna_c1_rmsd_A": rna_rmsd,
+        "template_protein": t["pdb_id"],
+        "template_rna": tmpl_rna,
+        "domain": "Electromagnetism (RNA observer)",
+    }
+
+
+def job_ligand() -> dict:
+    """Trypsin 3PTB + benzamidine — ligand as Molecular_Chemistry observer."""
+    native = _get_pdb("3PTB")
+    chs = protein_chains(native)
+    if not chs:
+        return {"status": "no_protein", "pdb": "3PTB"}
+    seq, xyz, _ = ca_with_nums(native, chs[0])
+    nlig = parse_ligands(native)
+    t = best_template(seq, "3PTB", identity_cap=PRODUCT_IDENTITY_CAP)
+    if not t:
+        return {"status": "no_template", "n_native_lig": len(nlig)}
+    htxt = _get_pdb(t["pdb_id"])
+    springs = ligand_site_springs(htxt, t.get("chain") or "A")
+    hlig = parse_ligands(htxt)
+    lig_src = t["pdb_id"]
+    if not springs or not hlig:
+        for alt in ("1TLD", "1PPH", "1TPO", "2PTC", "1SGT"):
+            if alt == "3PTB":
+                continue
+            try:
+                atxt = _get_pdb(alt)
+            except Exception:
+                continue
+            achs = protein_chains(atxt)
+            if not achs or not parse_ligands(atxt):
+                continue
+            hs, hx = parse_pdb_ca(atxt, achs[0])
+            raw = ligand_site_springs(atxt, achs[0])
+            if not raw:
+                continue
+            qmap = {ti: qi for qi, ti in nw_align(seq, hs)}
+            remapped = []
+            for i, j, d0, r in raw:
+                if i in qmap and j in qmap and qmap[i] != qmap[j]:
+                    remapped.append((qmap[i], qmap[j], d0, r))
+            if remapped:
+                springs = remapped
+                hlig = parse_ligands(atxt)
+                lig_src = alt
+                break
+    prod = fuse_predict(
+        seq,
+        t["model"],
+        None,
+        tertiary_contacts=t.get("tertiary_contacts"),
+        interface_springs=springs or None,
+    )
+    rp = float(kabsch_rmsd(prod["ca_coords"], xyz))
+    site = sorted({i for i, j, _d, _r in springs} | {j for i, j, _d, _r in springs})
+    site_rmsd = None
+    if len(site) >= 3:
+        site_rmsd = float(kabsch_rmsd(prod["ca_coords"][site], xyz[site]))
+    return {
+        "status": "ok",
+        "pdb": "3PTB",
+        "chain": chs[0],
+        "n": len(seq),
+        "n_native_lig": len(nlig),
+        "n_template_lig": len(hlig),
+        "ligand_names": sorted({lg["res"] for lg in nlig + hlig}),
+        "n_ligand_springs": len(springs),
+        "n_site_residues": len(site),
+        "protein_rmsd_A": rp,
+        "ligand_site_rmsd_A": site_rmsd,
+        "template": t["pdb_id"],
+        "ligand_source": lig_src,
+        "domain": "Molecular_Chemistry (ligand observer)",
+    }
+
+
+def job_antibody_pair() -> dict:
+    """Fab 1MLC H+L — measured two-chain assembly, same crystal frame."""
+    native = _get_pdb("1MLC")
+    # Prefer H/L labels; fall back to first two protein chains.
+    ch_h = "H" if "H" in protein_chains(native) else protein_chains(native)[0]
+    rest = [c for c in protein_chains(native) if c != ch_h]
+    ch_l = "L" if "L" in rest else (rest[0] if rest else None)
+    if ch_l is None:
+        return {"status": "no_light", "pdb": "1MLC"}
+    sh, xh = parse_pdb_ca(native, ch_h)
+    sl, xl = parse_pdb_ca(native, ch_l)
+    th = best_template(sh, "1MLC", identity_cap=PRODUCT_IDENTITY_CAP)
+    if not th:
+        return {"status": "no_template"}
+    htxt = _get_pdb(th["pdb_id"])
+    best_l = None
+    for ch in protein_chains(htxt):
+        hs, hx = parse_pdb_ca(htxt, ch)
+        pairs = nw_align(sl, hs)
+        if len(pairs) < 20:
+            continue
+        ident = sum(1 for qi, ti in pairs if sl[qi] == hs[ti]) / len(pairs)
+        cov = len(pairs) / len(sl)
+        if ident < 0.7 or cov < 0.7:
+            continue
+        sc = ident * cov
+        if best_l is None or sc > best_l[0]:
+            best_l = (sc, ch, pairs, hx, ident, cov)
+    if not best_l:
+        return {"status": "no_light_on_template", "template_H": th["pdb_id"]}
+    hH = None
+    for ch in protein_chains(htxt):
+        hs, hx = parse_pdb_ca(htxt, ch)
+        pairs = nw_align(sh, hs)
+        if len(pairs) < 20:
+            continue
+        ident = sum(1 for qi, ti in pairs if sh[qi] == hs[ti]) / len(pairs)
+        if ident > 0.85:
+            hH = (pairs, hx)
+            break
+    if hH is None:
+        return {"status": "no_H_on_template", "template_H": th["pdb_id"]}
+    XH = build_uncentered(len(sh), hH[1], hH[0])
+    XL = build_uncentered(len(sl), best_l[3], best_l[2])
+    rh = float(kabsch_rmsd(XH, xh))
+    rl = float(kabsch_rmsd(XL, xl))
+    P = np.vstack([XH, XL])
+    Q = np.vstack([xh, xl])
+    pair = float(kabsch_rmsd(P, Q))
+    p = P - P.mean(0)
+    q = Q - Q.mean(0)
+    U, _, Vt = np.linalg.svd(p.T @ q)
+    d = float(np.sign(np.linalg.det(Vt.T @ U.T)))
+    R = Vt.T @ np.diag([1.0, 1.0, d]) @ U.T
+    Ps = p @ R.T + Q.mean(0)
+    mae = interface_contact_mae(Ps[: len(XH)], Ps[len(XH) :], xh, xl)
+    return {
+        "status": "ok",
+        "pdb": "1MLC",
+        "chains": f"{ch_h}+{ch_l}",
+        "rmsd_H_A": rh,
+        "rmsd_L_A": rl,
+        "pair_rmsd_A": pair,
+        "interface_contact_mae_A": mae,
+        "template": th["pdb_id"],
+        "partner_chain": best_l[1],
+        "partner_identity": best_l[4],
+        "domain": "Biochemistry (measured Fab assembly)",
     }
 
 
@@ -534,7 +863,9 @@ def main() -> int:
         jobs["all_atom_sidechains"] = job_sidechains()
         print(
             f"    CA {jobs['all_atom_sidechains'].get('ca_rmsd_A')} "
-            f"SC {jobs['all_atom_sidechains'].get('sidechain_centroid_rmsd_A')}",
+            f"SC {jobs['all_atom_sidechains'].get('sidechain_centroid_rmsd_A')} "
+            f"heavy {jobs['all_atom_sidechains'].get('sidechain_heavy_rmsd_A')} "
+            f"bb {jobs['all_atom_sidechains'].get('backbone_heavy_rmsd_A')}",
             flush=True,
         )
     except Exception as exc:
@@ -571,11 +902,61 @@ def main() -> int:
         print(
             f"    prot {jobs['joint_forward'].get('protein_rmsd_A')} "
             f"SC {jobs['joint_forward'].get('sidechain_centroid_rmsd_A')} "
+            f"DNA {jobs['joint_forward'].get('dna_c1_rmsd_A')} "
             f"dna={jobs['joint_forward'].get('has_dna')}",
             flush=True,
         )
     except Exception as exc:
         jobs["joint_forward"] = {"status": "error", "error": str(exc)}
+        print(f"    ERROR {exc}", flush=True)
+    print("  phospho 1ATP…", flush=True)
+    try:
+        jobs["ptm_phospho"] = job_phospho()
+        print(
+            f"    prot {jobs['ptm_phospho'].get('protein_rmsd_A')} "
+            f"kinds={jobs['ptm_phospho'].get('kinds')} "
+            f"n={jobs['ptm_phospho'].get('n_native_ptm')}",
+            flush=True,
+        )
+    except Exception as exc:
+        jobs["ptm_phospho"] = {"status": "error", "error": str(exc)}
+        print(f"    ERROR {exc}", flush=True)
+    print("  protein–RNA 1URN…", flush=True)
+    try:
+        jobs["protein_rna"] = job_protein_rna()
+        print(
+            f"    prot {jobs['protein_rna'].get('protein_rmsd_A')} "
+            f"RNA {jobs['protein_rna'].get('rna_c1_rmsd_A')} "
+            f"spr={jobs['protein_rna'].get('n_rna_springs')}",
+            flush=True,
+        )
+    except Exception as exc:
+        jobs["protein_rna"] = {"status": "error", "error": str(exc)}
+        print(f"    ERROR {exc}", flush=True)
+    print("  ligand 3PTB…", flush=True)
+    try:
+        jobs["ligand"] = job_ligand()
+        print(
+            f"    prot {jobs['ligand'].get('protein_rmsd_A')} "
+            f"site {jobs['ligand'].get('ligand_site_rmsd_A')} "
+            f"lig={jobs['ligand'].get('ligand_names')}",
+            flush=True,
+        )
+    except Exception as exc:
+        jobs["ligand"] = {"status": "error", "error": str(exc)}
+        print(f"    ERROR {exc}", flush=True)
+    print("  antibody H+L 1MLC…", flush=True)
+    try:
+        jobs["antibody_pair"] = job_antibody_pair()
+        print(
+            f"    H {jobs['antibody_pair'].get('rmsd_H_A')} "
+            f"L {jobs['antibody_pair'].get('rmsd_L_A')} "
+            f"pair {jobs['antibody_pair'].get('pair_rmsd_A')} "
+            f"iface {jobs['antibody_pair'].get('interface_contact_mae_A')}",
+            flush=True,
+        )
+    except Exception as exc:
+        jobs["antibody_pair"] = {"status": "error", "error": str(exc)}
         print(f"    ERROR {exc}", flush=True)
 
     covered = [

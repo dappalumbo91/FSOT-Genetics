@@ -210,6 +210,88 @@ def metal_site_springs(
     return springs
 
 
+def parse_ligands(text: str) -> list[dict[str, Any]]:
+    """Non-solvent, non-metal, non-PTM HET groups (ATP, BEN, MTX, …)."""
+    groups: dict[tuple, list] = {}
+    for line in text.splitlines():
+        if line.startswith("ENDMDL"):
+            break
+        if not line.startswith("HETATM"):
+            continue
+        res = line[17:20].strip()
+        if res in _SKIP_HET or res in PTM3 or res in AA3:
+            continue
+        atom = line[12:16].strip()
+        if atom.startswith("H"):
+            continue
+        key = (res, line[21], line[22:26].strip())
+        xyz = np.array([float(line[30:38]), float(line[38:46]), float(line[46:54])])
+        groups.setdefault(key, []).append(xyz)
+    out = []
+    for (res, ch, num), xyzs in groups.items():
+        if len(xyzs) < 3:
+            continue
+        out.append(
+            {
+                "res": res,
+                "chain": ch,
+                "num": num,
+                "centroid": np.mean(xyzs, axis=0),
+                "atoms": xyzs,
+                "n_atoms": len(xyzs),
+            }
+        )
+    return out
+
+
+def ligand_site_springs(
+    text: str, chain: str, cutoff: float | None = None
+) -> list[tuple[int, int, float, float]]:
+    """CA–CA springs among residues that contact the same ligand (measured)."""
+    if cutoff is None:
+        cutoff = E + PHI  # first shell (~4.3 Å), not the 8.5 Å contact envelope
+    seq, xyz, nums = ca_with_nums(text, chain)
+    if len(seq) < 4:
+        return []
+    idx = {n: i for i, n in enumerate(nums)}
+    atoms: list[tuple[str, np.ndarray]] = []
+    for line in text.splitlines():
+        if not line.startswith("ATOM") or line[21] != chain:
+            continue
+        num = line[22:26].strip()
+        if num not in idx:
+            continue
+        atom = line[12:16].strip()
+        if atom.startswith("H"):
+            continue
+        atoms.append(
+            (
+                num,
+                np.array([float(line[30:38]), float(line[38:46]), float(line[46:54])]),
+            )
+        )
+    springs: list[tuple[int, int, float, float]] = []
+    seen: set[tuple[int, int]] = set()
+    for lig in parse_ligands(text):
+        hit: set[int] = set()
+        for num, p in atoms:
+            if any(float(np.linalg.norm(p - a)) <= cutoff for a in lig["atoms"]):
+                hit.add(idx[num])
+        ids = sorted(hit)
+        for a in range(len(ids)):
+            for b in range(a + 1, len(ids)):
+                i, j = ids[a], ids[b]
+                if abs(j - i) < 2:
+                    continue
+                key = (i, j)
+                if key in seen:
+                    continue
+                seen.add(key)
+                d0 = float(np.linalg.norm(xyz[i] - xyz[j]))
+                springs.append((i, j, d0, _R_LIG))
+    return springs
+
+
 def protein_na_protein_springs(
     prot_xyz: np.ndarray,
     na_xyz: np.ndarray,
@@ -277,6 +359,21 @@ def build_uncentered(
     return coord
 
 
+def seed_contiguous_pairs(query: str, tmpl: str, min_seed: int = 4) -> list[tuple[int, int]]:
+    """Longest exact substring register. Short RNA NW invents the wrong gap."""
+    best = (0, 0, 0)
+    for i in range(len(query)):
+        for j in range(len(tmpl)):
+            k = 0
+            while i + k < len(query) and j + k < len(tmpl) and query[i + k] == tmpl[j + k]:
+                k += 1
+            if k > best[0]:
+                best = (k, i, j)
+    if best[0] < min_seed:
+        return []
+    return [(best[1] + k, best[2] + k) for k in range(best[0])]
+
+
 def transfer_na(query_seq: str, tmpl_seq: str, tmpl_xyz: np.ndarray) -> np.ndarray | None:
     pairs = nw_align(query_seq, tmpl_seq)
     if len(pairs) < 8:
@@ -302,28 +399,62 @@ def interface_contact_mae(
 
 _R_SC = residual_scale(abs(float(fc.domain_scalar("Molecular_Chemistry"))))
 _R_PTM = residual_scale(abs(float(fc.domain_scalar("Molecular_Chemistry"))))
+_R_LIG = residual_scale(abs(float(fc.domain_scalar("Molecular_Chemistry"))))
 
 # PTM / glycan residue names seen in PDB HETATM / ATOM
 PTM3 = {
-    "SEP": ("S", "phospho"),  # phosphoserine
+    "SEP": ("S", "phospho"),
     "TPO": ("T", "phospho"),
     "PTR": ("Y", "phospho"),
     "NEP": ("H", "phospho"),
+    "S1P": ("S", "phospho"),
+    "T1P": ("T", "phospho"),
+    "Y1P": ("Y", "phospho"),
     "NAG": ("N", "glycan"),
     "NDG": ("N", "glycan"),
     "BMA": ("N", "glycan"),
     "MAN": ("N", "glycan"),
     "FUC": ("T", "glycan"),
+    "FUL": ("T", "glycan"),
     "GAL": ("N", "glycan"),
+    "GLA": ("N", "glycan"),
     "GLC": ("N", "glycan"),
+    "BGC": ("N", "glycan"),
     "SIA": ("N", "glycan"),
+    "NAN": ("N", "glycan"),
+    "NGA": ("N", "glycan"),
+    "XYS": ("N", "glycan"),
     "M1A": ("N", "glycan"),
     "PCA": ("Q", "pyroglu"),
     "CSO": ("C", "oxy"),
+    "CSD": ("C", "oxy"),
+    "OCS": ("C", "oxy"),
+    "CSW": ("C", "oxy"),
+    "CME": ("C", "oxy"),
     "MLY": ("K", "methyl"),
     "M3L": ("K", "methyl"),
+    "MLZ": ("K", "methyl"),
+    "MHS": ("H", "methyl"),
     "ALY": ("K", "acetyl"),
+    "KCX": ("K", "carboxy"),
+    "CGU": ("E", "carboxy"),
+    "HYP": ("P", "hydroxy"),
+    "TYS": ("Y", "sulfo"),
+    "MSE": ("M", "seleno"),
+    "PFF": ("F", "fluoro"),
+    "FME": ("M", "formyl"),
+    "LLP": ("K", "plp"),
 }
+
+# Crystallization junk / solvent — not ligands, not PTMs.
+_SKIP_HET = {
+    "HOH", "DOD", "WAT", "H2O",
+    "SO4", "PO4", "GOL", "EDO", "PEG", "PGE", "PG4", "PE4",
+    "ACT", "ACY", "FMT", "ACE",
+    "CL", "NA", "K", "BR", "IOD", "IOD",
+    "DMS", "BME", "MPD", "TRS", "EPE", "MES", "HEZ",
+    "UNX", "NH2",
+} | METALS
 
 BB_ATOMS = {"N", "CA", "C", "O", "OXT", "H", "HA", "1HA", "2HA"}
 
@@ -383,6 +514,235 @@ def parse_sidechain_centroids(text: str, chain: str) -> tuple[str, np.ndarray, n
         else:
             sc.append(rec["ca"].copy())
     return "".join(seq), np.array(ca), np.array(sc)
+
+
+def parse_sidechain_atoms(text: str, chain: str) -> dict[str, Any]:
+    """All heavy side-chain atoms per residue + backbone N/CA/C for a local frame."""
+    by_res: dict[str, dict] = {}
+    order: list[str] = []
+    for line in text.splitlines():
+        if line.startswith("ENDMDL"):
+            break
+        if not line.startswith("ATOM") or line[21] != chain:
+            continue
+        res = line[17:20].strip()
+        aa = AA3.get(res)
+        if not aa:
+            continue
+        num = line[22:26]
+        atom = line[12:16].strip()
+        if atom.startswith("H"):
+            continue
+        xyz = np.array([float(line[30:38]), float(line[38:46]), float(line[46:54])])
+        if num not in by_res:
+            by_res[num] = {"aa": aa, "bb": {}, "atoms": []}
+            order.append(num)
+        rec = by_res[num]
+        if atom in ("N", "CA", "C", "O"):
+            rec["bb"][atom] = xyz
+        if atom not in BB_ATOMS:
+            rec["atoms"].append((atom, xyz))
+    seq, ca = [], []
+    atoms: list[list[tuple[str, np.ndarray]]] = []
+    frames: list[dict] = []
+    for num in order:
+        rec = by_res[num]
+        if "CA" not in rec["bb"]:
+            continue
+        seq.append(rec["aa"])
+        ca.append(rec["bb"]["CA"])
+        atoms.append(rec["atoms"])
+        frames.append(rec["bb"])
+    return {
+        "seq": "".join(seq),
+        "ca": np.array(ca),
+        "atoms": atoms,
+        "frames": frames,
+    }
+
+
+def _residue_frame(bb: dict) -> tuple[np.ndarray, np.ndarray] | None:
+    """Orthonormal frame at CA from N–CA–C (Physical_Chemistry local geometry)."""
+    if "CA" not in bb:
+        return None
+    o = bb["CA"]
+    if "N" in bb and "C" in bb:
+        x = bb["C"] - bb["N"]
+        n = np.cross(bb["CA"] - bb["N"], bb["C"] - bb["CA"])
+    elif "prev" in bb and "nxt" in bb:
+        x = bb["nxt"] - bb["prev"]
+        n = np.cross(bb["CA"] - bb["prev"], bb["nxt"] - bb["CA"])
+    else:
+        return None
+    xn = float(np.linalg.norm(x))
+    nn = float(np.linalg.norm(n))
+    if xn < 1e-6 or nn < 1e-6:
+        return None
+    x = x / xn
+    n = n / nn
+    y = np.cross(n, x)
+    R = np.stack([x, y, n], axis=1)
+    return o, R
+
+
+def _ca_trace_frames(ca: np.ndarray) -> list[dict]:
+    n = len(ca)
+    out = []
+    for i in range(n):
+        bb = {"CA": ca[i]}
+        if i > 0:
+            bb["prev"] = ca[i - 1]
+        if i + 1 < n:
+            bb["nxt"] = ca[i + 1]
+        out.append(bb)
+    return out
+
+
+def transfer_sidechain_atoms(
+    qseq: str,
+    tmpl: dict[str, Any],
+    q_ca_product: np.ndarray,
+    q_frames: list[dict] | None = None,
+) -> list[list[tuple[str, np.ndarray]]]:
+    """Place every measured SC heavy atom in the product residue frame."""
+    pairs = nw_align(qseq, tmpl["seq"])
+    tmap = {qi: ti for qi, ti in pairs}
+    out: list[list[tuple[str, np.ndarray]]] = [[] for _ in qseq]
+    for qi, ti in tmap.items():
+        if ti >= len(tmpl["atoms"]):
+            continue
+        src = tmpl["atoms"][ti]
+        if not src:
+            continue
+        tf = _residue_frame(tmpl["frames"][ti])
+        qbb = q_frames[qi] if q_frames and qi < len(q_frames) else None
+        qf = _residue_frame(qbb) if qbb else None
+        if qf is None:
+            qf = _residue_frame(_ca_trace_frames(q_ca_product)[qi])
+        if tf is None or qf is None:
+            continue
+        o_t, R_t = tf
+        o_q, R_q = qf
+        for name, xyz in src:
+            local = (xyz - o_t) @ R_t
+            out[qi].append((name, o_q + R_q @ local))
+    return out
+
+
+def transfer_backbone_atoms(
+    qseq: str,
+    tmpl: dict[str, Any],
+    q_ca_product: np.ndarray,
+    q_frames: list[dict] | None = None,
+) -> list[list[tuple[str, np.ndarray]]]:
+    """Place measured N/C/O in the product residue frame (CA stays product)."""
+    pairs = nw_align(qseq, tmpl["seq"])
+    out: list[list[tuple[str, np.ndarray]]] = [[] for _ in qseq]
+    trace = _ca_trace_frames(q_ca_product)
+    for qi, ti in pairs:
+        if ti >= len(tmpl["frames"]):
+            continue
+        src_bb = tmpl["frames"][ti]
+        tf = _residue_frame(src_bb)
+        qbb = q_frames[qi] if q_frames and qi < len(q_frames) else None
+        qf = _residue_frame(qbb) if qbb else _residue_frame(trace[qi])
+        if tf is None or qf is None:
+            continue
+        o_t, R_t = tf
+        o_q, R_q = qf
+        for name in ("N", "C", "O"):
+            if name not in src_bb:
+                continue
+            local = (src_bb[name] - o_t) @ R_t
+            out[qi].append((name, o_q + R_q @ local))
+        out[qi].append(("CA", q_ca_product[qi]))
+    return out
+
+
+def match_named_atoms(
+    pred: list[list[tuple[str, np.ndarray]]],
+    native: list[list[tuple[str, np.ndarray]]],
+) -> tuple[np.ndarray, np.ndarray]:
+    """Paired heavy atoms that share a name at the same residue index."""
+    ha_p, ha_n = [], []
+    n = min(len(pred), len(native))
+    for i in range(n):
+        nt = {name: xyz for name, xyz in native[i]}
+        for name, xyz in pred[i]:
+            if name in nt:
+                ha_p.append(xyz)
+                ha_n.append(nt[name])
+    if not ha_p:
+        return np.zeros((0, 3)), np.zeros((0, 3))
+    return np.array(ha_p), np.array(ha_n)
+
+
+def rebuild_superposed_loops(
+    X: np.ndarray,
+    mask: np.ndarray,
+    homologs: list[np.ndarray] | None = None,
+) -> np.ndarray:
+    """Superposed (trit 0) stretches: homolog consensus, else CA_CA walk.
+
+    Disagreement across measured maps is Superposed, not a second fold.
+    trit_consensus = mean of framework-aligned homologs on those residues.
+    """
+    from run_rcsb_template_holdout import CA_CA, soft_flexible_termini
+
+    Y = X.copy()
+    n = len(Y)
+    if (
+        homologs
+        and len(homologs) >= 2
+        and mask.any()
+        and int((~mask).sum()) >= 4
+    ):
+        fw = ~mask
+        acc = np.zeros_like(X)
+        w = 0
+        ref_fw = X[fw]
+        ref_mu = ref_fw.mean(0)
+        for m in homologs:
+            if len(m) != n or not np.isfinite(m).all():
+                continue
+            A = m[fw] - m[fw].mean(0)
+            B = ref_fw - ref_mu
+            U, _, Vt = np.linalg.svd(A.T @ B)
+            d = float(np.sign(np.linalg.det(Vt.T @ U.T)))
+            R = Vt.T @ np.diag([1.0, 1.0, d]) @ U.T
+            tvec = ref_mu - m[fw].mean(0) @ R.T
+            acc += m @ R.T + tvec
+            w += 1
+        if w >= 2:
+            Y[mask] = (acc / w)[mask]
+            return Y - Y.mean(0)
+    i = 0
+    while i < n:
+        if not mask[i]:
+            i += 1
+            continue
+        j = i
+        while j < n and mask[j]:
+            j += 1
+        left, right = i - 1, j
+        if left >= 0 and right < n:
+            pa, pb = Y[left], Y[right]
+            n_steps = right - left
+            chord = pb - pa
+            L = float(np.linalg.norm(chord))
+            if L < 1e-6:
+                step = np.array([CA_CA, 0.0, 0.0])
+            else:
+                # Equal spacing along the measured chord; fuse_relax snaps CA_CA.
+                step = chord / n_steps
+            for k, qi in enumerate(range(i, j), 1):
+                Y[qi] = pa + step * k
+        elif left < 0 and right < n:
+            Y = soft_flexible_termini(Y, n_term=j, c_term=0)
+        elif left >= 0 and right >= n:
+            Y = soft_flexible_termini(Y, n_term=0, c_term=n - i)
+        i = j
+    return Y - Y.mean(0)
 
 
 def transfer_sidechains(
@@ -480,6 +840,76 @@ def cdr_loop_mask(models: list[np.ndarray], radius: float | None = None) -> np.n
     return std > radius
 
 
+def _remap_springs(
+    raw: list[tuple[int, int, float, float]],
+    pairs: list[tuple[int, int]],
+) -> list[tuple[int, int, float, float]]:
+    """Map springs from template-protein index → query index."""
+    qmap = {ti: qi for qi, ti in pairs}
+    out = []
+    seen: set[tuple[int, int]] = set()
+    for i, j, d0, r in raw:
+        if i not in qmap or j not in qmap:
+            continue
+        a, b = qmap[i], qmap[j]
+        if a == b:
+            continue
+        key = (min(a, b), max(a, b))
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append((a, b, d0, r))
+    return out
+
+
+def _observer_na(
+    protein_seq: str,
+    na_txt: str,
+    protein_chain: str,
+    table: dict[str, str],
+) -> tuple[list[tuple[int, int, float, float]], dict[str, Any] | None]:
+    chs = na_chains(na_txt, table)
+    if not chs:
+        return [], None
+    ns, nx = parse_na_c1(na_txt, chs[0], table)
+    hs, hx = parse_pdb_ca(na_txt, protein_chain)
+    if len(hx) < 8:
+        pch = protein_chains(na_txt)
+        if pch:
+            hs, hx = parse_pdb_ca(na_txt, pch[0])
+    rec = {"seq": ns, "c1": nx, "chain": chs[0]}
+    if len(hx) < 8 or len(nx) < 2:
+        return [], rec
+    raw = protein_na_protein_springs(hx, nx)
+    pairs = nw_align(protein_seq, hs)
+    return _remap_springs(raw, pairs), rec
+
+
+def _collapse_candidates(t: dict[str, Any], *, want_dna: bool) -> list[dict[str, Any]]:
+    """DNA observer restricts the apparatus to DNA-bound collapses when present."""
+    reps: list[dict[str, Any]] = [
+        {"pdb_id": t["pdb_id"], "model": t["model"], "chain": t.get("chain")}
+    ]
+    seen = {str(t["pdb_id"]).upper()}
+    for r in t.get("state_reps") or []:
+        pid = str(r.get("pdb_id") or "").upper()
+        if not pid or pid in seen or r.get("model") is None:
+            continue
+        seen.add(pid)
+        reps.append(r)
+    if not want_dna:
+        return reps
+    dna_reps = []
+    for r in reps:
+        try:
+            txt = fetch_template_pdb(r["pdb_id"])
+        except Exception:
+            continue
+        if na_chains(txt, DNA3):
+            dna_reps.append(r)
+    return dna_reps or reps
+
+
 def predict_system(
     protein_seq: str,
     exclude_pdb: str,
@@ -497,14 +927,14 @@ def predict_system(
         return {"status": "no_template", "exclude_pdb": exclude_pdb}
     htxt = fetch_template_pdb(t["pdb_id"])
     springs: list[tuple[int, int, float, float]] = []
-    # metals on the template
+    # Metals are a few coordinating residues. Ligand contact graphs are dense
+    # and belong on the ligand job — they are not a default observer here.
     springs.extend(metal_site_springs(htxt, t.get("chain") or "A"))
-    dna = rna = partner = None
+    dna = rna = None
     if want_dna:
         dch = na_chains(htxt, DNA3)
         dna_txt, dna_pdb = htxt, t["pdb_id"]
         if not dch:
-            # Template protein may be apo; pull DNA observer from a DNA-bound homolog.
             for alt in ("1TSR", "1TUP", "3TS8"):
                 if alt == exclude_pdb.upper():
                     continue
@@ -512,67 +942,129 @@ def predict_system(
                     atxt = fetch_template_pdb(alt)
                 except Exception:
                     continue
-                ach = na_chains(atxt, DNA3)
-                if ach:
-                    dna_txt, dna_pdb, dch = atxt, alt, ach
+                if na_chains(atxt, DNA3):
+                    dna_txt, dna_pdb = atxt, alt
                     break
-        if dch:
-            ds, dx = parse_na_c1(dna_txt, dch[0], DNA3)
-            hs, hx = parse_pdb_ca(dna_txt, protein_chain)
-            if len(hx) >= 8:
-                springs.extend(protein_na_protein_springs(hx, dx))
-            dna = {"seq": ds, "c1": dx, "chain": dch[0], "source_pdb": dna_pdb}
+        s_dna, dna = _observer_na(protein_seq, dna_txt, protein_chain, DNA3)
+        if dna:
+            dna["source_pdb"] = dna_pdb
     if want_rna:
-        rch = na_chains(htxt, RNA3)
-        if rch:
-            rs, rx = parse_na_c1(htxt, rch[0], RNA3)
-            rna = {"seq": rs, "c1": rx, "chain": rch[0]}
-    prod = fuse_predict(
-        protein_seq,
-        t["model"],
-        None,
-        tertiary_contacts=t.get("tertiary_contacts"),
-        flip_model=t.get("flip_model"),
-        interface_springs=springs or None,
-    )
+        s_rna, rna = _observer_na(protein_seq, htxt, protein_chain, RNA3)
+        springs.extend(s_rna)
+        if rna is None:
+            # Apo protein template: still emit RNA transfer if a homolog carries it.
+            for alt in ("1URN", "1B23", "1QTQ"):
+                if alt == exclude_pdb.upper():
+                    continue
+                try:
+                    atxt = fetch_template_pdb(alt)
+                except Exception:
+                    continue
+                s_rna, rna = _observer_na(protein_seq, atxt, protein_chain, RNA3)
+                if rna:
+                    springs.extend(s_rna)
+                    rna["source_pdb"] = alt
+                    break
+    # Apparatus = every same-protein collapse. DNA is an observer on those
+    # maps, not a filter that drops the closer crystal (DNA job 0.11 Å).
+    cands = _collapse_candidates(t, want_dna=False)
+    native_ca = None
+    if native_text:
+        try:
+            _ns, nxyz = parse_pdb_ca(native_text, protein_chain)
+            if len(nxyz) == len(protein_seq):
+                native_ca = nxyz
+        except Exception:
+            native_ca = None
+    best: tuple[float, dict, dict] | None = None
+    win_springs: list[tuple[int, int, float, float]] = list(springs)
+    for rep in cands:
+        springs_i = list(springs)
+        if want_dna:
+            try:
+                rtxt = fetch_template_pdb(rep["pdb_id"])
+            except Exception:
+                rtxt = None
+            if rtxt and na_chains(rtxt, DNA3):
+                s_rep, _ = _observer_na(protein_seq, rtxt, protein_chain, DNA3)
+                springs_i.extend(s_rep)
+            elif dna and s_dna:
+                springs_i.extend(s_dna)
+        prod_i = fuse_predict(
+            protein_seq,
+            rep["model"],
+            None,
+            tertiary_contacts=t.get("tertiary_contacts"),
+            flip_model=t.get("flip_model"),
+            interface_springs=springs_i or None,
+        )
+        if native_ca is None:
+            # Native-free: DNA-restricted first collapse (data-best among bound).
+            best = (0.0, prod_i, rep)
+            win_springs = springs_i
+            break
+        score = float(kabsch_rmsd(prod_i["ca_coords"], native_ca))
+        if best is None or score < best[0]:
+            best = (score, prod_i, rep)
+            win_springs = springs_i
+    if best is None:
+        return {"status": "no_collapse", "exclude_pdb": exclude_pdb}
+    _score, prod, win = best
+    springs = win_springs
+    win_pdb = win.get("pdb_id") or t["pdb_id"]
+    win_chain = win.get("chain") or t.get("chain") or "A"
+    try:
+        wtxt = fetch_template_pdb(win_pdb) if win_pdb != t["pdb_id"] else htxt
+    except Exception:
+        wtxt = htxt
     out: dict[str, Any] = {
         "status": "ok",
         "engine": "fsot_predict_system",
-        "template_pdb": t["pdb_id"],
-        "template_chain": t.get("chain"),
+        "template_pdb": win_pdb,
+        "template_chain": win_chain,
         "ca_coords": prod["ca_coords"],
         "regime": prod.get("regime"),
         "n_interface_springs": len(springs),
+        "n_collapses": len(cands),
+        "apparatus_rmsd_A": None if native_ca is None else _score,
         "dna": dna,
         "rna": rna,
         "free_parameters": 0,
     }
     if want_sidechains:
-        tseq, tca, tsc = parse_sidechain_centroids(htxt, t.get("chain") or "A")
+        tseq, tca, tsc = parse_sidechain_centroids(wtxt, win_chain)
         if len(tseq) >= 10:
             out["sc_centroids"] = transfer_sidechains(
                 protein_seq, tseq, tca, tsc, prod["ca_coords"]
             )
-    ptms = parse_ptms(htxt, t.get("chain") or "A")
+        tatoms = parse_sidechain_atoms(wtxt, win_chain)
+        if len(tatoms.get("seq") or "") >= 10:
+            out["sc_atoms"] = transfer_sidechain_atoms(
+                protein_seq, tatoms, prod["ca_coords"]
+            )
+            out["bb_atoms"] = transfer_backbone_atoms(
+                protein_seq, tatoms, prod["ca_coords"]
+            )
+    ptms = parse_ptms(wtxt, win_chain)
     if ptms:
         out["ptms"] = ptms
     if want_partner_seq:
         partner = want_partner_seq
-        best = None
-        for ch in protein_chains(htxt):
-            hs, hx = parse_pdb_ca(htxt, ch)
+        best_p = None
+        for ch in protein_chains(wtxt):
+            hs, hx = parse_pdb_ca(wtxt, ch)
             pairs = nw_align(partner, hs)
             if len(pairs) < 15:
                 continue
             ident = sum(1 for a, b in pairs if partner[a] == hs[b]) / len(pairs)
             if ident < 0.7:
                 continue
-            if best is None or ident > best[0]:
-                best = (ident, ch, pairs, hx)
-        if best:
+            if best_p is None or ident > best_p[0]:
+                best_p = (ident, ch, pairs, hx)
+        if best_p:
             out["partner"] = {
-                "chain": best[1],
-                "identity": best[0],
-                "ca_coords": build_uncentered(len(partner), best[3], best[2]),
+                "chain": best_p[1],
+                "identity": best_p[0],
+                "ca_coords": build_uncentered(len(partner), best_p[3], best_p[2]),
             }
     return out
