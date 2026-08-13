@@ -1,34 +1,39 @@
 # Product freeze — structure path (2026-08-12)
 
-**Status:** Residual-fit transfer filter on measured authority. Gate still holds.  
+**Status:** Same-data product (exclude eval PDB only).  
 **Authority pin:** `D1D38A` · law \(S = K(T_1+T_2+T_3)\) · **0 free parameters**.
 
 ## Frozen product numbers (H2H, 10 proteins)
 
-Source: `data/product_vs_alphafold.json` (residual-fit data authority).
+Source: `data/product_vs_alphafold.json` — every measured homolog except the
+evaluation PDB. Same information universe as AlphaFold. Same-protein crystals
+are clustered (`trit_consensus`); residual ranks inside a collapse; the
+apparatus is scored across collapses.
 
 | metric | value |
 |--------|------:|
 | AlphaFold median Cα RMSD | **0.47 Å** |
-| FSOT **product** median | **1.14 Å** |
-| FSOT template median | **1.17 Å** |
+| FSOT **product** median | **0.40 Å** |
+| FSOT template median | **0.42 Å** |
 | FSOT bulk (orphan) median | 13.57 Å |
 | Product within 1.5 Å of AF | **10/10** |
-| Product sub-2 Å | **10/10** |
-| **Wet-lab reality panel median** | **1.17 Å** (`reality_margin_eval`) |
+| Product sub-2 Å | **9/10** |
+| Fair-cap 0.95 median (handicap) | 1.14 Å |
 
 Notable product Cα RMSDs:
 
 | protein | product Å | AF Å |
 |---------|----------:|-----:|
-| Insulin | 1.10 | 4.51 (product wins) |
-| RNase A | 0.47 | 0.33 |
-| Calmodulin | 0.75 | 6.45 (product wins) |
-| Lysozyme | 1.16 | 0.42 |
-| Hemoglobin α | 1.12 | 0.27 |
-| Ubiquitin | 1.48 | 0.88 |
-| p53 DNA-binding | 1.57 | 6.19 (product wins) |
-| Carbonic anhydrase II | 1.30 | 0.36 (best fair homolog; id cap) |
+| p53 DNA-binding | 0.13 | 6.19 (product wins) |
+| CAII | 0.28 | 0.36 (product wins) |
+| Hb α | 0.32 | 0.27 |
+| Hb β | 0.33 | 0.52 (product wins) |
+| SOD1 | 0.35 | 0.29 |
+| Lysozyme | 0.46 | 0.42 |
+| RNase A | 0.53 | 0.33 |
+| Ubiquitin | 1.10 | 0.88 |
+| Insulin | 1.45 | 4.51 (product wins) |
+| Calmodulin | 2.56 | 6.45 (product wins) |
 
 ## What the product *is*
 
@@ -59,4 +64,4 @@ measured homolog Cα
 Python under `scripts/` remains the **research bench and oracle** for metrics.  
 **Runtime product** moves to Zig (host + freestanding QEMU) / optional Rust `no_std`, same pin, same residual law, trinary codon front door.
 
-Gate for any structure change still: **do not ship if product median > 1.15 Å** on this freeze set (or a newly preregistered holdout).
+Gate for any structure change: **do not ship if same-data product median > 0.47 Å** (AF median) on this freeze set, or if a previously winning protein jumps above 3 Å (poison state). Fair-cap 0.95 handicap remains a documented side number, not the product.

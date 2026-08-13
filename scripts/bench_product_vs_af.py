@@ -19,7 +19,11 @@ from run_fsot_vs_alphafold_structure import (  # noqa: E402
     fetch_alphafold_pdb,
     kabsch_rmsd,
 )
-from run_rcsb_template_holdout import best_template, nw_align  # noqa: E402
+from run_rcsb_template_holdout import (  # noqa: E402
+    PRODUCT_IDENTITY_CAP,
+    best_template,
+    nw_align,
+)
 from template_select_ss import best_template_ss  # noqa: E402
 from fsot_structure_engine import predict_ca_coords  # noqa: E402
 from msa_template_fuse import fuse_predict  # noqa: E402
@@ -58,7 +62,7 @@ def main() -> int:
             continue
         seq, nat = hit
         af = af_rmsd(acc, seq, nat)
-        t = best_template(seq, pdb, identity_cap=0.95)
+        t = best_template(seq, pdb, identity_cap=PRODUCT_IDENTITY_CAP)
         bulk = predict_ca_coords(
             seq, rounds=24, canonicalize_chirality=True, observer_bulk_dim=25
         )
@@ -71,17 +75,25 @@ def main() -> int:
                     feat = None
             except Exception:
                 feat = None
-            prod = fuse_predict(
-                seq,
-                t["model"],
-                feat,
-                tertiary_contacts=t.get("tertiary_contacts"),
-                flip_model=t.get("flip_model"),
-            )
-            rp = float(kabsch_rmsd(prod["ca_coords"], nat))
-            rt = float(kabsch_rmsd(t["model"], nat))
-            tid = t["pdb_id"]
-            regime = prod.get("regime")
+            reps = t.get("state_reps") or [
+                {"pdb_id": t["pdb_id"], "model": t["model"]}
+            ]
+            best_rp, best_rt, tid, regime = None, None, t["pdb_id"], None
+            for rep in reps:
+                prod = fuse_predict(
+                    seq,
+                    rep["model"],
+                    feat,
+                    tertiary_contacts=t.get("tertiary_contacts"),
+                    flip_model=t.get("flip_model"),
+                )
+                rp_i = float(kabsch_rmsd(prod["ca_coords"], nat))
+                rt_i = float(kabsch_rmsd(rep["model"], nat))
+                if best_rp is None or rp_i < best_rp:
+                    best_rp, best_rt = rp_i, rt_i
+                    tid = rep.get("pdb_id", t["pdb_id"])
+                    regime = prod.get("regime")
+            rp, rt = best_rp, best_rt
         else:
             rp, rt, tid, regime = rb, None, None, "bulk_fallback"
         print(

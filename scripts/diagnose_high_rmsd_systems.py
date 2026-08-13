@@ -25,6 +25,7 @@ sys.path.insert(0, str(ROOT / "vendor"))
 from wetlab_benchmark_catalog import STRUCTURE_CASES
 from run_fsot_vs_alphafold_structure import fetch_pdb, kabsch_rmsd
 from run_rcsb_template_holdout import (
+    PRODUCT_IDENTITY_CAP,
     best_template,
     collect_template_candidates,
     residual_interface_energy,
@@ -101,7 +102,7 @@ def main() -> int:
         if not hit:
             continue
         seq, nat = hit
-        tmpl = best_template(seq, case["pdb"], identity_cap=0.95)
+        tmpl = best_template(seq, case["pdb"], identity_cap=PRODUCT_IDENTITY_CAP)
         if not tmpl:
             systems.append(
                 {

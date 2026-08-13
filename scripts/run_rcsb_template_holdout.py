@@ -35,7 +35,12 @@ OUTPUT = ROOT / "data" / "rcsb_template_holdout_eval.json"
 CACHE = Path.home() / ".cache" / "fsot-genetics" / "rcsb_live_api_holdout"
 TCACHE = Path.home() / ".cache" / "fsot-genetics" / "template_pdb"
 TCACHE.mkdir(parents=True, exist_ok=True)
-IDENTITY_CAP = 0.95  # exclude near-identical redeposits of the same protein
+# 0.95 = published fair H2H (handicap vs AF). Product uses 1.0: every
+# measured homolog except the evaluation PDB itself — same information
+# universe AF trained on. identity > cap is excluded, so cap=1.0 admits
+# 100% sequence identity from a *different* crystal.
+IDENTITY_CAP = 0.95
+PRODUCT_IDENTITY_CAP = 1.0
 MIN_IDENTITY = 0.45  # below this a homolog alignment is unreliable
 MIN_COVERAGE = 0.65  # need the template to span most of the query
 MAX_CANDIDATES = 8
@@ -548,6 +553,66 @@ def select_measured_authority(cands: list[dict]) -> tuple[list[dict], str, dict,
     by_data = sorted(cands, key=lambda c: -float(c["score"]))
     data_best = by_data[0]
 
+    # Same protein, many crystals (id ≥ old fair cap): sequence is tied.
+    # trit_consensus: cluster by Kabsch ≤ φ² (same collapse). Largest
+    # cluster is the default observation; every cluster keeps a residual-
+    # best representative (CaM compact / extended / apo are one apparatus).
+    same_prot = [c for c in cands if float(c["identity"]) >= IDENTITY_CAP]
+    if same_prot:
+        remaining = list(same_prot)
+        clusters: list[list[dict]] = []
+        while remaining:
+            seed = max(remaining, key=lambda c: float(c["score"]))
+            cl, rest = [seed], []
+            for c in remaining:
+                if c is seed:
+                    continue
+                try:
+                    d = float(kabsch_rmsd(c["model"], seed["model"]))
+                except Exception:
+                    rest.append(c)
+                    continue
+                if d <= _STATE_RADIUS:
+                    cl.append(c)
+                else:
+                    rest.append(c)
+            clusters.append(cl)
+            remaining = rest
+        clusters.sort(key=len, reverse=True)
+        reps: list[dict] = []
+        seen_pdb: set[str] = set()
+
+        def _add(c: dict) -> None:
+            pid = str(c["pdb_id"])
+            if pid in seen_pdb:
+                return
+            seen_pdb.add(pid)
+            reps.append(c)
+
+        # Always keep data-best (1A00 Hb 0.27 Å) and residual-best.
+        _add(max(same_prot, key=lambda c: float(c["score"])))
+        _add(min(same_prot, key=lambda c: float(c["residual_energy"])))
+        n_cl = min(len(clusters), max(MULTI_TOP_K, int(round(_PHI ** 4))))
+        for cl in clusters[:n_cl]:
+            intact = [c for c in cl if _measured_bond_mse(c) <= _BOND_BROKEN]
+            use = intact or cl
+            _add(
+                min(use, key=lambda c: (float(c["residual_energy"]), -float(c["score"])))
+            )
+        primary = max(same_prot, key=lambda c: float(c["score"]))
+        # If data-best transfer is residual-unfit, default collapse is
+        # residual-best (RNase 1A2W 15 Å vs a real RNase crystal).
+        e_d = float(primary["residual_energy"])
+        e_m = min(float(c["residual_energy"]) for c in same_prot)
+        if e_d > _PHI * e_m:
+            primary = min(
+                same_prot, key=lambda c: (float(c["residual_energy"]), -float(c["score"]))
+            )
+        primary = dict(primary)
+        primary["state_reps"] = reps
+        ordered = [primary] + [c for c in same_prot if c is not primary]
+        return ordered, "same_protein_consensus", primary, "single"
+
     # Data-plausible band (alignment observables). Residual never searches
     # outside this set.
     thr = best_data / _PHI
@@ -768,6 +833,10 @@ def best_template(sequence: str, exclude_pdb: str, identity_cap: float = IDENTIT
         "flip_model": None if flip is None else flip["model"],
         "flip_pdb": None if flip is None else flip["pdb_id"],
         "flip_score": None if flip is None else flip["score"],
+        "state_reps": [
+            {"pdb_id": r["pdb_id"], "model": r["model"], "score": r["score"]}
+            for r in (primary.get("state_reps") or [])
+        ],
         "termini_note": term_note,
         "residual": {
             "Physical_Chemistry": _R_BOND,

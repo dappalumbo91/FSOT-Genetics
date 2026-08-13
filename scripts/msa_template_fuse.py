@@ -199,9 +199,13 @@ def _contacts_from_measured(
     for i, j, d0 in raw_t[: max(n, 1)]:
         r_link, link = _pair_residual(i, j, seq, props)
         tgt = d0
-        if link == "hbond_secondary" and abs(j - i) in (3, 4, 7):
+        if link == "hbond_secondary" and abs(j - i) in (3, 4, 7) and props:
             dh = _pauling_ca(abs(j - i))
-            if abs(d0 - dh) < PHI:
+            helical = (
+                props[i].p_alpha >= props[i].p_beta
+                and props[j].p_alpha >= props[j].p_beta
+            )
+            if helical and abs(d0 - dh) < PHI:
                 tgt = dh
         springs.append((i, j, tgt, r_link))
         seen.add((i, j))
@@ -232,18 +236,25 @@ def _contacts_from_measured(
                     # AF-precision pattern: if the measured pair is already
                     # helical, polish to Pauling (Chemistry geometry), else
                     # keep measured (do not invent a helix in a loop).
+                    pa = props[i].p_alpha
+                    pb = props[j].p_alpha
+                    ba = props[i].p_beta
+                    bb = props[j].p_beta
                     dh = _pauling_ca(abs(j - i))
-                    tgt = dh if abs(d0 - dh) < PHI else d0
+                    # Mixed α/β (RNase): do not snap sheet residues to helix.
+                    helical = pa >= ba and pb >= bb
+                    tgt = dh if helical and abs(d0 - dh) < PHI else d0
                     springs.append((i, j, tgt, r_link))
                     seen.add((i, j))
     return springs, n_ss
 
 
-def _sep2_helix_springs(X0: np.ndarray, sequence: str | None) -> list[tuple[int, int, float, float]]:
-    """sep=2 Physical_Chemistry hard geometry on already-helical measured pairs.
+def _sep2_ss_springs(X0: np.ndarray, sequence: str | None) -> list[tuple[int, int, float, float]]:
+    """sep=2 hard Physical_Chemistry, SS-split (Lean: no residual on sep=1,2).
 
-    Lean: do not residual-scale sep=1,2. Weight = 1. Target = Pauling i→i+2
-    only when both p_alpha > 1/e and measured d is within φ of Pauling.
+    Helix: Pauling i→i+2 when both p_alpha dominate and measured is within φ.
+    Sheet: CA_CA·e/φ along-strand when both p_beta dominate and measured
+    is within φ — RNase-class mixed folds must not be forced helical.
     """
     if not sequence:
         return []
@@ -255,14 +266,17 @@ def _sep2_helix_springs(X0: np.ndarray, sequence: str | None) -> list[tuple[int,
 
     props = [SsPropensity.from_expanded_amino_acid(a) for a in seq]
     gate = 1.0 / E
-    dh = _pauling_ca(2)
+    d_helix = _pauling_ca(2)
+    d_sheet = CA_CA * E / PHI  # ~6.38 Å extended virtual i→i+2
     out: list[tuple[int, int, float, float]] = []
     for i in range(n - 2):
-        if props[i].p_alpha <= gate or props[i + 2].p_alpha <= gate:
-            continue
+        pa, pb = props[i].p_alpha, props[i + 2].p_alpha
+        ba, bb = props[i].p_beta, props[i + 2].p_beta
         d0 = float(np.linalg.norm(X0[i + 2] - X0[i]))
-        if abs(d0 - dh) < PHI:
-            out.append((i, i + 2, dh, 1.0))
+        if pa > gate and pb > gate and pa >= ba and pb >= bb and abs(d0 - d_helix) < PHI:
+            out.append((i, i + 2, d_helix, 1.0))
+        elif ba > gate and bb > gate and ba >= pa and bb >= pb and abs(d0 - d_sheet) < PHI:
+            out.append((i, i + 2, d_sheet, 1.0))
     return out
 
 
@@ -295,7 +309,7 @@ def fuse_relax(
     r_bond = _R_BOND
     r_clash = _R_CLASH
     springs, _n_ss = _contacts_from_measured(X0, sequence, tertiary_contacts)
-    springs = list(springs) + _sep2_helix_springs(X0, sequence)
+    springs = list(springs) + _sep2_ss_springs(X0, sequence)
     evo_pairs: list[tuple[int, int, float]] = []
     if features is not None and features.depth_ok and features.coevolution.max() > 0:
         raw_pairs = top_coevolution_pairs(features, top_n=n)
@@ -436,7 +450,7 @@ def fuse_predict(
 
     X0 = template_model
     springs, _n_ss = _contacts_from_measured(X0, sequence, tertiary_contacts)
-    springs = list(springs) + _sep2_helix_springs(X0, sequence)
+    springs = list(springs) + _sep2_ss_springs(X0, sequence)
     X_phys = fuse_relax(
         X0, None, sequence=sequence, tertiary_contacts=tertiary_contacts
     )
