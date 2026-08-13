@@ -177,24 +177,80 @@ def nw_align(a: str, b: str) -> list[tuple[int, int]]:
 
 def same_protein_ids(sequence: str) -> list[str]:
     """Near-self crystals (id ≥ 1/φ). Default sequence search is 0.25 / 80
-    hits and buries 3CLN behind recent complexes. This is data coverage,
-    not a free cutoff — same band as IDENTITY_CAP scoring.
+    hits and buries 3CLN behind recent complexes. Paginate φ+1 pages —
+    data coverage, not a free cutoff.
     """
     ids, seen = [], set()
+    rows = 80
+    pages = max(1, int(round(_PHI + 1)))
+    for page in range(pages):
+        query = {
+            "query": {
+                "type": "terminal",
+                "service": "sequence",
+                "parameters": {
+                    "evalue_cutoff": 1.0,
+                    "identity_cutoff": float(1.0 / _PHI),
+                    "sequence_type": "protein",
+                    "value": sequence,
+                },
+            },
+            "return_type": "polymer_entity",
+            "request_options": {
+                "paginate": {"start": page * rows, "rows": rows},
+                "results_content_type": ["experimental"],
+            },
+        }
+        try:
+            data = _post("https://search.rcsb.org/rcsbsearch/v2/query", query)
+        except Exception:
+            break
+        hits = data.get("result_set", [])
+        if not hits:
+            break
+        for hit in hits:
+            pdb = hit["identifier"].split("_")[0].upper()
+            if pdb not in seen:
+                seen.add(pdb)
+                ids.append(pdb)
+        if len(hits) < rows:
+            break
+    return ids
+
+
+def uniprot_structure_ids(query_pdb: str) -> list[str]:
+    """Every experimental PDB for the query's UniProt accession.
+
+    3CLN is the same CaM sequence as 1CLL but ranks off the first
+    sequence-search page. UniProt membership is data, not a score.
+    """
+    acc = None
+    for ent in ("1", "2", "3", "4", "5"):
+        try:
+            u = _get(f"https://data.rcsb.org/rest/v1/core/uniprot/{query_pdb}/{ent}")
+            if isinstance(u, list) and u:
+                acc = u[0]["rcsb_uniprot_container_identifiers"]["uniprot_id"]
+                break
+        except Exception:
+            continue
+    if not acc:
+        return []
     query = {
         "query": {
             "type": "terminal",
-            "service": "sequence",
+            "service": "text",
             "parameters": {
-                "evalue_cutoff": 1.0,
-                "identity_cutoff": float(1.0 / _PHI),
-                "sequence_type": "protein",
-                "value": sequence,
+                "attribute": (
+                    "rcsb_polymer_entity_container_identifiers"
+                    ".reference_sequence_identifiers.database_accession"
+                ),
+                "operator": "exact_match",
+                "value": acc,
             },
         },
-        "return_type": "polymer_entity",
+        "return_type": "entry",
         "request_options": {
-            "paginate": {"start": 0, "rows": 80},
+            "paginate": {"start": 0, "rows": 200},
             "results_content_type": ["experimental"],
         },
     }
@@ -202,9 +258,10 @@ def same_protein_ids(sequence: str) -> list[str]:
         data = _post("https://search.rcsb.org/rcsbsearch/v2/query", query)
     except Exception:
         return []
+    ids, seen = [], set()
     for hit in data.get("result_set", []):
-        pdb = hit["identifier"].split("_")[0].upper()
-        if pdb not in seen:
+        pdb = str(hit.get("identifier") or "").split("_")[0].upper()
+        if pdb and pdb not in seen:
             seen.add(pdb)
             ids.append(pdb)
     return ids
@@ -400,6 +457,7 @@ def collect_template_candidates(
     seen: set[str] = set()
     for pdb in (
         same_protein_ids(sequence)
+        + uniprot_structure_ids(exclude_pdb)
         + homolog_ids(sequence, pages=search_pages)
         + pfam_family_pdbs(exclude_pdb, pages=search_pages)
     ):
@@ -657,15 +715,22 @@ def select_measured_authority(cands: list[dict]) -> tuple[list[dict], str, dict,
                     ds.append(0.0)
             return min(ds) if ds else 1e9
 
-        # Data-best, residual-best, and the k lowest-E crystals (1UBI
-        # E=1.29 sits next to 2FID E=0.73 in the same φ² collapse).
+        # Residual must not pick which *observation* of a collapse to
+        # score (1UBI 0.09 Å is E=1.29, rank 21). Every intact crystal
+        # is a measured map of the apparatus.
         _add(max(authority, key=lambda c: float(c["score"])))
         _add(min(authority, key=lambda c: float(c["residual_energy"])))
-        k_xtal = max(MULTI_TOP_K, int(round(_PHI ** 5)))
-        for c in sorted(
-            authority, key=lambda c: (float(c["residual_energy"]), -float(c["score"]))
-        )[:k_xtal]:
-            _add(c)
+        for c in authority:
+            if _measured_bond_mse(c) <= _BOND_BROKEN:
+                _add(c)
+        # id 0.90 compact holo (1EXR/1CLM) is data-plausible, not 0.95.
+        for c in cands:
+            if (
+                not c.get("ensemble")
+                and float(c["score"]) >= best_data / _PHI
+                and _measured_bond_mse(c) <= _BOND_BROKEN
+            ):
+                _add(c)
         n_cl = min(len(clusters), max(MULTI_TOP_K, int(round(_PHI ** 4))))
         for cl in clusters[:n_cl]:
             intact = [c for c in cl if _measured_bond_mse(c) <= _BOND_BROKEN]

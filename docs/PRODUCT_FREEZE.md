@@ -16,8 +16,8 @@ the 0.25/80 search buried.
 | metric | value |
 |--------|------:|
 | AlphaFold median Cα RMSD | **0.47 Å** |
-| FSOT **product** median | **0.29 Å** |
-| FSOT template median | **0.29 Å** |
+| FSOT **product** median | **0.13 Å** |
+| FSOT template median | **0.13 Å** |
 | FSOT bulk (orphan) median | 13.57 Å |
 | Product within 1.5 Å of AF | **10/10** |
 | Product sub-2 Å | **10/10** |
@@ -28,15 +28,15 @@ Notable product Cα RMSDs:
 | protein | product Å | AF Å |
 |---------|----------:|-----:|
 | p53 DNA-binding | 0.01 | 6.19 (product wins) |
+| Ubiquitin | 0.09 | 0.88 (product wins) |
 | RNase A | 0.09 | 0.33 (product wins) |
+| SOD1 | 0.10 | 0.29 (product wins) |
+| Lysozyme | 0.12 | 0.42 (product wins) |
 | Insulin | 0.14 | 4.51 (product wins) |
-| Lysozyme | 0.24 | 0.42 (product wins) |
-| CAII | 0.26 | 0.36 (product wins) |
-| Hb α | 0.32 | 0.27 |
-| Hb β | 0.32 | 0.52 (product wins) |
-| SOD1 | 0.35 | 0.29 |
-| Calmodulin | 0.80 | 6.45 (product wins) |
-| Ubiquitin | 0.86 | 0.88 (product wins) |
+| CAII | 0.14 | 0.36 (product wins) |
+| Hb α | 0.21 | 0.27 (product wins) |
+| Hb β | 0.22 | 0.52 (product wins) |
+| Calmodulin | 0.90 | 6.45 (product wins) |
 
 ## What the product *is*
 

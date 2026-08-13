@@ -525,6 +525,48 @@ def parse_sidechain_centroids(text: str, chain: str) -> tuple[str, np.ndarray, n
     return "".join(seq), np.array(ca), np.array(sc)
 
 
+def parse_hydrogen_atoms(text: str, chain: str) -> dict[str, Any]:
+    """Per-residue hydrogen atoms + N/CA/C frame (neutron / ultra-high-res)."""
+    by_res: dict[str, dict] = {}
+    order: list[str] = []
+    for line in text.splitlines():
+        if line.startswith("ENDMDL"):
+            break
+        if not line.startswith("ATOM") or line[21] != chain:
+            continue
+        res = line[17:20].strip()
+        aa = AA3.get(res)
+        if not aa:
+            continue
+        num = line[22:26]
+        atom = line[12:16].strip()
+        xyz = np.array([float(line[30:38]), float(line[38:46]), float(line[46:54])])
+        if num not in by_res:
+            by_res[num] = {"aa": aa, "bb": {}, "h": []}
+            order.append(num)
+        rec = by_res[num]
+        if atom in ("N", "CA", "C"):
+            rec["bb"][atom] = xyz
+        if (
+            atom.startswith("H")
+            or atom.startswith("D")
+            or (atom[:1].isdigit() and "H" in atom)
+        ):
+            # Neutron D and X-ray H are the same nucleus for matching.
+            name = "H" + atom[1:] if atom.startswith("D") else atom
+            rec["h"].append((name, xyz))
+    seq, ca, frames, hydro = [], [], [], []
+    for num in order:
+        rec = by_res[num]
+        if "CA" not in rec["bb"]:
+            continue
+        seq.append(rec["aa"])
+        ca.append(rec["bb"]["CA"])
+        frames.append(rec["bb"])
+        hydro.append(rec["h"])
+    return {"seq": "".join(seq), "ca": np.array(ca), "frames": frames, "atoms": hydro}
+
+
 def parse_sidechain_atoms(text: str, chain: str) -> dict[str, Any]:
     """All heavy side-chain atoms per residue + backbone N/CA/C for a local frame."""
     by_res: dict[str, dict] = {}

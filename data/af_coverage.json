@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-13T02:54:25.268164+00:00",
+  "generated_at": "2026-08-13T03:17:19.826112+00:00",
   "doctrine": "Each AF3 job is a named FSOT system: measured homolog + residual at the ChemLink for that interface. 0 free parameters.",
   "jobs": {
     "protein_monomer": {
       "status": "product",
       "n": 10,
-      "fsot_median_A": 0.2862112365115898,
+      "fsot_median_A": 0.12847815425974882,
       "alphafold_median_A": 0.4706172512401575,
       "beats_af_median": true,
       "note": "same-data monomer C\u03b1 (exclude eval PDB)"
@@ -76,15 +76,15 @@
       "pdb": "1LZ1",
       "n": 130,
       "n_sc": 117,
-      "n_heavy_matched": 498,
+      "n_heavy_matched": 490,
       "n_bb_matched": 0,
-      "ca_rmsd_A": 0.2417668191902326,
-      "sidechain_centroid_rmsd_A": 0.9155744079632443,
-      "sidechain_heavy_rmsd_A": 1.3320056307534371,
+      "ca_rmsd_A": 0.11765314029944425,
+      "sidechain_centroid_rmsd_A": 0.9319620844029083,
+      "sidechain_heavy_rmsd_A": 1.2640762876585323,
       "backbone_heavy_rmsd_A": null,
-      "all_heavy_rmsd_A": 1.3320056307534371,
+      "all_heavy_rmsd_A": 1.2640762876585323,
       "n_sc_templates": 7,
-      "template": "2MEE",
+      "template": "1REX",
       "domain": "Molecular_Chemistry"
     },
     "ptm_glycan": {
@@ -234,6 +234,18 @@
       "identity": 1.0,
       "coverage": 1.0,
       "domain": "Chemistry (modified nucleotide C1')"
+    },
+    "hydrogens": {
+      "status": "ok",
+      "pdb": "1LZN",
+      "n": 129,
+      "n_native_h": 962,
+      "n_h_matched": 934,
+      "ca_rmsd_A": 0.1278805685067897,
+      "hydrogen_rmsd_A": 1.914030097556529,
+      "template": "193L",
+      "hydrogen_source": "1IO5",
+      "domain": "Atomic_Physics (neutron H)"
     }
   },
   "covered_now": [
@@ -252,7 +264,8 @@
     "ligand",
     "antibody_pair",
     "protein_tetramer",
-    "modified_na"
+    "modified_na",
+    "hydrogens"
   ],
   "not_yet": [],
   "free_parameters": 0

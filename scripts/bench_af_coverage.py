@@ -35,6 +35,7 @@ from multi_system import (  # noqa: E402
     match_named_atoms,
     metal_site_springs,
     na_chains,
+    parse_hydrogen_atoms,
     parse_ligands,
     parse_na_c1,
     parse_pdb_ca,
@@ -342,6 +343,64 @@ def job_modified_na() -> dict:
         "identity": ident,
         "coverage": cov,
         "domain": "Chemistry (modified nucleotide C1')",
+    }
+
+
+def job_hydrogens() -> dict:
+    """Neutron lysozyme 1LZN — measured H/D transferred in the residue frame."""
+    native = _get_pdb("1LZN")
+    chs = protein_chains(native)
+    if not chs:
+        return {"status": "no_protein", "pdb": "1LZN"}
+    nat = parse_hydrogen_atoms(native, chs[0])
+    n_h = sum(len(a) for a in nat["atoms"])
+    if n_h < 20:
+        return {"status": "no_hydrogens", "pdb": "1LZN", "n_h": n_h}
+    seq = nat["seq"]
+    t = best_template(seq, "1LZN", identity_cap=PRODUCT_IDENTITY_CAP)
+    if not t:
+        return {"status": "no_template", "n_h": n_h}
+    reps = t.get("state_reps") or [{"pdb_id": t["pdb_id"], "model": t["model"]}]
+    best_ca = None
+    src_at = None
+    src_pdb = t["pdb_id"]
+    for rep in reps:
+        pid = str(rep.get("pdb_id") or t["pdb_id"])
+        try:
+            rtxt = _get_pdb(pid)
+        except Exception:
+            continue
+        rch = protein_chains(rtxt)
+        hat = parse_hydrogen_atoms(rtxt, rch[0] if rch else "A")
+        prod = fuse_predict(
+            seq, rep["model"], None, tertiary_contacts=t.get("tertiary_contacts")
+        )
+        rp = float(kabsch_rmsd(prod["ca_coords"], nat["ca"]))
+        if best_ca is None or rp < best_ca[0]:
+            best_ca = (rp, prod)
+        if sum(len(a) for a in hat["atoms"]) >= 20 and src_at is None:
+            src_at, src_pdb = hat, pid
+    if best_ca is None:
+        return {"status": "no_collapse", "n_h": n_h}
+    ca_r, prod = best_ca
+    h_r, n_match = None, 0
+    if src_at is not None:
+        pred = transfer_sidechain_atoms(seq, src_at, prod["ca_coords"])
+        hp, hn = match_named_atoms(pred, nat["atoms"])
+        n_match = int(len(hp))
+        if n_match >= 8:
+            h_r = float(kabsch_rmsd(hp, hn))
+    return {
+        "status": "ok",
+        "pdb": "1LZN",
+        "n": len(seq),
+        "n_native_h": n_h,
+        "n_h_matched": n_match,
+        "ca_rmsd_A": ca_r,
+        "hydrogen_rmsd_A": h_r,
+        "template": t["pdb_id"],
+        "hydrogen_source": src_pdb if src_at is not None else None,
+        "domain": "Atomic_Physics (neutron H)",
     }
 
 
@@ -1058,6 +1117,19 @@ def main() -> int:
         )
     except Exception as exc:
         jobs["modified_na"] = {"status": "error", "error": str(exc)}
+        print(f"    ERROR {exc}", flush=True)
+    print("  hydrogens 1LZN…", flush=True)
+    try:
+        jobs["hydrogens"] = job_hydrogens()
+        print(
+            f"    CA {jobs['hydrogens'].get('ca_rmsd_A')} "
+            f"H {jobs['hydrogens'].get('hydrogen_rmsd_A')} "
+            f"n={jobs['hydrogens'].get('n_h_matched')}/"
+            f"{jobs['hydrogens'].get('n_native_h')}",
+            flush=True,
+        )
+    except Exception as exc:
+        jobs["hydrogens"] = {"status": "error", "error": str(exc)}
         print(f"    ERROR {exc}", flush=True)
     print("  PPI Hb A+B…", flush=True)
     try:
