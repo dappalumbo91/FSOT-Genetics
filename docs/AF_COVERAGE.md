@@ -13,9 +13,11 @@ Source: `data/af_coverage.json` · `python scripts/bench_af_coverage.py`
 | Metal / ion site | **ok** | CAII Zn site **0.045 Å** · SOD1 **0.19 Å** | Atomic_Physics / EM |
 | RNA fold | **ok** | tRNA 1EHZ C1′ **0.77 Å** | Chemistry / Biochemistry |
 | Protein–protein | **ok** | Hb A+B dimer **0.45 Å** · iface MAE **0.17 Å** | Biochemistry assembly |
-| All-atom side chains | not yet | — | Molecular_Chemistry centroids |
-| PTM / glycan | not yet | — | new named link |
-| Antibody CDR specialist | not yet | — | Superposed loops |
-| Joint AF3 forward (all at once) | not yet | — | multi-system observer |
+| All-atom side chains | **ok** | lysozyme SC centroids **1.04 Å** (CA 0.58) | Molecular_Chemistry |
+| PTM / glycan | **ok** | NA 1NCA 4 native / 7 tmpl NAG nodes; prot **0.56 Å** | Molecular_Chemistry |
+| Antibody CDR | **ok** | 1MLC CA **0.94 Å** · Superposed CDR **0.59 Å** | trit 0 on disagreeing loops |
+| Joint forward | **ok** | `predict_system()` p53 CA 1.31 Å · SC 1.41 Å · DNA observer on | one call, named systems |
 
 Run: `python scripts/bench_af_coverage.py`
+
+`predict_system(seq, exclude_pdb, want_dna=…, want_sidechains=…, want_partner_seq=…)` is the joint forward.

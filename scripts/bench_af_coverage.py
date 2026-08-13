@@ -27,14 +27,19 @@ from multi_system import (  # noqa: E402
     _get_pdb,
     build_uncentered,
     ca_with_nums,
+    cdr_loop_mask,
     interface_contact_mae,
     metal_site_springs,
     na_chains,
     parse_na_c1,
     parse_pdb_ca,
+    parse_ptms,
+    parse_sidechain_centroids,
+    predict_system,
     protein_chains,
     protein_na_protein_springs,
     transfer_na,
+    transfer_sidechains,
     DNA3,
 )
 from run_rna_template_probe import (  # noqa: E402
@@ -311,6 +316,152 @@ def job_ppi() -> dict:
     }
 
 
+def job_sidechains() -> dict:
+    """Lysozyme 1LZ1 — side-chain centroids from a homolog, Kabsch into product CA."""
+    native = _get_pdb("1LZ1")
+    seq, n_ca, n_sc = parse_sidechain_centroids(native, "A")
+    t = best_template(seq, "1LZ1", identity_cap=PRODUCT_IDENTITY_CAP)
+    if not t:
+        return {"status": "no_template"}
+    prod = fuse_predict(seq, t["model"], None, tertiary_contacts=t.get("tertiary_contacts"))
+    htxt = _get_pdb(t["pdb_id"])
+    tseq, tca, tsc = parse_sidechain_centroids(htxt, t.get("chain") or "A")
+    sc = transfer_sidechains(seq, tseq, tca, tsc, prod["ca_coords"])
+    ok = np.isfinite(sc[:, 0]) & np.isfinite(n_sc[:, 0])
+    ca_r = float(kabsch_rmsd(prod["ca_coords"], n_ca))
+    sc_r = float(kabsch_rmsd(sc[ok], n_sc[ok])) if int(ok.sum()) >= 8 else None
+    return {
+        "status": "ok",
+        "pdb": "1LZ1",
+        "n": len(seq),
+        "n_sc": int(ok.sum()),
+        "ca_rmsd_A": ca_r,
+        "sidechain_centroid_rmsd_A": sc_r,
+        "template": t["pdb_id"],
+        "domain": "Molecular_Chemistry",
+    }
+
+
+def job_ptm() -> dict:
+    """Influenza NA 1NCA — NAG glycans as Molecular_Chemistry observer nodes."""
+    native = _get_pdb("1NCA")
+    chs = protein_chains(native)
+    if not chs:
+        return {"status": "no_protein", "pdb": "1NCA"}
+    seq, nca, _ = parse_sidechain_centroids(native, chs[0])
+    nptm = parse_ptms(native, chs[0])
+    t = best_template(seq, "1NCA", identity_cap=PRODUCT_IDENTITY_CAP)
+    if not t:
+        return {"status": "no_template", "n_native_ptm": len(nptm)}
+    htxt = _get_pdb(t["pdb_id"])
+    hptm = parse_ptms(htxt, t.get("chain") or "A")
+    springs = []
+    for p in hptm:
+        i = int(p["attach_i"])
+        if 0 <= i < len(seq):
+            springs.append((i, i, float(p["attach_d"]), p["r"]))  # self-noop
+    # Real constraint: attach residue CA–CA between PTM-linked sites
+    ids = sorted({int(p["attach_i"]) for p in hptm if 0 <= int(p["attach_i"]) < len(seq)})
+    hx = t["model"]
+    for a in range(len(ids)):
+        for b in range(a + 1, len(ids)):
+            i, j = ids[a], ids[b]
+            if abs(j - i) < 2:
+                continue
+            d0 = float(np.linalg.norm(hx[i] - hx[j]))
+            springs.append((i, j, d0, hptm[0]["r"]))
+    prod = fuse_predict(
+        seq,
+        t["model"],
+        None,
+        tertiary_contacts=t.get("tertiary_contacts"),
+        interface_springs=[s for s in springs if s[0] != s[1]] or None,
+    )
+    rp = float(kabsch_rmsd(prod["ca_coords"], nca))
+    return {
+        "status": "ok",
+        "pdb": "1NCA",
+        "chain": chs[0],
+        "n": len(seq),
+        "n_native_ptm": len(nptm),
+        "n_template_ptm": len(hptm),
+        "n_ptm_springs": len([s for s in springs if s[0] != s[1]]),
+        "protein_rmsd_A": rp,
+        "kinds": sorted({p["kind"] for p in nptm + hptm}),
+        "template": t["pdb_id"],
+        "domain": "Molecular_Chemistry (PTM/glycan node)",
+    }
+
+
+def job_antibody() -> dict:
+    """Fab 1MLC:H — CDR = Superposed (homologs disagree > φ Å)."""
+    native = _get_pdb("1MLC")
+    seq, nat = parse_pdb_ca(native, "H")
+    if len(seq) < 80:
+        seq, nat = parse_pdb_ca(native, "A")
+    t = best_template(seq, "1MLC", identity_cap=PRODUCT_IDENTITY_CAP)
+    if not t:
+        return {"status": "no_template"}
+    models = [t["model"]]
+    for rep in (t.get("state_reps") or [])[:4]:
+        if "model" in rep:
+            models.append(rep["model"])
+    mask = cdr_loop_mask(models)
+    prod = fuse_predict(seq, t["model"], None, tertiary_contacts=t.get("tertiary_contacts"))
+    rp = float(kabsch_rmsd(prod["ca_coords"], nat))
+    cdr_rmsd = None
+    fw_rmsd = None
+    if mask.any() and (~mask).sum() >= 8:
+        cdr_rmsd = float(kabsch_rmsd(prod["ca_coords"][mask], nat[mask]))
+        fw_rmsd = float(kabsch_rmsd(prod["ca_coords"][~mask], nat[~mask]))
+    return {
+        "status": "ok",
+        "pdb": "1MLC",
+        "n": len(seq),
+        "n_superposed_cdr": int(mask.sum()),
+        "frac_superposed": float(mask.mean()),
+        "ca_rmsd_A": rp,
+        "cdr_rmsd_A": cdr_rmsd,
+        "framework_rmsd_A": fw_rmsd,
+        "template": t["pdb_id"],
+        "domain": "Biochemistry; CDR = Superposed (trit 0)",
+    }
+
+
+def job_joint() -> dict:
+    """One predict_system call: p53 + DNA observer + side chains + metals."""
+    native = _get_pdb("1TUP")
+    seq, nca, nsc = parse_sidechain_centroids(native, "A")
+    sys_out = predict_system(
+        seq,
+        "1TUP",
+        protein_chain="A",
+        native_text=native,
+        want_sidechains=True,
+        want_dna=True,
+    )
+    if sys_out.get("status") != "ok":
+        return sys_out
+    rp = float(kabsch_rmsd(sys_out["ca_coords"], nca))
+    sc_r = None
+    if sys_out.get("sc_centroids") is not None:
+        sc = sys_out["sc_centroids"]
+        ok = np.isfinite(sc[:, 0]) & np.isfinite(nsc[:, 0])
+        if int(ok.sum()) >= 8:
+            sc_r = float(kabsch_rmsd(sc[ok], nsc[ok]))
+    return {
+        "status": "ok",
+        "pdb": "1TUP",
+        "protein_rmsd_A": rp,
+        "sidechain_centroid_rmsd_A": sc_r,
+        "has_dna": sys_out.get("dna") is not None,
+        "n_interface_springs": sys_out.get("n_interface_springs"),
+        "n_ptms": len(sys_out.get("ptms") or []),
+        "template": sys_out.get("template_pdb"),
+        "engine": sys_out.get("engine"),
+    }
+
+
 def main() -> int:
     print("AF-coverage bench (FSOT multi-system)", flush=True)
     jobs = {}
@@ -378,6 +529,54 @@ def main() -> int:
     except Exception as exc:
         jobs["protein_protein"] = {"status": "error", "error": str(exc)}
         print(f"    ERROR {exc}", flush=True)
+    print("  side chains 1LZ1…", flush=True)
+    try:
+        jobs["all_atom_sidechains"] = job_sidechains()
+        print(
+            f"    CA {jobs['all_atom_sidechains'].get('ca_rmsd_A')} "
+            f"SC {jobs['all_atom_sidechains'].get('sidechain_centroid_rmsd_A')}",
+            flush=True,
+        )
+    except Exception as exc:
+        jobs["all_atom_sidechains"] = {"status": "error", "error": str(exc)}
+        print(f"    ERROR {exc}", flush=True)
+    print("  PTM/glycan 1NCA…", flush=True)
+    try:
+        jobs["ptm_glycan"] = job_ptm()
+        print(
+            f"    prot {jobs['ptm_glycan'].get('protein_rmsd_A')} "
+            f"ptm {jobs['ptm_glycan'].get('n_native_ptm')}/"
+            f"{jobs['ptm_glycan'].get('n_template_ptm')}",
+            flush=True,
+        )
+    except Exception as exc:
+        jobs["ptm_glycan"] = {"status": "error", "error": str(exc)}
+        print(f"    ERROR {exc}", flush=True)
+    print("  antibody 1MLC…", flush=True)
+    try:
+        jobs["antibody_cdr"] = job_antibody()
+        print(
+            f"    CA {jobs['antibody_cdr'].get('ca_rmsd_A')} "
+            f"CDR {jobs['antibody_cdr'].get('cdr_rmsd_A')} "
+            f"FW {jobs['antibody_cdr'].get('framework_rmsd_A')} "
+            f"sup={jobs['antibody_cdr'].get('n_superposed_cdr')}",
+            flush=True,
+        )
+    except Exception as exc:
+        jobs["antibody_cdr"] = {"status": "error", "error": str(exc)}
+        print(f"    ERROR {exc}", flush=True)
+    print("  joint predict_system 1TUP…", flush=True)
+    try:
+        jobs["joint_forward"] = job_joint()
+        print(
+            f"    prot {jobs['joint_forward'].get('protein_rmsd_A')} "
+            f"SC {jobs['joint_forward'].get('sidechain_centroid_rmsd_A')} "
+            f"dna={jobs['joint_forward'].get('has_dna')}",
+            flush=True,
+        )
+    except Exception as exc:
+        jobs["joint_forward"] = {"status": "error", "error": str(exc)}
+        print(f"    ERROR {exc}", flush=True)
 
     covered = [
         k
@@ -385,10 +584,9 @@ def main() -> int:
         if isinstance(v, dict) and v.get("status") in ("ok", "product")
     ]
     missing = [
-        "all_atom_sidechains",
-        "ptm_glycan",
-        "antibody_cdr_specialist",
-        "af3_joint_all_in_one_forward",
+        k
+        for k, v in jobs.items()
+        if isinstance(v, dict) and v.get("status") not in ("ok", "product")
     ]
     out = {
         "generated_at": datetime.now(timezone.utc).isoformat(),

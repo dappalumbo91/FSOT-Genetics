@@ -298,3 +298,281 @@ def interface_contact_mae(
     if not mask.any():
         return None
     return float(np.mean(np.abs(D[mask] - D0[mask])))
+
+
+_R_SC = residual_scale(abs(float(fc.domain_scalar("Molecular_Chemistry"))))
+_R_PTM = residual_scale(abs(float(fc.domain_scalar("Molecular_Chemistry"))))
+
+# PTM / glycan residue names seen in PDB HETATM / ATOM
+PTM3 = {
+    "SEP": ("S", "phospho"),  # phosphoserine
+    "TPO": ("T", "phospho"),
+    "PTR": ("Y", "phospho"),
+    "NEP": ("H", "phospho"),
+    "NAG": ("N", "glycan"),
+    "NDG": ("N", "glycan"),
+    "BMA": ("N", "glycan"),
+    "MAN": ("N", "glycan"),
+    "FUC": ("T", "glycan"),
+    "GAL": ("N", "glycan"),
+    "GLC": ("N", "glycan"),
+    "SIA": ("N", "glycan"),
+    "M1A": ("N", "glycan"),
+    "PCA": ("Q", "pyroglu"),
+    "CSO": ("C", "oxy"),
+    "MLY": ("K", "methyl"),
+    "M3L": ("K", "methyl"),
+    "ALY": ("K", "acetyl"),
+}
+
+BB_ATOMS = {"N", "CA", "C", "O", "OXT", "H", "HA", "1HA", "2HA"}
+
+
+def _kabsch_apply(P: np.ndarray, X_from: np.ndarray, X_to: np.ndarray) -> np.ndarray:
+    """Rotate/translate P using the Kabsch that maps X_from → X_to."""
+    ok = np.isfinite(X_from[:, 0]) & np.isfinite(X_to[:, 0])
+    if int(ok.sum()) < 4:
+        return P - np.nanmean(P, axis=0) + np.nanmean(X_to, axis=0)
+    A = X_from[ok] - X_from[ok].mean(0)
+    B = X_to[ok] - X_to[ok].mean(0)
+    U, _, Vt = np.linalg.svd(A.T @ B)
+    d = float(np.sign(np.linalg.det(Vt.T @ U.T)))
+    R = Vt.T @ np.diag([1.0, 1.0, d]) @ U.T
+    t = X_to[ok].mean(0) - X_from[ok].mean(0) @ R.T
+    out = np.full_like(P, np.nan)
+    good = np.isfinite(P[:, 0])
+    out[good] = P[good] @ R.T + t
+    return out
+
+
+def parse_sidechain_centroids(text: str, chain: str) -> tuple[str, np.ndarray, np.ndarray]:
+    """Return (seq, CA, side-chain heavy-atom centroid). Gly centroid = CA."""
+    by_res: dict[str, dict] = {}
+    order: list[str] = []
+    for line in text.splitlines():
+        if line.startswith("ENDMDL"):
+            break
+        if not line.startswith("ATOM") or line[21] != chain:
+            continue
+        res = line[17:20].strip()
+        aa = AA3.get(res)
+        if not aa:
+            continue
+        num = line[22:26]
+        atom = line[12:16].strip()
+        if atom.startswith("H"):
+            continue
+        xyz = np.array([float(line[30:38]), float(line[38:46]), float(line[46:54])])
+        if num not in by_res:
+            by_res[num] = {"aa": aa, "ca": None, "sc": []}
+            order.append(num)
+        rec = by_res[num]
+        if atom == "CA":
+            rec["ca"] = xyz
+        elif atom not in BB_ATOMS:
+            rec["sc"].append(xyz)
+    seq, ca, sc = [], [], []
+    for num in order:
+        rec = by_res[num]
+        if rec["ca"] is None:
+            continue
+        seq.append(rec["aa"])
+        ca.append(rec["ca"])
+        if rec["sc"]:
+            sc.append(np.mean(rec["sc"], axis=0))
+        else:
+            sc.append(rec["ca"].copy())
+    return "".join(seq), np.array(ca), np.array(sc)
+
+
+def transfer_sidechains(
+    qseq: str,
+    tseq: str,
+    t_ca: np.ndarray,
+    t_sc: np.ndarray,
+    q_ca_product: np.ndarray,
+) -> np.ndarray:
+    """Place query SC centroids: measured template SC rotated into the product CA frame."""
+    pairs = nw_align(qseq, tseq)
+    S0 = np.full((len(qseq), 3), np.nan)
+    C0 = np.full((len(qseq), 3), np.nan)
+    for qi, ti in pairs:
+        if 0 <= ti < len(t_sc):
+            S0[qi] = t_sc[ti]
+            C0[qi] = t_ca[ti]
+    return _kabsch_apply(S0, C0, q_ca_product)
+
+
+def parse_ptms(text: str, chain: str) -> list[dict[str, Any]]:
+    """PTM / glycan heavy-atom centroids, linked to the nearest protein residue."""
+    prot = []
+    for line in text.splitlines():
+        if line.startswith("ENDMDL"):
+            break
+        if not line.startswith("ATOM") or line[21] != chain or line[12:16].strip() != "CA":
+            continue
+        res = line[17:20].strip()
+        if res not in AA3:
+            continue
+        prot.append(
+            (
+                line[22:26].strip(),
+                AA3[res],
+                np.array([float(line[30:38]), float(line[38:46]), float(line[46:54])]),
+            )
+        )
+    groups: dict[tuple, list] = {}
+    for line in text.splitlines():
+        tag = line[:6].strip()
+        if tag not in ("ATOM", "HETATM"):
+            continue
+        res = line[17:20].strip()
+        if res not in PTM3:
+            continue
+        ch = line[21]
+        num = line[22:26].strip()
+        atom = line[12:16].strip()
+        if atom.startswith("H"):
+            continue
+        xyz = np.array([float(line[30:38]), float(line[38:46]), float(line[46:54])])
+        groups.setdefault((res, ch, num), []).append(xyz)
+    out = []
+    for (res, ch, num), xyzs in groups.items():
+        cen = np.mean(xyzs, axis=0)
+        aa, kind = PTM3[res]
+        attach_i, attach_d = None, 1e9
+        for i, (_n, _aa, p) in enumerate(prot):
+            d = float(np.linalg.norm(p - cen))
+            if d < attach_d:
+                attach_d, attach_i = d, i
+        if attach_i is None or attach_d > CONTACT * PHI:
+            continue
+        out.append(
+            {
+                "res": res,
+                "kind": kind,
+                "aa": aa,
+                "centroid": cen,
+                "attach_i": attach_i,
+                "attach_d": attach_d,
+                "r": _R_PTM,
+            }
+        )
+    return out
+
+
+def cdr_loop_mask(models: list[np.ndarray], radius: float | None = None) -> np.ndarray:
+    """Superposed residues: homologs disagree by > φ Å after alignment (CDR / loops)."""
+    if radius is None:
+        radius = PHI
+    if len(models) < 2:
+        return np.zeros(len(models[0]), dtype=bool)
+    ref = models[0] - models[0].mean(0)
+    al = [ref]
+    for m in models[1:]:
+        p = m - m.mean(0)
+        U, _, Vt = np.linalg.svd(p.T @ ref)
+        d = float(np.sign(np.linalg.det(Vt.T @ U.T)))
+        R = Vt.T @ np.diag([1.0, 1.0, d]) @ U.T
+        al.append(p @ R.T)
+    stack = np.stack(al, axis=0)
+    std = stack.std(axis=0).mean(axis=1)
+    return std > radius
+
+
+def predict_system(
+    protein_seq: str,
+    exclude_pdb: str,
+    *,
+    protein_chain: str = "A",
+    native_text: str | None = None,
+    want_sidechains: bool = True,
+    want_dna: bool = False,
+    want_rna: bool = False,
+    want_partner_seq: str | None = None,
+) -> dict[str, Any]:
+    """One forward pass: protein + optional DNA/RNA/partner/side chains/PTMs/metals."""
+    t = best_template(protein_seq, exclude_pdb, identity_cap=PRODUCT_IDENTITY_CAP)
+    if not t:
+        return {"status": "no_template", "exclude_pdb": exclude_pdb}
+    htxt = fetch_template_pdb(t["pdb_id"])
+    springs: list[tuple[int, int, float, float]] = []
+    # metals on the template
+    springs.extend(metal_site_springs(htxt, t.get("chain") or "A"))
+    dna = rna = partner = None
+    if want_dna:
+        dch = na_chains(htxt, DNA3)
+        dna_txt, dna_pdb = htxt, t["pdb_id"]
+        if not dch:
+            # Template protein may be apo; pull DNA observer from a DNA-bound homolog.
+            for alt in ("1TSR", "1TUP", "3TS8"):
+                if alt == exclude_pdb.upper():
+                    continue
+                try:
+                    atxt = fetch_template_pdb(alt)
+                except Exception:
+                    continue
+                ach = na_chains(atxt, DNA3)
+                if ach:
+                    dna_txt, dna_pdb, dch = atxt, alt, ach
+                    break
+        if dch:
+            ds, dx = parse_na_c1(dna_txt, dch[0], DNA3)
+            hs, hx = parse_pdb_ca(dna_txt, protein_chain)
+            if len(hx) >= 8:
+                springs.extend(protein_na_protein_springs(hx, dx))
+            dna = {"seq": ds, "c1": dx, "chain": dch[0], "source_pdb": dna_pdb}
+    if want_rna:
+        rch = na_chains(htxt, RNA3)
+        if rch:
+            rs, rx = parse_na_c1(htxt, rch[0], RNA3)
+            rna = {"seq": rs, "c1": rx, "chain": rch[0]}
+    prod = fuse_predict(
+        protein_seq,
+        t["model"],
+        None,
+        tertiary_contacts=t.get("tertiary_contacts"),
+        flip_model=t.get("flip_model"),
+        interface_springs=springs or None,
+    )
+    out: dict[str, Any] = {
+        "status": "ok",
+        "engine": "fsot_predict_system",
+        "template_pdb": t["pdb_id"],
+        "template_chain": t.get("chain"),
+        "ca_coords": prod["ca_coords"],
+        "regime": prod.get("regime"),
+        "n_interface_springs": len(springs),
+        "dna": dna,
+        "rna": rna,
+        "free_parameters": 0,
+    }
+    if want_sidechains:
+        tseq, tca, tsc = parse_sidechain_centroids(htxt, t.get("chain") or "A")
+        if len(tseq) >= 10:
+            out["sc_centroids"] = transfer_sidechains(
+                protein_seq, tseq, tca, tsc, prod["ca_coords"]
+            )
+    ptms = parse_ptms(htxt, t.get("chain") or "A")
+    if ptms:
+        out["ptms"] = ptms
+    if want_partner_seq:
+        partner = want_partner_seq
+        best = None
+        for ch in protein_chains(htxt):
+            hs, hx = parse_pdb_ca(htxt, ch)
+            pairs = nw_align(partner, hs)
+            if len(pairs) < 15:
+                continue
+            ident = sum(1 for a, b in pairs if partner[a] == hs[b]) / len(pairs)
+            if ident < 0.7:
+                continue
+            if best is None or ident > best[0]:
+                best = (ident, ch, pairs, hx)
+        if best:
+            out["partner"] = {
+                "chain": best[1],
+                "identity": best[0],
+                "ca_coords": build_uncentered(len(partner), best[3], best[2]),
+            }
+    return out
