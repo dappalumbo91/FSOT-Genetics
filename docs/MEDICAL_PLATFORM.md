@@ -144,7 +144,9 @@ tie the miss back to OPEN.md / MECHANISM_GAP_MAP
 
 Same loop that moved structure 1.16 → 0.13 Å. Hits teach the genetics of a working interface. Misses are where we are not tight — and because the construction is named (DNA / metal / ligand / Superposed), we know *which* interface to refine.
 
-First freeze of that bench (`data/experimental_pgx.json`): **8/8** public mechanism classes. The first pass was 5/8 — misses were the loop working: DNA used too short a cutoff (C1′ at 12.4 Å needs \( \pi e \varphi \)), BRAF V600 is chain B, and L858R/V600E are **allosteric state** (cleft ~16 Å away), not first-shell binders. T790M and G12C *are* first-shell. P72R is not on the 1TUP DNA-binding chain. That is a mechanism, not a score chase.
+Experimental PGx (`data/experimental_pgx.json`): **9/9** public mechanism classes (disclosure on every card). Misses in early passes were the loop: DNA cutoff, BRAF chain, and L858R / V600E / CYP2C9*3 I359L as **allosteric / SRS state** (~15–16 Å from the ligand), not first-shell. T790M and G12C *are* first-shell. P72R is not on the 1TUP DNA-binding chain.
+
+Conservation panel: **P72R** is `common_polymorphism` when population AF ≥ 1/φ³ (gnomAD/1000G as data). TP53 hotspot drivers stay 7/7 LIKELY DAMAGING.
 
 ### Unlawful (do not build)
 

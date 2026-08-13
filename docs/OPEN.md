@@ -23,7 +23,7 @@ This list is what to clear next. One mechanism at a time. Pin `D1D38A`. 0 free p
 
 See `docs/MECHANISM_GAP_MAP.md`. Still open there: EGFR coverage, variant P72R specificity, vaccine-antigen domain scope, CASP/CAMEO blind.
 
-Medical expansion (not Ångström work): `docs/MEDICAL_PLATFORM.md`. Experimental PGx bench: `scripts/bench_experimental_pgx.py` (8/8 mechanism classes; disclosure required). First remaining medical gate is still **P72R must not be LIKELY DAMAGING** on the conservation panel.
+Medical expansion: `docs/MEDICAL_PLATFORM.md`. Experimental PGx: `scripts/bench_experimental_pgx.py` (disclosure required). **P72R** is now `common_polymorphism` via population AF ≥ 1/φ³ (data, not a fit). Drivers on TP53 remain 7/7 LIKELY DAMAGING.
 
 ## Anti-goals (do not “fix” these)
 

@@ -122,6 +122,17 @@ CASES: list[dict[str, Any]] = [
         "source": "population / catalog control",
     },
     {
+        "id": "cyp2c9_i359l_warfarin",
+        "gene": "CYP2C9",
+        "pdb": "1OG5",
+        "chain": "A",
+        "pdb_resnum": "359",
+        "drug": "warfarin",
+        "known_class": "allosteric_state",
+        "known_outcome": "CYP2C9*3 I359L reduces warfarin clearance; SRS5 ~15 Å from the warfarin first shell (CPIC-class metabolizer, not the binder)",
+        "source": "PDB 1OG5 (CYP2C9–warfarin)",
+    },
+    {
         "id": "caii_zn_site",
         "gene": "CA2",
         "pdb": "1CA2",

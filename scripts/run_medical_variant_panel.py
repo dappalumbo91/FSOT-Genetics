@@ -64,6 +64,10 @@ CONS_HIGH = 1.0 - math.exp(-math.pi / 2.0)
 CONS_MID = 1.0 - 1.0 / math.e
 FMUT_RARE = 1.0 / (math.e ** 2)
 FMUT_ABSENT = 1.0 / (math.e ** 3)
+# Common-allele demotion: population AF is *data* (gnomAD / 1000G), not a
+# trained weight. Threshold 1/φ³ ≈ 0.236 — P72R is ~0.46 globally.
+_PHI = (1.0 + 5.0 ** 0.5) / 2.0
+POP_AF_COMMON = 1.0 / (_PHI ** 3)
 
 
 def fetch_uniprot_seq(acc: str) -> str:
@@ -138,11 +142,14 @@ def call_variant(
     cons: float | None,
     f_mut: float | None,
     pct: float | None,
+    pop_af: float | None = None,
 ) -> str:
     """Dual-gate call: absolute evolutionary intolerance OR high percentile.
 
     Tight UniRef clusters make nearly all sites high-cons, so percentile-only
     gates fail. Absolute gate mirrors SIFT spirit with seed-closed cutpoints.
+    Population AF ≥ 1/φ³ demotes a damaging call — common poly is data
+    (P72R), not a free specificity weight.
     """
     if kind.startswith("nonsense"):
         return "LIKELY DAMAGING"
@@ -154,20 +161,26 @@ def call_variant(
     fm = float(f_mut if f_mut is not None else 1.0)
     # Absolute intolerance
     if c >= CONS_HIGH and fm <= FMUT_ABSENT:
-        return "LIKELY DAMAGING"
-    if c >= CONS_HIGH and fm <= FMUT_RARE:
-        return "LIKELY DAMAGING"
-    if c >= CONS_MID and fm <= FMUT_ABSENT:
-        return "uncertain"
-    # Percentile gate (works for diverse Pfam-style backgrounds)
-    if pct is not None:
-        if pct >= PCT_DAMAGING:
-            return "LIKELY DAMAGING"
-        if pct >= PCT_UNCERTAIN:
-            return "uncertain"
-    if c >= CONS_MID and fm <= FMUT_RARE:
-        return "uncertain"
-    return "likely tolerated"
+        call = "LIKELY DAMAGING"
+    elif c >= CONS_HIGH and fm <= FMUT_RARE:
+        call = "LIKELY DAMAGING"
+    elif c >= CONS_MID and fm <= FMUT_ABSENT:
+        call = "uncertain"
+    elif pct is not None and pct >= PCT_DAMAGING:
+        call = "LIKELY DAMAGING"
+    elif pct is not None and pct >= PCT_UNCERTAIN:
+        call = "uncertain"
+    elif c >= CONS_MID and fm <= FMUT_RARE:
+        call = "uncertain"
+    else:
+        call = "likely tolerated"
+    if (
+        pop_af is not None
+        and float(pop_af) >= POP_AF_COMMON
+        and call == "LIKELY DAMAGING"
+    ):
+        return "common_polymorphism"
+    return call
 
 
 def score_missense(
@@ -178,6 +191,8 @@ def score_missense(
     cons: np.ndarray,
     freq: list[dict],
     background: np.ndarray,
+    *,
+    pop_af: float | None = None,
 ) -> dict[str, Any]:
     """pos is 1-based UniProt."""
     i = pos - 1
@@ -208,7 +223,12 @@ def score_missense(
     impact = c * (1.0 - fm)
     pct = float((background < impact).mean()) * 100.0 if coverage_ok else None
     call = call_variant(
-        kind="missense", coverage_ok=coverage_ok, cons=c, f_mut=fm, pct=pct
+        kind="missense",
+        coverage_ok=coverage_ok,
+        cons=c,
+        f_mut=fm,
+        pct=pct,
+        pop_af=pop_af,
     )
     out.update(
         {
@@ -228,7 +248,9 @@ def score_missense(
                 "fmut_absent": FMUT_ABSENT,
                 "fmut_rare": FMUT_RARE,
                 "pct_damaging": PCT_DAMAGING,
+                "pop_af_common": POP_AF_COMMON,
             },
+            "pop_af": pop_af,
         }
     )
     return out
@@ -296,7 +318,16 @@ def score_gene(symbol: str) -> dict[str, Any]:
     drivers_out = []
     for d in gene.get("drivers") or []:
         cons_p, freq_p, nrows, pf, bg_p = get_profile_at(d["pos"])
-        sc = score_missense(seq, d["pos"], d["wt"], d["mut"], cons_p, freq_p, bg_p)
+        sc = score_missense(
+            seq,
+            d["pos"],
+            d["wt"],
+            d["mut"],
+            cons_p,
+            freq_p,
+            bg_p,
+            pop_af=d.get("pop_af"),
+        )
         sc.update(
             {
                 "hgvs_p": d["hgvs_p"],
@@ -312,7 +343,16 @@ def score_gene(symbol: str) -> dict[str, Any]:
     controls_out = []
     for d in gene.get("controls") or []:
         cons_p, freq_p, nrows, pf, bg_p = get_profile_at(d["pos"])
-        sc = score_missense(seq, d["pos"], d["wt"], d["mut"], cons_p, freq_p, bg_p)
+        sc = score_missense(
+            seq,
+            d["pos"],
+            d["wt"],
+            d["mut"],
+            cons_p,
+            freq_p,
+            bg_p,
+            pop_af=d.get("pop_af"),
+        )
         sc.update(
             {
                 "hgvs_p": d["hgvs_p"],

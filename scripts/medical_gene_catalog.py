@@ -40,7 +40,15 @@ GENE_CATALOG: dict[str, dict[str, Any]] = {
             {"hgvs_p": "p.R282W", "pos": 282, "wt": "R", "mut": "W", "note": "structural"},
         ],
         "controls": [
-            {"hgvs_p": "p.P72R", "pos": 72, "wt": "P", "mut": "R", "note": "common polymorphism (mild)"},
+            {
+                "hgvs_p": "p.P72R",
+                "pos": 72,
+                "wt": "P",
+                "mut": "R",
+                "note": "common polymorphism (mild)",
+                # gnomAD / 1000G global AF for rs1042522 — data, not a fit
+                "pop_af": 0.46,
+            },
         ],
         "dna_examples": [
             (175, "CGC", 1, "A", "c.524G>A"),
