@@ -258,7 +258,8 @@ scripts/bench_product_vs_af.py   freeze H2H (10 proteins)
 scripts/multi_system.py          AF3 jobs: DNA/RNA/metal/PPI/SC/PTM/H
 scripts/bench_af_coverage.py     coverage scoreboard
 scripts/trinary_syntax.py        7-trit opcodes + codon syntax
-scripts/fsot_structure_engine.py F01–F15 bulk path
+scripts/fsot_structure_engine.py F01–F15 formulas (Rg / secondary)
+scripts/biohub_3d.py             read Biohub GEFF 3-D tracks (data on D:\)
 formulas/                        F01–F15 derivations + trinary maps
 zig/                             host + freestanding QEMU runtime
 crates/                          codon_core, fsot_core, fsot_protein (Rust)
@@ -267,6 +268,7 @@ docs/PRODUCT_FREEZE.md           marked results
 docs/AF_COVERAGE.md              AF3 job table
 docs/FSOT_APPLICATION.md         do not invert residual
 docs/OPEN.md                     remaining structure misses
+docs/BIOHUB_3D.md                organism 3-D reader (Zebrahub / Kaggle)
 docs/MEDICAL_PLATFORM.md         patient / drug / species orientation
 docs/MECHANISM_GAP_MAP.md        historical wet-lab mechanisms
 data/product_vs_alphafold.json   freeze numbers

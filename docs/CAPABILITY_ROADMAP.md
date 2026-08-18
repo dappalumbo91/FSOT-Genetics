@@ -23,6 +23,8 @@ Older snapshots (`data/medical_stress_suite.json` fuse **1.16 Å**, bulk 16–17
 
 **Medical benches:** experimental PGx **10/10** (`data/experimental_pgx.json`, disclosure required). Variant panel drivers after recatalog — see `docs/MEDICAL_PLATFORM.md`. P72R is `common_polymorphism`, not a miss.
 
+**Organism 3-D (Biohub / Zebrahub):** 199/199 train GEFFs readable from `D:\Kaggle_Biohub_Data` (not in git). Proxy volume 100×64×256×256, median cell step **2.88 µm**. See `docs/BIOHUB_3D.md`.
+
 ---
 
 ## What we can claim

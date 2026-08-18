@@ -1,0 +1,44 @@
+{
+  "dataset": "44b6_0113de3b",
+  "n_nodes": 52,
+  "n_edges": 50,
+  "n_divisions": 0,
+  "t_range": [
+    0,
+    75
+  ],
+  "span_um_zyx": [
+    100.75,
+    63.375,
+    73.125
+  ],
+  "step_median_um": 2.882652237165848,
+  "residual": {
+    "residual_Biochemistry": 1.091958932349586,
+    "n_steps": 50,
+    "step_median_um": 2.882652237165848,
+    "step_mae_um": 1.1441684312060967,
+    "energy": 2.428513626933271,
+    "phi": 1.618033988749895
+  },
+  "volume": {
+    "exists": true,
+    "level0_shape": [
+      100,
+      64,
+      256,
+      256
+    ],
+    "level0_dtype": "uint16",
+    "keys": [
+      "0"
+    ]
+  },
+  "scale_um": [
+    1.625,
+    0.40625,
+    0.40625
+  ],
+  "authority": "measured GEFF cell centers (exclude nothing \u2014 this is not a holdout fold)",
+  "free_parameters": 0
+}

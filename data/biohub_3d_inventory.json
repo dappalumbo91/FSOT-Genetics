@@ -1,0 +1,1398 @@
+{
+  "n": 199,
+  "geffs": [
+    {
+      "dataset": "44b6_0113de3b",
+      "n_nodes": 52,
+      "n_edges": 50,
+      "estimated_nodes": 25755,
+      "t_max": 75.0
+    },
+    {
+      "dataset": "44b6_0b24845f",
+      "n_nodes": 51,
+      "n_edges": 49,
+      "estimated_nodes": 32795,
+      "t_max": 50.0
+    },
+    {
+      "dataset": "44b6_0c582fdc",
+      "n_nodes": 71,
+      "n_edges": 70,
+      "estimated_nodes": 27958,
+      "t_max": 90.0
+    },
+    {
+      "dataset": "44b6_0db75fae",
+      "n_nodes": 157,
+      "n_edges": 151,
+      "estimated_nodes": 15335,
+      "t_max": 88.0
+    },
+    {
+      "dataset": "44b6_12dfb391",
+      "n_nodes": 788,
+      "n_edges": 773,
+      "estimated_nodes": 58672,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_144b256d",
+      "n_nodes": 121,
+      "n_edges": 119,
+      "estimated_nodes": 65376,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_1574802b",
+      "n_nodes": 155,
+      "n_edges": 153,
+      "estimated_nodes": 17677,
+      "t_max": 98.0
+    },
+    {
+      "dataset": "44b6_18ced818",
+      "n_nodes": 100,
+      "n_edges": 99,
+      "estimated_nodes": 78644,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_1d530831",
+      "n_nodes": 276,
+      "n_edges": 271,
+      "estimated_nodes": 35825,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_24264f12",
+      "n_nodes": 230,
+      "n_edges": 221,
+      "estimated_nodes": 26353,
+      "t_max": 86.0
+    },
+    {
+      "dataset": "44b6_267148e4",
+      "n_nodes": 280,
+      "n_edges": 277,
+      "estimated_nodes": 19130,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_2a2eff9f",
+      "n_nodes": 214,
+      "n_edges": 210,
+      "estimated_nodes": 56367,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_2f31fc2f",
+      "n_nodes": 89,
+      "n_edges": 85,
+      "estimated_nodes": 24368,
+      "t_max": 80.0
+    },
+    {
+      "dataset": "44b6_33b596bf",
+      "n_nodes": 50,
+      "n_edges": 49,
+      "estimated_nodes": 23330,
+      "t_max": 70.0
+    },
+    {
+      "dataset": "44b6_341df25f",
+      "n_nodes": 216,
+      "n_edges": 209,
+      "estimated_nodes": 7436,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_3a861e03",
+      "n_nodes": 935,
+      "n_edges": 919,
+      "estimated_nodes": 40546,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_3bb3690f",
+      "n_nodes": 400,
+      "n_edges": 396,
+      "estimated_nodes": 31937,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_40c45f5a",
+      "n_nodes": 200,
+      "n_edges": 198,
+      "estimated_nodes": 32681,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_415c0a3a",
+      "n_nodes": 331,
+      "n_edges": 322,
+      "estimated_nodes": 57292,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_53f95252",
+      "n_nodes": 70,
+      "n_edges": 68,
+      "estimated_nodes": 38715,
+      "t_max": 50.0
+    },
+    {
+      "dataset": "44b6_551a5dba",
+      "n_nodes": 228,
+      "n_edges": 224,
+      "estimated_nodes": 57627,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_5740d24b",
+      "n_nodes": 173,
+      "n_edges": 170,
+      "estimated_nodes": 19730,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_587a1e22",
+      "n_nodes": 381,
+      "n_edges": 371,
+      "estimated_nodes": 18137,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_5f15d135",
+      "n_nodes": 278,
+      "n_edges": 273,
+      "estimated_nodes": 29519,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_668e0cc7",
+      "n_nodes": 643,
+      "n_edges": 631,
+      "estimated_nodes": 39701,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_66f9292d",
+      "n_nodes": 200,
+      "n_edges": 198,
+      "estimated_nodes": 52710,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_706092f0",
+      "n_nodes": 118,
+      "n_edges": 117,
+      "estimated_nodes": 69898,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_71a4179f",
+      "n_nodes": 121,
+      "n_edges": 119,
+      "estimated_nodes": 67688,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_74d0c52e",
+      "n_nodes": 140,
+      "n_edges": 139,
+      "estimated_nodes": 15090,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_7a302da0",
+      "n_nodes": 516,
+      "n_edges": 507,
+      "estimated_nodes": 66858,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_7e557709",
+      "n_nodes": 570,
+      "n_edges": 560,
+      "estimated_nodes": 56060,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_808952d6",
+      "n_nodes": 181,
+      "n_edges": 179,
+      "estimated_nodes": 15742,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_81c256f0",
+      "n_nodes": 199,
+      "n_edges": 197,
+      "estimated_nodes": 10052,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_87bba6c4",
+      "n_nodes": 153,
+      "n_edges": 149,
+      "estimated_nodes": 28102,
+      "t_max": 80.0
+    },
+    {
+      "dataset": "44b6_8cc6506c",
+      "n_nodes": 400,
+      "n_edges": 396,
+      "estimated_nodes": 32172,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_8f5ab931",
+      "n_nodes": 616,
+      "n_edges": 604,
+      "estimated_nodes": 27571,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_8f9ecab4",
+      "n_nodes": 374,
+      "n_edges": 370,
+      "estimated_nodes": 74833,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_90724892",
+      "n_nodes": 105,
+      "n_edges": 103,
+      "estimated_nodes": 25532,
+      "t_max": 85.0
+    },
+    {
+      "dataset": "44b6_949adeb1",
+      "n_nodes": 388,
+      "n_edges": 378,
+      "estimated_nodes": 37179,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_95029e92",
+      "n_nodes": 200,
+      "n_edges": 198,
+      "estimated_nodes": 5161,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_97725144",
+      "n_nodes": 225,
+      "n_edges": 221,
+      "estimated_nodes": 35774,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_996155de",
+      "n_nodes": 380,
+      "n_edges": 377,
+      "estimated_nodes": 7573,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_9be80b04",
+      "n_nodes": 222,
+      "n_edges": 220,
+      "estimated_nodes": 57877,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_9bfa6a0a",
+      "n_nodes": 264,
+      "n_edges": 259,
+      "estimated_nodes": 64308,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_a21120c2",
+      "n_nodes": 296,
+      "n_edges": 286,
+      "estimated_nodes": 23040,
+      "t_max": 84.0
+    },
+    {
+      "dataset": "44b6_a2bb48bb",
+      "n_nodes": 416,
+      "n_edges": 410,
+      "estimated_nodes": 60613,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_aaf8b0ea",
+      "n_nodes": 209,
+      "n_edges": 206,
+      "estimated_nodes": 22099,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_abf82518",
+      "n_nodes": 96,
+      "n_edges": 94,
+      "estimated_nodes": 27604,
+      "t_max": 57.0
+    },
+    {
+      "dataset": "44b6_b2c44266",
+      "n_nodes": 170,
+      "n_edges": 168,
+      "estimated_nodes": 59729,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_c15fded2",
+      "n_nodes": 104,
+      "n_edges": 102,
+      "estimated_nodes": 20585,
+      "t_max": 74.0
+    },
+    {
+      "dataset": "44b6_c50204e0",
+      "n_nodes": 333,
+      "n_edges": 325,
+      "estimated_nodes": 47078,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_c771cb04",
+      "n_nodes": 227,
+      "n_edges": 223,
+      "estimated_nodes": 53345,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_c8e2a523",
+      "n_nodes": 168,
+      "n_edges": 164,
+      "estimated_nodes": 33144,
+      "t_max": 80.0
+    },
+    {
+      "dataset": "44b6_c96cfa10",
+      "n_nodes": 629,
+      "n_edges": 616,
+      "estimated_nodes": 46236,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_cf2536e8",
+      "n_nodes": 76,
+      "n_edges": 75,
+      "estimated_nodes": 57565,
+      "t_max": 75.0
+    },
+    {
+      "dataset": "44b6_cf8fed6b",
+      "n_nodes": 191,
+      "n_edges": 188,
+      "estimated_nodes": 43729,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_d29c9ab2",
+      "n_nodes": 1353,
+      "n_edges": 1328,
+      "estimated_nodes": 38055,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_d2f34f90",
+      "n_nodes": 283,
+      "n_edges": 281,
+      "estimated_nodes": 24074,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_d5e7d891",
+      "n_nodes": 906,
+      "n_edges": 893,
+      "estimated_nodes": 44848,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_d754aa59",
+      "n_nodes": 72,
+      "n_edges": 70,
+      "estimated_nodes": 5171,
+      "t_max": 75.0
+    },
+    {
+      "dataset": "44b6_d78e09d9",
+      "n_nodes": 463,
+      "n_edges": 451,
+      "estimated_nodes": 22259,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_db3c847b",
+      "n_nodes": 165,
+      "n_edges": 162,
+      "estimated_nodes": 15023,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_ddf577ad",
+      "n_nodes": 659,
+      "n_edges": 647,
+      "estimated_nodes": 53492,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_deabac95",
+      "n_nodes": 126,
+      "n_edges": 124,
+      "estimated_nodes": 13989,
+      "t_max": 97.0
+    },
+    {
+      "dataset": "44b6_e28840c6",
+      "n_nodes": 311,
+      "n_edges": 309,
+      "estimated_nodes": 74686,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_e29f0176",
+      "n_nodes": 51,
+      "n_edges": 50,
+      "estimated_nodes": 12969,
+      "t_max": 80.0
+    },
+    {
+      "dataset": "44b6_e31261b4",
+      "n_nodes": 116,
+      "n_edges": 113,
+      "estimated_nodes": 72856,
+      "t_max": 96.0
+    },
+    {
+      "dataset": "44b6_e35b117d",
+      "n_nodes": 270,
+      "n_edges": 266,
+      "estimated_nodes": 28641,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_e57ff5c6",
+      "n_nodes": 193,
+      "n_edges": 186,
+      "estimated_nodes": 20314,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_eb2880fc",
+      "n_nodes": 390,
+      "n_edges": 379,
+      "estimated_nodes": 48084,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "44b6_f28707c6",
+      "n_nodes": 63,
+      "n_edges": 61,
+      "estimated_nodes": 18656,
+      "t_max": 72.0
+    },
+    {
+      "dataset": "6bba_05b6850b",
+      "n_nodes": 861,
+      "n_edges": 845,
+      "estimated_nodes": 6362,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_05db0fb1",
+      "n_nodes": 1229,
+      "n_edges": 1183,
+      "estimated_nodes": 69800,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_062c8d37",
+      "n_nodes": 930,
+      "n_edges": 898,
+      "estimated_nodes": 6030,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_07477033",
+      "n_nodes": 613,
+      "n_edges": 602,
+      "estimated_nodes": 4836,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_07e24132",
+      "n_nodes": 359,
+      "n_edges": 345,
+      "estimated_nodes": 21485,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_085bf656",
+      "n_nodes": 1198,
+      "n_edges": 1168,
+      "estimated_nodes": 8463,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_09961292",
+      "n_nodes": 1950,
+      "n_edges": 1871,
+      "estimated_nodes": 31117,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_0c7fa718",
+      "n_nodes": 704,
+      "n_edges": 659,
+      "estimated_nodes": 13650,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_0e7c0d07",
+      "n_nodes": 209,
+      "n_edges": 198,
+      "estimated_nodes": 22467,
+      "t_max": 85.0
+    },
+    {
+      "dataset": "6bba_12665c0e",
+      "n_nodes": 1036,
+      "n_edges": 998,
+      "estimated_nodes": 8314,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_13f19531",
+      "n_nodes": 737,
+      "n_edges": 704,
+      "estimated_nodes": 5773,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_15403b9a",
+      "n_nodes": 758,
+      "n_edges": 729,
+      "estimated_nodes": 6889,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_1d0d8384",
+      "n_nodes": 1438,
+      "n_edges": 1365,
+      "estimated_nodes": 17909,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_1ebfb80d",
+      "n_nodes": 745,
+      "n_edges": 719,
+      "estimated_nodes": 11558,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_1f58c2f6",
+      "n_nodes": 317,
+      "n_edges": 299,
+      "estimated_nodes": 28903,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_207c6aaf",
+      "n_nodes": 475,
+      "n_edges": 450,
+      "estimated_nodes": 11999,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_20852818",
+      "n_nodes": 952,
+      "n_edges": 909,
+      "estimated_nodes": 9758,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_2312ac41",
+      "n_nodes": 1156,
+      "n_edges": 1132,
+      "estimated_nodes": 11950,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_23af9eeb",
+      "n_nodes": 513,
+      "n_edges": 499,
+      "estimated_nodes": 4450,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_2540cd90",
+      "n_nodes": 529,
+      "n_edges": 523,
+      "estimated_nodes": 3783,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_2646afc7",
+      "n_nodes": 738,
+      "n_edges": 721,
+      "estimated_nodes": 5495,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_268e1230",
+      "n_nodes": 641,
+      "n_edges": 609,
+      "estimated_nodes": 5107,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_2819ca14",
+      "n_nodes": 986,
+      "n_edges": 949,
+      "estimated_nodes": 5534,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_283bf9f1",
+      "n_nodes": 1342,
+      "n_edges": 1288,
+      "estimated_nodes": 20861,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_312f0dc3",
+      "n_nodes": 520,
+      "n_edges": 500,
+      "estimated_nodes": 9963,
+      "t_max": 80.0
+    },
+    {
+      "dataset": "6bba_32db13fc",
+      "n_nodes": 862,
+      "n_edges": 811,
+      "estimated_nodes": 38705,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_337b1b3a",
+      "n_nodes": 1272,
+      "n_edges": 1213,
+      "estimated_nodes": 30480,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_372c8cb8",
+      "n_nodes": 1036,
+      "n_edges": 1007,
+      "estimated_nodes": 7021,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_3a1849c2",
+      "n_nodes": 1173,
+      "n_edges": 1142,
+      "estimated_nodes": 7003,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_3abfe10a",
+      "n_nodes": 997,
+      "n_edges": 935,
+      "estimated_nodes": 52065,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_3c5691b6",
+      "n_nodes": 765,
+      "n_edges": 746,
+      "estimated_nodes": 6258,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_3db54e20",
+      "n_nodes": 502,
+      "n_edges": 474,
+      "estimated_nodes": 23236,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_3fda6b25",
+      "n_nodes": 1207,
+      "n_edges": 1179,
+      "estimated_nodes": 9842,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_43fea39d",
+      "n_nodes": 910,
+      "n_edges": 880,
+      "estimated_nodes": 5748,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_474be664",
+      "n_nodes": 292,
+      "n_edges": 286,
+      "estimated_nodes": 28293,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_48816121",
+      "n_nodes": 935,
+      "n_edges": 918,
+      "estimated_nodes": 23965,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_4aa14c89",
+      "n_nodes": 707,
+      "n_edges": 681,
+      "estimated_nodes": 6787,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_4f99ce20",
+      "n_nodes": 1057,
+      "n_edges": 1010,
+      "estimated_nodes": 5965,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_4ffd3da3",
+      "n_nodes": 706,
+      "n_edges": 689,
+      "estimated_nodes": 17637,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_55b7eebe",
+      "n_nodes": 705,
+      "n_edges": 688,
+      "estimated_nodes": 5257,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_55c70843",
+      "n_nodes": 490,
+      "n_edges": 467,
+      "estimated_nodes": 35415,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_57b7cc1e",
+      "n_nodes": 1659,
+      "n_edges": 1592,
+      "estimated_nodes": 65511,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_5a4d9360",
+      "n_nodes": 747,
+      "n_edges": 722,
+      "estimated_nodes": 5976,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_5b28472a",
+      "n_nodes": 737,
+      "n_edges": 724,
+      "estimated_nodes": 5802,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_5c039895",
+      "n_nodes": 1174,
+      "n_edges": 1145,
+      "estimated_nodes": 8570,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_5c824876",
+      "n_nodes": 1170,
+      "n_edges": 1130,
+      "estimated_nodes": 24647,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_5dfe9ad1",
+      "n_nodes": 1542,
+      "n_edges": 1487,
+      "estimated_nodes": 26913,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_5f89039d",
+      "n_nodes": 904,
+      "n_edges": 885,
+      "estimated_nodes": 4611,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_61dd1e0d",
+      "n_nodes": 558,
+      "n_edges": 543,
+      "estimated_nodes": 10128,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_61ecbe65",
+      "n_nodes": 640,
+      "n_edges": 614,
+      "estimated_nodes": 5774,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_6321a359",
+      "n_nodes": 827,
+      "n_edges": 798,
+      "estimated_nodes": 4821,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_6479435d",
+      "n_nodes": 617,
+      "n_edges": 580,
+      "estimated_nodes": 23453,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_67ebd073",
+      "n_nodes": 462,
+      "n_edges": 438,
+      "estimated_nodes": 16061,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_6ca87370",
+      "n_nodes": 1081,
+      "n_edges": 1052,
+      "estimated_nodes": 7195,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_6db0e9b4",
+      "n_nodes": 449,
+      "n_edges": 440,
+      "estimated_nodes": 28435,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_6feb10f0",
+      "n_nodes": 1368,
+      "n_edges": 1343,
+      "estimated_nodes": 8862,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_6feeb0b1",
+      "n_nodes": 1389,
+      "n_edges": 1343,
+      "estimated_nodes": 7518,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_705ec2c9",
+      "n_nodes": 596,
+      "n_edges": 562,
+      "estimated_nodes": 5600,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_718b21f9",
+      "n_nodes": 661,
+      "n_edges": 652,
+      "estimated_nodes": 4306,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_74686d6a",
+      "n_nodes": 586,
+      "n_edges": 576,
+      "estimated_nodes": 29803,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_767a1e17",
+      "n_nodes": 718,
+      "n_edges": 658,
+      "estimated_nodes": 47714,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_76db78c1",
+      "n_nodes": 617,
+      "n_edges": 604,
+      "estimated_nodes": 4855,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_784a78c9",
+      "n_nodes": 1788,
+      "n_edges": 1739,
+      "estimated_nodes": 13096,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_786893ac",
+      "n_nodes": 1465,
+      "n_edges": 1395,
+      "estimated_nodes": 58979,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_789f8168",
+      "n_nodes": 713,
+      "n_edges": 681,
+      "estimated_nodes": 10676,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_78a7bd97",
+      "n_nodes": 886,
+      "n_edges": 832,
+      "estimated_nodes": 40613,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_7af54fde",
+      "n_nodes": 1131,
+      "n_edges": 1092,
+      "estimated_nodes": 9624,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_7b5d3b2c",
+      "n_nodes": 565,
+      "n_edges": 555,
+      "estimated_nodes": 5780,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_7d3058ae",
+      "n_nodes": 1200,
+      "n_edges": 1173,
+      "estimated_nodes": 7611,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_7f87b3d8",
+      "n_nodes": 1000,
+      "n_edges": 934,
+      "estimated_nodes": 10581,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_80d12824",
+      "n_nodes": 680,
+      "n_edges": 654,
+      "estimated_nodes": 9021,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_825bd1c6",
+      "n_nodes": 968,
+      "n_edges": 930,
+      "estimated_nodes": 7586,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_87289e13",
+      "n_nodes": 724,
+      "n_edges": 699,
+      "estimated_nodes": 14966,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_8b7818bf",
+      "n_nodes": 741,
+      "n_edges": 725,
+      "estimated_nodes": 5828,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_907271db",
+      "n_nodes": 945,
+      "n_edges": 921,
+      "estimated_nodes": 7306,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_91951b3a",
+      "n_nodes": 1188,
+      "n_edges": 1148,
+      "estimated_nodes": 11907,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_96833384",
+      "n_nodes": 758,
+      "n_edges": 721,
+      "estimated_nodes": 4869,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_969618f6",
+      "n_nodes": 679,
+      "n_edges": 658,
+      "estimated_nodes": 13888,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_971fa5e0",
+      "n_nodes": 792,
+      "n_edges": 767,
+      "estimated_nodes": 5609,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_9a41d029",
+      "n_nodes": 1401,
+      "n_edges": 1353,
+      "estimated_nodes": 18231,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_9e23430b",
+      "n_nodes": 914,
+      "n_edges": 891,
+      "estimated_nodes": 7708,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_a5e926bb",
+      "n_nodes": 741,
+      "n_edges": 698,
+      "estimated_nodes": 8440,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_a90a0b9c",
+      "n_nodes": 1147,
+      "n_edges": 1112,
+      "estimated_nodes": 36896,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_ab78413d",
+      "n_nodes": 1179,
+      "n_edges": 1138,
+      "estimated_nodes": 9241,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_acd782a8",
+      "n_nodes": 356,
+      "n_edges": 330,
+      "estimated_nodes": 19710,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_ae82a791",
+      "n_nodes": 1495,
+      "n_edges": 1471,
+      "estimated_nodes": 7403,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_aeee7805",
+      "n_nodes": 795,
+      "n_edges": 768,
+      "estimated_nodes": 5034,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_af149c94",
+      "n_nodes": 1350,
+      "n_edges": 1317,
+      "estimated_nodes": 8933,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_afb141ff",
+      "n_nodes": 654,
+      "n_edges": 626,
+      "estimated_nodes": 6054,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_b1ae37b9",
+      "n_nodes": 612,
+      "n_edges": 579,
+      "estimated_nodes": 24298,
+      "t_max": 87.0
+    },
+    {
+      "dataset": "6bba_b204cac7",
+      "n_nodes": 826,
+      "n_edges": 811,
+      "estimated_nodes": 5092,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_b329af44",
+      "n_nodes": 1316,
+      "n_edges": 1268,
+      "estimated_nodes": 62465,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_b693381b",
+      "n_nodes": 983,
+      "n_edges": 935,
+      "estimated_nodes": 5558,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_bb9f20c3",
+      "n_nodes": 1925,
+      "n_edges": 1879,
+      "estimated_nodes": 23071,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_bbb708ca",
+      "n_nodes": 892,
+      "n_edges": 861,
+      "estimated_nodes": 6785,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_c27cba08",
+      "n_nodes": 517,
+      "n_edges": 493,
+      "estimated_nodes": 6445,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_c328f2fd",
+      "n_nodes": 511,
+      "n_edges": 500,
+      "estimated_nodes": 31228,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_c73a1d11",
+      "n_nodes": 737,
+      "n_edges": 710,
+      "estimated_nodes": 16315,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_cdcfe533",
+      "n_nodes": 1419,
+      "n_edges": 1348,
+      "estimated_nodes": 29785,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_cf35214c",
+      "n_nodes": 842,
+      "n_edges": 817,
+      "estimated_nodes": 34890,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_cff5865f",
+      "n_nodes": 1571,
+      "n_edges": 1501,
+      "estimated_nodes": 46362,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_d0fc38b5",
+      "n_nodes": 835,
+      "n_edges": 813,
+      "estimated_nodes": 6111,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_d1acb6ff",
+      "n_nodes": 681,
+      "n_edges": 643,
+      "estimated_nodes": 14719,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_d2b9fc0c",
+      "n_nodes": 944,
+      "n_edges": 921,
+      "estimated_nodes": 20178,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_d3da753b",
+      "n_nodes": 887,
+      "n_edges": 857,
+      "estimated_nodes": 17246,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_d5eae175",
+      "n_nodes": 528,
+      "n_edges": 519,
+      "estimated_nodes": 4519,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_d6ecebbb",
+      "n_nodes": 886,
+      "n_edges": 862,
+      "estimated_nodes": 5359,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_d82a4fc6",
+      "n_nodes": 545,
+      "n_edges": 530,
+      "estimated_nodes": 27716,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_debd7bfa",
+      "n_nodes": 766,
+      "n_edges": 729,
+      "estimated_nodes": 11807,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_df673a83",
+      "n_nodes": 668,
+      "n_edges": 654,
+      "estimated_nodes": 19239,
+      "t_max": 98.0
+    },
+    {
+      "dataset": "6bba_e16ffc58",
+      "n_nodes": 964,
+      "n_edges": 942,
+      "estimated_nodes": 6367,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_e5e44988",
+      "n_nodes": 666,
+      "n_edges": 634,
+      "estimated_nodes": 5615,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_ebdf3b34",
+      "n_nodes": 847,
+      "n_edges": 803,
+      "estimated_nodes": 56847,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_ebff6e76",
+      "n_nodes": 1318,
+      "n_edges": 1264,
+      "estimated_nodes": 41596,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_ed9377fd",
+      "n_nodes": 531,
+      "n_edges": 508,
+      "estimated_nodes": 4443,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_edf14583",
+      "n_nodes": 801,
+      "n_edges": 760,
+      "estimated_nodes": 59242,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_eebc57a5",
+      "n_nodes": 1026,
+      "n_edges": 989,
+      "estimated_nodes": 9347,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_ef7b4f7e",
+      "n_nodes": 1234,
+      "n_edges": 1201,
+      "estimated_nodes": 6107,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_f17befbc",
+      "n_nodes": 1078,
+      "n_edges": 1015,
+      "estimated_nodes": 24963,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_f1fde7e0",
+      "n_nodes": 476,
+      "n_edges": 446,
+      "estimated_nodes": 9040,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_f20478e9",
+      "n_nodes": 1003,
+      "n_edges": 963,
+      "estimated_nodes": 5973,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_f4ae811c",
+      "n_nodes": 1001,
+      "n_edges": 965,
+      "estimated_nodes": 8903,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_f8ffd5e7",
+      "n_nodes": 389,
+      "n_edges": 370,
+      "estimated_nodes": 29540,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_fbc898dc",
+      "n_nodes": 655,
+      "n_edges": 639,
+      "estimated_nodes": 4889,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_fc516dc6",
+      "n_nodes": 788,
+      "n_edges": 762,
+      "estimated_nodes": 7866,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_fc5f39dc",
+      "n_nodes": 471,
+      "n_edges": 458,
+      "estimated_nodes": 14020,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_fc83837d",
+      "n_nodes": 957,
+      "n_edges": 923,
+      "estimated_nodes": 13087,
+      "t_max": 99.0
+    },
+    {
+      "dataset": "6bba_fe670320",
+      "n_nodes": 716,
+      "n_edges": 680,
+      "estimated_nodes": 10836,
+      "t_max": 99.0
+    }
+  ]
+}
