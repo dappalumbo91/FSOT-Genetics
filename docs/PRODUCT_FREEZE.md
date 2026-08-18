@@ -1,4 +1,4 @@
-# Product freeze — structure path (2026-08-13)
+# Product freeze — structure path (2026-08-17)
 
 **Marked results.** Do not silently overwrite this table. Remaining misses: `docs/OPEN.md`. Audit: `docs/AUDIT.md`.
 
@@ -33,12 +33,12 @@ Notable product Cα RMSDs:
 | Ubiquitin | 0.09 | 0.88 (product wins) |
 | RNase A | 0.09 | 0.33 (product wins) |
 | SOD1 | 0.10 | 0.29 (product wins) |
-| Lysozyme | 0.12 | 0.42 (product wins) |
+| Lysozyme | 0.13 | 0.42 (product wins) |
 | Insulin | 0.14 | 4.51 (product wins) |
 | CAII | 0.14 | 0.36 (product wins) |
 | Hb α | 0.21 | 0.27 (product wins) |
 | Hb β | 0.22 | 0.52 (product wins) |
-| Calmodulin | 0.90 | 6.45 (product wins) |
+| Calmodulin | 0.52 | 6.45 (product wins) |
 
 ## What the product *is*
 

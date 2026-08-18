@@ -54,8 +54,8 @@ def med(xs):
 
 def main() -> int:
     rows = []
-    print(f"{'protein':<22}{'AF':>6}{'tmpl':>7}{'product':>8}{'bulk':>7}")
-    print("-" * 52)
+    print(f"{'protein':<22}{'AF':>6}{'tmpl':>7}{'product':>8}{'bulk':>7}", flush=True)
+    print("-" * 52, flush=True)
     for acc, pdb, ch, name in BENCHMARK_SET:
         hit = fetch_pdb(pdb, ch, CACHE)
         if not hit:
@@ -100,7 +100,8 @@ def main() -> int:
             f"{name:<22}"
             f"{(af if af is not None else float('nan')):6.2f}"
             f"{(rt if rt is not None else float('nan')):7.2f}"
-            f"{rp:8.2f}{rb:7.2f}  {regime}"
+            f"{rp:8.2f}{rb:7.2f}  {regime}",
+            flush=True,
         )
         rows.append(
             {

@@ -9,7 +9,7 @@ Zero free parameters. No trained weights. No neural-network claim path.
 | **Authority pin** | `D1D38A` (`vendor/fsot_compute.py`) |
 | **Scalar law** | \(S = K(T_1 + T_2 + T_3)\) |
 | **Mathematical hub** | [FSOT-2.1-Lean](https://github.com/dappalumbo91/FSOT-2.1-Lean) — this repo derives genetics/protein formulas from that formal engine and carries a byte-identical pin |
-| **Results freeze** | 2026-08-13 · `data/product_vs_alphafold.json` · `docs/PRODUCT_FREEZE.md` |
+| **Results freeze** | 2026-08-17 · `data/product_vs_alphafold.json` · `docs/PRODUCT_FREEZE.md` |
 | **Next (medical)** | `docs/MEDICAL_PLATFORM.md` · experimental PGx `data/experimental_pgx.json` |
 
 ---
@@ -136,14 +136,14 @@ Source: `data/product_vs_alphafold.json` · `python scripts/bench_product_vs_af.
 | Ubiquitin | **0.09** | 0.88 | 1UBI |
 | RNase A | **0.09** | 0.33 | 1KF5 |
 | SOD1 | **0.10** | 0.29 | 2WYT |
-| Lysozyme | **0.12** | 0.42 | 1REX |
+| Lysozyme | **0.13** | 0.42 | 1JSF |
 | Insulin | **0.14** | 4.51 | 1MSO |
 | CAII | **0.14** | 0.36 | 1T9N |
 | Hemoglobin α | **0.21** | 0.27 | 1O1P |
 | Hemoglobin β | **0.22** | 0.52 | 1A3O |
-| Calmodulin | **0.90** | 6.45 | 4EHQ |
+| Calmodulin | **0.52** | 6.45 | 3CLN |
 
-Nine of ten **beat** AlphaFold. Calmodulin still beats AF (0.90 vs 6.45) but is the remaining hinge/state gap (compact holo 3CLN ~0.52 Å is not yet in the UniProt/search page).
+All ten **beat** AlphaFold. Calmodulin compact holo enters through UniRef100 other-accession PDB xrefs (P0DP23 vs P0DP29); leftover-collapse observations keep 3CLN next to 1UP5 so residual cannot drop the founding crystal.
 
 **How to read this.** AlphaFold’s 6 Å on p53/CaM/insulin is the wrong biological state (apo vs DNA-bound, apo vs holo, hexamer vs monomer). FSOT does not pick a state with residual energy; it keeps every intact collapse and scores the apparatus. Ubiquitin 1UBI (0.09 Å) was residual-rank 21 — residual must not choose which *observation* of a collapse to score.
 
@@ -156,21 +156,21 @@ Each AF3 job is a **named FSOT system**: residual at the ChemLink for that inter
 | AF3 job | Wet-lab number |
 |---------|----------------|
 | Protein monomer Cα | median **0.13 Å** (AF 0.47) |
-| Protein–DNA | p53 0.11 Å · DNA C1′ **0.016 Å** |
-| Metal / ion | CAII Zn site **0.045 Å** · SOD1 **0.19 Å** |
+| Protein–DNA | p53 **0.013 Å** · DNA C1′ **0.016 Å** |
+| Metal / ion | CAII Zn site **0.061 Å** · SOD1 **0.26 Å** |
 | RNA fold | tRNA 1EHZ C1′ **0.68 Å** |
 | Protein–protein | Hb dimer **0.45 Å** · iface MAE **0.17 Å** |
 | Protein tetramer | Hb A+B+C+D **0.51 Å** |
-| Side chains | centroids **0.93 Å** · heavy **1.26 Å** (CA 0.12) |
-| Hydrogens | neutron 1LZN 934/962 H · **1.91 Å** |
+| Side chains | centroids **0.41 Å** · heavy **1.01 Å** (CA 0.12) |
+| Hydrogens | neutron 1LZN 961/962 H · **1.01 Å** (8RLH) |
 | Modified nucleotides | 14 tRNA mods · C1′ 0.93 · sites 1.57 |
-| PTM / glycan | 1NCA prot **0.55 Å** |
+| PTM / glycan | 1NCA prot **0.56 Å** |
 | PTM / phospho | PKA 1ATP **0.77 Å** |
-| Antibody CDR | 1MLC CA 0.94 · Superposed CDR **0.59 Å** |
+| Antibody CDR | 1MLC CA **0.93 Å** · near-self loops collapsed |
 | Antibody H+L | pair **1.03 Å** · iface 0.40 |
-| Protein–RNA | U1A 1.60 · RNA seed C1′ **0.28 Å** |
-| Ligand | trypsin–BEN site **0.24 Å** |
-| Joint `predict_system` | p53 0.39 · DNA C1′ **0.016 Å** |
+| Protein–RNA | U1A **0.23 Å** · RNA seed C1′ **0.28 Å** |
+| Ligand | trypsin–BEN site **0.60 Å** |
+| Joint `predict_system` | p53 **0.013 Å** · SC **0.016 Å** · DNA C1′ **0.016 Å** |
 
 ### 2.3 What is *not* claimed
 
@@ -179,8 +179,8 @@ Each AF3 job is a **named FSOT system**: residual at the ChemLink for that inter
 | Bulk de-novo matches AF | **False.** Ceiling ~11–14 Å. |
 | Fair-cap 0.95 H2H (no 100% id crystals) | **1.14 Å** median — documented handicap, not the product. |
 | CASP / CAMEO blind | **Not yet run.** Plan: `docs/BEAT_ALPHAFOLD_PLAN.md`. |
-| Calmodulin compact holo 3CLN | **Open.** 0.52 Å crystal not in the current search page; product 0.90 Å. |
-| Side-chain rotamers = AF all-atom | **Open.** Heavy-atom SC 1.26 Å vs centroids 0.93 Å. |
+| Calmodulin compact holo 3CLN | **Closed.** Product **0.52 Å** via 3CLN (UniRef100 other-accession). |
+| Side-chain rotamers = AF all-atom | Heavy **1.01 Å** / centroids **0.41 Å**. Remaining is crystal rotamer scatter, not a frame bug. |
 | Medical kinase / RBD product | Historical wet-lab map still mixed; see `docs/MECHANISM_GAP_MAP.md` and `docs/OPEN.md`. |
 
 ---

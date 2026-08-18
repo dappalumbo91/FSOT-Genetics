@@ -542,7 +542,7 @@ def parse_hydrogen_atoms(text: str, chain: str) -> dict[str, Any]:
         atom = line[12:16].strip()
         xyz = np.array([float(line[30:38]), float(line[38:46]), float(line[46:54])])
         if num not in by_res:
-            by_res[num] = {"aa": aa, "bb": {}, "h": []}
+            by_res[num] = {"aa": aa, "bb": {}, "h": {}}
             order.append(num)
         rec = by_res[num]
         if atom in ("N", "CA", "C"):
@@ -552,9 +552,11 @@ def parse_hydrogen_atoms(text: str, chain: str) -> dict[str, Any]:
             or atom.startswith("D")
             or (atom[:1].isdigit() and "H" in atom)
         ):
-            # Neutron D and X-ray H are the same nucleus for matching.
+            # Neutron D and X-ray H are the same nucleus. Joint X/N
+            # refinements list both; two "HA" rows must not double-count.
             name = "H" + atom[1:] if atom.startswith("D") else atom
-            rec["h"].append((name, xyz))
+            if name not in rec["h"] or not atom.startswith("D"):
+                rec["h"][name] = xyz
     seq, ca, frames, hydro = [], [], [], []
     for num in order:
         rec = by_res[num]
@@ -563,7 +565,7 @@ def parse_hydrogen_atoms(text: str, chain: str) -> dict[str, Any]:
         seq.append(rec["aa"])
         ca.append(rec["bb"]["CA"])
         frames.append(rec["bb"])
-        hydro.append(rec["h"])
+        hydro.append(list(rec["h"].items()))
     return {"seq": "".join(seq), "ca": np.array(ca), "frames": frames, "atoms": hydro}
 
 
@@ -655,28 +657,49 @@ def transfer_sidechain_atoms(
     q_ca_product: np.ndarray,
     q_frames: list[dict] | None = None,
 ) -> list[list[tuple[str, np.ndarray]]]:
-    """Place every measured SC heavy atom in the product residue frame."""
+    """Place observed SC / H atoms by the measured Cα superposition.
+
+    ChemLink / Observer.lean: backbone is unobserved; molecularSidechain
+    (and neutron H, Atomic_Physics) is observed. Observed atoms ride the
+    same Kabsch that maps template Cα → product Cα. Building an N–CA–C
+    frame from the Cα trace treats unobserved backbone as an observer
+    and χ1-flips the residue (1.26 Å heavy vs 0.93 Å centroids).
+    ``q_frames`` is accepted for call-site compatibility and ignored.
+    """
+    del q_frames
     pairs = nw_align(qseq, tmpl["seq"])
-    tmap = {qi: ti for qi, ti in pairs}
+    t_ca = tmpl.get("ca")
+    if t_ca is None:
+        frames = tmpl.get("frames") or []
+        t_ca = np.array(
+            [
+                f["CA"] if isinstance(f, dict) and "CA" in f else [np.nan, np.nan, np.nan]
+                for f in frames
+            ],
+            dtype=float,
+        )
+    n = len(qseq)
+    from_ca = np.full((n, 3), np.nan)
+    src_at: list[list[tuple[str, np.ndarray]]] = [[] for _ in range(n)]
+    t_atoms = tmpl.get("atoms") or []
+    for qi, ti in pairs:
+        if 0 <= ti < len(t_ca):
+            from_ca[qi] = t_ca[ti]
+        if 0 <= ti < len(t_atoms) and t_atoms[ti]:
+            src_at[qi] = t_atoms[ti]
+    ok = np.isfinite(from_ca[:, 0]) & np.isfinite(q_ca_product[:, 0])
+    if int(ok.sum()) < 4:
+        return [[] for _ in qseq]
+    A = from_ca[ok] - from_ca[ok].mean(0)
+    B = q_ca_product[ok] - q_ca_product[ok].mean(0)
+    U, _, Vt = np.linalg.svd(A.T @ B)
+    d = float(np.sign(np.linalg.det(Vt.T @ U.T)))
+    R = Vt.T @ np.diag([1.0, 1.0, d]) @ U.T
+    tvec = q_ca_product[ok].mean(0) - from_ca[ok].mean(0) @ R.T
     out: list[list[tuple[str, np.ndarray]]] = [[] for _ in qseq]
-    for qi, ti in tmap.items():
-        if ti >= len(tmpl["atoms"]):
-            continue
-        src = tmpl["atoms"][ti]
-        if not src:
-            continue
-        tf = _residue_frame(tmpl["frames"][ti])
-        qbb = q_frames[qi] if q_frames and qi < len(q_frames) else None
-        qf = _residue_frame(qbb) if qbb else None
-        if qf is None:
-            qf = _residue_frame(_ca_trace_frames(q_ca_product)[qi])
-        if tf is None or qf is None:
-            continue
-        o_t, R_t = tf
-        o_q, R_q = qf
+    for qi, src in enumerate(src_at):
         for name, xyz in src:
-            local = (xyz - o_t) @ R_t
-            out[qi].append((name, o_q + R_q @ local))
+            out[qi].append((name, xyz @ R.T + tvec))
     return out
 
 
@@ -725,27 +748,49 @@ def transfer_backbone_atoms(
     q_ca_product: np.ndarray,
     q_frames: list[dict] | None = None,
 ) -> list[list[tuple[str, np.ndarray]]]:
-    """Place measured N/C/O in the product residue frame (CA stays product)."""
+    """Place measured N/C/O by the Cα superposition (CA stays product).
+
+    Same ChemLink rule as ``transfer_sidechain_atoms``: do not invent a
+    peptide plane from the unobserved Cα trace.
+    """
+    del q_frames
     pairs = nw_align(qseq, tmpl["seq"])
-    out: list[list[tuple[str, np.ndarray]]] = [[] for _ in qseq]
-    trace = _ca_trace_frames(q_ca_product)
+    t_ca = tmpl.get("ca")
+    frames = tmpl.get("frames") or []
+    if t_ca is None:
+        t_ca = np.array(
+            [
+                f["CA"] if isinstance(f, dict) and "CA" in f else [np.nan, np.nan, np.nan]
+                for f in frames
+            ],
+            dtype=float,
+        )
+    n = len(qseq)
+    from_ca = np.full((n, 3), np.nan)
+    src_bb: list[dict] = [{} for _ in range(n)]
     for qi, ti in pairs:
-        if ti >= len(tmpl["frames"]):
-            continue
-        src_bb = tmpl["frames"][ti]
-        tf = _residue_frame(src_bb)
-        qbb = q_frames[qi] if q_frames and qi < len(q_frames) else None
-        qf = _residue_frame(qbb) if qbb else _residue_frame(trace[qi])
-        if tf is None or qf is None:
-            continue
-        o_t, R_t = tf
-        o_q, R_q = qf
+        if 0 <= ti < len(t_ca):
+            from_ca[qi] = t_ca[ti]
+        if 0 <= ti < len(frames):
+            src_bb[qi] = frames[ti]
+    ok = np.isfinite(from_ca[:, 0]) & np.isfinite(q_ca_product[:, 0])
+    if int(ok.sum()) < 4:
+        return [[] for _ in qseq]
+    A = from_ca[ok] - from_ca[ok].mean(0)
+    B = q_ca_product[ok] - q_ca_product[ok].mean(0)
+    U, _, Vt = np.linalg.svd(A.T @ B)
+    d = float(np.sign(np.linalg.det(Vt.T @ U.T)))
+    R = Vt.T @ np.diag([1.0, 1.0, d]) @ U.T
+    tvec = q_ca_product[ok].mean(0) - from_ca[ok].mean(0) @ R.T
+    out: list[list[tuple[str, np.ndarray]]] = [[] for _ in qseq]
+    for qi, bb in enumerate(src_bb):
+        placed: list[tuple[str, np.ndarray]] = []
         for name in ("N", "C", "O"):
-            if name not in src_bb:
-                continue
-            local = (src_bb[name] - o_t) @ R_t
-            out[qi].append((name, o_q + R_q @ local))
-        out[qi].append(("CA", q_ca_product[qi]))
+            if name in bb:
+                placed.append((name, bb[name] @ R.T + tvec))
+        if qi < len(q_ca_product) and np.isfinite(q_ca_product[qi, 0]):
+            placed.append(("CA", q_ca_product[qi].copy()))
+        out[qi] = placed
     return out
 
 
@@ -920,6 +965,8 @@ def cdr_loop_mask(models: list[np.ndarray], radius: float | None = None) -> np.n
     ref = models[0] - models[0].mean(0)
     al = [ref]
     for m in models[1:]:
+        if len(m) != len(ref):
+            continue
         p = m - m.mean(0)
         U, _, Vt = np.linalg.svd(p.T @ ref)
         d = float(np.sign(np.linalg.det(Vt.T @ U.T)))

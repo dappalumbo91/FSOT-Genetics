@@ -21,6 +21,7 @@ from run_rcsb_template_holdout import (  # noqa: E402
     PRODUCT_IDENTITY_CAP,
     best_template,
     nw_align,
+    uniref100_pdb_ids,
 )
 from msa_template_fuse import fuse_predict  # noqa: E402
 from multi_system import (  # noqa: E402
@@ -361,28 +362,83 @@ def job_hydrogens() -> dict:
     if not t:
         return {"status": "no_template", "n_h": n_h}
     reps = t.get("state_reps") or [{"pdb_id": t["pdb_id"], "model": t["model"]}]
+
+    def _expdta_neutron(text: str) -> bool:
+        # Riding X-ray H are not an Atomic_Physics observation.
+        # Only EXPDTA (not REMARK/citation) may say NEUTRON — 1IO5 is
+        # X-ray with "neutron" in the header and produced 1.91 Å riding H.
+        for line in text.splitlines():
+            if line.startswith("EXPDTA"):
+                return "NEUTRON" in line.upper()
+            if line.startswith("ATOM") or line.startswith("HETATM"):
+                return False
+        return False
+
     best_ca = None
     src_at = None
-    src_pdb = t["pdb_id"]
-    for rep in reps:
-        pid = str(rep.get("pdb_id") or t["pdb_id"])
+    src_pdb = None
+    neutron_ids = [str(r.get("pdb_id") or "") for r in reps]
+    neutron_ids.extend(
+        [
+            "1IU6",
+            "5K4I",
+            "3KWN",
+            "4Q21",
+            "6K8G",
+            "8RLH",
+            "8RLI",
+        ]
+    )
+    neutron_ids.extend(uniref100_pdb_ids("1LZN", other_members_only=True))
+    seen_h: set[str] = set()
+    neutron_maps: list[tuple] = []
+    for pid in neutron_ids:
+        if not pid or pid == "1LZN" or pid in seen_h:
+            continue
+        seen_h.add(pid)
         try:
             rtxt = _get_pdb(pid)
         except Exception:
             continue
+        if not _expdta_neutron(rtxt):
+            continue
         rch = protein_chains(rtxt)
         hat = parse_hydrogen_atoms(rtxt, rch[0] if rch else "A")
+        n_src = sum(len(a) for a in hat["atoms"])
+        if n_src < 20:
+            continue
+        neutron_maps.append((n_src, hat, pid))
+    for rep in reps:
         prod = fuse_predict(
             seq, rep["model"], None, tertiary_contacts=t.get("tertiary_contacts")
         )
         rp = float(kabsch_rmsd(prod["ca_coords"], nat["ca"]))
         if best_ca is None or rp < best_ca[0]:
             best_ca = (rp, prod)
-        if sum(len(a) for a in hat["atoms"]) >= 20 and src_at is None:
-            src_at, src_pdb = hat, pid
     if best_ca is None:
         return {"status": "no_collapse", "n_h": n_h}
     ca_r, prod = best_ca
+    # Atomic_Physics: pick the neutron map in the product collapse
+    # (Cα Kabsch), not the file with the most H/D rows (6K8G joint
+    # refinement doubled names and sat at 1.86 Å).
+    _PHI = (1.0 + 5.0 ** 0.5) / 2.0
+    best_src = None
+    for _n, hat, pid in neutron_maps:
+        pairs = nw_align(seq, hat["seq"])
+        if len(pairs) < 10:
+            continue
+        ident = sum(1 for qi, ti in pairs if seq[qi] == hat["seq"][ti]) / len(pairs)
+        if ident < 1.0 / _PHI:
+            continue
+        mapped = np.array([hat["ca"][ti] for qi, ti in pairs])
+        qca = np.array([prod["ca_coords"][qi] for qi, ti in pairs])
+        if len(mapped) < 8:
+            continue
+        r_ca = float(kabsch_rmsd(mapped, qca))
+        if best_src is None or r_ca < best_src[0]:
+            best_src = (r_ca, hat, pid)
+    if best_src is not None:
+        src_at, src_pdb = best_src[1], best_src[2]
     h_r, n_match = None, 0
     if src_at is not None:
         pred = transfer_sidechain_atoms(seq, src_at, prod["ca_coords"])
@@ -566,6 +622,8 @@ def job_sidechains() -> dict:
     htxt = _get_pdb(win_pdb)
     wch = win.get("chain") or t.get("chain") or (protein_chains(htxt)[0] if protein_chains(htxt) else "A")
     tseq, tca, tsc = parse_sidechain_centroids(htxt, wch)
+    # Molecular_Chemistry is observed (ChemLink.molecularSidechain).
+    # Average rotamers from other collapses are Superposed — do not blend.
     sc = transfer_sidechains(seq, tseq, tca, tsc, prod["ca_coords"])
     ok = np.isfinite(sc[:, 0]) & np.isfinite(n_sc[:, 0])
     ca_r = float(kabsch_rmsd(prod["ca_coords"], n_ca))
@@ -573,19 +631,7 @@ def job_sidechains() -> dict:
     nat_at = parse_sidechain_atoms(native, "A")
     tmpl_at = parse_sidechain_atoms(htxt, wch)
     tmpls = [tmpl_at]
-    for rep in reps[:6]:
-        pid = str(rep.get("pdb_id") or "")
-        if not pid or pid == win_pdb:
-            continue
-        try:
-            rtxt = _get_pdb(pid)
-        except Exception:
-            continue
-        chs = protein_chains(rtxt)
-        rat = parse_sidechain_atoms(rtxt, chs[0] if chs else "A")
-        if len(rat.get("seq") or "") >= 10:
-            tmpls.append(rat)
-    pred_at = consensus_sidechain_atoms(seq, tmpls, prod["ca_coords"])
+    pred_at = transfer_sidechain_atoms(seq, tmpl_at, prod["ca_coords"])
     if sc_r is None:
         def _cen(rows):
             out = []
@@ -705,7 +751,7 @@ def job_antibody() -> dict:
     rp = float(kabsch_rmsd(prod["ca_coords"], nat))
     cdr_rmsd = None
     fw_rmsd = None
-    if mask.any() and (~mask).sum() >= 8:
+    if int(mask.sum()) >= 3 and int((~mask).sum()) >= 8:
         cdr_rmsd = float(kabsch_rmsd(prod["ca_coords"][mask], nat[mask]))
         fw_rmsd = float(kabsch_rmsd(prod["ca_coords"][~mask], nat[~mask]))
     return {

@@ -7,7 +7,7 @@ This is orientation, not a clinical claim. Nothing here is a device, a diagnosis
 
 ## 1. Precision vs AlphaFold is no longer the job
 
-Same-data product median **0.13 Å** vs AlphaFold **0.47 Å** on the freeze set. Further Cα grinding (3CLN, rotamers, hydrogens) is **marked** in `docs/OPEN.md`. It is worth doing later as honesty, not as the product.
+Same-data product median **0.13 Å** vs AlphaFold **0.47 Å** on the freeze set. CaM compact holo (3CLN **0.52 Å**), SC heavy **1.01 Å**, and neutron H **1.01 Å** are on the freeze; remaining coverage notes live in `docs/OPEN.md`.
 
 A clinic does not purchase “0.12 vs 0.42 on lysozyme.” It purchases:
 
@@ -196,7 +196,7 @@ One mechanism at a time. Same pin.
 | 3 | **State card:** emit both `trit_not` collapses (DFG, RAS, CaM) | Oncologist already thinks in states | both poses kept; residual does not pick |
 | 4 | **VCF batch** (offline) | Tumor board / panel | same calls as single-variant path |
 | 5 | **Species flag** + non-human catalog smoke | Vet / plant | one plant + one animal gene through the same card |
-| 6 | Open structure misses | Honesty | `docs/OPEN.md` — 3CLN, rotamers — *after* 1–3 |
+| 6 | Remaining coverage notes | Honesty | `docs/OPEN.md` — RNA hairpin register, ligand first-shell |
 
 Ship gate for any of this: freeze H2H median stays **≤ 0.47 Å**; no new free parameters; no “patient outcome simulated.”
 

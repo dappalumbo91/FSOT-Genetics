@@ -218,6 +218,112 @@ def same_protein_ids(sequence: str) -> list[str]:
     return ids
 
 
+def identity_band_ids(sequence: str, *, identity_cutoff: float) -> list[str]:
+    """Same-protein band at the fair identity cap (0.95).
+
+    3CLN is 0.993 vs 1CLL but ranks off the 1/φ search (recent complexes).
+    A second RCSB sequence query at IDENTITY_CAP is data coverage, not a
+    free cutoff — it is the same cap already used for same_prot clustering.
+    """
+    ids, seen = [], set()
+    rows = 80
+    pages = max(1, int(round(_PHI + 1)))
+    for page in range(pages):
+        query = {
+            "query": {
+                "type": "terminal",
+                "service": "sequence",
+                "parameters": {
+                    "evalue_cutoff": 1.0,
+                    "identity_cutoff": float(identity_cutoff),
+                    "sequence_type": "protein",
+                    "value": sequence,
+                },
+            },
+            "return_type": "polymer_entity",
+            "request_options": {
+                "paginate": {"start": page * rows, "rows": rows},
+                "results_content_type": ["experimental"],
+            },
+        }
+        try:
+            data = _post("https://search.rcsb.org/rcsbsearch/v2/query", query)
+        except Exception:
+            break
+        hits = data.get("result_set", [])
+        if not hits:
+            break
+        for hit in hits:
+            pdb = hit["identifier"].split("_")[0].upper()
+            if pdb not in seen:
+                seen.add(pdb)
+                ids.append(pdb)
+        if len(hits) < rows:
+            break
+    return ids
+
+
+def uniref100_pdb_ids(
+    query_pdb: str, *, other_members_only: bool = False
+) -> list[str]:
+    """PDB xrefs in the query's UniRef100 cluster (identical sequence).
+
+    1CLL is P0DP23; 3CLN is P0DP29 — same CaM sequence, different accession.
+    UniRef100 membership is measured sequence identity, not a free list.
+
+    other_members_only: skip the query accession (those PDBs are already
+    in uniprot_structure_ids). The full cluster is 457 CaM / 1000+ Hb
+    complexes; the *other* accessions are the isoform/species crystals
+    the query-acc page never lists (3CLN).
+    """
+    acc = None
+    for ent in ("1", "2", "3", "4", "5"):
+        try:
+            u = _get(f"https://data.rcsb.org/rest/v1/core/uniprot/{query_pdb}/{ent}")
+            if isinstance(u, list) and u:
+                acc = u[0]["rcsb_uniprot_container_identifiers"]["uniprot_id"]
+                break
+        except Exception:
+            continue
+    if not acc:
+        return []
+    url = (
+        "https://rest.uniprot.org/uniprotkb/search?"
+        f"query=uniref_cluster_100:UniRef100_{acc}+AND+database:pdb"
+        "&fields=accession,xref_pdb&size=500&format=json"
+    )
+    ids, seen = [], set()
+    while url:
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": "fsot-genetics"})
+            with urllib.request.urlopen(req, timeout=60) as response:
+                data = json.loads(response.read().decode("utf-8", "replace"))
+                link = response.headers.get("Link") or ""
+        except Exception:
+            break
+        for row in data.get("results") or []:
+            member = str(row.get("primaryAccession") or "")
+            if other_members_only and member and member == acc:
+                continue
+            for xref in row.get("uniProtKBCrossReferences") or []:
+                if xref.get("database") != "PDB":
+                    continue
+                pid = str(xref.get("id") or "").upper()
+                if pid and pid not in seen:
+                    seen.add(pid)
+                    ids.append(pid)
+        nxt = None
+        for part in link.split(","):
+            if 'rel="next"' in part or "rel=next" in part:
+                try:
+                    nxt = part.split("<", 1)[1].split(">", 1)[0].strip()
+                except IndexError:
+                    nxt = None
+                break
+        url = nxt
+    return ids
+
+
 def uniprot_structure_ids(query_pdb: str) -> list[str]:
     """Every experimental PDB for the query's UniProt accession.
 
@@ -250,7 +356,7 @@ def uniprot_structure_ids(query_pdb: str) -> list[str]:
         },
         "return_type": "entry",
         "request_options": {
-            "paginate": {"start": 0, "rows": 200},
+            "paginate": {"start": 0, "rows": 240},
             "results_content_type": ["experimental"],
         },
     }
@@ -455,57 +561,70 @@ def collect_template_candidates(
     """All fair homolog chain hits (measured authority pool). No early exit."""
     out: list[dict] = []
     seen: set[str] = set()
-    for pdb in (
-        same_protein_ids(sequence)
+    priority = uniref100_pdb_ids(exclude_pdb, other_members_only=True)
+    rest = (
+        identity_band_ids(sequence, identity_cutoff=IDENTITY_CAP)
+        + same_protein_ids(sequence)
         + uniprot_structure_ids(exclude_pdb)
         + homolog_ids(sequence, pages=search_pages)
         + pfam_family_pdbs(exclude_pdb, pages=search_pages)
-    ):
-        if pdb == exclude_pdb.upper() or pdb in seen:
-            continue
-        seen.add(pdb)
-        try:
-            text = fetch_template_pdb(pdb)
-        except Exception:
-            continue
-        for chain in chains_of(text):
+    )
+
+    def _ingest(pdb_ids: list[str], *, budget: int | None) -> None:
+        n = 0
+        for pdb in pdb_ids:
+            if pdb == exclude_pdb.upper() or pdb in seen:
+                continue
+            if budget is not None and n >= budget:
+                break
+            seen.add(pdb)
+            n += 1
             try:
-                tseq, tcoords = parse_pdb_ca(text, chain)
+                text = fetch_template_pdb(pdb)
             except Exception:
                 continue
-            if len(tseq) < 20:
-                continue
-            pairs = nw_align(sequence, tseq)
-            if len(pairs) < 10:
-                continue
-            identity = sum(
-                1 for qi, ti in pairs if sequence[qi] == tseq[ti]
-            ) / len(pairs)
-            coverage = len(pairs) / len(sequence)
-            if identity > identity_cap or identity < MIN_IDENTITY or coverage < MIN_COVERAGE:
-                continue
-            model = build_from_template(len(sequence), tcoords, pairs)
-            if not model_is_sane(model, len(sequence)):
-                continue
-            # Data eligibility only: id × coverage (alignment observables).
-            # Ranking is residual-at-interface energy — NOT free geometric scores.
-            score_data = coverage * identity
-            out.append(
-                {
-                    "score": score_data,
-                    "pdb_id": pdb,
-                    "chain": chain,
-                    "model": model,
-                    "identity": identity,
-                    "coverage": coverage,
-                    "pairs": pairs,
-                    "tcoords": tcoords,
-                    "tmpl_len": len(tseq),
-                    "ensemble": pdb_is_ensemble(text),
-                }
-            )
-        if len(seen) >= max_pdbs:
-            break
+            for chain in chains_of(text):
+                try:
+                    tseq, tcoords = parse_pdb_ca(text, chain)
+                except Exception:
+                    continue
+                if len(tseq) < 20:
+                    continue
+                pairs = nw_align(sequence, tseq)
+                if len(pairs) < 10:
+                    continue
+                identity = sum(
+                    1 for qi, ti in pairs if sequence[qi] == tseq[ti]
+                ) / len(pairs)
+                coverage = len(pairs) / len(sequence)
+                if identity > identity_cap or identity < MIN_IDENTITY or coverage < MIN_COVERAGE:
+                    continue
+                model = build_from_template(len(sequence), tcoords, pairs)
+                if not model_is_sane(model, len(sequence)):
+                    continue
+                # Data eligibility only: id × coverage (alignment observables).
+                # Ranking is residual-at-interface energy — NOT free geometric scores.
+                score_data = coverage * identity
+                out.append(
+                    {
+                        "score": score_data,
+                        "pdb_id": pdb,
+                        "chain": chain,
+                        "model": model,
+                        "identity": identity,
+                        "coverage": coverage,
+                        "pairs": pairs,
+                        "tcoords": tcoords,
+                        "tmpl_len": len(tseq),
+                        "ensemble": pdb_is_ensemble(text),
+                    }
+                )
+
+    # UniRef100 = identical sequence. That is the same apparatus, not a
+    # homolog page. Do not truncate it with MAX_TEMPLATE_PDBS (3CLN sat
+    # past the 120-cap while 4EHQ filled the first page).
+    _ingest(priority, budget=None)
+    _ingest(rest, budget=max_pdbs)
     return out
 
 
@@ -716,31 +835,30 @@ def select_measured_authority(cands: list[dict]) -> tuple[list[dict], str, dict,
             return min(ds) if ds else 1e9
 
         # Residual must not pick which *observation* of a collapse to
-        # score (1UBI 0.09 Å is E=1.29, rank 21). Every intact crystal
-        # is a measured map of the apparatus.
+        # score (1UBI 0.09 Å is E=1.29, rank 21). That rule is per
+        # collapse, not "every UniRef100 crystal" — the latter dumped
+        # 300 CaM-target complexes into the apparatus.
         _add(max(authority, key=lambda c: float(c["score"])))
         _add(min(authority, key=lambda c: float(c["residual_energy"])))
-        for c in authority:
-            if _measured_bond_mse(c) <= _BOND_BROKEN:
-                _add(c)
-        # id 0.90 compact holo (1EXR/1CLM) is data-plausible, not 0.95.
-        for c in cands:
-            if (
-                not c.get("ensemble")
-                and float(c["score"]) >= best_data / _PHI
-                and _measured_bond_mse(c) <= _BOND_BROKEN
-            ):
-                _add(c)
         n_cl = min(len(clusters), max(MULTI_TOP_K, int(round(_PHI ** 4))))
-        for cl in clusters[:n_cl]:
+        for i, cl in enumerate(clusters[:n_cl]):
             intact = [c for c in cl if _measured_bond_mse(c) <= _BOND_BROKEN]
             use = [c for c in (intact or cl) if not c.get("ensemble")] or (
                 intact or cl
             )
+            if not use:
+                continue
             seed = min(
                 use, key=lambda c: (float(c["residual_energy"]), -float(c["score"]))
             )
             _add(seed)
+            _add(max(use, key=lambda c: float(c["score"])))
+            # Default collapse (largest cluster): keep every intact map
+            # so residual cannot drop 1UBI inside ubiquitin.
+            if i == 0:
+                for c in use:
+                    if _measured_bond_mse(c) <= _BOND_BROKEN:
+                        _add(c)
             # φ² merges CaM 2R28 (2.2 Å) with 3CLN (0.52 Å). A crystal
             # more than φ from the seed is the other collapse in the ball.
             far = []
@@ -764,18 +882,59 @@ def select_measured_authority(cands: list[dict]) -> tuple[list[dict], str, dict,
                     )
                 )
                 _add(max(far, key=lambda c: float(c["score"])))
-        # Data-plausible crystals outside the 0.95 cap (1CLM id 0.90).
-        extra = [
+        # Leftover identical-sequence collapses (3CLN compact holo vs a
+        # large bound-CaM cluster). Residual/score must not drop the
+        # other observation of that collapse (1UP5 1.38 kept, 3CLN 0.52
+        # dropped when only the seed was stored).
+        leftover = [
             c
-            for c in cands
-            if float(c["score"]) >= best_data / _PHI
-            and float(c["identity"]) < IDENTITY_CAP
-            and not c.get("ensemble")
+            for c in same_prot
+            if not c.get("ensemble")
             and _measured_bond_mse(c) <= _BOND_BROKEN
             and str(c["pdb_id"]) not in seen_pdb
+            and _mind(c) > _PHI
         ]
-        if extra and _mind(min(extra, key=lambda c: float(c["residual_energy"]))) > _PHI:
-            _add(min(extra, key=lambda c: float(c["residual_energy"])))
+        remaining = leftover
+        while remaining:
+            seed = max(remaining, key=lambda c: float(c["score"]))
+            cl, rest = [seed], []
+            for c in remaining:
+                if c is seed:
+                    continue
+                try:
+                    d = float(kabsch_rmsd(c["model"], seed["model"]))
+                except Exception:
+                    rest.append(c)
+                    continue
+                if d <= _STATE_RADIUS:
+                    cl.append(c)
+                else:
+                    rest.append(c)
+            for c in cl:
+                _add(c)
+            remaining = rest
+        # Data-plausible maps below the 0.95 cap (1CLM / 1EXR id ~0.90).
+        extras = 0
+        for c in sorted(
+            cands,
+            key=lambda c: (-float(c["score"]), float(c["residual_energy"])),
+        ):
+            if c.get("ensemble"):
+                continue
+            if float(c["identity"]) >= IDENTITY_CAP:
+                continue
+            if float(c["score"]) < best_data / _PHI:
+                continue
+            if _measured_bond_mse(c) > _BOND_BROKEN:
+                continue
+            if str(c["pdb_id"]) in seen_pdb:
+                continue
+            if _mind(c) <= _PHI:
+                continue
+            _add(c)
+            extras += 1
+            if extras >= n_cl:
+                break
         primary = max(authority, key=lambda c: float(c["score"]))
         # If data-best transfer is residual-unfit, default collapse is
         # residual-best (RNase 1A2W 15 Å vs a real RNase crystal).
@@ -1011,7 +1170,12 @@ def best_template(sequence: str, exclude_pdb: str, identity_cap: float = IDENTIT
         "flip_pdb": None if flip is None else flip["pdb_id"],
         "flip_score": None if flip is None else flip["score"],
         "state_reps": [
-            {"pdb_id": r["pdb_id"], "model": r["model"], "score": r["score"]}
+            {
+                "pdb_id": r["pdb_id"],
+                "model": r["model"],
+                "score": r["score"],
+                "chain": r.get("chain"),
+            }
             for r in (primary.get("state_reps") or [])
         ]
         + (

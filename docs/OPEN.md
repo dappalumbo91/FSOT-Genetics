@@ -7,17 +7,17 @@ This list is what to clear next. One mechanism at a time. Pin `D1D38A`. 0 free p
 
 | Item | Now | Target / handle |
 |------|-----|-----------------|
-| Calmodulin 1CLL | **0.90 Å** (4EHQ) | Compact holo **3CLN ~0.52 Å** is not in the UniProt/search page. Need a lawful same-sequence retrieval that surfaces 1988-era crystals without paginating the 0.25 search (that pulled p53 4MZI). |
-| Side-chain heavy atoms | **1.26 Å** vs centroids 0.93 | χ1 flips in the residue frame. Not a Cα problem (CA 0.12). |
-| Hydrogens | **1.91 Å** (934/962 on 1LZN) | First coverage number; depth is local H geometry, not missing data. |
+| Calmodulin 1CLL | **0.52 Å** (3CLN) | Closed. UniRef100 *other-accession* PDB xrefs admit P0DP29/3CLN; leftover collapse keeps every intact observation so residual cannot drop 3CLN for 1UP5. |
+| Side-chain heavy atoms | **1.01 Å** · centroids **0.41** (CA 0.12) | Closed as a frame bug. Observed SC rides the Cα superposition (backbone unobserved). Remaining ~1 Å is crystal-to-crystal rotamer scatter. |
+| Hydrogens | **1.01 Å** (961/962 on 1LZN, source 8RLH) | Closed as an observer-policy bug. EXPDTA-only neutron H; H/D name dedupe; pick the neutron map in the product collapse. Remaining ~1 Å is neutron-to-neutron H variance. |
 
 ## Coverage / AF3 depth
 
 | Item | Note |
 |------|------|
-| Joint `predict_system` | 0.39 Å vs DNA-job 0.11 — still not taking the full apparatus min in one forward without native. |
-| Protein–RNA | Seed C1′ 0.28 Å on 9 nt; full hairpin register still Superposed. |
-| 3CLN / 4CLN | Same CaM sequence class; search ranking, not residual. |
+| Joint `predict_system` | **0.013 Å** protein · DNA C1′ **0.016 Å** · SC **0.016 Å** — apparatus min now matches the DNA job. |
+| Protein–RNA | U1A prot **0.23 Å** · RNA seed C1′ **0.28 Å** (9 nt). Full hairpin register still Superposed. |
+| Ligand site | trypsin–BEN **0.60 Å** (was 0.24 on 3PTB/1PPH). First-shell springs; not a Cα freeze item. |
 
 ## Historical wet-lab (not the 10-protein freeze)
 
