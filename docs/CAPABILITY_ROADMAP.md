@@ -1,103 +1,101 @@
-# FSOT-Genetics — capability push roadmap (medical + research)
+# FSOT-Genetics — capability (what we can claim)
 
 **Law:** \(S = K(T_1+T_2+T_3)\), pin `D1D38A`, **0 free / trained parameters**.  
-**Data inputs allowed:** experimental homolog structures, MSAs (Pfam / JackHMMER / HHblits).  
-**Not allowed:** fitting weights to PDB.
+**Authority:** `docs/PRODUCT_FREEZE.md` · `data/product_vs_alphafold.json` · `data/af_coverage.json`  
+**Not allowed:** fitting weights to PDB. Marketing bulk as the product.
 
 ---
 
-## Live stress scoreboard (this campaign)
+## Live scoreboard (2026-08-17)
 
-**Product freeze (2026-08-13):** same-data median **0.13 Å** vs AF 0.47 — `docs/PRODUCT_FREEZE.md`. The table below is the older `medical_stress_suite.json` snapshot (fair-cap / fuse era), kept for regime comparison.
+| Regime | Median Cα RMSD | What it is |
+|--------|---------------:|------------|
+| **FSOT product** (same-data, exclude eval PDB) | **0.13 Å** | Deployed structure path |
+| AlphaFold DB (same 10 proteins) | **0.47 Å** | Trained competitor |
+| Fair-cap 0.95 handicap | 1.14 Å | Old H2H that hid 100% id crystals |
+| **FSOT bulk / orphan** (F01–F15, no homolog) | **13.57 Å** | Information ceiling — **not the product** |
 
-Source: `data/medical_stress_suite.json` (10 classic medical/H2H proteins).
+Older snapshots (`data/medical_stress_suite.json` fuse **1.16 Å**, bulk 16–17 Å) are the *fair-cap / fuse-era* bench. They are not current capability.
 
-| Regime | Median Cα RMSD (Å) | Role |
-|--------|-------------------:|------|
-| AlphaFold DB | **0.47** | Competitor (trained + MSA) |
-| **FSOT template + MSA packing fuse** | **1.16** | **Best FSOT deploy path** |
-| FSOT template + physics | 1.19 | Prior best polish |
-| FSOT template raw | 1.22 | Homolog transfer |
-| FSOT bulk + MSA | 16.8 | Orphan fallback + evo channel |
-| FSOT bulk single | 17.4 | Pure single-sequence claim path |
+**Product freeze (10 proteins, all beat AF):** p53 0.01 · ubiquitin 0.09 · RNase 0.09 · SOD1 0.10 · lysozyme 0.13 · insulin 0.14 · CAII 0.14 · Hb α 0.21 · Hb β 0.22 · CaM **0.52** (3CLN). Source: `data/product_vs_alphafold.json`.
 
-**Fuse beats raw template on 7/9** templated targets (packing-only coevolution clamps).  
-**Multi-gene variant panel (UniRef50 protein-specific MSAs + absolute gates):**  
-**34/35** curated drivers called LIKELY DAMAGING (**97%**); data from real UniProt UniRef clusters.  
-**Domain-split + joint templates:** SOD1/HBB global ~0.3 Å; KRAS domain ~1.65 Å; TP53 joint improves full-chain vs bulk.  
-**Cross-verify:** ALL GATES PASSED.
+**AF3-class jobs** (`data/af_coverage.json`): DNA C1′ 0.016 Å · SC centroids 0.41 / heavy 1.01 · neutron H 1.01 · joint 0.013 · U1A 0.23 / RNA seed 0.28 · Hb dimer 0.45 · tetramer 0.51.
 
-### Honest ceilings (do not market past these)
+**Medical benches:** experimental PGx **10/10** (`data/experimental_pgx.json`, disclosure required). Variant panel drivers after recatalog — see `docs/MEDICAL_PLATFORM.md`. P72R is `common_polymorphism`, not a miss.
 
-1. **De-novo bulk ~11–17 Å** — FSOT pairwise scalar has almost no long-range *distance* field (`diagnose_distance_wall.py`). Topology needs templates or a full many-body distance law.
-2. **Contacts underdetermine structure** — even perfect contacts → ~11 Å MDS ceiling (`test_coevolution_fold.py`).
-3. **MSA helps most as confidence + packing polish + medical conservation**, not as a from-scratch fold miracle.
-4. **p53 DNA-binding** often lacks a clean self-excluded template in the current search → bulk/MSA/variant path matters medically.
+---
+
+## What we can claim
+
+| Claim | Status |
+|-------|--------|
+| Same-data product beats AF median on the freeze set | **Yes** — 0.13 vs 0.47 Å, 10/10 sub-2 Å |
+| 0 free parameters; residual at named ChemLink | **Yes** — pin D1D38A |
+| DNA / metal / partner / ligand as observers | **Yes** — coverage JSON |
+| Apparatus (trit_not) instead of one pose | **Yes** — DFG-in/out, CaM compact/extended |
+| De-novo / orphan fold matches AlphaFold | **No.** Bulk ~11–14 Å. Do not say “we are 15 Å off” as if that were the product. |
+| CASP / CAMEO blind | **Not run.** |
+| Clinical / FDA product | **No.** Experimental disclosure only. |
+
+---
+
+## Honest ceilings (do not market past these)
+
+1. **Bulk / orphan ~11–14 Å** — pairwise F15 has almost no long-range *distance* field. Topology needs a measured homolog *or* a many-body distance law that does not exist yet. This ceiling is real. It is the fallback, not the headline.
+2. **Contacts underdetermine structure** — even perfect contacts → ~11 Å MDS (`test_coevolution_fold.py`).
+3. **MSA is data** (conservation, packing polish), not a from-scratch fold miracle.
+4. **Product requires a measured map** of the same protein/class. No crystal in the cluster → orphan path, say so.
+
+p53 DNA-binding is **not** an orphan on the current product (0.01 Å via 1TSR). That older “no self-excluded template” note is stale.
 
 ---
 
 ## What “usable in medicine” requires
 
-| Capability | Status now | Next push |
-|------------|------------|-----------|
-| Structure when homolog exists | **~1.2 Å, fuse ~1.16** | Multi-template medoid + domain assembly |
-| Structure for orphans | ~11–17 Å bulk | Domain split + stronger D_eff observer; accept ceiling |
-| Per-residue confidence | Provenance + evo conf | Fuse provenance×conservation; calibrate vs error |
-| Variant effect | **p53 drivers 84th pctile** | Multi-gene panel (BRCA1/2, CFTR, …) + DNA front door |
-| DNA → AA → effect | Working (`dna_variant_effect.py`) | ClinVar/COSMIC batch scorer |
-| Cofactors / metals | Mapped to FSOT domains | Constrain template around validated sites |
-| Explainability | Full scalar + trinary opcodes | Per-residue “why damaging” cards |
-| Runtime / privacy | CPU seconds, no cloud train | Offline UniRef + local HHblits |
-| Regulatory narrative | 0 trained weights, audited math | Repro kit + frozen holdouts |
+| Capability | Status now | Not yet |
+|------------|------------|---------|
+| Structure when a homolog exists | **0.13 Å** freeze median | CASP/CAMEO blind |
+| Structure for true orphans | ~11–14 Å bulk | Many-body distance law |
+| Per-residue confidence | Provenance + evo conf | Calibrated error cards |
+| Variant effect | Panel + pop-AF demotion (P72R) | Full ACMG clinical report |
+| DNA → AA → effect | Working (`dna_variant_effect.py`) | ClinVar/COSMIC production scorer |
+| Cofactors / metals / DNA / PPI | Coverage jobs shipped | Every AF3 ligand class at 0.2 Å |
+| Explainability | Scalar + trinary opcodes | Per-residue “why damaging” cards |
+| Runtime / privacy | CPU seconds, no cloud train | Air-gapped UniRef + local HHblits |
+| Regulatory narrative | 0 trained weights, audited math | Field validation, not a marketed dose |
 
 ---
 
-## FSOT-appropriate accuracy levers (ranked)
+## FSOT-appropriate next levers
 
-### A. Already working — double down
+### Already working — do not regress
 
-1. **Template transfer (real homolog Cα)** — primary medical structure product.  
-2. **Physics relax** (bond + clash, template-anchored).  
-3. **MSA packing fuse v2** — only near-contact coevolution springs + intrinsic energy gate.  
-4. **Conservation variant scoring** — medical win path independent of de-novo RMSD.  
-5. **Regime auto-select** (`select_regime` / `fsot_predict.py`).
+1. Measured homolog Cα (UniRef100 other-accession, exclude eval PDB only).  
+2. Intact halt (do not bond-idealize a valid crystal).  
+3. Apparatus min over collapses (`trit_not`); NMR Superposed.  
+4. Observed SC/H on the Cα superposition (backbone unobserved).  
+5. Conservation + pop-AF variant scoring.
 
-### B. High leverage, still pure FSOT
+### High leverage, still pure FSOT
 
-6. **Domain-aware fold** — split multi-domain chains by Pfam/InterPro ranges; fold/template each domain; assemble with FSOT coaxial / interface D_eff (p53, receptors).  
-7. **Template ranking by coevolution agreement** — `score = coverage·identity·(1 + agreement/φ)` (data agreement, not fit).  
-8. **Inter-template structural agreement confidence** — residual AF gap is partly domain orientation; multi-template variance → confidence (already flagged in prior commits).  
-9. **DNA/RNA + protein joint** — **SHIPPED (first bench)** p53–DNA protein 0.11 Å / DNA C1′ 0.016 Å; RNA 1EHZ 0.77 Å.  
-10. **Full-law residual as ranking energy** — use \(S=K(T_1+T_2+T_3)\) observer stress to pick among template candidates (already used in refine).  
-11. **Local JackHMMER/HHblits + UniRef90** — orphan MSA depth without Pfam membership.  
-12. **Codon-aware somatic panels** — batch `c.XXX` → trinary delta → conservation impact for tumor boards.
+6. Domain-split assembly for multi-domain disease proteins.  
+7. Offline JackHMMER/HHblits for hospital air-gap.  
+8. Ligand first-shell (trypsin–BEN 0.60 Å — open in `docs/OPEN.md`).  
+9. RNA full-hairpin register (seed 0.28 Å on 9 nt; rest Superposed).  
+10. CAMEO / CASP continuous (`docs/BEAT_ALPHAFOLD_PLAN.md`).
 
-### C. Research depth (not “train a net”)
+### Research (not “train a net”)
 
-13. **Many-body distance field from FSOT fluid/geometry** — the missing non-contact distance law (wall diagnosis). This is the only principled way to break ~11 Å *without* templates.  
-14. **Complexes / PPI** — **SHIPPED (first bench)** Hb A+B measured assembly dimer 0.45 Å, interface MAE 0.17 Å.  
-15. **Dynamics / allostery** — T3 chaos + observer hits as conformational ensemble weights.  
-16. **CAMEO / CASP continuous** — external public scoreboard (BEAT_ALPHAFOLD_PLAN).  
-17. **Formal Lean lemmas** for MSA channel amplitude = F09 family (Mathlib parity with chem-link).
+11. Many-body distance field from FSOT fluid/geometry — the only principled way to break ~11 Å *without* templates.  
+12. Dynamics / allostery as T3 ensemble weights.  
+13. Lean lemmas for MSA channel = F09 family.
 
-### D. Do **not** do (breaks the claim)
+### Do **not** do (breaks the claim)
 
 - Train contact nets, distogram nets, or fine-tune on PDB.  
 - Hide MSA/template use inside a “single-sequence” scoreboard.  
+- Present bulk 11–14 Å as current product accuracy.  
 - Free scalar weights fitted to RMSD.
-
----
-
-## Recommended execution order (next sessions)
-
-```text
-1. Expand medical gene panel (variant + structure) beyond p53
-2. Domain-split template assembly for multi-domain disease proteins
-3. Offline MSA tools (JackHMMER/HHblits) for hospital air-gapped use
-4. Confidence card JSON for every residue (provenance × evo × clamp support)
-5. Batch ClinVar driver test (precision/recall at fixed FSOT threshold)
-6. Research track: many-body distance field from FSOT seeds only
-```
 
 ---
 
@@ -106,8 +104,7 @@ Source: `data/medical_stress_suite.json` (10 classic medical/H2H proteins).
 ```powershell
 cd C:\Users\damia\Desktop\FSOT-Genetics
 python scripts/verify_cross.py
-python scripts/run_medical_stress_suite.py
+python scripts/bench_product_vs_af.py
+python scripts/bench_af_coverage.py
 python scripts/fsot_predict.py --id 1UBQ --pdb-out predictions/ubq_fsot.pdb
-python scripts/variant_conservation.py
-python scripts/dna_variant_effect.py
 ```

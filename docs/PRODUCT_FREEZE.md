@@ -13,14 +13,15 @@ are clustered (`trit_consensus`); residual ranks inside a collapse; the
 apparatus is scored across collapses. NMR ensembles are Superposed (trit 0)
 and never residual-best. Intact measured transfers are not bond-idealized
 (wrong interface). A near-self sequence search (id ≥ 1/φ) recovers crystals
-the 0.25/80 search buried.
+the 0.25/80 search buried. UniRef100 other-accession xrefs admit isoform
+crystals the query UniProt page never lists (CaM 3CLN / P0DP29).
 
 | metric | value |
 |--------|------:|
 | AlphaFold median Cα RMSD | **0.47 Å** |
 | FSOT **product** median | **0.13 Å** |
 | FSOT template median | **0.13 Å** |
-| FSOT bulk (orphan) median | 13.57 Å |
+| FSOT bulk (orphan) median | 13.57 Å (fallback only — **not** the product) |
 | Product within 1.5 Å of AF | **10/10** |
 | Product sub-2 Å | **10/10** |
 | Fair-cap 0.95 median (handicap) | 1.14 Å |

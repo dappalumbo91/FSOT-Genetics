@@ -1,8 +1,9 @@
 # Mechanism gap map — where FSOT fails and what to solve
 
-**Current freeze (2026-08-13):** same-data product median **0.13 Å** vs AF **0.47 Å**. Remaining H2H/coverage gaps: `docs/OPEN.md`.
+**Current product (do not quote this file as the scoreboard):** same-data median **0.13 Å** vs AF **0.47 Å**, CaM **0.52 Å** — `docs/PRODUCT_FREEZE.md`. Remaining coverage: `docs/OPEN.md`.
 
-**Source (this ledger):** `data/wetlab_af_eval.json` (2026-08-11) + older product freeze + error-margin doctrine. The table below is the **broader medical set**, not the 10-protein H2H.  
+**This ledger is historical.** Source: `data/wetlab_af_eval.json` (2026-08-11) + the fair-cap / fuse-era freeze (1.16 Å). Rows below (ABL1 12.7 Å, p53 2.60, P72R false +, ship gate ≤ 1.16) record *what failed then*. Several are closed on the current product (p53 0.01, P72R `common_polymorphism`, freeze 0.13). Do **not** read 12 Å kinase rows as present-day capability.
+
 **Rule:** fix **one mechanism at a time** under \(S=K(T_1+T_2+T_3)\), pin `D1D38A`, **0 free parameters**.  
 **Attitude:** failures are **diagnostic**, not embarrassment — they tell us which FSOT interface is wrong.
 
@@ -98,7 +99,7 @@ Ranked by medical impact × solvability under pure FSOT.
 | **What failed** | Conservation alone cannot separate polymorphic conserved sites from drivers |
 | **FSOT handle** | Population allele frequency as **data** (gnomAD/ClinVar AF when available) — not a trained weight; trinary codon class for synonymous; dual-gate: absolute cons × f_mut **and** “common poly demotion” when AF_pop &gt; seed threshold (e.g. 1/φ³); benign control panel expansion |
 | **Success metric** | P72R not LIKELY DAMAGING; pathogenic recall ≥ 0.9 on expanded set |
-| **Status** | **OPEN — medical specificity** |
+| **Status** | **CLOSED on the current panel** — P72R is `common_polymorphism` (pop AF ≥ 1/φ³). See `docs/MEDICAL_PLATFORM.md`. |
 
 ### M8 — Evaluation / AF comparison fairness
 
@@ -116,7 +117,7 @@ Ranked by medical impact × solvability under pure FSOT.
 | Mechanism | Evidence | Keep |
 |-----------|----------|------|
 | Residual law \(1+\|S\|P_{\mathrm{NEW}}\) | Zig≡Python; drug median 0.84 Å | Keep pin domains |
-| Multi-template fill (φ³ / φ⁶) | Freeze product 1.16 Å H2H | Keep |
+| Multi-template fill (φ³ / φ⁶) | Historical freeze 1.16 Å; current product **0.13 Å** | Keep the law, not the old number |
 | Measured template authority | Beats bulk everywhere medical | Never replace with pure bulk |
 | Pathogenic conservation signal | 11/11 drivers | Keep absolute + percentile dual gate |
 | Zero free parameters | All ship gates | No learned RMSD polish |
@@ -130,13 +131,13 @@ Ranked by medical impact × solvability under pure FSOT.
 [2] M2  Coverage holes (EGFR)       → improved via isoform expand; still ~5 Å
 [3] Reality margins                 → long_range_contacts dominant on product path
 [4] Vaccine antigens (RBD)          → still ~5.8 Å; need sarbecovirus RBD pool
-[5] M7  Variant specificity         → pop-AF data demotion + benign panel
+[5] M7  Variant specificity         → CLOSED (P72R common_polymorphism)
 [6] M4  Conformation classes        → multi-template density clusters
 [7] M5  Precision polish            → ChemLink residual SS only, gated
 [8] M6  Bulk wall                   → research many-body; not product
 ```
 
-**Hard gate for any ship:** product freeze H2H median **≤ 1.16 Å** and wet-lab ABL1 **improves** if M1 ships; no silent regressions on RNase/CaM-class winners.
+**Hard gate for any ship:** product freeze H2H median **≤ 0.47 Å** (AF median; current freeze **0.13 Å**). No silent jump of a winning protein above 3 Å. The old ≤ 1.16 Å line was the fuse-era gate.
 
 ---
 
@@ -162,7 +163,7 @@ Doctrine: **wrong interface → worse residual.** If RMSD rises after a residual
 1. Collect full fair homolog pool (no early-exit).  
 2. Native-free **density** pick among top-k by score **and** among high-coverage Pfam-domain PDBs.  
 3. Compare product RMSD vs current greedy multi-fill.  
-4. Ship only if wet-lab medians improve **and** freeze H2H ≤ 1.16.
+4. Ship only if wet-lab medians improve **and** freeze H2H stays ≤ 0.47 Å (AF).
 
 Do **not** combine with M5 polish in the same commit.
 

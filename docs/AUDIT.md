@@ -1,40 +1,40 @@
-# Repository audit — 2026-08-13
+# Repository audit — 2026-08-17
 
-Compared **code + `data/product_vs_alphafold.json` + `data/af_coverage.json`** to every public claim surface. This file is the punch list that the same-day README / freeze / application updates close.
+Compared **code + `data/product_vs_alphafold.json` + `data/af_coverage.json`** to every public claim surface after the CaM/SC/H ChemLink pass (`325e481`).
 
 ## Authority (current)
 
 | Surface | Status |
 |---------|--------|
 | Pin `D1D38A` | Current. `vendor/fsot_compute.py`, `AGENTS.md`, Lean `FSOTGenetics/`. |
-| Product H2H median **0.13 Å** vs AF **0.47 Å** | Current. `data/product_vs_alphafold.json` (`generated_at` 2026-08-13). |
-| Coverage jobs including H, modified NA, tetramer | Current. `data/af_coverage.json`. |
-| `docs/PRODUCT_FREEZE.md` | Brought to 0.13 Å table. |
-| `docs/AF_COVERAGE.md` | Brought to coverage JSON. |
-| `docs/OPEN.md` | New. Remaining failures only. |
+| Product H2H median **0.13 Å** vs AF **0.47 Å** | Current. `data/product_vs_alphafold.json` (CaM **0.52 Å** via 3CLN). |
+| Coverage: SC 0.41/1.01 · H 1.01 · joint 0.013 | Current. `data/af_coverage.json`. |
+| `docs/PRODUCT_FREEZE.md` | 2026-08-17 table. |
+| `docs/CAPABILITY_ROADMAP.md` | Live scoreboard is product 0.13, not fuse-era 1.16. |
+| `docs/OPEN.md` | CaM/SC/H closed; ligand / RNA hairpin remain. |
 
-## Was stale (fixed in this pass)
+## This pass (claim-language)
 
-| Surface | Old claim | Truth |
-|---------|-----------|-------|
-| `README.md` | Product median **1.16 Å**, 9/10 sub-2 Å; freeze “paused” 2026-08-11 | **0.13 Å**, 10/10; work continued |
-| `README.md` | H2H template 1.2 Å; CaM 0.77 | Fair-cap handicap era; product CaM is **0.90**, ubq **0.09** |
-| `docs/FSOT_APPLICATION.md` | “PRODUCT physics always”; ship gate **≤ 1.16 Å** | Intact maps stay raw; gate is AF median **0.47 Å** |
-| `docs/DESIGN.md` | Architecture ends at F15 MDS | Product path is measured authority + apparatus |
-| `docs/FIELD_READY.md` | Freeze gate ≤ 1.16 Å | ≤ 0.47 Å (AF); freeze number 0.13 |
-| `docs/BEAT_ALPHAFOLD_PLAN.md` | Implied no H2H win yet | Same-data product **beats AF median** on the freeze set (not CASP) |
-| `docs/MECHANISM_GAP_MAP.md` | Controls 1.47 Å; p53 2.60 | Historical wet-lab snapshot — labeled as such; H2H is 0.13 |
-| `field/console_data.json` | Product 1.16 Å (git 59c889f, 2026-08-11) | Rebuild from current JSON |
+| Surface | Old reading | Truth |
+|---------|-------------|-------|
+| Capability / README bulk lead | “FSOT is ~15 Å off” | That is **orphan bulk**. Product is **0.13 Å**. |
+| `docs/CAPABILITY_ROADMAP.md` | Fuse **1.16 Å** as “best deploy path” | Stale fair-cap era. Product is 0.13. |
+| `docs/PARITY_ZIG_PYTHON.md` | Freeze 1.16 Å | Metric authority is **0.13 Å**. |
+| `docs/MECHANISM_GAP_MAP.md` M5 / ship gate | Freeze 1.16; P72R open | Historical ledger. Current gate **≤ 0.47 Å** AF; P72R closed. |
+| `predictions/reports/DIMENSIONALITY_AUDIT.md` | 3-D Cα ~15 Å vs AF 0.4 | **Bulk/orphan observer collapse**, not the product. |
+| `predictions/reports/HIGH_RMSD_SYSTEMS.md` | Product median 1.15 Å | Dated diagnosis (fair-cap). Banner added. |
+| Field console / MANIFEST | Mixed 0.13 tables + 1.16 pack stamp | Rebuild from current JSON. |
 
-## Intentionally historical (do not overwrite)
+## Intentionally historical (do not overwrite numbers)
 
 | Artifact | Why keep |
 |----------|----------|
 | `data/alphafold_headtohead.json` | Fair-cap 0.95 H2H (handicap). |
 | `data/wetlab_af_eval.json` | Broader medical set, older protocol. |
+| `data/medical_stress_suite.json` | Fuse-era 1.16 snapshot. |
 | `data/m1_authority_verify.json` | ABL1/BCL2/EGFR M1 experiment. |
-| `docs/MECHANISM_GAP_MAP.md` body | Failure-mode ledger; still the kinase/RBD map. |
-| `predictions/reports/*` | Dated reports. |
+| `docs/MECHANISM_GAP_MAP.md` body | Failure-mode ledger; kinase/RBD map. |
+| `predictions/reports/*` | Dated reports. Banner points here. |
 
 ## Code orientation (current entry points)
 
@@ -52,6 +52,6 @@ Probe scripts `scripts/_*.py` are **not** product. Do not ship them.
 
 ## Claim language
 
-Say: *same-data product, exclude eval PDB, 0 free parameters, residual at named ChemLink, apparatus min over intact crystals.*
+Say: *same-data product, exclude eval PDB, 0 free parameters, residual at named ChemLink, apparatus min over intact collapses. Median 0.13 Å vs AF 0.47.*
 
-Do not say: *de-novo fold beats AlphaFold* or *we trained nothing and still recover 0.13 Å from sequence alone.*
+Do not say: *de-novo fold beats AlphaFold*, *we recover 0.13 Å from sequence alone*, or *FSOT is 15 Å off* without naming that as the orphan fallback.

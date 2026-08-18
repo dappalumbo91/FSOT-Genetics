@@ -1,4 +1,4 @@
-# Open failures (marked 2026-08-13)
+# Open failures (marked 2026-08-17)
 
 Results in `docs/PRODUCT_FREEZE.md` and `data/product_vs_alphafold.json` are **frozen**.  
 This list is what to clear next. One mechanism at a time. Pin `D1D38A`. 0 free parameters.
@@ -21,7 +21,7 @@ This list is what to clear next. One mechanism at a time. Pin `D1D38A`. 0 free p
 
 ## Historical wet-lab (not the 10-protein freeze)
 
-See `docs/MECHANISM_GAP_MAP.md`. Still open there: EGFR coverage, variant P72R specificity, vaccine-antigen domain scope, CASP/CAMEO blind.
+See `docs/MECHANISM_GAP_MAP.md` (historical wet-lab ledger — not the freeze scoreboard). Still open there: EGFR coverage, vaccine-antigen domain scope, CASP/CAMEO blind. P72R specificity is **closed** (`common_polymorphism`).
 
 Medical expansion: `docs/MEDICAL_PLATFORM.md`. Experimental PGx: **10/10** (`scripts/bench_experimental_pgx.py`, disclosure required).
 

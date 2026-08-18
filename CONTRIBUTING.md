@@ -7,6 +7,7 @@
 3. Do not add trained weights, MSA-fitted dials, or Chou-Fasman lookup tables.
 4. Keep the fold path **fast** (seconds-scale). O(n²)×huge multi-start is a regression.
 5. Publish honest RMSD / contact metrics — no cherry-picking.
+6. Never quote bulk ~11–14 Å as the product. Product is same-data **0.13 Å** (`docs/PRODUCT_FREEZE.md`).
 
 ## Before push
 

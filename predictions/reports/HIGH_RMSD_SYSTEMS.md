@@ -1,5 +1,7 @@
 # High-RMSD systems (>1.2 Å vs wet lab) — multi-system diagnosis
 
+> **Historical (fair-cap / fuse era).** The “product H2H median 1.15 Å” and p53 1.57 / ubq 2.03 rows below are **not** current capability. Current same-data product: median **0.13 Å**, p53 **0.01**, ubiquitin **0.09**, CaM **0.52**. See `docs/PRODUCT_FREEZE.md`. This file stays as the diagnosis ledger.
+
 Source: `data/high_rmsd_system_diagnosis.json` + product path after multi-system residual levers.
 
 ## Systems above 1.2 Å (reality panel)

@@ -1,10 +1,10 @@
 {
-  "built_at": "2026-08-13T03:22:12.862841+00:00",
+  "built_at": "2026-08-18T02:56:23.345067+00:00",
   "pin": "D1D38A",
   "pin_sha256_prefix": "D1D38A185487",
   "git": {
-    "sha": "43aa0de",
-    "sha_full": "43aa0de137006b378c7234532a742b3f8a6b0891",
+    "sha": "325e481",
+    "sha_full": "325e4819cd30048beeec9fb105b14fd16deeb7c8",
     "branch": "main",
     "dirty": true
   },
@@ -13,8 +13,8 @@
     "summary": {
       "n": 10,
       "alphafold_median_A": 0.4706172512401575,
-      "fsot_template_median_A": 0.12847815425974868,
-      "fsot_product_median_A": 0.12847815425974882,
+      "fsot_template_median_A": 0.13251476526304143,
+      "fsot_product_median_A": 0.13251476526304168,
       "fsot_bulk_median_A": 13.574035917440511,
       "product_within_1p5A_of_alphafold": 10,
       "product_sub2A": 10,
@@ -60,10 +60,10 @@
       {
         "name": "Lysozyme human",
         "alphafold_rmsd_A": 0.4215392291893585,
-        "fsot_template_rmsd_A": 0.11765314029944404,
-        "fsot_product_rmsd_A": 0.11765314029944425,
+        "fsot_template_rmsd_A": 0.12572636230602952,
+        "fsot_product_rmsd_A": 0.12572636230603,
         "fsot_bulk_rmsd_A": 11.534684051709375,
-        "template_pdb": "1REX",
+        "template_pdb": "1JSF",
         "regime": "template_raw"
       },
       {
@@ -105,14 +105,14 @@
       {
         "name": "Calmodulin",
         "alphafold_rmsd_A": 6.453900855719977,
-        "fsot_template_rmsd_A": 0.8995477258333835,
-        "fsot_product_rmsd_A": 0.8995477258333834,
+        "fsot_template_rmsd_A": 0.5211882807663313,
+        "fsot_product_rmsd_A": 0.5211882807663312,
         "fsot_bulk_rmsd_A": 17.497890964874788,
-        "template_pdb": "4EHQ",
+        "template_pdb": "3CLN",
         "regime": "template_raw"
       }
     ],
-    "generated_at": "2026-08-13T03:15:32.355369+00:00"
+    "generated_at": "2026-08-18T02:38:09.743276+00:00"
   },
   "parity": {
     "status": "PASS",
@@ -126,68 +126,156 @@
     "summary": {
       "n_genes": 8,
       "n_drivers": 35,
-      "n_likely_damaging": 34,
-      "driver_recall_at_75pct": 0.9714285714285714,
-      "mean_driver_percentile": 62.23935264546526,
+      "n_likely_damaging": 35,
+      "driver_recall_at_75pct": 1.0,
+      "mean_driver_percentile": 62.239352645465274,
       "threshold_damaging": 75.0,
       "threshold_uncertain": 40.0
     },
     "drivers": [
       {
-        "gene": "TP53",
-        "pos": 175,
-        "change": "R175H",
+        "gene": "BRAF",
+        "pos": 600,
+        "change": "V600E",
         "call": "LIKELY DAMAGING",
-        "percentile": 61.965983661443694,
-        "conservation": 0.9940828402366864
+        "percentile": 66.82698914387797,
+        "conservation": 0.9967105263157895
       },
       {
-        "gene": "TP53",
-        "pos": 245,
-        "change": "G245S",
+        "gene": "BRAF",
+        "pos": 600,
+        "change": "V600K",
         "call": "LIKELY DAMAGING",
-        "percentile": 64.3765903307888,
+        "percentile": 66.82698914387797,
+        "conservation": 0.9967105263157895
+      },
+      {
+        "gene": "BRAF",
+        "pos": 469,
+        "change": "G469A",
+        "call": "LIKELY DAMAGING",
+        "percentile": 68.9295039164491,
         "conservation": 1.0
       },
       {
-        "gene": "TP53",
-        "pos": 248,
-        "change": "R248Q",
+        "gene": "BRCA1",
+        "pos": 61,
+        "change": "C61G",
         "call": "LIKELY DAMAGING",
-        "percentile": 40.2303468595152,
-        "conservation": 0.9702380952380952
+        "percentile": 72.08520496087239,
+        "conservation": 0.9849624060150376
       },
       {
-        "gene": "TP53",
-        "pos": 248,
-        "change": "R248W",
+        "gene": "BRCA1",
+        "pos": 64,
+        "change": "C64Y",
         "call": "LIKELY DAMAGING",
-        "percentile": 41.07405919378599,
-        "conservation": 0.9702380952380952
-      },
-      {
-        "gene": "TP53",
-        "pos": 249,
-        "change": "R249S",
-        "call": "LIKELY DAMAGING",
-        "percentile": 64.3765903307888,
+        "percentile": 85.61460010735374,
         "conservation": 1.0
       },
       {
-        "gene": "TP53",
-        "pos": 273,
-        "change": "R273H",
+        "gene": "BRCA1",
+        "pos": 1699,
+        "change": "R1699W",
         "call": "LIKELY DAMAGING",
-        "percentile": 48.38623275746619,
-        "conservation": 0.9880952380952381
+        "percentile": 85.61460010735374,
+        "conservation": 1.0
       },
       {
-        "gene": "TP53",
-        "pos": 282,
-        "change": "R282W",
+        "gene": "BRCA1",
+        "pos": 1708,
+        "change": "A1708E",
         "call": "LIKELY DAMAGING",
-        "percentile": 64.3765903307888,
+        "percentile": 85.61460010735374,
         "conservation": 1.0
+      },
+      {
+        "gene": "BRCA1",
+        "pos": 1775,
+        "change": "M1775R",
+        "call": "LIKELY DAMAGING",
+        "percentile": 85.61460010735374,
+        "conservation": 1.0
+      },
+      {
+        "gene": "CFTR",
+        "pos": 551,
+        "change": "G551D",
+        "call": "LIKELY DAMAGING",
+        "percentile": 92.83783783783784,
+        "conservation": 1.0
+      },
+      {
+        "gene": "CFTR",
+        "pos": 117,
+        "change": "R117H",
+        "call": "LIKELY DAMAGING",
+        "percentile": 68.36415362731152,
+        "conservation": 0.9792027729636048
+      },
+      {
+        "gene": "CFTR",
+        "pos": 1303,
+        "change": "N1303K",
+        "call": "LIKELY DAMAGING",
+        "percentile": 89.95732574679943,
+        "conservation": 0.9982758620689656
+      },
+      {
+        "gene": "CFTR",
+        "pos": 542,
+        "change": "G542*",
+        "call": "LIKELY DAMAGING",
+        "percentile": 100.0,
+        "conservation": 0.5033670033670034
+      },
+      {
+        "gene": "EGFR",
+        "pos": 719,
+        "change": "G719S",
+        "call": "LIKELY DAMAGING",
+        "percentile": 78.34710743801652,
+        "conservation": 1.0
+      },
+      {
+        "gene": "EGFR",
+        "pos": 790,
+        "change": "T790M",
+        "call": "LIKELY DAMAGING",
+        "percentile": 62.30100043497173,
+        "conservation": 0.9904580152671756
+      },
+      {
+        "gene": "EGFR",
+        "pos": 858,
+        "change": "L858R",
+        "call": "LIKELY DAMAGING",
+        "percentile": 78.34710743801652,
+        "conservation": 1.0
+      },
+      {
+        "gene": "EGFR",
+        "pos": 861,
+        "change": "L861Q",
+        "call": "LIKELY DAMAGING",
+        "percentile": 78.34710743801652,
+        "conservation": 1.0
+      },
+      {
+        "gene": "HBB",
+        "pos": 7,
+        "change": "E7V",
+        "call": "LIKELY DAMAGING",
+        "percentile": 49.62406015037594,
+        "conservation": 0.8571428571428571
+      },
+      {
+        "gene": "HBB",
+        "pos": 7,
+        "change": "E7K",
+        "call": "LIKELY DAMAGING",
+        "percentile": 49.051199427139274,
+        "conservation": 0.8571428571428571
       },
       {
         "gene": "KRAS",
@@ -270,159 +358,63 @@
         "conservation": 0.9791666666666666
       },
       {
-        "gene": "HBB",
-        "pos": 7,
-        "change": "E7V",
+        "gene": "TP53",
+        "pos": 175,
+        "change": "R175H",
         "call": "LIKELY DAMAGING",
-        "percentile": 49.62406015037594,
-        "conservation": 0.8571428571428571
+        "percentile": 61.965983661443694,
+        "conservation": 0.9940828402366864
       },
       {
-        "gene": "HBB",
-        "pos": 7,
-        "change": "E7K",
+        "gene": "TP53",
+        "pos": 245,
+        "change": "G245S",
         "call": "LIKELY DAMAGING",
-        "percentile": 49.051199427139274,
-        "conservation": 0.8571428571428571
-      },
-      {
-        "gene": "HBB",
-        "pos": 122,
-        "change": "E122Q",
-        "call": "uncertain",
-        "percentile": 21.08843537414966,
-        "conservation": 0.6689209911630398
-      },
-      {
-        "gene": "EGFR",
-        "pos": 719,
-        "change": "G719S",
-        "call": "LIKELY DAMAGING",
-        "percentile": 78.34710743801652,
+        "percentile": 64.3765903307888,
         "conservation": 1.0
       },
       {
-        "gene": "EGFR",
-        "pos": 790,
-        "change": "T790M",
+        "gene": "TP53",
+        "pos": 248,
+        "change": "R248Q",
         "call": "LIKELY DAMAGING",
-        "percentile": 62.30100043497173,
-        "conservation": 0.9904580152671756
+        "percentile": 40.2303468595152,
+        "conservation": 0.9702380952380952
       },
       {
-        "gene": "EGFR",
-        "pos": 858,
-        "change": "L858R",
+        "gene": "TP53",
+        "pos": 248,
+        "change": "R248W",
         "call": "LIKELY DAMAGING",
-        "percentile": 78.34710743801652,
+        "percentile": 41.07405919378599,
+        "conservation": 0.9702380952380952
+      },
+      {
+        "gene": "TP53",
+        "pos": 249,
+        "change": "R249S",
+        "call": "LIKELY DAMAGING",
+        "percentile": 64.3765903307888,
         "conservation": 1.0
       },
       {
-        "gene": "EGFR",
-        "pos": 861,
-        "change": "L861Q",
+        "gene": "TP53",
+        "pos": 273,
+        "change": "R273H",
         "call": "LIKELY DAMAGING",
-        "percentile": 78.34710743801652,
-        "conservation": 1.0
+        "percentile": 48.38623275746619,
+        "conservation": 0.9880952380952381
       },
       {
-        "gene": "BRAF",
-        "pos": 600,
-        "change": "V600E",
+        "gene": "TP53",
+        "pos": 282,
+        "change": "R282W",
         "call": "LIKELY DAMAGING",
-        "percentile": 66.82698914387797,
-        "conservation": 0.9967105263157895
-      },
-      {
-        "gene": "BRAF",
-        "pos": 600,
-        "change": "V600K",
-        "call": "LIKELY DAMAGING",
-        "percentile": 66.82698914387797,
-        "conservation": 0.9967105263157895
-      },
-      {
-        "gene": "BRAF",
-        "pos": 469,
-        "change": "G469A",
-        "call": "LIKELY DAMAGING",
-        "percentile": 68.9295039164491,
-        "conservation": 1.0
-      },
-      {
-        "gene": "CFTR",
-        "pos": 551,
-        "change": "G551D",
-        "call": "LIKELY DAMAGING",
-        "percentile": 92.83783783783784,
-        "conservation": 1.0
-      },
-      {
-        "gene": "CFTR",
-        "pos": 117,
-        "change": "R117H",
-        "call": "LIKELY DAMAGING",
-        "percentile": 68.36415362731152,
-        "conservation": 0.9792027729636048
-      },
-      {
-        "gene": "CFTR",
-        "pos": 1303,
-        "change": "N1303K",
-        "call": "LIKELY DAMAGING",
-        "percentile": 89.95732574679943,
-        "conservation": 0.9982758620689656
-      },
-      {
-        "gene": "CFTR",
-        "pos": 542,
-        "change": "G542*",
-        "call": "LIKELY DAMAGING",
-        "percentile": 100.0,
-        "conservation": 0.5033670033670034
-      },
-      {
-        "gene": "BRCA1",
-        "pos": 61,
-        "change": "C61G",
-        "call": "LIKELY DAMAGING",
-        "percentile": 72.08520496087239,
-        "conservation": 0.9849624060150376
-      },
-      {
-        "gene": "BRCA1",
-        "pos": 64,
-        "change": "C64Y",
-        "call": "LIKELY DAMAGING",
-        "percentile": 85.61460010735374,
-        "conservation": 1.0
-      },
-      {
-        "gene": "BRCA1",
-        "pos": 1699,
-        "change": "R1699W",
-        "call": "LIKELY DAMAGING",
-        "percentile": 85.61460010735374,
-        "conservation": 1.0
-      },
-      {
-        "gene": "BRCA1",
-        "pos": 1708,
-        "change": "A1708E",
-        "call": "LIKELY DAMAGING",
-        "percentile": 85.61460010735374,
-        "conservation": 1.0
-      },
-      {
-        "gene": "BRCA1",
-        "pos": 1775,
-        "change": "M1775R",
-        "call": "LIKELY DAMAGING",
-        "percentile": 85.61460010735374,
+        "percentile": 64.3765903307888,
         "conservation": 1.0
       }
     ],
-    "generated_at": "2026-08-11T04:44:30.424562+00:00",
+    "generated_at": "2026-08-13T04:26:56.891956+00:00",
     "n_genes": 8
   },
   "stress_summary": {
@@ -442,6 +434,6 @@
     "fuse_beats_template": 7,
     "msa_contact_improves": 0
   },
-  "freeze_excerpt": "# Product freeze \u2014 structure path (2026-08-13)\n\n**Marked results.** Do not silently overwrite this table. Remaining misses: `docs/OPEN.md`. Audit: `docs/AUDIT.md`.\n\n**Status:** Same-data product (exclude eval PDB only).  \n**Authority pin:** `D1D38A` \u00b7 law \\(S = K(T_1+T_2+T_3)\\) \u00b7 **0 free parameters**.\n\n## Frozen product numbers (H2H, 10 proteins)\n\nSource: `data/product_vs_alphafold.json` \u2014 every measured homolog except the\nevaluation PDB. Same information universe as AlphaFold. Same-protein crystals\nare clustered (`trit_consensus`); residual ranks inside a collapse; the\napparatus is scored across collapses. NMR ensembles are Superposed (trit 0)\nand never residual-best. Intact measured transfers are not bond-idealized\n(wrong interface). A near-self sequence search (id \u2265 1/\u03c6) recovers crystals\nthe 0.25/80 search buried.\n\n| metric | value |\n|--------|------:|\n| AlphaFold median C\u03b1 RMSD | **0.47 \u00c5** |\n| FSOT **product** median | **0.13 \u00c5** |\n| FSOT template median | **0.13 \u00c5** |\n| FSOT bulk (orphan) median | 13.57 \u00c5 |\n| Product within 1.5 \u00c5 of AF | **10/10** |\n| Product sub-2 \u00c5 | **10/10** |\n| Fair-cap 0.95 median (handicap) | 1.14 \u00c5 |\n\nNotable product C\u03b1 RMSDs:\n\n| protein | product \u00c5",
+  "freeze_excerpt": "# Product freeze \u2014 structure path (2026-08-17)\n\n**Marked results.** Do not silently overwrite this table. Remaining misses: `docs/OPEN.md`. Audit: `docs/AUDIT.md`.\n\n**Status:** Same-data product (exclude eval PDB only).  \n**Authority pin:** `D1D38A` \u00b7 law \\(S = K(T_1+T_2+T_3)\\) \u00b7 **0 free parameters**.\n\n## Frozen product numbers (H2H, 10 proteins)\n\nSource: `data/product_vs_alphafold.json` \u2014 every measured homolog except the\nevaluation PDB. Same information universe as AlphaFold. Same-protein crystals\nare clustered (`trit_consensus`); residual ranks inside a collapse; the\napparatus is scored across collapses. NMR ensembles are Superposed (trit 0)\nand never residual-best. Intact measured transfers are not bond-idealized\n(wrong interface). A near-self sequence search (id \u2265 1/\u03c6) recovers crystals\nthe 0.25/80 search buried. UniRef100 other-accession xrefs admit isoform\ncrystals the query UniProt page never lists (CaM 3CLN / P0DP29).\n\n| metric | value |\n|--------|------:|\n| AlphaFold median C\u03b1 RMSD | **0.47 \u00c5** |\n| FSOT **product** median | **0.13 \u00c5** |\n| FSOT template median | **0.13 \u00c5** |\n| FSOT bulk (orphan) median | 13.57 \u00c5 (fallback only \u2014 **not** the product) |\n| Product within 1.5",
   "pdb_name": "ubq_fsot.pdb"
 }

@@ -56,5 +56,5 @@ It does **not** invent new ranking free-forms (length×score, medoid shotguns, e
 ## Ship gate
 
 Same-data product median **≤ 0.47 Å** (AlphaFold median on the freeze set).  
-Current freeze: **0.13 Å** (`docs/PRODUCT_FREEZE.md`). Guards (RNase, CaM) must not jump above 3 Å.  
+Current freeze: **0.13 Å** (`docs/PRODUCT_FREEZE.md`). CaM is **0.52 Å** (3CLN). Guards (RNase, CaM) must not jump above 3 Å.  
 If residual change raises median → **revert** (math at wrong interface).

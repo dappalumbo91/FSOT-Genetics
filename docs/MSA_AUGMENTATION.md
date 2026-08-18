@@ -1,13 +1,14 @@
 # MSA augmentation (optional evolutionary channel)
 
-**Status:** usability layer on top of the zero-free-parameter single-sequence engine.  
-**Default behaviour unchanged:** pure single-sequence F01–F15 remains the claim path.
+**Status:** optional evolutionary *data* channel on top of the zero-free-parameter engine.  
+**Claim path:** the **product** (measured homologs, exclude eval PDB) — median **0.13 Å**.  
+Single-sequence F01–F15 is the **orphan / bulk** fallback (~11–14 Å), not the product.
 
 ## Why this exists
 
-FSOT-Genetics was designed and scored as a **single-sequence / closed-form** method.
-That is why the published residuals (template regime ~1.2 Å, de-novo ceiling ~11 Å)
-are internally consistent without MSAs.
+The published product is measured authority + residual law (`docs/PRODUCT_FREEZE.md`).
+The older “template ~1.2 Å / de-novo ~11 Å” sentence was the fair-cap + bulk era.
+Those numbers are still true *as those regimes*; they are not current product accuracy.
 
 For **practical** use (medical, design, shallow-MSA orphans vs deep families),
 evolutionary signal is still on the table:

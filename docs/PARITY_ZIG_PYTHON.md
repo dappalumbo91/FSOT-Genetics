@@ -12,7 +12,7 @@
 | **Zig host** `zig build host` | Shipping residual/codon/scalar on Windows |
 | **Zig kernel** QEMU Multiboot | Same law freestanding (serial gates) |
 
-Python remains the **metric authority** for product RMSD (freeze 1.16 Å).  
+Python remains the **metric authority** for product RMSD (freeze **0.13 Å**; see `docs/PRODUCT_FREEZE.md`). The 1.16 Å figure is the retired fair-cap / fuse-era snapshot.  
 Zig is the **runtime authority** for the pin residual cell — it must match the oracle.
 
 ## Compared quantities

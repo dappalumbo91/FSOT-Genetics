@@ -50,9 +50,11 @@ is never a count of Cartesian axes. Concretely:
   of gyration (0-D), hydrophobic burial profile (1-D radial), secondary structure
   (1-D labels), and native-dimension contact topology (`D_eff`-D).
 - A 3-D Cα RMSD requires an **observer collapse** `D_eff → 3` that is
-  underdetermined from a single sequence. Do not claim single-sequence,
-  AlphaFold-grade coordinate accuracy. Report each observable in its own
-  dimension.
+  underdetermined from a single sequence. Do not claim *orphan / bulk*
+  AlphaFold-grade coordinate accuracy (~11–14 Å ceiling). The **product**
+  (measured homologs, exclude eval PDB) is a different information regime
+  and is currently **0.13 Å** median — say which regime you mean.
+  Report each observable in its own dimension.
 
 ## 5. Validation is falsifiable and frozen
 

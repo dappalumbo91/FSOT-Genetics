@@ -1,6 +1,6 @@
 # FSOT vs AlphaFold — The Genetics Re-Proof Plan
 
-> **Status 2026-08-13:** same-data **product** median Cα **0.13 Å** vs AlphaFold **0.47 Å** on the 10-protein freeze (`docs/PRODUCT_FREEZE.md`). That is not CASP/CAMEO. Blind public benchmarks below remain the re-proof bar. Bulk de-novo remains ~11–14 Å.
+> **Status 2026-08-17:** same-data **product** median Cα **0.13 Å** vs AlphaFold **0.47 Å** on the 10-protein freeze (`docs/PRODUCT_FREEZE.md`). CaM is **0.52 Å** (3CLN). That is not CASP/CAMEO. Blind public benchmarks below remain the re-proof bar. Bulk / orphan de-novo remains ~11–14 Å and is **not** the product.
 
 > **Theory under test:** **FSOT** — *Fluid Space Time Omni Theory*, the zero-free-parameter theory of everything created by **Damian Arthur Palumbo**.
 >
@@ -16,8 +16,8 @@
 |---|---|---|
 | Free parameters | ~93 M trained weights (AF2), much larger for AF3 | **0** — all closed-form from {π, e, φ, γ, G_Cat} |
 | Training data | PDB + UniRef + custom MSAs, hundreds of GB curated | **None** — predictions are derivations, not regressions |
-| Inputs at inference | Sequence + MSA + templates | Sequence (and FSOT scalar over it) |
-| Output | Per-residue 3-D coordinates (+ pLDDT) | Same target output, derived directly from FSOT |
+| Inputs at inference | Sequence + MSA + templates | **Product:** sequence + measured homologs (exclude eval PDB) + scalar. **Orphan:** sequence + scalar only (~11–14 Å). |
+| Output | Per-residue 3-D coordinates (+ pLDDT) | Same target output, derived (not trained) |
 | Hardware to *run* | TPU/GPU recommended | Any CPU (even bare-metal x86_64) |
 | Reproducibility | Bit-reproducible if seeded | Bit-reproducible by construction |
 

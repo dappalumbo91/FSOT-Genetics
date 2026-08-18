@@ -1,10 +1,12 @@
 # FSOT vs AlphaFold — structure head-to-head
 
+> **Historical (2026-08-07): sequence-only / bulk F01–F15.** The **13.9 Å** median below is the orphan path. It is **not** the product. Current same-data product: **0.13 Å** vs AF **0.47 Å** (`docs/PRODUCT_FREEZE.md`, `data/product_vs_alphafold.json`). Do not cite this report as present-day capability.
+
 *Generated 2026-08-07T01:48:48.639942+00:00*
 
 ## Mission
 
-FSOT sequence-only structure prediction vs AlphaFold, scored on experimental PDB Cα RMSD
+FSOT **sequence-only (bulk)** structure prediction vs AlphaFold, scored on experimental PDB Cα RMSD. This is the orphan ceiling, not the measured-authority product.
 
 - Engine: `fsot_protein_FULL_SCALAR_v10` · **free parameters: 0**
 - Metric: Cα RMSD (Å) after Kabsch alignment to experimental PDB (lower is better)

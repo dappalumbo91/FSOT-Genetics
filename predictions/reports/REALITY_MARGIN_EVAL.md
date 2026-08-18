@@ -1,5 +1,7 @@
 # Reality-margin eval — FSOT product vs wet-lab experimental
 
+> **Historical (2026-08-11, broader 19-chain set, older protocol).** Median **1.17 Å** below is not the 10-protein freeze. Current freeze product: **0.13 Å**. See `docs/PRODUCT_FREEZE.md`.
+
 Generated: `2026-08-11T16:59:00.326133+00:00`  
 **Target = experimental PDB Cα, not AlphaFold.**  
 Free parameters: **0** · pin D1D38A

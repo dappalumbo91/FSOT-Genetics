@@ -1,5 +1,7 @@
 # Medical stress suite — FSOT multi-regime
 
+> **Historical snapshot (2026-08-10, fair-cap / fuse era).** The 1.16 Å “template + MSA fuse” median below is **not** current product capability. Current same-data product: **0.13 Å** vs AF **0.47 Å**. Bulk 16–17 Å in this file is the orphan path. See `docs/PRODUCT_FREEZE.md`.
+
 Generated: `2026-08-10T21:49:23.756993+00:00`  
 Free parameters: **0**  
 Targets: **10**

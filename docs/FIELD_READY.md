@@ -52,7 +52,7 @@ GUI shows **frozen gates**. CLI/Zig **does** the science.
 2. **Tables over charts** until data is boringly stable  
 3. **Commands copy-pasteable** on the same page as results  
 4. **Dark, high-contrast, monospace for science values**  
-5. **Never hide bulk ceiling** — marketing failure is worse than RMSD failure  
+5. **Never present bulk as the product** — orphan ceiling ~11–14 Å is real; the product is **0.13 Å**. Hiding either number is a marketing failure.  
 
 ---
 
@@ -71,6 +71,6 @@ python scripts/build_field_pack.py         # USB zip
 | Auditable 0-param law on metal | Hospital EMR integration |
 | Reproducible H2H + medical panel | Full ACMG clinical report |
 | Visual console for demos / your desk | Polished SaaS multi-tenant UI |
-| Clear oversell boundaries | Claiming AF-beating orphans |
+| Clear oversell boundaries | Claiming AF-beating orphans, or quoting 15 Å as if it were the product |
 
 Ship the **console + gates**. Iterate UI only when a real user (you) hits friction.

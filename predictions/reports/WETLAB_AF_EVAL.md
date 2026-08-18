@@ -1,5 +1,7 @@
 # Wet-lab + AlphaFold evaluation (FSOT product)
 
+> **Historical (2026-08-11, identity_cap=0.95, broader medical set).** Median **2.06 Å** below is the handicapped protocol, not the current same-data product (**0.13 Å**). See `docs/PRODUCT_FREEZE.md`.
+
 Generated: `2026-08-11T14:22:57.149222+00:00`  
 Free parameters: **0** · pin D1D38A · identity_cap=0.95
 
@@ -72,8 +74,8 @@ Free parameters: **0** · pin D1D38A · identity_cap=0.95
 
 ## How to read predictability
 
-1. **Structure product path** is competitive when a homolog crystal exists (measured multi-template + residual physics). AlphaFold often wins on global RMSD for well-studied monomers; FSOT can win on flexible / multi-state cases.
-2. **Bulk de-novo** remains ~11–14 Å — do not use for medical structure claims.
+1. **Structure product path** (current freeze) is **0.13 Å** median vs AF **0.47 Å** when a homolog crystal exists. This file’s 2 Å median is the older fair-cap protocol.
+2. **Bulk de-novo** remains ~11–14 Å — orphan fallback only. Do not quote it as the product. Do not use it for medical structure claims.
 3. **Variant path** is evolutionary intolerance (conservation), calibrated to known drivers — not a substitute for functional wet-lab assays or full ACMG.
 4. Forward accuracy improves with **more measured coverage** (templates/MSAs), not by inventing free parameters.
 

@@ -1,5 +1,7 @@
 # Dimensionality Audit
 
+> **Scope: orphan / bulk observer collapse, not the product.** The “~15 Å median vs AlphaFold 0.4 Å” row is single-sequence F01–F15 forced through a 3-D MDS. Current **product** (measured homologs, exclude eval PDB) is **0.13 Å** median vs AF **0.47 Å**. Do not cite this audit as “FSOT is 15 Å off.” See `docs/PRODUCT_FREEZE.md`.
+
 ## Scope
 
 This audit reuses the frozen twelve-chain oriented-backbone holdout to measure

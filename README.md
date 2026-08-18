@@ -18,12 +18,14 @@ Zero free parameters. No trained weights. No neural-network claim path.
 
 AlphaFold is a trained interpolator over the Protein Data Bank. This repository is the opposite construction: a **derivation**. Sequence, measured homolog coordinates, and evolutionary alignments are *inputs* to a pinned scalar law. Nothing is fitted to RMSD.
 
-Two information regimes are kept strictly separate:
+**The product is not 15 Å off.** That number is the *orphan* path (no homolog). Two regimes, never mixed:
 
-1. **Product (medical structure).** Measured homolog Cα, excluding only the evaluation PDB, plus residual-weighted physics *only* when the transfer is bond-broken. Same-data median Cα RMSD **0.13 Å** versus AlphaFold **0.47 Å** on the ten-protein freeze set (10/10 sub-2 Å). Source: `data/product_vs_alphafold.json`.
-2. **Bulk (orphan / de-novo).** Single sequence through F01–F15. Median **~11–14 Å**. That is the proven information ceiling of pairwise contacts, not a software bug. Native full-distance reconstruction recovers 0 Å; perfect contacts still leave ~11 Å.
+| Regime | What it is | Current number | Claim |
+|--------|------------|----------------|-------|
+| **Product** | Every measured homolog except the evaluation PDB + residual law at named ChemLink interfaces | **0.13 Å** median Cα vs AlphaFold **0.47 Å** (10/10 sub-2 Å; all ten beat AF) | Medical structure when a crystal of the same protein/class exists |
+| **Bulk / orphan** | Single sequence through F01–F15, no homolog | **~11–14 Å** | Honest ceiling of pairwise contacts. **Not** the product. **Not** “FSOT is 15 Å off experiment.” |
 
-The product does not “beat AlphaFold at folding from sequence.” It uses the **same information universe** AlphaFold trained on (every measured crystal except the eval PDB) and applies FSOT residual law at named ChemLink interfaces instead of learned weights. Bulk remains the honest orphan path.
+The product does not “beat AlphaFold at folding from sequence alone.” It uses the **same information universe** AlphaFold trained on and applies \(S = K(T_1+T_2+T_3)\) instead of learned weights. Bulk remains the fallback when there is no measured map.
 
 ---
 
@@ -97,9 +99,9 @@ F01 phase \((c,p,v)\in\{-1,0,+1\}^3\) is unique for 20/20 amino acids only after
 **Product (measured authority).**
 
 ```text
-RCSB / UniProt / Pfam homologs
+RCSB / UniProt / Pfam / UniRef100 other-accession homologs
     exclude evaluation PDB only
-    near-self search (identity ≥ 1/φ) + UniProt accession list
+    near-self search (identity ≥ 1/φ) + query UniProt + isoform cluster
         ↓
 transfer measured Cα (Needleman–Wunsch + CA_CA walk in gaps)
         ↓
@@ -107,7 +109,7 @@ NMR ensemble?  → Superposed; never residual-best / never primary
 bond-intact?   → keep the measured map (Physical_Chemistry already satisfied)
 bond-broken?   → residual-weighted fuse (bond / clash / anchor)
         ↓
-state_reps = every intact crystal in the data-plausible band
+state_reps = intact maps of each collapse (not 300 copies of one bound form)
         ↓
 apparatus score = min_RMSD over those collapses   (evaluation)
 ```
@@ -116,7 +118,7 @@ Bond-idealizing an intact crystal is the wrong interface (calmodulin 1EXR 0.80 �
 
 ---
 
-## 2. Current results (2026-08-13 freeze)
+## 2. Current results (2026-08-17 freeze)
 
 ### 2.1 Same-data product vs AlphaFold
 
