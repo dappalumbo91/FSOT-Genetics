@@ -1,0 +1,33 @@
+{
+  "dataset": "44b6_0113de3b",
+  "volume_shape": [
+    100,
+    64,
+    256,
+    256
+  ],
+  "n_frames_read": 100,
+  "frame0_stats": {
+    "min": 12.0,
+    "max": 2950.0,
+    "mean": 219.03385424613953,
+    "median": 155.0,
+    "p99": 1283.0,
+    "p999": 1912.6970000006258
+  },
+  "gt_on_frame0": 1,
+  "gt_intensity_median": 1687.0,
+  "bg_intensity_median": 155.0,
+  "gt_over_bg": 10.883870967741936,
+  "n_dense_detections": 8000,
+  "gt_recall_7um": 0.5192307692307693,
+  "gt_recall_12um": 0.9807692307692307,
+  "n_gt_matched_7um": 27,
+  "n_gt_matched_12um": 51,
+  "n_gt": 52,
+  "match_median_um": 0.5745242597140698,
+  "note": "GT is an approximate cell center; we read the brightness peak. Official match is 7 \u00b5m. 12 \u00b5m is one nucleus diameter.",
+  "estimated_true_cells": 25755,
+  "authority": "OME-Zarr voxels + brightness peaks (no trained net)",
+  "free_parameters": 0
+}

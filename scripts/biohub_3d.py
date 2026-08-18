@@ -166,6 +166,158 @@ def inventory(train_dir: Path = TRAIN) -> list[dict[str, Any]]:
     return rows
 
 
+MATCH_UM = 7.0  # official Biohub centroid match radius
+NMS_UM = 6.0  # CellMot NMS / typical nucleus exclusion
+
+
+def open_volume(zarr_path: Path):
+    """OME-Zarr level-0 array (T, Z, Y, X). Does not load voxels until sliced."""
+    return _open(zarr_path)["0"]
+
+
+def read_frame(zarr_path: Path, t: int) -> np.ndarray:
+    """One time-point as (Z, Y, X) uint16 — the actual light-sheet voxels."""
+    arr = open_volume(zarr_path)
+    t = int(np.clip(t, 0, arr.shape[0] - 1))
+    return np.asarray(arr[t])
+
+
+def frame_stats(vol: np.ndarray) -> dict[str, float]:
+    v = vol.astype(np.float64)
+    return {
+        "min": float(v.min()),
+        "max": float(v.max()),
+        "mean": float(v.mean()),
+        "median": float(np.median(v)),
+        "p99": float(np.percentile(v, 99)),
+        "p999": float(np.percentile(v, 99.9)),
+    }
+
+
+def detect_peaks_frame(
+    vol: np.ndarray,
+    *,
+    scale_zyx: tuple[float, float, float] = (SCALE_Z_UM, SCALE_Y_UM, SCALE_X_UM),
+    nms_um: float = NMS_UM,
+    percentile: float = 99.2,
+    xy_stride: int = 2,
+) -> np.ndarray:
+    """Measured brightness peaks = observed nuclei in this frame.
+
+    Local maxima of a lightly smoothed volume above a high percentile.
+    No trained weights. Image is the observer; peaks are the data.
+    Returns (N, 3) z,y,x in *full-resolution voxels*.
+    """
+    from scipy.ndimage import gaussian_filter, maximum_filter
+
+    v = vol.astype(np.float32)
+    if xy_stride > 1:
+        v = v[:, ::xy_stride, ::xy_stride]
+        sc = (
+            scale_zyx[0],
+            scale_zyx[1] * xy_stride,
+            scale_zyx[2] * xy_stride,
+        )
+    else:
+        sc = scale_zyx
+    sm = gaussian_filter(v, sigma=(0.4, 0.8, 0.8))
+    thr = float(np.percentile(sm, percentile))
+    size = tuple(int(max(1, 2 * round(nms_um / s) + 1)) for s in sc)
+    mx = maximum_filter(sm, size=size, mode="nearest")
+    peaks = (sm == mx) & (sm >= thr)
+    zi, yi, xi = np.where(peaks)
+    if len(zi) == 0:
+        return np.zeros((0, 3), dtype=np.float64)
+    y = yi.astype(np.float64) * xy_stride
+    x = xi.astype(np.float64) * xy_stride
+    return np.stack([zi.astype(np.float64), y, x], axis=1)
+
+
+def detect_video(
+    zarr_path: Path,
+    *,
+    t_indices: list[int] | None = None,
+    scale_zyx: tuple[float, float, float] = (SCALE_Z_UM, SCALE_Y_UM, SCALE_X_UM),
+    nms_um: float = NMS_UM,
+    percentile: float = 99.2,
+) -> np.ndarray:
+    """Dense detections (t, z, y, x) voxels for selected frames."""
+    arr = open_volume(zarr_path)
+    T = int(arr.shape[0])
+    if t_indices is None:
+        t_indices = list(range(T))
+    rows = []
+    n_t = len(t_indices)
+    for k, t in enumerate(t_indices):
+        if k % 10 == 0 or k + 1 == n_t:
+            print(f"  detect frame {int(t)} ({k + 1}/{n_t})", flush=True)
+        vol = np.asarray(arr[int(t)])
+        p = detect_peaks_frame(vol, scale_zyx=scale_zyx, nms_um=nms_um, percentile=percentile)
+        if len(p):
+            tt = np.full((len(p), 1), float(t))
+            rows.append(np.hstack([tt, p]))
+    if not rows:
+        return np.zeros((0, 4), dtype=np.float64)
+    return np.vstack(rows)
+
+
+def match_centroids(
+    pred_tzyx: np.ndarray,
+    gt_tzyx: np.ndarray,
+    *,
+    scale_zyx: tuple[float, float, float] = (SCALE_Z_UM, SCALE_Y_UM, SCALE_X_UM),
+    max_um: float = MATCH_UM,
+) -> dict[str, Any]:
+    """Per-frame nearest match in µm. Returns recall of GT and match distances."""
+    sc = np.asarray(scale_zyx, dtype=float)
+    if len(gt_tzyx) == 0:
+        return {"n_gt": 0, "n_pred": int(len(pred_tzyx)), "n_matched": 0, "recall": None}
+    frames = sorted({int(t) for t in gt_tzyx[:, 0]})
+    matched = 0
+    dists: list[float] = []
+    for t in frames:
+        g = gt_tzyx[gt_tzyx[:, 0] == t][:, 1:4]
+        p = pred_tzyx[pred_tzyx[:, 0] == t][:, 1:4] if len(pred_tzyx) else np.zeros((0, 3))
+        if len(g) == 0:
+            continue
+        if len(p) == 0:
+            continue
+        d = np.sqrt((((g[:, None, :] - p[None, :, :]) * sc) ** 2).sum(axis=2))
+        used = set()
+        for i in range(len(g)):
+            j = int(np.argmin(d[i]))
+            if j in used:
+                # next-best unused
+                order = np.argsort(d[i])
+                j = next((int(k) for k in order if int(k) not in used), j)
+            if j in used:
+                continue
+            if d[i, j] <= max_um:
+                used.add(j)
+                matched += 1
+                dists.append(float(d[i, j]))
+    n_gt = int(len(gt_tzyx))
+    return {
+        "n_gt": n_gt,
+        "n_pred": int(len(pred_tzyx)),
+        "n_matched": int(matched),
+        "recall": float(matched / n_gt) if n_gt else None,
+        "match_median_um": float(np.median(dists)) if dists else None,
+        "match_mean_um": float(np.mean(dists)) if dists else None,
+        "max_um": max_um,
+    }
+
+
+def intensity_at(vol: np.ndarray, zyx: np.ndarray) -> np.ndarray:
+    """Sample voxel intensity at (possibly fractional) z,y,x."""
+    if len(zyx) == 0:
+        return np.zeros(0)
+    z = np.clip(np.round(zyx[:, 0]).astype(int), 0, vol.shape[0] - 1)
+    y = np.clip(np.round(zyx[:, 1]).astype(int), 0, vol.shape[1] - 1)
+    x = np.clip(np.round(zyx[:, 2]).astype(int), 0, vol.shape[2] - 1)
+    return vol[z, y, x].astype(np.float64)
+
+
 def read_volume_meta(zarr_path: Path) -> dict[str, Any]:
     """OME-Zarr image header only — does not load the 85 GB voxels."""
     meta_path = zarr_path / "zarr.json"
@@ -190,6 +342,11 @@ def main(argv: list[str] | None = None) -> int:
 
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--inventory", action="store_true")
+    ap.add_argument(
+        "--voxels",
+        action="store_true",
+        help="Read light-sheet voxels and detect nuclei (local maxima).",
+    )
     ap.add_argument("--dataset", default=PROXY)
     ap.add_argument("--root", default=str(BIOHUB_ROOT))
     args = ap.parse_args(argv)
@@ -211,6 +368,58 @@ def main(argv: list[str] | None = None) -> int:
         out = ROOT / "data" / "biohub_3d_inventory.json"
         out.write_text(json.dumps({"n": len(rows), "geffs": rows}, indent=2), encoding="utf-8")
         print(f"  wrote {out}")
+        return 0
+    if args.voxels:
+        geff = train / f"{args.dataset}.geff"
+        volp = train / f"{args.dataset}.zarr"
+        if not volp.exists():
+            print(f"no volume at {volp}", file=sys.stderr)
+            return 2
+        tracks = read_geff(geff)
+        arr = open_volume(volp)
+        T = int(arr.shape[0])
+        # Intensity audit: GT cells sit on bright voxels (frame 0 + mid).
+        t0 = int(tracks["t"][0]) if len(tracks["t"]) else 0
+        frame0 = np.asarray(arr[t0])
+        st = frame_stats(frame0)
+        gt0 = tracks["xyz_vox"][tracks["t"] == t0]
+        gt_int = intensity_at(frame0, gt0) if len(gt0) else np.zeros(0)
+        pred = detect_video(volp)
+        gt_tzyx = np.column_stack(
+            [tracks["t"].astype(float), tracks["xyz_vox"]]
+        )
+        hit = match_centroids(pred, gt_tzyx)
+        hit12 = match_centroids(pred, gt_tzyx, max_um=12.0)
+        out = {
+            "dataset": args.dataset,
+            "volume_shape": [int(x) for x in arr.shape],
+            "n_frames_read": T,
+            "frame0_stats": st,
+            "gt_on_frame0": int(len(gt0)),
+            "gt_intensity_median": float(np.median(gt_int)) if len(gt_int) else None,
+            "bg_intensity_median": st["median"],
+            "gt_over_bg": (
+                float(np.median(gt_int) / st["median"]) if len(gt_int) and st["median"] else None
+            ),
+            "n_dense_detections": hit["n_pred"],
+            "gt_recall_7um": hit["recall"],
+            "gt_recall_12um": hit12["recall"],
+            "n_gt_matched_7um": hit["n_matched"],
+            "n_gt_matched_12um": hit12["n_matched"],
+            "n_gt": hit["n_gt"],
+            "match_median_um": hit["match_median_um"],
+            "note": (
+                "GT is an approximate cell center; we read the brightness peak. "
+                "Official match is 7 µm. 12 µm is one nucleus diameter."
+            ),
+            "estimated_true_cells": tracks["meta"].get("estimated_nodes"),
+            "authority": "OME-Zarr voxels + brightness peaks (no trained net)",
+            "free_parameters": 0,
+        }
+        print(json.dumps(out, indent=2))
+        dest = ROOT / "data" / "biohub_3d_voxels.json"
+        dest.write_text(json.dumps(out, indent=2), encoding="utf-8")
+        print(f"wrote {dest}")
         return 0
     geff = train / f"{args.dataset}.geff"
     vol = train / f"{args.dataset}.zarr"

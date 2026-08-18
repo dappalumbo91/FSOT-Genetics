@@ -31,6 +31,27 @@ First live read (2026-08-17):
 
 The volume header is read **without** loading 85 GB of voxels. Cell centers are the 3-D object we map.
 
+## Voxels (what we were not reading)
+
+`python scripts/biohub_3d.py --voxels`
+
+Light-sheet pixels are now sliced in place (one T is ~8 MB). Nuclei are **brightness peaks** in the volume — measured observer, no trained U-Net in this repo.
+
+Proxy `44b6_0113de3b` (100 frames):
+
+| Item | Number |
+|------|-------:|
+| Frames loaded | **100 / 100** |
+| GT cell vs background intensity | **1687 / 155** (~11×) |
+| Dense peaks | **8,000** (estimated true cells 25,755) |
+| Official 7 µm recall vs sparse GT | 27/52 (**0.52**) |
+| 12 µm recall (one nucleus) | 51/52 (**0.98**) |
+| Median match when inside 7 µm | **0.57 µm** |
+
+The annotated GEFF point is an *approximate* cell center. We read the brightness maximum of the nucleus. Those two points sit on the same cell; 7 µm is tight for that difference, 12 µm is a nucleus. Source: `data/biohub_3d_voxels.json`.
+
+**Kaggle submit** (U-Net + ILP, public ~0.848 floor) stays in `C:\Users\damia\biohub-fsot-unet`. This repo is the genetics / 3-D *reader*, not a second competition stack.
+
 ## How this sits next to the protein product
 
 ```text
