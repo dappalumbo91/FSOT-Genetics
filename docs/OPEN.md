@@ -18,7 +18,7 @@ This list is what to clear next. One mechanism at a time. Pin `D1D38A`. 0 free p
 | Joint `predict_system` | **0.013 Å** protein · DNA C1′ **0.016 Å** · SC **0.016 Å** — apparatus min now matches the DNA job. |
 | Protein–RNA | U1A prot **0.23 Å** · RNA seed C1′ **0.28 Å** (9 nt). Full hairpin register still Superposed. |
 | Ligand site | trypsin–BEN **0.60 Å** (was 0.24 on 3PTB/1PPH). First-shell springs; not a Cα freeze item. |
-| Organism 3-D / lineage | Proxy 7 µm **1.00**, lineage **0.82 / 0.90**. Dense 1950 GT: 7 µm **0.96**, lineage **0.69 / 0.78**. Leftover ER: ~22% of dense GEFF edges (mostly residual-only cells + Hungarian steal). |
+| Organism 3-D / lineage | Proxy 7 µm **1.00**, lineage **0.90 / 0.90**. Dense 1950 GT: 7 µm **0.96**, lineage **0.79 / 0.81**. Leftover ER: ~19% of dense GEFF edges at 12 µm (Hungarian pri–pri steal + 7–12 µm node remap + leftover mixed-tier). |
 
 ## Historical wet-lab (not the 10-protein freeze)
 

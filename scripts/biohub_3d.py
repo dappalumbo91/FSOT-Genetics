@@ -172,6 +172,8 @@ MATCH_UM = 7.0  # official Biohub centroid match radius
 # landed 8–12 µm away. φ³ splits them; official match is still 7 µm.
 NMS_UM = float(_PHI ** 3)
 LINK_UM = float(_PHI ** 4)  # first-pass link; residual widens with measured step
+# Detections stay on the game drive (not git). Re-link without re-detecting.
+DETECT_CACHE = BIOHUB_ROOT / "_fsot_detect_cache"
 
 
 def open_volume(zarr_path: Path):
@@ -359,6 +361,55 @@ def detect_video(
     return np.vstack(rows)
 
 
+def detect_cache_path(dataset: str) -> Path:
+    return DETECT_CACHE / f"{dataset}.npy"
+
+
+def load_or_detect(dataset: str, volp: Path) -> np.ndarray:
+    """Reuse measured peaks. Detection is the expensive observer, not the link."""
+    cache = detect_cache_path(dataset)
+    if cache.exists():
+        pred = np.load(cache)
+        print(f"  detect cache {cache} n={len(pred)}", flush=True)
+        return pred
+    pred = detect_video(volp)
+    DETECT_CACHE.mkdir(parents=True, exist_ok=True)
+    np.save(cache, pred)
+    print(f"  wrote detect cache {cache}", flush=True)
+    return pred
+
+
+def _indices_at(pred: np.ndarray, t: int, tier: int | None = None) -> np.ndarray:
+    m = pred[:, 0].astype(int) == int(t)
+    if tier is not None and pred.shape[1] >= 5:
+        m &= pred[:, 4].astype(int) == int(tier)
+    return np.where(m)[0]
+
+
+def _pair_cost(
+    pred: np.ndarray,
+    src: np.ndarray | list[int],
+    dst: np.ndarray | list[int],
+    sc: np.ndarray,
+) -> tuple[np.ndarray, np.ndarray]:
+    """µm distance and intensity-identity cost between two index sets."""
+    src = np.asarray(src, dtype=int)
+    dst = np.asarray(dst, dtype=int)
+    pa = pred[src][:, 1:4]
+    pb = pred[dst][:, 1:4]
+    d = np.sqrt((((pa[:, None, :] - pb[None, :, :]) * sc) ** 2).sum(axis=2))
+    if pred.shape[1] >= 6:
+        ia_ = pred[src, 5]
+        ib_ = pred[dst, 5]
+        rel = np.abs(ia_[:, None] - ib_[None, :]) / (
+            np.maximum(ia_[:, None], ib_[None, :]) + 1e-6
+        )
+        cost = d * (1.0 + rel)
+    else:
+        cost = d
+    return d, cost
+
+
 def link_tracks(
     pred_tzyx: np.ndarray,
     *,
@@ -376,6 +427,7 @@ def link_tracks(
     sc = np.asarray(scale_zyx, dtype=float)
     frames = sorted({int(t) for t in pred_tzyx[:, 0]})
     edges: list[tuple[int, int]] = []
+    parent: dict[int, int] = {}
     idx_by_t = {t: np.where(pred_tzyx[:, 0] == t)[0] for t in frames}
     for t0, t1 in zip(frames, frames[1:]):
         if t1 != t0 + 1:
@@ -386,22 +438,33 @@ def link_tracks(
             continue
         pa = pred_tzyx[a][:, 1:4]
         pb = pred_tzyx[b][:, 1:4]
-        d = np.sqrt((((pa[:, None, :] - pb[None, :, :]) * sc) ** 2).sum(axis=2))
+        # T2 linear: x̂_{t+1} = x_t + (x_t − x_{t−1}). A closer neighbor
+        # off the measured velocity is not the continuation.
+        pred_pos = pa.copy()
+        for k, i in enumerate(a):
+            par = parent.get(int(i))
+            if par is not None:
+                pred_pos[k] = pa[k] + (pa[k] - pred_tzyx[par, 1:4])
+        d_act = np.sqrt((((pa[:, None, :] - pb[None, :, :]) * sc) ** 2).sum(axis=2))
+        d_inn = np.sqrt((((pred_pos[:, None, :] - pb[None, :, :]) * sc) ** 2).sum(axis=2))
         from scipy.optimize import linear_sum_assignment
 
         if pred_tzyx.shape[1] >= 6:
             ia_ = pred_tzyx[a, 5]
             ib_ = pred_tzyx[b, 5]
             rel = np.abs(ia_[:, None] - ib_[None, :]) / (np.maximum(ia_[:, None], ib_[None, :]) + 1e-6)
-            cost = d * (1.0 + rel)
+            cost = d_inn * (1.0 + rel)
         else:
-            cost = d
+            cost = d_inn
         cap = cost.copy()
-        cap[d > max_um] = max_um * 4.0
+        far = (d_inn > max_um) | (d_act > float(_PHI ** 5))
+        cap[far] = max_um * 4.0
         ri, cj = linear_sum_assignment(cap)
         for ia, jb in zip(ri, cj):
-            if d[ia, jb] <= max_um:
-                edges.append((int(a[ia]), int(b[jb])))
+            if d_inn[ia, jb] <= max_um and d_act[ia, jb] <= float(_PHI ** 5):
+                i, j = int(a[ia]), int(b[jb])
+                edges.append((i, j))
+                parent[j] = i
     return edges
 
 
@@ -433,11 +496,37 @@ def link_tracks_residual(
     }
 
 
-def link_tracks_staged(pred: np.ndarray) -> tuple[list[tuple[int, int]], dict[str, float]]:
-    """First-collapse links, then leftover detections at φ⁵ µm.
+def _hungarian_gate(
+    pred: np.ndarray,
+    src: list[int] | np.ndarray,
+    dst: list[int] | np.ndarray,
+    sc: np.ndarray,
+    max_um: float,
+) -> list[tuple[int, int]]:
+    """1-1 links with intensity identity, reject if d > max_um."""
+    from scipy.optimize import linear_sum_assignment
 
-    Residual peaks (tier 2) and unmatched primaries fill tracks the first
-    Hungarian pass left open — 351 dense GEFF edges were residual-only.
+    src = [int(i) for i in src]
+    dst = [int(i) for i in dst]
+    if not src or not dst:
+        return []
+    d, cost = _pair_cost(pred, src, dst, sc)
+    cap = cost.copy()
+    cap[d > max_um] = max_um * 4.0
+    ri, cj = linear_sum_assignment(cap)
+    out: list[tuple[int, int]] = []
+    for ia, jb in zip(ri, cj):
+        if d[ia, jb] <= max_um:
+            out.append((src[ia], dst[jb]))
+    return out
+
+
+def link_tracks_staged(pred: np.ndarray) -> tuple[list[tuple[int, int]], dict[str, float]]:
+    """First-collapse links, leftover primaries, isolated mix, residual–residual.
+
+    Halo residual↔primary stole tracks. Isolated residual (farther than
+    NMS from every primary) may meet an unmatched primary; leftover
+    residual→residual recovers second-collapse nuclei that never mix.
     """
     if len(pred) == 0:
         return [], {}
@@ -447,53 +536,172 @@ def link_tracks_staged(pred: np.ndarray) -> tuple[list[tuple[int, int]], dict[st
     has_n = {i for i, _j in edges}
     has_p = {j for _i, j in edges}
     leftover_um = float(_PHI ** 5)
-    extra = 0
     frames = sorted({int(t) for t in pred[:, 0]})
-    from scipy.optimize import linear_sum_assignment
-
     sc = np.array([SCALE_Z_UM, SCALE_Y_UM, SCALE_X_UM])
+
+    extra = 0
     for t0, t1 in zip(frames, frames[1:]):
         if t1 != t0 + 1:
             continue
-        # Unmatched first-collapse only (residual leftovers stole tracks).
-        src = [
-            i
-            for i in range(len(pred))
-            if int(pred[i, 0]) == t0 and i not in has_n and int(pred[i, 4]) == 1
-        ]
-        dst = [
-            i
-            for i in range(len(pred))
-            if int(pred[i, 0]) == t1 and i not in has_p and int(pred[i, 4]) == 1
-        ]
-        if not src or not dst:
+        src = [int(i) for i in _indices_at(pred, t0, 1) if int(i) not in has_n]
+        dst = [int(i) for i in _indices_at(pred, t1, 1) if int(i) not in has_p]
+        for i, j in _hungarian_gate(pred, src, dst, sc, leftover_um):
+            edges.append((i, j))
+            has_n.add(i)
+            has_p.add(j)
+            extra += 1
+
+    iso_um = float(NMS_UM)
+
+    def _iso(res, pri):
+        if not res:
+            return []
+        if len(pri) == 0:
+            return list(res)
+        dmin = np.sqrt(
+            (
+                ((pred[res][:, 1:4][:, None, :] - pred[pri][None, :, 1:4]) * sc)
+                ** 2
+            ).sum(axis=2)
+        ).min(axis=1)
+        return [res[k] for k in range(len(res)) if float(dmin[k]) > iso_um]
+
+    # Isolated residual ↔ unmatched primary before residual–residual
+    # consumes those leftovers. Halo residual↔primary stole tracks.
+    mix_n = 0
+    for t0, t1 in zip(frames, frames[1:]):
+        if t1 != t0 + 1:
             continue
-        pa = pred[src][:, 1:4]
-        pb = pred[dst][:, 1:4]
-        d = np.sqrt((((pa[:, None, :] - pb[None, :, :]) * sc) ** 2).sum(axis=2))
-        if pred.shape[1] >= 6:
-            ia_ = pred[src, 5]
-            ib_ = pred[dst, 5]
-            rel = np.abs(ia_[:, None] - ib_[None, :]) / (
-                np.maximum(ia_[:, None], ib_[None, :]) + 1e-6
-            )
-            cost = d * (1.0 + rel)
-        else:
-            cost = d
-        cap = cost.copy()
-        cap[d > leftover_um] = leftover_um * 4.0
-        ri, cj = linear_sum_assignment(cap)
-        for ia, jb in zip(ri, cj):
-            if d[ia, jb] <= leftover_um:
-                i, j = int(src[ia]), int(dst[jb])
-                edges.append((i, j))
-                has_n.add(i)
-                has_p.add(j)
-                extra += 1
+        pri0 = [int(i) for i in _indices_at(pred, t0, 1) if int(i) not in has_n]
+        pri1 = [int(i) for i in _indices_at(pred, t1, 1) if int(i) not in has_p]
+        res0 = [int(i) for i in _indices_at(pred, t0, 2) if int(i) not in has_n]
+        res1 = [int(i) for i in _indices_at(pred, t1, 2) if int(i) not in has_p]
+        iso0 = _iso(res0, _indices_at(pred, t0, 1))
+        iso1 = _iso(res1, _indices_at(pred, t1, 1))
+        for i, j in _hungarian_gate(pred, iso0, pri1, sc, leftover_um):
+            edges.append((i, j))
+            has_n.add(i)
+            has_p.add(j)
+            mix_n += 1
+        pri0 = [i for i in pri0 if i not in has_n]
+        for i, j in _hungarian_gate(pred, pri0, iso1, sc, leftover_um):
+            edges.append((i, j))
+            has_n.add(i)
+            has_p.add(j)
+            mix_n += 1
+
+    iso_n = 0
+    res_n = 0
+    for t0, t1 in zip(frames, frames[1:]):
+        if t1 != t0 + 1:
+            continue
+        res0 = [int(i) for i in _indices_at(pred, t0, 2) if int(i) not in has_n]
+        res1 = [int(i) for i in _indices_at(pred, t1, 2) if int(i) not in has_p]
+        src_iso = _iso(res0, _indices_at(pred, t0, 1))
+        dst_iso = _iso(res1, _indices_at(pred, t1, 1))
+        for i, j in _hungarian_gate(pred, src_iso, dst_iso, sc, leftover_um):
+            edges.append((i, j))
+            has_n.add(i)
+            has_p.add(j)
+            iso_n += 1
+        src_r = [i for i in res0 if i not in has_n]
+        dst_r = [i for i in res1 if i not in has_p]
+        for i, j in _hungarian_gate(pred, src_r, dst_r, sc, leftover_um):
+            edges.append((i, j))
+            has_n.add(i)
+            has_p.add(j)
+            res_n += 1
+
     meta = dict(meta)
     meta["n_leftover_edges"] = extra
     meta["leftover_um"] = leftover_um
+    meta["n_isolated_residual_edges"] = iso_n
+    meta["n_residual_residual_edges"] = res_n
+    meta["n_isolated_mix_edges"] = mix_n
     return edges, meta
+
+
+def _greedy_match_frame(
+    gxyz: np.ndarray,
+    pxyz: np.ndarray,
+    sc: np.ndarray,
+    max_um: float,
+    used_p: set[int] | None = None,
+) -> dict[int, int]:
+    """Greedy nearest unused pred for each GT row. Local indices."""
+    if len(gxyz) == 0 or len(pxyz) == 0:
+        return {}
+    d = np.sqrt((((gxyz[:, None, :] - pxyz[None, :, :]) * sc) ** 2).sum(axis=2))
+    used: set[int] = set() if used_p is None else set(used_p)
+    out: dict[int, int] = {}
+    for row in range(len(gxyz)):
+        order = [int(k) for k in np.argsort(d[row]) if int(k) not in used]
+        if not order:
+            continue
+        j = order[0]
+        if d[row, j] <= max_um:
+            used.add(j)
+            out[row] = j
+    return out
+
+
+def _assign_frame(
+    pred_tzyx: np.ndarray,
+    gi: list[int],
+    gxyz: np.ndarray,
+    t: int,
+    sc: np.ndarray,
+    max_um: float,
+    g2p: dict[int, int],
+    *,
+    primary_only: bool,
+    fill_residual: bool,
+) -> int:
+    """Match unmatched GT in one frame. Returns residual-fill count."""
+    n_fill = 0
+    taken = set(g2p[g] for g in gi if g in g2p)
+    leftover_rows = [r for r, g in enumerate(gi) if g not in g2p]
+    if not leftover_rows:
+        return 0
+    g_left = gxyz[leftover_rows]
+    if primary_only and pred_tzyx.shape[1] >= 5:
+        pri = [
+            i
+            for i, tt in enumerate(pred_tzyx[:, 0])
+            if int(tt) == t and int(pred_tzyx[i, 4]) == 1 and i not in taken
+        ]
+        hit = _greedy_match_frame(
+            g_left, pred_tzyx[pri][:, 1:4] if pri else np.zeros((0, 3)), sc, max_um
+        )
+        for row, j in hit.items():
+            g2p[gi[leftover_rows[row]]] = int(pri[j])
+            taken.add(int(pri[j]))
+        if fill_residual:
+            still = [r for r, g in enumerate(gi) if g not in g2p]
+            if still:
+                res = [
+                    i
+                    for i, tt in enumerate(pred_tzyx[:, 0])
+                    if int(tt) == t and int(pred_tzyx[i, 4]) == 2 and i not in taken
+                ]
+                if res:
+                    fill = _greedy_match_frame(
+                        gxyz[still], pred_tzyx[res][:, 1:4], sc, max_um
+                    )
+                    for row, j in fill.items():
+                        g2p[gi[still[row]]] = int(res[j])
+                        n_fill += 1
+    else:
+        pi = [
+            i
+            for i, tt in enumerate(pred_tzyx[:, 0])
+            if int(tt) == t and i not in taken
+        ]
+        if pi:
+            hit = _greedy_match_frame(g_left, pred_tzyx[pi][:, 1:4], sc, max_um)
+            for row, j in hit.items():
+                g2p[gi[leftover_rows[row]]] = int(pi[j])
+    return n_fill
 
 
 def lineage_recall(
@@ -504,34 +712,44 @@ def lineage_recall(
     scale_zyx: tuple[float, float, float] = (SCALE_Z_UM, SCALE_Y_UM, SCALE_X_UM),
     max_um: float = MATCH_UM,
     primary_only: bool = False,
+    fill_residual: bool = False,
+    seed_um: float | None = None,
 ) -> dict[str, Any]:
-    """Fraction of measured GEFF edges whose both ends match a predicted link."""
+    """Fraction of measured GEFF edges whose both ends match a predicted link.
+
+    primary_only maps GT onto first-collapse peaks. fill_residual then gives
+    leftover GT the residual second-collapse peaks — residual never competes
+    with a primary match (that mix stole tracks). seed_um locks a tighter
+    match so a wider radius cannot remap a cell onto a farther primary.
+    """
     gt = np.column_stack([tracks["t"].astype(float), tracks["xyz_vox"]])
     id_to_g = {int(n): i for i, n in enumerate(tracks["ids"])}
-    # GT node -> pred row (if matched)
     sc = np.asarray(scale_zyx, dtype=float)
     g2p: dict[int, int] = {}
+    n_fill = 0
+    radii = [float(max_um)] if seed_um is None else [float(seed_um), float(max_um)]
+    # unique, increasing
+    seen_r: list[float] = []
+    for r in radii:
+        if not seen_r or r > seen_r[-1] + 1e-9:
+            seen_r.append(r)
     for t in sorted({int(x) for x in gt[:, 0]}):
         gi = [i for i, tt in enumerate(gt[:, 0]) if int(tt) == t]
-        pi = [i for i, tt in enumerate(pred_tzyx[:, 0]) if int(tt) == t] if len(pred_tzyx) else []
-        if primary_only and pred_tzyx.shape[1] >= 5:
-            pi = [i for i in pi if int(pred_tzyx[i, 4]) == 1]
-        if not gi or not pi:
+        if not gi:
             continue
         gxyz = gt[gi][:, 1:4]
-        pxyz = pred_tzyx[pi][:, 1:4]
-        d = np.sqrt((((gxyz[:, None, :] - pxyz[None, :, :]) * sc) ** 2).sum(axis=2))
-        used: set[int] = set()
-        for row, gidx in enumerate(gi):
-            j = int(np.argmin(d[row]))
-            if j in used:
-                alt = [int(k) for k in np.argsort(d[row]) if int(k) not in used]
-                if not alt:
-                    continue
-                j = alt[0]
-            if d[row, j] <= max_um:
-                used.add(j)
-                g2p[gidx] = int(pi[j])
+        for rad in seen_r:
+            n_fill += _assign_frame(
+                pred_tzyx,
+                gi,
+                gxyz,
+                t,
+                sc,
+                rad,
+                g2p,
+                primary_only=primary_only,
+                fill_residual=fill_residual,
+            )
     pred_set = {tuple(sorted(e)) for e in pred_edges}
     hit = 0
     n_e = 0
@@ -550,6 +768,7 @@ def lineage_recall(
         "n_edge_matched": hit,
         "edge_recall": float(hit / n_e) if n_e else None,
         "n_gt_nodes_matched": len(g2p),
+        "n_gt_residual_fill": n_fill,
     }
 
 
@@ -686,7 +905,7 @@ def main(argv: list[str] | None = None) -> int:
         st = frame_stats(frame0)
         gt0 = tracks["xyz_vox"][tracks["t"] == t0]
         gt_int = intensity_at(frame0, gt0) if len(gt0) else np.zeros(0)
-        pred = detect_video(volp)
+        pred = load_or_detect(args.dataset, volp)
         gt_tzyx = np.column_stack(
             [tracks["t"].astype(float), tracks["xyz_vox"]]
         )
@@ -699,8 +918,23 @@ def main(argv: list[str] | None = None) -> int:
             link_meta["n_residual_peaks"] = int((pred[:, 4] == 2).sum())
         else:
             edges, link_meta = link_tracks_residual(xyz4)
-        lin = lineage_recall(pred, edges, tracks, primary_only=True)
-        lin12 = lineage_recall(pred, edges, tracks, max_um=12.0, primary_only=True)
+        # Primary map is the shipped scorer. Residual fill is leftover GT
+        # only — residual never displaces a primary match.
+        lin_pri = lineage_recall(pred, edges, tracks, primary_only=True)
+        lin = lineage_recall(
+            pred, edges, tracks, primary_only=True, fill_residual=True
+        )
+        lin12 = lineage_recall(
+            pred,
+            edges,
+            tracks,
+            max_um=12.0,
+            seed_um=MATCH_UM,
+            primary_only=True,
+            fill_residual=True,
+        )
+        link_meta["lineage_primary_only_7um"] = lin_pri["edge_recall"]
+        link_meta["n_gt_residual_fill"] = lin["n_gt_residual_fill"]
         out = {
             "dataset": args.dataset,
             "volume_shape": [int(x) for x in arr.shape],
@@ -730,7 +964,9 @@ def main(argv: list[str] | None = None) -> int:
             "note": (
                 "Centroid = half-max first moment. Gate = median+φ·MAD. "
                 "NMS = φ³ µm. Residual second collapse fills leftover "
-                "brightness (7 µm recall). Lineage links first collapse only."
+                "brightness (7 µm recall). Lineage: primary Hungarian + "
+                "φ⁵ leftover primaries + isolated residual↔primary + "
+                "residual–residual. Leftover GT may map onto residual peaks."
             ),
             "estimated_true_cells": tracks["meta"].get("estimated_nodes"),
             "authority": "OME-Zarr voxels + measured blob centroids (no trained net)",
