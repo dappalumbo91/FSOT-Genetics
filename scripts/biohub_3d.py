@@ -276,16 +276,38 @@ def detect_peaks_frame(
     size = tuple(int(max(1, 2 * round(nms_um / s) + 1)) for s in sc)
     mx = maximum_filter(sm, size=size, mode="nearest")
     peaks = (sm == mx) & (sm >= thr)
-    zi, yi, xi = np.where(peaks)
+    # Residual second collapse: zero the first NMS balls and take leftover
+    # local max. Unannotated neighbors left 7–12 µm ghosts on the dense set.
+    sm2 = sm.copy()
+    rad = np.maximum(1, np.round(np.array(nms_um) / np.array(sc))).astype(int)
+    pz, py, px = np.where(peaks)
+    for zi0, yi0, xi0 in zip(pz, py, px):
+        z1, z2 = max(0, zi0 - rad[0]), min(sm2.shape[0], zi0 + rad[0] + 1)
+        y1, y2 = max(0, yi0 - rad[1]), min(sm2.shape[1], yi0 + rad[1] + 1)
+        x1, x2 = max(0, xi0 - rad[2]), min(sm2.shape[2], xi0 + rad[2] + 1)
+        sm2[z1:z2, y1:y2, x1:x2] = 0.0
+    mx2 = maximum_filter(sm2, size=size, mode="nearest")
+    peaks2 = (sm2 == mx2) & (sm2 >= thr)
+    zi1, yi1, xi1 = np.where(peaks)
+    zi2, yi2, xi2 = np.where(peaks2)
+    zi = np.concatenate([zi1, zi2])
+    yi = np.concatenate([yi1, yi2])
+    xi = np.concatenate([xi1, xi2])
+    tier = np.concatenate(
+        [
+            np.ones(len(zi1), dtype=np.int8),
+            np.full(len(zi2), 2, dtype=np.int8),
+        ]
+    )
     if len(zi) == 0:
-        return np.zeros((0, 3), dtype=np.float64)
+        return np.zeros((0, 3), dtype=np.float64), np.zeros((0,), dtype=np.int8)
     y = yi.astype(np.float64) * xy_stride
     x = xi.astype(np.float64) * xy_stride
     raw = np.stack([zi.astype(np.float64), y, x], axis=1)
     out = np.empty_like(raw)
     for i, p in enumerate(raw):
         out[i] = _centroid_blob(full, p, scale_zyx, nms_um)
-    return out
+    return out, tier
 
 
 def detect_video(
@@ -307,14 +329,14 @@ def detect_video(
         if k % 10 == 0 or k + 1 == n_t:
             print(f"  detect frame {int(t)} ({k + 1}/{n_t})", flush=True)
         vol = np.asarray(arr[int(t)])
-        p = detect_peaks_frame(
+        p, tier = detect_peaks_frame(
             vol, scale_zyx=scale_zyx, nms_um=nms_um, percentile=percentile
         )
         if len(p):
             tt = np.full((len(p), 1), float(t))
-            rows.append(np.hstack([tt, p]))
+            rows.append(np.hstack([tt, p, tier.reshape(-1, 1).astype(np.float64)]))
     if not rows:
-        return np.zeros((0, 4), dtype=np.float64)
+        return np.zeros((0, 5), dtype=np.float64)
     return np.vstack(rows)
 
 
@@ -346,17 +368,13 @@ def link_tracks(
         pa = pred_tzyx[a][:, 1:4]
         pb = pred_tzyx[b][:, 1:4]
         d = np.sqrt((((pa[:, None, :] - pb[None, :, :]) * sc) ** 2).sum(axis=2))
-        used_b: set[int] = set()
-        order = np.argsort(d.min(axis=1))
-        for ia in order:
-            jb = int(np.argmin(d[ia]))
-            if jb in used_b:
-                cand = [int(k) for k in np.argsort(d[ia]) if int(k) not in used_b]
-                if not cand:
-                    continue
-                jb = cand[0]
+        from scipy.optimize import linear_sum_assignment
+
+        cap = d.copy()
+        cap[cap > max_um] = max_um * 4.0
+        ri, cj = linear_sum_assignment(cap)
+        for ia, jb in zip(ri, cj):
             if d[ia, jb] <= max_um:
-                used_b.add(jb)
                 edges.append((int(a[ia]), int(b[jb])))
     return edges
 
@@ -376,7 +394,9 @@ def link_tracks_residual(
             float(np.linalg.norm((pred_tzyx[j, 1:4] - pred_tzyx[i, 1:4]) * sc))
         )
     med = float(np.median(steps)) if steps else seed_um
-    gate = max(seed_um, _PHI * med)
+    # Do not floor at φ⁴ — that 6.85 µm gate let Hungarian steal the
+    # true continuation (proxy lineage 0.78→0.56). Gate is φ · measured step.
+    gate = max(seed_um, _PHI * med) if steps else seed_um
     e2 = link_tracks(pred_tzyx, scale_zyx=scale_zyx, max_um=gate)
     return e2, {
         "seed_um": seed_um,
@@ -404,6 +424,8 @@ def lineage_recall(
     for t in sorted({int(x) for x in gt[:, 0]}):
         gi = [i for i, tt in enumerate(gt[:, 0]) if int(tt) == t]
         pi = [i for i, tt in enumerate(pred_tzyx[:, 0]) if int(tt) == t] if len(pred_tzyx) else []
+        if pred_tzyx.shape[1] >= 5:
+            pi = [i for i in pi if int(pred_tzyx[i, 4]) == 1]
         if not gi or not pi:
             continue
         gxyz = gt[gi][:, 1:4]
@@ -578,9 +600,17 @@ def main(argv: list[str] | None = None) -> int:
         gt_tzyx = np.column_stack(
             [tracks["t"].astype(float), tracks["xyz_vox"]]
         )
-        hit = match_centroids(pred, gt_tzyx)
-        hit12 = match_centroids(pred, gt_tzyx, max_um=12.0)
-        edges, link_meta = link_tracks_residual(pred)
+        xyz4 = pred[:, :4]
+        hit = match_centroids(xyz4, gt_tzyx)
+        hit12 = match_centroids(xyz4, gt_tzyx, max_um=12.0)
+        if pred.shape[1] >= 5:
+            pri = np.where(pred[:, 4] == 1)[0]
+            e_loc, link_meta = link_tracks_residual(xyz4[pri])
+            edges = [(int(pri[i]), int(pri[j])) for i, j in e_loc]
+            link_meta["n_primary"] = int(len(pri))
+            link_meta["n_residual_peaks"] = int((pred[:, 4] == 2).sum())
+        else:
+            edges, link_meta = link_tracks_residual(xyz4)
         lin = lineage_recall(pred, edges, tracks)
         lin12 = lineage_recall(pred, edges, tracks, max_um=12.0)
         out = {
@@ -611,8 +641,8 @@ def main(argv: list[str] | None = None) -> int:
             "link_meta": link_meta,
             "note": (
                 "Centroid = half-max first moment. Gate = median+φ·MAD. "
-                "NMS = φ³ µm (splits unannotated neighbors). "
-                "Link = φ · measured median step."
+                "NMS = φ³ µm. Residual second collapse fills leftover "
+                "brightness (7 µm recall). Lineage links first collapse only."
             ),
             "estimated_true_cells": tracks["meta"].get("estimated_nodes"),
             "authority": "OME-Zarr voxels + measured blob centroids (no trained net)",
