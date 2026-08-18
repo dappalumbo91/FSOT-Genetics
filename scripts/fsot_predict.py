@@ -9,8 +9,9 @@ Usage
 
 Regime policy (zero free params; templates/MSA = data):
   1. If a real homolog structure is found → template + packing fuse (MSA if deep)
-  2. Else if deep MSA → bulk MSA-augmented F15
-  3. Else → pure single-sequence bulk
+  2. Else → no_measured_map: F01–F15 observables (Rg, secondary) only.
+     3-D MDS bulk is not a product fold (orphan ceiling ~11–14 Å).
+     Pass --force-bulk to emit that research path anyway.
 
 Always reports free_parameters=0, structure_mode, confidence when MSA exists.
 """
@@ -27,7 +28,12 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from fsot_structure_engine import predict_ca_coords, write_ca_pdb, clean_sequence  # noqa: E402
+from fsot_structure_engine import (  # noqa: E402
+    clean_sequence,
+    predict_ca_coords,
+    sequence_observables,
+    write_ca_pdb,
+)
 from msa_pipeline import build_msa_features, conservation_confidence  # noqa: E402
 from msa_template_fuse import fuse_predict, select_regime  # noqa: E402
 
@@ -59,6 +65,11 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--pfam", default=None)
     ap.add_argument("--exclude-pdb", default=None, help="Self-PDB to exclude from templates")
     ap.add_argument("--no-template", action="store_true")
+    ap.add_argument(
+        "--force-bulk",
+        action="store_true",
+        help="Emit retired 3-D MDS bulk (research). Not a product structure.",
+    )
     ap.add_argument("--no-msa", action="store_true")
     ap.add_argument("--rounds", type=int, default=16)
     ap.add_argument("--pdb-out", default=None)
@@ -97,7 +108,11 @@ def main(argv: list[str] | None = None) -> int:
         except Exception:
             tmpl = None
 
-    regime = select_regime(tmpl is not None, feat if feat and feat.n_seqs else None)
+    regime = select_regime(
+        tmpl is not None,
+        feat if feat and feat.n_seqs else None,
+        force_bulk=bool(args.force_bulk),
+    )
     report: dict = {
         "sequence": seq,
         "length": len(seq),
@@ -130,7 +145,7 @@ def main(argv: list[str] | None = None) -> int:
             }
         )
         conf = fused.get("confidence")
-    else:
+    elif args.force_bulk:
         mode = "msa" if regime == "bulk_msa" else "single"
         pred = predict_ca_coords(
             seq,
@@ -148,10 +163,31 @@ def main(argv: list[str] | None = None) -> int:
                 "rg_A": pred.get("rg_A"),
                 "predict_ms": pred.get("predict_ms"),
                 "mean_confidence": float(np.mean(conf)) if conf is not None else None,
+                "note": "force-bulk: 3-D MDS is the orphan ceiling, not product",
+            }
+        )
+    else:
+        obs = sequence_observables(seq)
+        X = None
+        conf = conservation_confidence(feat) if feat and feat.n_seqs else None
+        report.update(
+            {
+                "structure_mode": "no_measured_map",
+                "engine": obs.get("engine"),
+                "secondary": obs.get("secondary"),
+                "regions": obs.get("regions"),
+                "rg_target_A": obs.get("rg_target_A"),
+                "mean_confidence": float(np.mean(conf)) if conf is not None else None,
+                "note": (
+                    "No measured homolog. F01–F15 reports Rg/secondary. "
+                    "A 3-D Cα fold is not emitted (backbone unobserved). "
+                    "Use --force-bulk only for the research MDS path."
+                ),
             }
         )
 
-    report["ca_coords"] = X.tolist()
+    if X is not None:
+        report["ca_coords"] = X.tolist()
     if conf is not None:
         report["per_residue_confidence"] = [float(c) for c in conf]
 
@@ -172,10 +208,22 @@ def main(argv: list[str] | None = None) -> int:
         )
     if report.get("mean_confidence") is not None:
         print(f"  mean confidence={report['mean_confidence']:.3f}")
+    if report.get("structure_mode") == "no_measured_map":
+        print(f"  rg_target={report.get('rg_target_A'):.2f} A  (no 3-D fold)")
+        sec = report.get("secondary") or ""
+        if sec:
+            print(f"  secondary={sec[:72]}{'…' if len(sec) > 72 else ''}")
 
     if args.pdb_out:
-        write_ca_pdb(Path(args.pdb_out), seq, X, name="FSOT")
-        print(f"  wrote {args.pdb_out}")
+        if X is None:
+            print(
+                "  no PDB written: no measured map "
+                "(pass --force-bulk for retired 3-D MDS)",
+                file=sys.stderr,
+            )
+        else:
+            write_ca_pdb(Path(args.pdb_out), seq, X, name="FSOT")
+            print(f"  wrote {args.pdb_out}")
     if args.json_out:
         # drop huge coords optionally? keep for medical audit
         Path(args.json_out).write_text(json.dumps(report, indent=2), encoding="utf-8")

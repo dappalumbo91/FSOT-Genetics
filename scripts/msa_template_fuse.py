@@ -399,20 +399,24 @@ def fused_confidence(
 def select_regime(
     has_template: bool,
     features: MsaFeatures | None,
+    *,
+    force_bulk: bool = False,
 ) -> str:
     """Deployable regime picker (medical default policy).
 
     template_available → template_physics (+ optional packing fuse)
-    else if deep MSA   → bulk_msa
-    else               → bulk_single
+    else               → no_measured_map
+    force_bulk=True    → retired 3-D MDS path (research / diagnostic only)
     """
     if has_template:
         if features is not None and features.depth_ok:
             return "template_msa_fuse"
         return "template_physics"
-    if features is not None and features.depth_ok:
-        return "bulk_msa"
-    return "bulk_single"
+    if force_bulk:
+        if features is not None and features.depth_ok:
+            return "bulk_msa"
+        return "bulk_single"
+    return "no_measured_map"
 
 
 def _termini_bond_stress(X: np.ndarray) -> tuple[float, float]:

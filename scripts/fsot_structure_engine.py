@@ -759,6 +759,31 @@ def proximity_to_distance(
     return D
 
 
+def sequence_observables(sequence: str) -> dict[str, Any]:
+    """Lawful single-sequence outputs that do *not* collapse to a 3-D fold.
+
+    ChemLink / Observer.lean: backbone is unobserved. F01–F15 still determines
+    Rg target, secondary labels, and region spans. Those stay. A 3-D Cα MDS
+    from pairwise contacts is the orphan ceiling (~11–14 Å) and is not a
+    product structure.
+    """
+    seq = clean_sequence(sequence)
+    if len(seq) < 5:
+        raise ValueError("sequence too short")
+    _M, props, regions, chars, iface = build_distogram(seq)
+    return {
+        "sequence": chars,
+        "length": len(chars),
+        "secondary": "".join(p.dominant() for p in props),
+        "regions": [{"kind": r.kind, "start": r.start, "end": r.end} for r in regions],
+        "rg_target_A": target_rg_fsot(len(chars)),
+        "structure_mode": "no_measured_map",
+        "engine": "fsot_sequence_observables",
+        "mean_abs_S_pairs": iface.get("mean_abs_S_pairs"),
+        "observed_pair_fraction": iface.get("observed_pair_fraction"),
+    }
+
+
 def target_rg_fsot(n: int) -> float:
     """Collapsed-globule R_g from seeds: π · N^{1/π} (Å).
 

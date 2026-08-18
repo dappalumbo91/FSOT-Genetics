@@ -33,7 +33,7 @@ Older snapshots (`data/medical_stress_suite.json` fuse **1.16 Å**, bulk 16–17
 | 0 free parameters; residual at named ChemLink | **Yes** — pin D1D38A |
 | DNA / metal / partner / ligand as observers | **Yes** — coverage JSON |
 | Apparatus (trit_not) instead of one pose | **Yes** — DFG-in/out, CaM compact/extended |
-| De-novo / orphan fold matches AlphaFold | **No.** Bulk ~11–14 Å. Do not say “we are 15 Å off” as if that were the product. |
+| De-novo / orphan fold matches AlphaFold | **No.** Front door is `no_measured_map` (Rg + secondary). 3-D MDS (~11–14 Å) is research-only (`--force-bulk`). |
 | CASP / CAMEO blind | **Not run.** |
 | Clinical / FDA product | **No.** Experimental disclosure only. |
 
@@ -41,7 +41,7 @@ Older snapshots (`data/medical_stress_suite.json` fuse **1.16 Å**, bulk 16–17
 
 ## Honest ceilings (do not market past these)
 
-1. **Bulk / orphan ~11–14 Å** — pairwise F15 has almost no long-range *distance* field. Topology needs a measured homolog *or* a many-body distance law that does not exist yet. This ceiling is real. It is the fallback, not the headline.
+1. **True orphans get observables, not a fake fold.** Pairwise F15 has almost no long-range *distance* field. The live front door (`fsot_predict.py`) reports `no_measured_map` (Rg target + secondary). `--force-bulk` still emits the 11–14 Å MDS for research. That ceiling is real; grinding it is the wrong ChemLink.
 2. **Contacts underdetermine structure** — even perfect contacts → ~11 Å MDS (`test_coevolution_fold.py`).
 3. **MSA is data** (conservation, packing polish), not a from-scratch fold miracle.
 4. **Product requires a measured map** of the same protein/class. No crystal in the cluster → orphan path, say so.
@@ -55,7 +55,7 @@ p53 DNA-binding is **not** an orphan on the current product (0.01 Å via 1TSR). 
 | Capability | Status now | Not yet |
 |------------|------------|---------|
 | Structure when a homolog exists | **0.13 Å** freeze median | CASP/CAMEO blind |
-| Structure for true orphans | ~11–14 Å bulk | Many-body distance law |
+| Structure for true orphans | **`no_measured_map`** — Rg + secondary only. 3-D MDS retired as deploy. | Remote homolog retrieval, or a many-body distance law |
 | Per-residue confidence | Provenance + evo conf | Calibrated error cards |
 | Variant effect | Panel + pop-AF demotion (P72R) | Full ACMG clinical report |
 | DNA → AA → effect | Working (`dna_variant_effect.py`) | ClinVar/COSMIC production scorer |

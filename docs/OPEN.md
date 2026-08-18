@@ -30,7 +30,7 @@ Medical expansion: `docs/MEDICAL_PLATFORM.md`. Experimental PGx: **10/10** (`scr
 
 ## Anti-goals (do not “fix” these)
 
-- Bulk 11–14 Å (information ceiling).
+- Grinding 3-D MDS bulk toward AlphaFold. Backbone is unobserved; pairwise contacts underdetermine a Cα fold. That path is **retired as a product** (`no_measured_map`). F01–F15 formulas (CA_CA, Rg target, secondary) stay — they still feed the measured product.
 - Residual picking DFG-in vs DFG-out.
 - Bond-idealizing intact crystals.
 - Geometric shotgun (medoid-all, invented contacts).

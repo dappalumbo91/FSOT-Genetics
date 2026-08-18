@@ -62,7 +62,7 @@ measured homolog Cα
 
 - Geometric shotgun (medoid-all, false contacts, residual springs that tank median).
 - Bond-idealizing an already-intact crystal (that was 1EXR 0.80→1.16).
-- Claiming AlphaFold-beating bulk fold without more measured coverage / hardware path.
+- Claiming AlphaFold-beating bulk fold. 3-D MDS bulk is retired as a product (`no_measured_map`). F01–F15 formulas remain.
 
 ## What we *are* doing next
 

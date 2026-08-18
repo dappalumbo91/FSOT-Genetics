@@ -23,7 +23,7 @@ AlphaFold is a trained interpolator over the Protein Data Bank. This repository 
 | Regime | What it is | Current number | Claim |
 |--------|------------|----------------|-------|
 | **Product** | Every measured homolog except the evaluation PDB + residual law at named ChemLink interfaces | **0.13 Å** median Cα vs AlphaFold **0.47 Å** (10/10 sub-2 Å; all ten beat AF) | Medical structure when a crystal of the same protein/class exists |
-| **Bulk / orphan** | Single sequence through F01–F15, no homolog | **~11–14 Å** | Honest ceiling of pairwise contacts. **Not** the product. **Not** “FSOT is 15 Å off experiment.” |
+| **No measured map** | Sequence only — F01–F15 observables (Rg, secondary). 3-D MDS is **not** emitted | — | Honest: we do not invent a fold. The old ~11–14 Å number is that retired MDS path (`--force-bulk`). |
 
 The product does not “beat AlphaFold at folding from sequence alone.” It uses the **same information universe** AlphaFold trained on and applies \(S = K(T_1+T_2+T_3)\) instead of learned weights. Bulk remains the fallback when there is no measured map.
 

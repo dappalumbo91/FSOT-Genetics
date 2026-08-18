@@ -334,15 +334,12 @@ def assemble_domains(
                 except Exception:
                     pass
         else:
-            if len(sub) <= 400:
-                pred = predict_ca_coords(sub, rounds=bulk_rounds, mode="single")
-                Xdom = pred["ca_coords"]
-                entry["source"] = "bulk_single"
-            else:
-                Xdom = np.zeros((len(sub), 3))
-                for k in range(len(sub)):
-                    Xdom[k] = np.array([k * CA_CA, 0.0, 0.0])
-                entry["source"] = "extended_chain"
+            # No measured domain map. Do not invent a 13 Å MDS globule
+            # (backbone unobserved). A CA_CA walk is an honest gap filler.
+            Xdom = np.zeros((len(sub), 3))
+            for k in range(len(sub)):
+                Xdom[k] = np.array([k * CA_CA, 0.0, 0.0])
+            entry["source"] = "no_measured_map"
 
         rg = float(np.sqrt(((Xdom - Xdom.mean(0)) ** 2).sum(axis=1).mean()))
         if di == 0 and not covered.any():
