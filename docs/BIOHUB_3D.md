@@ -43,12 +43,12 @@ Refinement (FSOT, 0 free params):
 - Gate = median + φ·MAD (φ²·MAD if that paints > 1/φ of voxels).
 - NMS = φ³ µm (φ⁴ merged an annotated cell with an unannotated neighbor).
 - Residual second collapse on leftover brightness (7–12 µm ghosts).
-- Lineage = Hungarian on the **first** collapse only (mixing residual peaks stole edges).
+- Lineage = Hungarian on the first collapse (intensity identity). Unmatched primaries get a second pass at φ⁵ µm (long but real steps). Residual peaks stay localization-only.
 
 | Video | GT | 7 µm recall | 12 µm recall | Lineage 7 / 12 µm | Detections |
 |-------|---:|------------:|-------------:|------------------:|-----------:|
-| `44b6_0113de3b` (sparse) | 52 | **1.00** | **1.00** | **0.80 / 0.88** | 42,666 (21.6k primary) |
-| `6bba_09961292` (dense) | 1950 | **0.96** | **0.999** | **0.69 / 0.77** | 38,778 (19.5k primary) |
+| `44b6_0113de3b` (sparse) | 52 | **1.00** | **1.00** | **0.82 / 0.90** | 42,666 (21.6k primary) |
+| `6bba_09961292` (dense) | 1950 | **0.96** | **0.999** | **0.69 / 0.78** | 38,778 (19.5k primary) |
 
 Lineage = predicted parent→child edges vs measured GEFF edges (the competition outcome). AlphaFold does not score this. Source: `data/biohub_3d_voxels.json`.
 

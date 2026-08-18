@@ -300,14 +300,24 @@ def detect_peaks_frame(
         ]
     )
     if len(zi) == 0:
-        return np.zeros((0, 3), dtype=np.float64), np.zeros((0,), dtype=np.int8)
+        return (
+            np.zeros((0, 3), dtype=np.float64),
+            np.zeros((0,), dtype=np.int8),
+            np.zeros((0,), dtype=np.float64),
+        )
     y = yi.astype(np.float64) * xy_stride
     x = xi.astype(np.float64) * xy_stride
     raw = np.stack([zi.astype(np.float64), y, x], axis=1)
     out = np.empty_like(raw)
+    inten = np.empty(len(raw), dtype=np.float64)
     for i, p in enumerate(raw):
         out[i] = _centroid_blob(full, p, scale_zyx, nms_um)
-    return out, tier
+        zc, yc, xc = [int(round(c)) for c in out[i]]
+        zc = int(np.clip(zc, 0, full.shape[0] - 1))
+        yc = int(np.clip(yc, 0, full.shape[1] - 1))
+        xc = int(np.clip(xc, 0, full.shape[2] - 1))
+        inten[i] = float(full[zc, yc, xc])
+    return out, tier, inten
 
 
 def detect_video(
@@ -329,14 +339,23 @@ def detect_video(
         if k % 10 == 0 or k + 1 == n_t:
             print(f"  detect frame {int(t)} ({k + 1}/{n_t})", flush=True)
         vol = np.asarray(arr[int(t)])
-        p, tier = detect_peaks_frame(
+        p, tier, inten = detect_peaks_frame(
             vol, scale_zyx=scale_zyx, nms_um=nms_um, percentile=percentile
         )
         if len(p):
             tt = np.full((len(p), 1), float(t))
-            rows.append(np.hstack([tt, p, tier.reshape(-1, 1).astype(np.float64)]))
+            rows.append(
+                np.hstack(
+                    [
+                        tt,
+                        p,
+                        tier.reshape(-1, 1).astype(np.float64),
+                        inten.reshape(-1, 1),
+                    ]
+                )
+            )
     if not rows:
-        return np.zeros((0, 5), dtype=np.float64)
+        return np.zeros((0, 6), dtype=np.float64)
     return np.vstack(rows)
 
 
@@ -370,8 +389,15 @@ def link_tracks(
         d = np.sqrt((((pa[:, None, :] - pb[None, :, :]) * sc) ** 2).sum(axis=2))
         from scipy.optimize import linear_sum_assignment
 
-        cap = d.copy()
-        cap[cap > max_um] = max_um * 4.0
+        if pred_tzyx.shape[1] >= 6:
+            ia_ = pred_tzyx[a, 5]
+            ib_ = pred_tzyx[b, 5]
+            rel = np.abs(ia_[:, None] - ib_[None, :]) / (np.maximum(ia_[:, None], ib_[None, :]) + 1e-6)
+            cost = d * (1.0 + rel)
+        else:
+            cost = d
+        cap = cost.copy()
+        cap[d > max_um] = max_um * 4.0
         ri, cj = linear_sum_assignment(cap)
         for ia, jb in zip(ri, cj):
             if d[ia, jb] <= max_um:
@@ -407,6 +433,69 @@ def link_tracks_residual(
     }
 
 
+def link_tracks_staged(pred: np.ndarray) -> tuple[list[tuple[int, int]], dict[str, float]]:
+    """First-collapse links, then leftover detections at φ⁵ µm.
+
+    Residual peaks (tier 2) and unmatched primaries fill tracks the first
+    Hungarian pass left open — 351 dense GEFF edges were residual-only.
+    """
+    if len(pred) == 0:
+        return [], {}
+    pri = np.where(pred[:, 4] == 1)[0] if pred.shape[1] >= 5 else np.arange(len(pred))
+    e_loc, meta = link_tracks_residual(pred[pri])
+    edges = [(int(pri[i]), int(pri[j])) for i, j in e_loc]
+    has_n = {i for i, _j in edges}
+    has_p = {j for _i, j in edges}
+    leftover_um = float(_PHI ** 5)
+    extra = 0
+    frames = sorted({int(t) for t in pred[:, 0]})
+    from scipy.optimize import linear_sum_assignment
+
+    sc = np.array([SCALE_Z_UM, SCALE_Y_UM, SCALE_X_UM])
+    for t0, t1 in zip(frames, frames[1:]):
+        if t1 != t0 + 1:
+            continue
+        # Unmatched first-collapse only (residual leftovers stole tracks).
+        src = [
+            i
+            for i in range(len(pred))
+            if int(pred[i, 0]) == t0 and i not in has_n and int(pred[i, 4]) == 1
+        ]
+        dst = [
+            i
+            for i in range(len(pred))
+            if int(pred[i, 0]) == t1 and i not in has_p and int(pred[i, 4]) == 1
+        ]
+        if not src or not dst:
+            continue
+        pa = pred[src][:, 1:4]
+        pb = pred[dst][:, 1:4]
+        d = np.sqrt((((pa[:, None, :] - pb[None, :, :]) * sc) ** 2).sum(axis=2))
+        if pred.shape[1] >= 6:
+            ia_ = pred[src, 5]
+            ib_ = pred[dst, 5]
+            rel = np.abs(ia_[:, None] - ib_[None, :]) / (
+                np.maximum(ia_[:, None], ib_[None, :]) + 1e-6
+            )
+            cost = d * (1.0 + rel)
+        else:
+            cost = d
+        cap = cost.copy()
+        cap[d > leftover_um] = leftover_um * 4.0
+        ri, cj = linear_sum_assignment(cap)
+        for ia, jb in zip(ri, cj):
+            if d[ia, jb] <= leftover_um:
+                i, j = int(src[ia]), int(dst[jb])
+                edges.append((i, j))
+                has_n.add(i)
+                has_p.add(j)
+                extra += 1
+    meta = dict(meta)
+    meta["n_leftover_edges"] = extra
+    meta["leftover_um"] = leftover_um
+    return edges, meta
+
+
 def lineage_recall(
     pred_tzyx: np.ndarray,
     pred_edges: list[tuple[int, int]],
@@ -414,6 +503,7 @@ def lineage_recall(
     *,
     scale_zyx: tuple[float, float, float] = (SCALE_Z_UM, SCALE_Y_UM, SCALE_X_UM),
     max_um: float = MATCH_UM,
+    primary_only: bool = False,
 ) -> dict[str, Any]:
     """Fraction of measured GEFF edges whose both ends match a predicted link."""
     gt = np.column_stack([tracks["t"].astype(float), tracks["xyz_vox"]])
@@ -424,7 +514,7 @@ def lineage_recall(
     for t in sorted({int(x) for x in gt[:, 0]}):
         gi = [i for i, tt in enumerate(gt[:, 0]) if int(tt) == t]
         pi = [i for i, tt in enumerate(pred_tzyx[:, 0]) if int(tt) == t] if len(pred_tzyx) else []
-        if pred_tzyx.shape[1] >= 5:
+        if primary_only and pred_tzyx.shape[1] >= 5:
             pi = [i for i in pi if int(pred_tzyx[i, 4]) == 1]
         if not gi or not pi:
             continue
@@ -604,15 +694,13 @@ def main(argv: list[str] | None = None) -> int:
         hit = match_centroids(xyz4, gt_tzyx)
         hit12 = match_centroids(xyz4, gt_tzyx, max_um=12.0)
         if pred.shape[1] >= 5:
-            pri = np.where(pred[:, 4] == 1)[0]
-            e_loc, link_meta = link_tracks_residual(xyz4[pri])
-            edges = [(int(pri[i]), int(pri[j])) for i, j in e_loc]
-            link_meta["n_primary"] = int(len(pri))
+            edges, link_meta = link_tracks_staged(pred)
+            link_meta["n_primary"] = int((pred[:, 4] == 1).sum())
             link_meta["n_residual_peaks"] = int((pred[:, 4] == 2).sum())
         else:
             edges, link_meta = link_tracks_residual(xyz4)
-        lin = lineage_recall(pred, edges, tracks)
-        lin12 = lineage_recall(pred, edges, tracks, max_um=12.0)
+        lin = lineage_recall(pred, edges, tracks, primary_only=True)
+        lin12 = lineage_recall(pred, edges, tracks, max_um=12.0, primary_only=True)
         out = {
             "dataset": args.dataset,
             "volume_shape": [int(x) for x in arr.shape],
