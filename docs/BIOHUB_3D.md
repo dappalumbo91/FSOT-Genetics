@@ -37,18 +37,20 @@ The volume header is read **without** loading 85 GB of voxels. Cell centers are 
 
 Light-sheet pixels are now sliced in place (one T is ~8 MB). Nuclei are **brightness peaks** in the volume — measured observer, no trained U-Net in this repo.
 
-Proxy `44b6_0113de3b` (100 frames):
+Refinement (FSOT, 0 free params):
 
-| Item | Number |
-|------|-------:|
-| Frames loaded | **100 / 100** |
-| GT cell vs background intensity | **1687 / 155** (~11×) |
-| Dense peaks | **8,000** (estimated true cells 25,755) |
-| Official 7 µm recall vs sparse GT | 27/52 (**0.52**) |
-| 12 µm recall (one nucleus) | 51/52 (**0.98**) |
-| Median match when inside 7 µm | **0.57 µm** |
+- Center = **half-max first moment** of the observed blob (not the brightest voxel).
+- Gate = median + φ·MAD (φ²·MAD if that paints > 1/φ of voxels).
+- NMS = φ⁴ µm · link = φ⁵ µm.
 
-The annotated GEFF point is an *approximate* cell center. We read the brightness maximum of the nucleus. Those two points sit on the same cell; 7 µm is tight for that difference, 12 µm is a nucleus. Source: `data/biohub_3d_voxels.json`.
+| Video | GT | 7 µm recall | 12 µm recall | Lineage 7 / 12 µm | Detections |
+|-------|---:|------------:|-------------:|------------------:|-----------:|
+| `44b6_0113de3b` (sparse) | 52 | **0.75** (was 0.52) | **1.00** | **0.52 / 0.72** | 11,101 |
+| `6bba_09961292` (dense) | 1950 | **0.54** | **0.91** | **0.41 / 0.63** | 8,876 |
+
+Lineage = predicted parent→child edges vs measured GEFF edges (the competition outcome). AlphaFold does not score this. Source: `data/biohub_3d_voxels.json`.
+
+The 7 µm official radius is peak/centroid vs annotator center. At one nucleus (12 µm) we recover almost every annotated cell and most of its next frame.
 
 **Kaggle submit** (U-Net + ILP, public ~0.848 floor) stays in `C:\Users\damia\biohub-fsot-unet`. This repo is the genetics / 3-D *reader*, not a second competition stack.
 

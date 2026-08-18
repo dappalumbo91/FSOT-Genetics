@@ -167,7 +167,9 @@ def inventory(train_dir: Path = TRAIN) -> list[dict[str, Any]]:
 
 
 MATCH_UM = 7.0  # official Biohub centroid match radius
-NMS_UM = 6.0  # CellMot NMS / typical nucleus exclusion
+# Nucleus / NMS length = φ⁴ µm (seed). CellMot used 6.0; φ⁴ ≈ 6.85.
+NMS_UM = float(_PHI ** 4)
+LINK_UM = float(_PHI ** 5)  # φ · nucleus — one-frame displacement gate
 
 
 def open_volume(zarr_path: Path):
@@ -194,34 +196,81 @@ def frame_stats(vol: np.ndarray) -> dict[str, float]:
     }
 
 
+def _mad_threshold(sm: np.ndarray) -> float:
+    """Foreground gate: median + φ·MAD. If that paints > 1/φ of voxels, use φ²."""
+    med = float(np.median(sm))
+    mad = float(np.median(np.abs(sm - med))) + 1e-6
+    thr = med + _PHI * mad
+    if float((sm >= thr).mean()) > 1.0 / _PHI:
+        thr = med + (_PHI * _PHI) * mad
+    return thr
+
+
+def _centroid_blob(
+    vol: np.ndarray,
+    zyx: np.ndarray,
+    scale_zyx: tuple[float, float, float],
+    radius_um: float,
+) -> np.ndarray:
+    """Intensity-weighted first moment of the observed blob (measured center)."""
+    sc = np.asarray(scale_zyx, dtype=float)
+    rad = np.maximum(1, np.round(radius_um / sc)).astype(int)
+    z0, y0, x0 = [int(round(c)) for c in zyx]
+    z1, z2 = max(0, z0 - rad[0]), min(vol.shape[0], z0 + rad[0] + 1)
+    y1, y2 = max(0, y0 - rad[1]), min(vol.shape[1], y0 + rad[1] + 1)
+    x1, x2 = max(0, x0 - rad[2]), min(vol.shape[2], x0 + rad[2] + 1)
+    patch = vol[z1:z2, y1:y2, x1:x2].astype(np.float64)
+    if patch.size == 0:
+        return zyx.astype(np.float64)
+    # Half-max of this blob (measured FWHM core). Patch-median pulled the
+    # centroid into the dim halo and moved some hits out to ~5 µm.
+    peak = float(patch.max())
+    w = np.maximum(patch - 0.5 * peak, 0.0)
+    wsum = float(w.sum())
+    if wsum < 1e-6:
+        return np.array([z0, y0, x0], dtype=np.float64)
+    zz, yy, xx = np.indices(patch.shape, dtype=np.float64)
+    return np.array(
+        [
+            z1 + float((w * zz).sum() / wsum),
+            y1 + float((w * yy).sum() / wsum),
+            x1 + float((w * xx).sum() / wsum),
+        ]
+    )
+
+
 def detect_peaks_frame(
     vol: np.ndarray,
     *,
     scale_zyx: tuple[float, float, float] = (SCALE_Z_UM, SCALE_Y_UM, SCALE_X_UM),
     nms_um: float = NMS_UM,
-    percentile: float = 99.2,
+    percentile: float | None = None,
     xy_stride: int = 2,
 ) -> np.ndarray:
-    """Measured brightness peaks = observed nuclei in this frame.
+    """Observed nuclei: local max, then measured intensity centroid.
 
-    Local maxima of a lightly smoothed volume above a high percentile.
-    No trained weights. Image is the observer; peaks are the data.
-    Returns (N, 3) z,y,x in *full-resolution voxels*.
+    Threshold is median + φ·MAD (seed), not a free percentile. The 7 µm
+    miss was peak-voxel vs GT cell center — we now take the first moment
+    of the bright blob. Returns (N, 3) z,y,x in full-resolution voxels.
     """
     from scipy.ndimage import gaussian_filter, maximum_filter
 
-    v = vol.astype(np.float32)
+    full = vol.astype(np.float32)
     if xy_stride > 1:
-        v = v[:, ::xy_stride, ::xy_stride]
+        v = full[:, ::xy_stride, ::xy_stride]
         sc = (
             scale_zyx[0],
             scale_zyx[1] * xy_stride,
             scale_zyx[2] * xy_stride,
         )
     else:
+        v = full
         sc = scale_zyx
     sm = gaussian_filter(v, sigma=(0.4, 0.8, 0.8))
-    thr = float(np.percentile(sm, percentile))
+    if percentile is None:
+        thr = _mad_threshold(sm)
+    else:
+        thr = float(np.percentile(sm, percentile))
     size = tuple(int(max(1, 2 * round(nms_um / s) + 1)) for s in sc)
     mx = maximum_filter(sm, size=size, mode="nearest")
     peaks = (sm == mx) & (sm >= thr)
@@ -230,7 +279,11 @@ def detect_peaks_frame(
         return np.zeros((0, 3), dtype=np.float64)
     y = yi.astype(np.float64) * xy_stride
     x = xi.astype(np.float64) * xy_stride
-    return np.stack([zi.astype(np.float64), y, x], axis=1)
+    raw = np.stack([zi.astype(np.float64), y, x], axis=1)
+    out = np.empty_like(raw)
+    for i, p in enumerate(raw):
+        out[i] = _centroid_blob(full, p, scale_zyx, nms_um)
+    return out
 
 
 def detect_video(
@@ -239,7 +292,7 @@ def detect_video(
     t_indices: list[int] | None = None,
     scale_zyx: tuple[float, float, float] = (SCALE_Z_UM, SCALE_Y_UM, SCALE_X_UM),
     nms_um: float = NMS_UM,
-    percentile: float = 99.2,
+    percentile: float | None = None,
 ) -> np.ndarray:
     """Dense detections (t, z, y, x) voxels for selected frames."""
     arr = open_volume(zarr_path)
@@ -252,13 +305,112 @@ def detect_video(
         if k % 10 == 0 or k + 1 == n_t:
             print(f"  detect frame {int(t)} ({k + 1}/{n_t})", flush=True)
         vol = np.asarray(arr[int(t)])
-        p = detect_peaks_frame(vol, scale_zyx=scale_zyx, nms_um=nms_um, percentile=percentile)
+        p = detect_peaks_frame(
+            vol, scale_zyx=scale_zyx, nms_um=nms_um, percentile=percentile
+        )
         if len(p):
             tt = np.full((len(p), 1), float(t))
             rows.append(np.hstack([tt, p]))
     if not rows:
         return np.zeros((0, 4), dtype=np.float64)
     return np.vstack(rows)
+
+
+def link_tracks(
+    pred_tzyx: np.ndarray,
+    *,
+    scale_zyx: tuple[float, float, float] = (SCALE_Z_UM, SCALE_Y_UM, SCALE_X_UM),
+    max_um: float = LINK_UM,
+) -> list[tuple[int, int]]:
+    """Link detections in consecutive frames (nearest unused, ≤ φ⁵ µm).
+
+    Edges are predicted lineage (same cell or daughters). Residual does not
+    invent a second length — the gate is the seed nucleus scale.
+    Returns pairs of *row indices* into pred_tzyx.
+    """
+    if len(pred_tzyx) < 2:
+        return []
+    sc = np.asarray(scale_zyx, dtype=float)
+    frames = sorted({int(t) for t in pred_tzyx[:, 0]})
+    edges: list[tuple[int, int]] = []
+    idx_by_t = {t: np.where(pred_tzyx[:, 0] == t)[0] for t in frames}
+    for t0, t1 in zip(frames, frames[1:]):
+        if t1 != t0 + 1:
+            continue
+        a = idx_by_t[t0]
+        b = idx_by_t[t1]
+        if len(a) == 0 or len(b) == 0:
+            continue
+        pa = pred_tzyx[a][:, 1:4]
+        pb = pred_tzyx[b][:, 1:4]
+        d = np.sqrt((((pa[:, None, :] - pb[None, :, :]) * sc) ** 2).sum(axis=2))
+        used_b: set[int] = set()
+        order = np.argsort(d.min(axis=1))
+        for ia in order:
+            jb = int(np.argmin(d[ia]))
+            if jb in used_b:
+                cand = [int(k) for k in np.argsort(d[ia]) if int(k) not in used_b]
+                if not cand:
+                    continue
+                jb = cand[0]
+            if d[ia, jb] <= max_um:
+                used_b.add(jb)
+                edges.append((int(a[ia]), int(b[jb])))
+    return edges
+
+
+def lineage_recall(
+    pred_tzyx: np.ndarray,
+    pred_edges: list[tuple[int, int]],
+    tracks: dict[str, Any],
+    *,
+    scale_zyx: tuple[float, float, float] = (SCALE_Z_UM, SCALE_Y_UM, SCALE_X_UM),
+    max_um: float = MATCH_UM,
+) -> dict[str, Any]:
+    """Fraction of measured GEFF edges whose both ends match a predicted link."""
+    gt = np.column_stack([tracks["t"].astype(float), tracks["xyz_vox"]])
+    id_to_g = {int(n): i for i, n in enumerate(tracks["ids"])}
+    # GT node -> pred row (if matched)
+    sc = np.asarray(scale_zyx, dtype=float)
+    g2p: dict[int, int] = {}
+    for t in sorted({int(x) for x in gt[:, 0]}):
+        gi = [i for i, tt in enumerate(gt[:, 0]) if int(tt) == t]
+        pi = [i for i, tt in enumerate(pred_tzyx[:, 0]) if int(tt) == t] if len(pred_tzyx) else []
+        if not gi or not pi:
+            continue
+        gxyz = gt[gi][:, 1:4]
+        pxyz = pred_tzyx[pi][:, 1:4]
+        d = np.sqrt((((gxyz[:, None, :] - pxyz[None, :, :]) * sc) ** 2).sum(axis=2))
+        used: set[int] = set()
+        for row, gidx in enumerate(gi):
+            j = int(np.argmin(d[row]))
+            if j in used:
+                alt = [int(k) for k in np.argsort(d[row]) if int(k) not in used]
+                if not alt:
+                    continue
+                j = alt[0]
+            if d[row, j] <= max_um:
+                used.add(j)
+                g2p[gidx] = int(pi[j])
+    pred_set = {tuple(sorted(e)) for e in pred_edges}
+    hit = 0
+    n_e = 0
+    for a, b in tracks["edges"]:
+        if a not in id_to_g or b not in id_to_g:
+            continue
+        n_e += 1
+        pa, pb = g2p.get(id_to_g[a]), g2p.get(id_to_g[b])
+        if pa is None or pb is None:
+            continue
+        if tuple(sorted((pa, pb))) in pred_set:
+            hit += 1
+    return {
+        "n_gt_edges": n_e,
+        "n_pred_edges": len(pred_edges),
+        "n_edge_matched": hit,
+        "edge_recall": float(hit / n_e) if n_e else None,
+        "n_gt_nodes_matched": len(g2p),
+    }
 
 
 def match_centroids(
@@ -283,11 +435,21 @@ def match_centroids(
         if len(p) == 0:
             continue
         d = np.sqrt((((g[:, None, :] - p[None, :, :]) * sc) ** 2).sum(axis=2))
+        if len(g) > 1 and len(p) > 1:
+            from scipy.optimize import linear_sum_assignment
+
+            cap = d.copy()
+            cap[cap > max_um] = max_um * 4
+            ri, cj = linear_sum_assignment(cap)
+            for i, j in zip(ri, cj):
+                if d[i, j] <= max_um:
+                    matched += 1
+                    dists.append(float(d[i, j]))
+            continue
         used = set()
         for i in range(len(g)):
             j = int(np.argmin(d[i]))
             if j in used:
-                # next-best unused
                 order = np.argsort(d[i])
                 j = next((int(k) for k in order if int(k) not in used), j)
             if j in used:
@@ -390,6 +552,9 @@ def main(argv: list[str] | None = None) -> int:
         )
         hit = match_centroids(pred, gt_tzyx)
         hit12 = match_centroids(pred, gt_tzyx, max_um=12.0)
+        edges = link_tracks(pred)
+        lin = lineage_recall(pred, edges, tracks)
+        lin12 = lineage_recall(pred, edges, tracks, max_um=12.0)
         out = {
             "dataset": args.dataset,
             "volume_shape": [int(x) for x in arr.shape],
@@ -408,17 +573,35 @@ def main(argv: list[str] | None = None) -> int:
             "n_gt_matched_12um": hit12["n_matched"],
             "n_gt": hit["n_gt"],
             "match_median_um": hit["match_median_um"],
+            "n_pred_edges": lin["n_pred_edges"],
+            "lineage_edge_recall_7um": lin["edge_recall"],
+            "lineage_edge_recall_12um": lin12["edge_recall"],
+            "n_gt_edges_matched": lin["n_edge_matched"],
+            "n_gt_edges": lin["n_gt_edges"],
+            "nms_um": NMS_UM,
+            "link_um": LINK_UM,
             "note": (
-                "GT is an approximate cell center; we read the brightness peak. "
-                "Official match is 7 µm. 12 µm is one nucleus diameter."
+                "Centroid = intensity first moment of the observed blob. "
+                "Gate = median+φ·MAD. NMS = φ⁴ µm. Link = φ⁵ µm."
             ),
             "estimated_true_cells": tracks["meta"].get("estimated_nodes"),
-            "authority": "OME-Zarr voxels + brightness peaks (no trained net)",
+            "authority": "OME-Zarr voxels + measured blob centroids (no trained net)",
             "free_parameters": 0,
         }
         print(json.dumps(out, indent=2))
         dest = ROOT / "data" / "biohub_3d_voxels.json"
-        dest.write_text(json.dumps(out, indent=2), encoding="utf-8")
+        bundle: dict[str, Any] = {"free_parameters": 0, "datasets": {}}
+        if dest.exists():
+            try:
+                prev = json.loads(dest.read_text(encoding="utf-8"))
+                if isinstance(prev, dict) and "datasets" in prev:
+                    bundle = prev
+                elif isinstance(prev, dict) and "dataset" in prev:
+                    bundle["datasets"][str(prev["dataset"])] = prev
+            except Exception:
+                pass
+        bundle["datasets"][str(out["dataset"])] = out
+        dest.write_text(json.dumps(bundle, indent=2), encoding="utf-8")
         print(f"wrote {dest}")
         return 0
     geff = train / f"{args.dataset}.geff"
