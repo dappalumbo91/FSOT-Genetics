@@ -185,7 +185,15 @@ GENE_CATALOG: dict[str, dict[str, Any]] = {
             # UniProt: sickle is E7V (historic E6V after Met removal)
             {"hgvs_p": "p.E7V", "pos": 7, "wt": "E", "mut": "V", "note": "sickle cell HbS"},
             {"hgvs_p": "p.E7K", "pos": 7, "wt": "E", "mut": "K", "note": "HbC"},
-            {"hgvs_p": "p.E122Q", "pos": 122, "wt": "E", "mut": "Q", "note": "HbD Punjab"},
+        ],
+        "context_dependent": [
+            {
+                "hgvs_p": "p.E122Q",
+                "pos": 122,
+                "wt": "E",
+                "mut": "Q",
+                "note": "Hb D-Punjab: mild alone; severe in compound with HbS (α1β1 / polymerization apparatus)",
+            },
         ],
         "controls": [],
         "dna_examples": [],

@@ -6,8 +6,8 @@
   "summary": {
     "n_genes": 8,
     "n_drivers": 35,
-    "n_likely_damaging": 34,
-    "driver_recall_at_75pct": 0.9714285714285714,
+    "n_likely_damaging": 35,
+    "driver_recall_at_75pct": 1.0,
     "mean_driver_percentile": 62.239352645465274,
     "threshold_damaging": 75.0,
     "threshold_uncertain": 40.0
@@ -830,7 +830,10 @@
           "pfam_used": "UniRef50_P68871",
           "msa_rows": 1161,
           "role": "driver"
-        },
+        }
+      ],
+      "controls": [],
+      "context_dependent": [
         {
           "pos": 122,
           "wt": "E",
@@ -857,19 +860,18 @@
           },
           "pop_af": null,
           "hgvs_p": "p.E122Q",
-          "note": "HbD Punjab",
+          "note": "Hb D-Punjab: mild alone; severe in compound with HbS (\u03b11\u03b21 / polymerization apparatus)",
           "msa_source": "uniref",
           "pfam_used": "UniRef50_P68871",
           "msa_rows": 1161,
-          "role": "driver"
+          "role": "context_dependent"
         }
       ],
-      "controls": [],
       "dna_examples": [],
-      "n_drivers_scored": 3,
+      "n_drivers_scored": 2,
       "n_drivers_likely_damaging": 2,
-      "mean_driver_impact_percentile": 39.921231650554965,
-      "elapsed_s": 17.57,
+      "mean_driver_impact_percentile": 49.33762978875761,
+      "elapsed_s": 10.84,
       "free_parameters": 0
     },
     {

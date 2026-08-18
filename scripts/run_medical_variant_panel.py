@@ -365,6 +365,31 @@ def score_gene(symbol: str) -> dict[str, Any]:
         )
         controls_out.append(sc)
 
+    context_out = []
+    for d in gene.get("context_dependent") or []:
+        cons_p, freq_p, nrows, pf, bg_p = get_profile_at(d["pos"])
+        sc = score_missense(
+            seq,
+            d["pos"],
+            d["wt"],
+            d["mut"],
+            cons_p,
+            freq_p,
+            bg_p,
+            pop_af=d.get("pop_af"),
+        )
+        sc.update(
+            {
+                "hgvs_p": d["hgvs_p"],
+                "note": d.get("note"),
+                "msa_source": source_label,
+                "pfam_used": pf,
+                "msa_rows": nrows,
+                "role": "context_dependent",
+            }
+        )
+        context_out.append(sc)
+
     dna_out = []
     for item in gene.get("dna_examples") or []:
         pos, wt_codon, cpos, alt, hgvs = item
@@ -424,6 +449,7 @@ def score_gene(symbol: str) -> dict[str, Any]:
         "pfam_gapfill_positions": pfam_fills,
         "drivers": drivers_out,
         "controls": controls_out,
+        "context_dependent": context_out,
         "dna_examples": dna_out,
         "n_drivers_scored": n_ok,
         "n_drivers_likely_damaging": n_dam,

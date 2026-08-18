@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-08-13T03:54:26.282331+00:00",
+  "generated_at": "2026-08-18T01:12:08.833032+00:00",
   "disclosure": "EXPERIMENTAL RESEARCH \u2014 not a diagnosis, prescription, or medical device. See docs/EXPERIMENTAL_DISCLOSURE.md.",
   "doctrine": "Public dose/tox/mechanism labels are measured authority. FSOT reports whether the variant occupies that ChemLink. Hits confirm the interface; misses diagnose it. Not a prescription.",
-  "n": 9,
-  "n_concordant": 9,
+  "n": 10,
+  "n_concordant": 10,
   "concordance": 1.0,
   "misses": [],
   "cards": [
@@ -23,6 +23,7 @@
       "n_ligand_site": 35,
       "n_metal_site": 1,
       "n_dna_site": 0,
+      "n_ppi_site": 0,
       "domain": "Molecular_Chemistry",
       "diagnostic": null,
       "free_parameters": 0
@@ -43,6 +44,7 @@
       "n_ligand_site": 18,
       "n_metal_site": 0,
       "n_dna_site": 0,
+      "n_ppi_site": 0,
       "domain": "Biochemistry",
       "diagnostic": null,
       "free_parameters": 0
@@ -63,6 +65,7 @@
       "n_ligand_site": 18,
       "n_metal_site": 0,
       "n_dna_site": 0,
+      "n_ppi_site": 0,
       "domain": "Molecular_Chemistry",
       "diagnostic": null,
       "free_parameters": 0
@@ -83,6 +86,7 @@
       "n_ligand_site": 0,
       "n_metal_site": 0,
       "n_dna_site": 0,
+      "n_ppi_site": 66,
       "domain": "Biochemistry",
       "diagnostic": null,
       "free_parameters": 0
@@ -103,6 +107,7 @@
       "n_ligand_site": 0,
       "n_metal_site": 7,
       "n_dna_site": 0,
+      "n_ppi_site": 42,
       "domain": "Atomic_Physics",
       "diagnostic": null,
       "free_parameters": 0
@@ -123,6 +128,7 @@
       "n_ligand_site": 0,
       "n_metal_site": 4,
       "n_dna_site": 22,
+      "n_ppi_site": 40,
       "domain": "Electromagnetism",
       "diagnostic": null,
       "free_parameters": 0
@@ -143,6 +149,28 @@
       "n_ligand_site": 0,
       "n_metal_site": 4,
       "n_dna_site": 22,
+      "n_ppi_site": 40,
+      "domain": "Biochemistry",
+      "diagnostic": null,
+      "free_parameters": 0
+    },
+    {
+      "id": "hbb_e122q_interface",
+      "disclosure": "EXPERIMENTAL RESEARCH \u2014 not a diagnosis, prescription, or medical device. See docs/EXPERIMENTAL_DISCLOSURE.md.",
+      "gene": "HBB",
+      "pdb": "1A3N",
+      "residue": "121",
+      "aa_on_chain": "E",
+      "drug": "partner chain A (\u03b11\u03b21)",
+      "fsot_class": "on_ppi_site",
+      "known_class": "on_ppi_site",
+      "known_outcome": "Hb D-Punjab E121Q (UniProt E122): \u03b11\u03b21 contact; mild alone, severe with HbS",
+      "source": "PDB 1A3N B121\u2013A31; compound-sickle apparatus",
+      "concordant": true,
+      "n_ligand_site": 21,
+      "n_metal_site": 0,
+      "n_dna_site": 0,
+      "n_ppi_site": 77,
       "domain": "Biochemistry",
       "diagnostic": null,
       "free_parameters": 0
@@ -163,6 +191,7 @@
       "n_ligand_site": 41,
       "n_metal_site": 0,
       "n_dna_site": 0,
+      "n_ppi_site": 56,
       "domain": "Biochemistry",
       "diagnostic": null,
       "free_parameters": 0
@@ -183,6 +212,7 @@
       "n_ligand_site": 0,
       "n_metal_site": 3,
       "n_dna_site": 0,
+      "n_ppi_site": 0,
       "domain": "Atomic_Physics",
       "diagnostic": null,
       "free_parameters": 0

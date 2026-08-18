@@ -23,7 +23,10 @@ This list is what to clear next. One mechanism at a time. Pin `D1D38A`. 0 free p
 
 See `docs/MECHANISM_GAP_MAP.md`. Still open there: EGFR coverage, variant P72R specificity, vaccine-antigen domain scope, CASP/CAMEO blind.
 
-Medical expansion: `docs/MEDICAL_PLATFORM.md`. Experimental PGx: `scripts/bench_experimental_pgx.py` (disclosure required). **P72R** is now `common_polymorphism` via population AF ≥ 1/φ³ (data, not a fit). Drivers on TP53 remain 7/7 LIKELY DAMAGING.
+Medical expansion: `docs/MEDICAL_PLATFORM.md`. Experimental PGx: **10/10** (`scripts/bench_experimental_pgx.py`, disclosure required).
+
+- **P72R** → `common_polymorphism` (pop AF ≥ 1/φ³).
+- **HBB E122Q** (Hb D-Punjab) is not a failed driver: mid-conservation, α1β1 interface, compound-sickle apparatus. Catalog role is `context_dependent`. Solo call stays `uncertain`. PGx: `on_ppi_site` on 1A3N B121.
 
 ## Anti-goals (do not “fix” these)
 

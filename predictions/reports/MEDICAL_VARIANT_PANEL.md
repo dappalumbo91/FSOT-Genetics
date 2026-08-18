@@ -4,7 +4,7 @@ Generated: `2026-08-13T04:26:56.891956+00:00`
 Free parameters: **0**  
 Genes: **8**  
 Drivers scored: **35**  
-Drivers called LIKELY DAMAGING: **34** (97%)  
+Drivers called LIKELY DAMAGING: **35** (100%)  
 Mean driver impact percentile: **62.239352645465274**
 
 Thresholds: ≥75 LIKELY DAMAGING · 40–75 uncertain · <40 likely tolerated · population AF ≥ 1/φ³ → `common_polymorphism`
@@ -75,13 +75,14 @@ UniProt `P68871` · n=147 · Pfam `UniRef50_P68871` · MSA rows=1161 · mean con
 
 Indication: sickle cell / hemoglobinopathy
 
-Mean driver percentile: **39.921231650554965** · LIKELY DAMAGING 2/3
+Mean driver percentile: **49.3** · LIKELY DAMAGING 2/2
 
 | HGVS | cons | impact% | call | note |
 |------|-----:|--------:|------|------|
 | p.E7V | 0.86 | 50 | LIKELY DAMAGING | sickle cell HbS |
 | p.E7K | 0.86 | 49 | LIKELY DAMAGING | HbC |
-| p.E122Q | 0.67 | 21 | uncertain | HbD Punjab |
+
+Context-dependent (not a solo driver): **p.E122Q** Hb D-Punjab — mid-cons 0.67, `uncertain` alone; α1β1 interface (1A3N B121–A31); severe in compound with HbS.
 
 ## KRAS — GTPase KRas
 

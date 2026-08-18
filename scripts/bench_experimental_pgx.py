@@ -34,6 +34,7 @@ from multi_system import (  # noqa: E402
     parse_metals,
     parse_na_c1,
     parse_pdb_ca,
+    protein_chains,
 )
 
 OUT = ROOT / "data" / "experimental_pgx.json"
@@ -122,6 +123,17 @@ CASES: list[dict[str, Any]] = [
         "source": "population / catalog control",
     },
     {
+        "id": "hbb_e122q_interface",
+        "gene": "HBB",
+        "pdb": "1A3N",
+        "chain": "B",
+        "pdb_resnum": "121",
+        "drug": "partner chain A (α1β1)",
+        "known_class": "on_ppi_site",
+        "known_outcome": "Hb D-Punjab E121Q (UniProt E122): α1β1 contact; mild alone, severe with HbS",
+        "source": "PDB 1A3N B121–A31; compound-sickle apparatus",
+    },
+    {
         "id": "cyp2c9_i359l_warfarin",
         "gene": "CYP2C9",
         "pdb": "1OG5",
@@ -156,8 +168,8 @@ def _res_index(nums: list[str], pdb_resnum: str) -> int | None:
 
 def _atom_hits(
     text: str, chain: str, nums: list[str], cutoff: float
-) -> tuple[set[int], set[int], set[int]]:
-    """Residue indices contacting ligand / metal / DNA C1'."""
+) -> tuple[set[int], set[int], set[int], set[int]]:
+    """Residue indices contacting ligand / metal / DNA C1' / other protein chains."""
     idx = {n.strip(): i for i, n in enumerate(nums)}
     atoms: list[tuple[str, np.ndarray]] = []
     for line in text.splitlines():
@@ -174,7 +186,7 @@ def _atom_hits(
         atoms.append(
             (num, np.array([float(line[30:38]), float(line[38:46]), float(line[46:54])]))
         )
-    lig, met, dna = set(), set(), set()
+    lig, met, dna, ppi = set(), set(), set(), set()
     cut = cutoff
     for lg in parse_ligands(text):
         for num, p in atoms:
@@ -191,10 +203,32 @@ def _atom_hits(
         for num, p in atoms:
             if float(np.linalg.norm(nx - p, axis=1).min()) <= CONTACT * PHI:
                 dna.add(idx[num])
-    return lig, met, dna
+    # Other protein chains in the same crystal (measured assembly).
+    partners = [c for c in protein_chains(text) if c != chain]
+    partner_xyz: list[np.ndarray] = []
+    for pch in partners:
+        for line in text.splitlines():
+            if line.startswith("ENDMDL"):
+                break
+            if not line.startswith("ATOM") or line[21] != pch:
+                continue
+            atom = line[12:16].strip()
+            if atom.startswith("H") or atom.startswith("D"):
+                continue
+            partner_xyz.append(
+                np.array([float(line[30:38]), float(line[38:46]), float(line[46:54])])
+            )
+    if partner_xyz:
+        P = np.stack(partner_xyz, axis=0)
+        for num, p in atoms:
+            if float(np.linalg.norm(P - p, axis=1).min()) <= CONTACT:
+                ppi.add(idx[num])
+    return lig, met, dna, ppi
 
 
-def classify(i: int | None, lig: set[int], met: set[int], dna: set[int]) -> str:
+def classify(
+    i: int | None, lig: set[int], met: set[int], dna: set[int], ppi: set[int]
+) -> str:
     if i is None:
         return "not_on_chain"
     if i in met:
@@ -203,6 +237,8 @@ def classify(i: int | None, lig: set[int], met: set[int], dna: set[int]) -> str:
         return "on_dna_site"
     if i in lig:
         return "on_drug_site"
+    if i in ppi:
+        return "on_ppi_site"
     return "off_site"
 
 
@@ -226,8 +262,8 @@ def run_case(case: dict[str, Any]) -> dict[str, Any]:
         seq = _s
     i = _res_index(nums, case["pdb_resnum"])
     cutoff = float(E + PHI)
-    lig, met, dna = _atom_hits(text, case["chain"], nums, cutoff)
-    got = classify(i, lig, met, dna)
+    lig, met, dna, ppi = _atom_hits(text, case["chain"], nums, cutoff)
+    got = classify(i, lig, met, dna, ppi)
     # Activation-loop class: on-site or CA within φ of any ligand-contact CA.
     if case["known_class"] == "activation_loop_near_site" and i is not None and got == "off_site":
         if lig and xyz is not None and len(xyz) == len(nums):
@@ -253,6 +289,7 @@ def run_case(case: dict[str, Any]) -> dict[str, Any]:
         "n_ligand_site": len(lig),
         "n_metal_site": len(met),
         "n_dna_site": len(dna),
+        "n_ppi_site": len(ppi),
         "domain": (
             "Molecular_Chemistry"
             if "drug" in (got + case["known_class"])
