@@ -41,12 +41,13 @@ Refinement (FSOT, 0 free params):
 
 - Center = **half-max first moment** of the observed blob (not the brightest voxel).
 - Gate = median + φ·MAD (φ²·MAD if that paints > 1/φ of voxels).
-- NMS = φ⁴ µm · link = φ⁵ µm.
+- NMS = φ³ µm (φ⁴ merged an annotated cell with an unannotated neighbor).
+- Link = φ · measured median step (floor φ⁴ µm).
 
 | Video | GT | 7 µm recall | 12 µm recall | Lineage 7 / 12 µm | Detections |
 |-------|---:|------------:|-------------:|------------------:|-----------:|
-| `44b6_0113de3b` (sparse) | 52 | **0.75** (was 0.52) | **1.00** | **0.52 / 0.72** | 11,101 |
-| `6bba_09961292` (dense) | 1950 | **0.54** | **0.91** | **0.41 / 0.63** | 8,876 |
+| `44b6_0113de3b` (sparse) | 52 | **0.92** (was 0.52) | **1.00** | **0.78 / 0.86** | 21,587 / 25,755 est. |
+| `6bba_09961292` (dense) | 1950 | **0.83** (was 0.54) | **0.998** | **0.69 / 0.76** | 19,476 / 31,117 est. |
 
 Lineage = predicted parent→child edges vs measured GEFF edges (the competition outcome). AlphaFold does not score this. Source: `data/biohub_3d_voxels.json`.
 

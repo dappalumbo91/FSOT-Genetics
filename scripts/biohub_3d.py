@@ -167,9 +167,11 @@ def inventory(train_dir: Path = TRAIN) -> list[dict[str, Any]]:
 
 
 MATCH_UM = 7.0  # official Biohub centroid match radius
-# Nucleus / NMS length = φ⁴ µm (seed). CellMot used 6.0; φ⁴ ≈ 6.85.
-NMS_UM = float(_PHI ** 4)
-LINK_UM = float(_PHI ** 5)  # φ · nucleus — one-frame displacement gate
+# NMS = φ³ µm (≈4.24). φ⁴ (6.85) sat on the 7 µm match radius and
+# merged an annotated cell with an unannotated neighbor — nearest peak
+# landed 8–12 µm away. φ³ splits them; official match is still 7 µm.
+NMS_UM = float(_PHI ** 3)
+LINK_UM = float(_PHI ** 4)  # first-pass link; residual widens with measured step
 
 
 def open_volume(zarr_path: Path):
@@ -357,6 +359,32 @@ def link_tracks(
                 used_b.add(jb)
                 edges.append((int(a[ia]), int(b[jb])))
     return edges
+
+
+def link_tracks_residual(
+    pred_tzyx: np.ndarray,
+    *,
+    scale_zyx: tuple[float, float, float] = (SCALE_Z_UM, SCALE_Y_UM, SCALE_X_UM),
+    seed_um: float = LINK_UM,
+) -> tuple[list[tuple[int, int]], dict[str, float]]:
+    """Link, then widen the gate to φ · measured median step (residual, not free)."""
+    sc = np.asarray(scale_zyx, dtype=float)
+    e1 = link_tracks(pred_tzyx, scale_zyx=scale_zyx, max_um=seed_um)
+    steps = []
+    for i, j in e1:
+        steps.append(
+            float(np.linalg.norm((pred_tzyx[j, 1:4] - pred_tzyx[i, 1:4]) * sc))
+        )
+    med = float(np.median(steps)) if steps else seed_um
+    gate = max(seed_um, _PHI * med)
+    e2 = link_tracks(pred_tzyx, scale_zyx=scale_zyx, max_um=gate)
+    return e2, {
+        "seed_um": seed_um,
+        "measured_step_median_um": med if steps else None,
+        "residual_gate_um": gate,
+        "n_edges_seed": len(e1),
+        "n_edges_residual": len(e2),
+    }
 
 
 def lineage_recall(
@@ -552,7 +580,7 @@ def main(argv: list[str] | None = None) -> int:
         )
         hit = match_centroids(pred, gt_tzyx)
         hit12 = match_centroids(pred, gt_tzyx, max_um=12.0)
-        edges = link_tracks(pred)
+        edges, link_meta = link_tracks_residual(pred)
         lin = lineage_recall(pred, edges, tracks)
         lin12 = lineage_recall(pred, edges, tracks, max_um=12.0)
         out = {
@@ -579,10 +607,12 @@ def main(argv: list[str] | None = None) -> int:
             "n_gt_edges_matched": lin["n_edge_matched"],
             "n_gt_edges": lin["n_gt_edges"],
             "nms_um": NMS_UM,
-            "link_um": LINK_UM,
+            "link_um": link_meta.get("residual_gate_um", LINK_UM),
+            "link_meta": link_meta,
             "note": (
-                "Centroid = intensity first moment of the observed blob. "
-                "Gate = median+φ·MAD. NMS = φ⁴ µm. Link = φ⁵ µm."
+                "Centroid = half-max first moment. Gate = median+φ·MAD. "
+                "NMS = φ³ µm (splits unannotated neighbors). "
+                "Link = φ · measured median step."
             ),
             "estimated_true_cells": tracks["meta"].get("estimated_nodes"),
             "authority": "OME-Zarr voxels + measured blob centroids (no trained net)",

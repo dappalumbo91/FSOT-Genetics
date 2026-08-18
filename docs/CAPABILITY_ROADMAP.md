@@ -23,7 +23,7 @@ Older snapshots (`data/medical_stress_suite.json` fuse **1.16 Å**, bulk 16–17
 
 **Medical benches:** experimental PGx **10/10** (`data/experimental_pgx.json`, disclosure required). Variant panel drivers after recatalog — see `docs/MEDICAL_PLATFORM.md`. P72R is `common_polymorphism`, not a miss.
 
-**Organism 3-D (Biohub / Zebrahub):** voxel centroids + φ-seed link. Proxy 7 µm **0.75** / lineage **0.72** at 12 µm. Dense 1950-GT video: 7 µm **0.54**, 12 µm **0.91**, lineage **0.63**. AF does not score this. `docs/BIOHUB_3D.md`.
+**Organism 3-D (Biohub / Zebrahub):** φ³ NMS + blob centroid + residual link. Proxy 7 µm **0.92** / lineage **0.86**. Dense 1950-GT: 7 µm **0.83**, 12 µm **0.998**, lineage **0.76**. AF does not score this. `docs/BIOHUB_3D.md`.
 
 ---
 
