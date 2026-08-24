@@ -18,7 +18,7 @@ This list is what to clear next. One mechanism at a time. Pin `D1D38A`. 0 free p
 | Joint `predict_system` | **0.013 Å** protein · DNA C1′ **0.016 Å** · SC **0.016 Å** — apparatus min now matches the DNA job. |
 | Protein–RNA | U1A prot **0.23 Å** · RNA seed C1′ **0.28 Å** (9 nt). Full hairpin register still Superposed. |
 | Ligand site | trypsin–BEN **0.60 Å** (was 0.24 on 3PTB/1PPH). First-shell springs; not a Cα freeze item. |
-| Organism 3-D / lineage | Proxy 7 µm **1.00**, lineage **0.94 / 0.98**. Dense 1950 GT: 7 µm **0.96**, lineage **0.85 / 0.97**. Leftover ER: ~15% of dense GEFF edges at official 7 µm (predicted child sits 7–12 µm from the annotator). At one nucleus (12 µm) leftover is ~3%. |
+| Organism 3-D / lineage | Proxy find **1.00**, follow **0.94 / 0.98**, Kaggle Jaccard **0.86 (adj. 0.80)**. Dense find **0.96**, follow **0.85 / 0.97**, Jaccard **0.67 (adj. 0.65)** — TP 1258 / FP 10 / FN 613. Live Kaggle top **0.962**; our public U-Net floor **0.848**. Native leftover is FN + node-count tax (38k peaks vs 31k estimated), not steal. |
 
 ## Historical wet-lab (not the 10-protein freeze)
 

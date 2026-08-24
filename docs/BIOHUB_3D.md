@@ -46,12 +46,14 @@ Refinement (FSOT, 0 free params):
 - Lineage = Hungarian on the first collapse (intensity identity). Unmatched primaries get a second pass at φ⁵ µm. Isolated residual peaks (farther than NMS from every primary) may meet an unmatched primary; leftover residual–residual tracks stay off the primary map. Halo residual↔primary is not mixed (that stole tracks).
 - Outcome = the parent's **predicted child** lands within 7 µm of the measured next cell. Pairing both GT ends independently was matching a closer ghost that was not the continuation (pair-match still in `link_meta`).
 
-| Video | GT | 7 µm recall | 12 µm recall | Lineage 7 / 12 µm | Detections |
-|-------|---:|------------:|-------------:|------------------:|-----------:|
-| `44b6_0113de3b` (sparse) | 52 | **1.00** | **1.00** | **0.94 / 0.98** | 42,666 (21.6k primary) |
-| `6bba_09961292` (dense) | 1950 | **0.96** | **0.999** | **0.85 / 0.97** | 38,778 (19.5k primary) |
+| Video | GT | 7 µm recall | Lineage follow 7 / 12 µm | Edge Jaccard (adj.) | Detections |
+|-------|---:|------------:|-------------------------:|--------------------:|-----------:|
+| `44b6_0113de3b` (sparse) | 52 | **1.00** | **0.94 / 0.98** | **0.86 (0.80)** | 42,666 (21.6k primary) |
+| `6bba_09961292` (dense) | 1950 | **0.96** | **0.85 / 0.97** | **0.67 (0.65)** | 38,778 (19.5k primary) |
 
-Lineage = predicted parent→child edges vs measured GEFF edges (the competition outcome). AlphaFold does not score this. Source: `data/biohub_3d_voxels.json`.
+Follow-recall = parent's predicted child within 7 µm of the measured next cell. **Kaggle scores adjusted edge Jaccard** `TP/(TP+FP+FN)` plus a tax on extra nodes vs `estimated_number_of_nodes`, plus 0.1 × division Jaccard. Dense official: TP 1258 / FP 10 / FN 613. Extra residual peaks help follow-recall and hurt Jaccard. Source: `data/biohub_3d_voxels.json`.
+
+This repo does not yet beat the Kaggle public board. Official CellMot U-Net submit is **0.848** in `biohub-fsot-unet`. Live public top (2026-08-24) is **0.962**. Native peak detector is the measured observer, not the competition detector (threshold-only submit was 0.245).
 
 The 7 µm official radius is peak/centroid vs annotator center. At one nucleus (12 µm) we recover almost every annotated cell and most of its next frame.
 

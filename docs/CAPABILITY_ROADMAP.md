@@ -23,7 +23,7 @@ Older snapshots (`data/medical_stress_suite.json` fuse **1.16 Å**, bulk 16–17
 
 **Medical benches:** experimental PGx **10/10** (`data/experimental_pgx.json`, disclosure required). Variant panel drivers after recatalog — see `docs/MEDICAL_PLATFORM.md`. P72R is `common_polymorphism`, not a miss.
 
-**Organism 3-D (Biohub / Zebrahub):** residual second collapse + primary Hungarian + isolated residual↔primary. Outcome = predicted next cell within 7 µm of the measured child. Proxy 7 µm **1.00** / lineage **0.94**. Dense 1950-GT: 7 µm **0.96**, lineage **0.85** (12 µm **0.97**). AF does not score this. `docs/BIOHUB_3D.md`.
+**Organism 3-D (Biohub / Zebrahub):** native observer finds dense cells at 7 µm **0.96** and follows **0.85 / 0.97**. Official Kaggle Jaccard on that graph is **0.67 (adj. 0.65)** — not the public board. Public U-Net floor **0.848**; live top **0.962**. AF does not score this. `docs/BIOHUB_3D.md`.
 
 ---
 

@@ -874,6 +874,90 @@ def match_centroids(
     }
 
 
+def edge_jaccard_official(
+    pred_tzyx: np.ndarray,
+    pred_edges: list[tuple[int, int]],
+    tracks: dict[str, Any],
+    *,
+    scale_zyx: tuple[float, float, float] = (SCALE_Z_UM, SCALE_Y_UM, SCALE_X_UM),
+    max_um: float = MATCH_UM,
+    node_penalty_a: float = 0.1,
+) -> dict[str, Any]:
+    """Kaggle edge Jaccard (TP/FP/FN) + node-count penalty.
+
+    Recall of GEFF edges is not this number. Unmatched predicted edges are
+    ignored; a predicted edge that steals an annotated in/out is FP.
+    Adjusted Jaccard taxes extra nodes vs estimated_number_of_nodes.
+    """
+    from scipy.optimize import linear_sum_assignment
+
+    sc = np.asarray(scale_zyx, dtype=float)
+    gt_t = tracks["t"].astype(int)
+    gt_xyz = tracks["xyz_vox"]
+    g2p: dict[int, int] = {}
+    p2g: dict[int, int] = {}
+    for t in sorted(set(gt_t.tolist())):
+        gi = np.where(gt_t == t)[0]
+        pi = np.where(pred_tzyx[:, 0].astype(int) == t)[0]
+        if len(gi) == 0 or len(pi) == 0:
+            continue
+        d = np.sqrt((((gt_xyz[gi][:, None, :] - pred_tzyx[pi][:, 1:4][None, :, :]) * sc) ** 2).sum(axis=2))
+        cap = d.copy()
+        cap[d > max_um] = max_um * 4.0
+        ri, cj = linear_sum_assignment(cap)
+        for r, c in zip(ri, cj):
+            if d[r, c] <= max_um:
+                g2p[int(gi[r])] = int(pi[c])
+                p2g[int(pi[c])] = int(gi[r])
+    id_to_g = {int(n): i for i, n in enumerate(tracks["ids"])}
+    gt_pair: set[tuple[int, int]] = set()
+    gt_out: dict[int, set[int]] = {}
+    gt_in: dict[int, set[int]] = {}
+    for a, b in tracks["edges"]:
+        if a not in id_to_g or b not in id_to_g:
+            continue
+        ga, gb = id_to_g[a], id_to_g[b]
+        gt_pair.add((ga, gb))
+        gt_out.setdefault(ga, set()).add(gb)
+        gt_in.setdefault(gb, set()).add(ga)
+    tp = 0
+    fp = 0
+    matched: set[tuple[int, int]] = set()
+    for i, j in pred_edges:
+        ga, gb = p2g.get(int(i)), p2g.get(int(j))
+        if ga is None or gb is None:
+            continue
+        if (ga, gb) in gt_pair:
+            tp += 1
+            matched.add((ga, gb))
+            continue
+        if gb in gt_in and ga not in gt_in.get(gb, set()):
+            fp += 1
+        elif ga in gt_out and gb not in gt_out.get(ga, set()):
+            fp += 1
+    fn = len(gt_pair) - len(matched)
+    den = tp + fp + fn
+    jac = float(tp / den) if den else None
+    t_pred = int(len(pred_tzyx))
+    t_true = int(tracks["meta"].get("estimated_nodes") or 0)
+    adj = (
+        max(0.0, jac * (1.0 - node_penalty_a * (t_pred - t_true) / t_true))
+        if jac is not None and t_true
+        else jac
+    )
+    return {
+        "tp": int(tp),
+        "fp": int(fp),
+        "fn": int(fn),
+        "n_gt_edges": int(len(gt_pair)),
+        "edge_jaccard": jac,
+        "adjusted_edge_jaccard": adj,
+        "n_pred_nodes": t_pred,
+        "n_est_true": t_true if t_true else None,
+        "n_gt_nodes_matched": len(g2p),
+    }
+
+
 def intensity_at(vol: np.ndarray, zyx: np.ndarray) -> np.ndarray:
     """Sample voxel intensity at (possibly fractional) z,y,x."""
     if len(zyx) == 0:
@@ -985,6 +1069,18 @@ def main(argv: list[str] | None = None) -> int:
         link_meta["lineage_primary_only_7um"] = lin_pri["edge_recall"]
         link_meta["lineage_pair_7um"] = lin_pair["edge_recall"]
         link_meta["n_gt_residual_fill"] = lin["n_gt_residual_fill"]
+        jac = edge_jaccard_official(pred, edges, tracks)
+        if pred.shape[1] >= 5:
+            pri = pred[pred[:, 4] == 1]
+            e_pri, _ = link_tracks_residual(pri)
+            jac_pri = edge_jaccard_official(pri, e_pri, tracks)
+        else:
+            jac_pri = jac
+        link_meta["edge_jaccard"] = jac["edge_jaccard"]
+        link_meta["adjusted_edge_jaccard"] = jac["adjusted_edge_jaccard"]
+        link_meta["edge_jaccard_primary"] = jac_pri["edge_jaccard"]
+        link_meta["adjusted_edge_jaccard_primary"] = jac_pri["adjusted_edge_jaccard"]
+        link_meta["jaccard_tp_fp_fn"] = [jac["tp"], jac["fp"], jac["fn"]]
         out = {
             "dataset": args.dataset,
             "volume_shape": [int(x) for x in arr.shape],
@@ -1008,6 +1104,9 @@ def main(argv: list[str] | None = None) -> int:
             "lineage_edge_recall_12um": lin12["edge_recall"],
             "n_gt_edges_matched": lin["n_edge_matched"],
             "n_gt_edges": lin["n_gt_edges"],
+            "edge_jaccard": jac["edge_jaccard"],
+            "adjusted_edge_jaccard": jac["adjusted_edge_jaccard"],
+            "jaccard_tp_fp_fn": [jac["tp"], jac["fp"], jac["fn"]],
             "nms_um": NMS_UM,
             "link_um": link_meta.get("residual_gate_um", LINK_UM),
             "link_meta": link_meta,
