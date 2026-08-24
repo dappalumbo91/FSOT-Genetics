@@ -645,6 +645,28 @@ def _greedy_match_frame(
     return out
 
 
+def _hungarian_match_frame(
+    gxyz: np.ndarray,
+    pxyz: np.ndarray,
+    sc: np.ndarray,
+    max_um: float,
+) -> dict[int, int]:
+    """1-1 nearest unused pred (same as node recall). Local indices."""
+    if len(gxyz) == 0 or len(pxyz) == 0:
+        return {}
+    from scipy.optimize import linear_sum_assignment
+
+    d = np.sqrt((((gxyz[:, None, :] - pxyz[None, :, :]) * sc) ** 2).sum(axis=2))
+    cap = d.copy()
+    cap[d > max_um] = max_um * 4.0
+    ri, cj = linear_sum_assignment(cap)
+    out: dict[int, int] = {}
+    for r, c in zip(ri, cj):
+        if d[r, c] <= max_um:
+            out[int(r)] = int(c)
+    return out
+
+
 def _assign_frame(
     pred_tzyx: np.ndarray,
     gi: list[int],
@@ -670,7 +692,7 @@ def _assign_frame(
             for i, tt in enumerate(pred_tzyx[:, 0])
             if int(tt) == t and int(pred_tzyx[i, 4]) == 1 and i not in taken
         ]
-        hit = _greedy_match_frame(
+        hit = _hungarian_match_frame(
             g_left, pred_tzyx[pri][:, 1:4] if pri else np.zeros((0, 3)), sc, max_um
         )
         for row, j in hit.items():
@@ -685,7 +707,7 @@ def _assign_frame(
                     if int(tt) == t and int(pred_tzyx[i, 4]) == 2 and i not in taken
                 ]
                 if res:
-                    fill = _greedy_match_frame(
+                    fill = _hungarian_match_frame(
                         gxyz[still], pred_tzyx[res][:, 1:4], sc, max_um
                     )
                     for row, j in fill.items():
@@ -698,7 +720,7 @@ def _assign_frame(
             if int(tt) == t and i not in taken
         ]
         if pi:
-            hit = _greedy_match_frame(g_left, pred_tzyx[pi][:, 1:4], sc, max_um)
+            hit = _hungarian_match_frame(g_left, pred_tzyx[pi][:, 1:4], sc, max_um)
             for row, j in hit.items():
                 g2p[gi[leftover_rows[row]]] = int(pi[j])
     return n_fill
@@ -714,13 +736,18 @@ def lineage_recall(
     primary_only: bool = False,
     fill_residual: bool = False,
     seed_um: float | None = None,
+    follow: bool = False,
 ) -> dict[str, Any]:
-    """Fraction of measured GEFF edges whose both ends match a predicted link.
+    """Fraction of measured GEFF edges recovered by predicted lineage.
 
     primary_only maps GT onto first-collapse peaks. fill_residual then gives
     leftover GT the residual second-collapse peaks — residual never competes
     with a primary match (that mix stole tracks). seed_um locks a tighter
     match so a wider radius cannot remap a cell onto a farther primary.
+
+    follow: the parent's predicted child (outgoing link) lands within
+    max_um of the measured next cell. Independent greedy pairing of both
+    ends was matching a closer ghost that was not the continuation.
     """
     gt = np.column_stack([tracks["t"].astype(float), tracks["xyz_vox"]])
     id_to_g = {int(n): i for i, n in enumerate(tracks["ids"])}
@@ -751,13 +778,30 @@ def lineage_recall(
                 fill_residual=fill_residual,
             )
     pred_set = {tuple(sorted(e)) for e in pred_edges}
+    out_of = {int(i): int(j) for i, j in pred_edges}
+    sc_gt = sc
+    xyz = tracks["xyz_vox"]
     hit = 0
     n_e = 0
+    used_dest: set[int] = set()
     for a, b in tracks["edges"]:
         if a not in id_to_g or b not in id_to_g:
             continue
         n_e += 1
-        pa, pb = g2p.get(id_to_g[a]), g2p.get(id_to_g[b])
+        ga, gb = id_to_g[a], id_to_g[b]
+        if follow:
+            pa = g2p.get(ga)
+            if pa is None or pa not in out_of:
+                continue
+            dest = out_of[pa]
+            if dest in used_dest:
+                continue
+            d = float(np.linalg.norm((pred_tzyx[dest, 1:4] - xyz[gb]) * sc_gt))
+            if d <= max_um:
+                used_dest.add(dest)
+                hit += 1
+            continue
+        pa, pb = g2p.get(ga), g2p.get(gb)
         if pa is None or pb is None:
             continue
         if tuple(sorted((pa, pb))) in pred_set:
@@ -769,6 +813,7 @@ def lineage_recall(
         "edge_recall": float(hit / n_e) if n_e else None,
         "n_gt_nodes_matched": len(g2p),
         "n_gt_residual_fill": n_fill,
+        "follow": bool(follow),
     }
 
 
@@ -918,11 +963,14 @@ def main(argv: list[str] | None = None) -> int:
             link_meta["n_residual_peaks"] = int((pred[:, 4] == 2).sum())
         else:
             edges, link_meta = link_tracks_residual(xyz4)
-        # Primary map is the shipped scorer. Residual fill is leftover GT
-        # only — residual never displaces a primary match.
+        # Pair-match is conservative. Follow scores the predicted next
+        # cell against the measured child (official 7 µm), not a closer ghost.
         lin_pri = lineage_recall(pred, edges, tracks, primary_only=True)
-        lin = lineage_recall(
+        lin_pair = lineage_recall(
             pred, edges, tracks, primary_only=True, fill_residual=True
+        )
+        lin = lineage_recall(
+            pred, edges, tracks, primary_only=True, fill_residual=True, follow=True
         )
         lin12 = lineage_recall(
             pred,
@@ -932,8 +980,10 @@ def main(argv: list[str] | None = None) -> int:
             seed_um=MATCH_UM,
             primary_only=True,
             fill_residual=True,
+            follow=True,
         )
         link_meta["lineage_primary_only_7um"] = lin_pri["edge_recall"]
+        link_meta["lineage_pair_7um"] = lin_pair["edge_recall"]
         link_meta["n_gt_residual_fill"] = lin["n_gt_residual_fill"]
         out = {
             "dataset": args.dataset,
@@ -966,7 +1016,8 @@ def main(argv: list[str] | None = None) -> int:
                 "NMS = φ³ µm. Residual second collapse fills leftover "
                 "brightness (7 µm recall). Lineage: primary Hungarian + "
                 "φ⁵ leftover primaries + isolated residual↔primary + "
-                "residual–residual. Leftover GT may map onto residual peaks."
+                "residual–residual. Outcome = parent's predicted child "
+                "within 7 µm of the measured next cell."
             ),
             "estimated_true_cells": tracks["meta"].get("estimated_nodes"),
             "authority": "OME-Zarr voxels + measured blob centroids (no trained net)",
