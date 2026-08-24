@@ -57,7 +57,7 @@ This repo does not yet beat the Kaggle public board. Official CellMot U-Net subm
 
 The 7 µm official radius is peak/centroid vs annotator center. At one nucleus (12 µm) we recover almost every annotated cell and most of its next frame.
 
-**Kaggle submit** (U-Net + ILP, public ~0.848 floor) stays in `C:\Users\damia\biohub-fsot-unet`. This repo is the genetics / 3-D *reader*, not a second competition stack.
+**Kaggle submit** stays in `C:\Users\damia\biohub-fsot-unet`. Public Final **0.848** until beaten. Local climb (official metric, hard5): leftover unmatched φ⁴ after U-Net+ILP — baseline **0.689→0.711**, v3 **0.743→0.760**. Notebook `fsot-biohub-v64-leftover-phi4` is built, **not pushed**. Native peak detector is the measured observer, not the competition entry (threshold-only submit was 0.245).
 
 ## How this sits next to the protein product
 
