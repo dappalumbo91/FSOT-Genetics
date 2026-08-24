@@ -496,6 +496,40 @@ def link_tracks_residual(
     }
 
 
+def product_detections(pred: np.ndarray) -> np.ndarray:
+    """Primary peaks plus isolated residual (farther than NMS from every primary).
+
+    Halo residual next to a primary steals the 7 µm GT match off a correctly
+    linked first-collapse track. Isolated leftover nuclei stay — they are
+    the second collapse, not the neighbor ghost.
+    """
+    if len(pred) == 0 or pred.shape[1] < 5:
+        return pred
+    sc = np.array([SCALE_Z_UM, SCALE_Y_UM, SCALE_X_UM])
+    iso_um = float(NMS_UM)
+    keep: list[int] = []
+    for t in sorted({int(x) for x in pred[:, 0]}):
+        pri = _indices_at(pred, t, 1)
+        res = _indices_at(pred, t, 2)
+        keep.extend(int(i) for i in pri)
+        if len(res) == 0:
+            continue
+        if len(pri) == 0:
+            keep.extend(int(i) for i in res)
+            continue
+        dmin = np.sqrt(
+            (
+                ((pred[res][:, 1:4][:, None, :] - pred[pri][None, :, 1:4]) * sc)
+                ** 2
+            ).sum(axis=2)
+        ).min(axis=1)
+        keep.extend(int(res[k]) for k in range(len(res)) if float(dmin[k]) > iso_um)
+    if not keep:
+        return pred[:0]
+    idx = np.array(sorted(set(keep)), dtype=int)
+    return pred[idx]
+
+
 def _hungarian_gate(
     pred: np.ndarray,
     src: list[int] | np.ndarray,
@@ -1042,22 +1076,29 @@ def main(argv: list[str] | None = None) -> int:
         hit = match_centroids(xyz4, gt_tzyx)
         hit12 = match_centroids(xyz4, gt_tzyx, max_um=12.0)
         if pred.shape[1] >= 5:
-            edges, link_meta = link_tracks_staged(pred)
+            prod = product_detections(pred)
+            edges, link_meta = link_tracks_staged(prod)
             link_meta["n_primary"] = int((pred[:, 4] == 1).sum())
             link_meta["n_residual_peaks"] = int((pred[:, 4] == 2).sum())
+            link_meta["n_product_nodes"] = int(len(prod))
+            link_meta["n_isolated_residual_nodes"] = int(
+                (prod[:, 4] == 2).sum() if prod.shape[1] >= 5 else 0
+            )
         else:
+            prod = pred
             edges, link_meta = link_tracks_residual(xyz4)
-        # Pair-match is conservative. Follow scores the predicted next
-        # cell against the measured child (official 7 µm), not a closer ghost.
-        lin_pri = lineage_recall(pred, edges, tracks, primary_only=True)
+        # Observer find-recall stays on all peaks. Lineage / Jaccard are
+        # the product graph (primary + isolated residual) so halo cannot
+        # steal the 7 µm match off a linked first-collapse track.
+        lin_pri = lineage_recall(prod, edges, tracks, primary_only=True)
         lin_pair = lineage_recall(
-            pred, edges, tracks, primary_only=True, fill_residual=True
+            prod, edges, tracks, primary_only=True, fill_residual=True
         )
         lin = lineage_recall(
-            pred, edges, tracks, primary_only=True, fill_residual=True, follow=True
+            prod, edges, tracks, primary_only=True, fill_residual=True, follow=True
         )
         lin12 = lineage_recall(
-            pred,
+            prod,
             edges,
             tracks,
             max_um=12.0,
@@ -1069,7 +1110,7 @@ def main(argv: list[str] | None = None) -> int:
         link_meta["lineage_primary_only_7um"] = lin_pri["edge_recall"]
         link_meta["lineage_pair_7um"] = lin_pair["edge_recall"]
         link_meta["n_gt_residual_fill"] = lin["n_gt_residual_fill"]
-        jac = edge_jaccard_official(pred, edges, tracks)
+        jac = edge_jaccard_official(prod, edges, tracks)
         if pred.shape[1] >= 5:
             pri = pred[pred[:, 4] == 1]
             e_pri, _ = link_tracks_residual(pri)
@@ -1099,7 +1140,8 @@ def main(argv: list[str] | None = None) -> int:
             "n_gt_matched_12um": hit12["n_matched"],
             "n_gt": hit["n_gt"],
             "match_median_um": hit["match_median_um"],
-            "n_pred_edges": lin["n_pred_edges"],
+            "n_pred_edges": len(edges),
+            "n_product_nodes": int(len(prod)),
             "lineage_edge_recall_7um": lin["edge_recall"],
             "lineage_edge_recall_12um": lin12["edge_recall"],
             "n_gt_edges_matched": lin["n_edge_matched"],
@@ -1113,10 +1155,10 @@ def main(argv: list[str] | None = None) -> int:
             "note": (
                 "Centroid = half-max first moment. Gate = median+φ·MAD. "
                 "NMS = φ³ µm. Residual second collapse fills leftover "
-                "brightness (7 µm recall). Lineage: primary Hungarian + "
-                "φ⁵ leftover primaries + isolated residual↔primary + "
-                "residual–residual. Outcome = parent's predicted child "
-                "within 7 µm of the measured next cell."
+                "brightness (7 µm find). Product graph = first collapse + "
+                "isolated residual only (halo residual stole 7 µm GT matches). "
+                "Lineage: leftover unmatched + isolated mix. Jaccard is the "
+                "Kaggle reference metric."
             ),
             "estimated_true_cells": tracks["meta"].get("estimated_nodes"),
             "authority": "OME-Zarr voxels + measured blob centroids (no trained net)",

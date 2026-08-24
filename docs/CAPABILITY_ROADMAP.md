@@ -23,7 +23,7 @@ Older snapshots (`data/medical_stress_suite.json` fuse **1.16 Å**, bulk 16–17
 
 **Medical benches:** experimental PGx **10/10** (`data/experimental_pgx.json`, disclosure required). Variant panel drivers after recatalog — see `docs/MEDICAL_PLATFORM.md`. P72R is `common_polymorphism`, not a miss.
 
-**Organism 3-D (Biohub / Zebrahub):** native observer finds dense cells at 7 µm **0.96** and follows **0.85 / 0.97**. Official Kaggle Jaccard on that graph is **0.67 (adj. 0.65)** — not the public board. Public U-Net floor **0.848**; live top **0.962**. AF does not score this. `docs/BIOHUB_3D.md`.
+**Organism 3-D (Biohub / Zebrahub):** native observer finds dense cells at 7 µm **0.96**. Product graph (primary + isolated residual) Jaccard **0.77 (adj. 0.78)**; follow **0.84 / 0.97**. Proxy Jaccard **0.94**. Kaggle is the reference metric. `docs/BIOHUB_3D.md`.
 
 ---
 
