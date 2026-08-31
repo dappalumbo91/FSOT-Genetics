@@ -415,6 +415,7 @@ def link_tracks(
     *,
     scale_zyx: tuple[float, float, float] = (SCALE_Z_UM, SCALE_Y_UM, SCALE_X_UM),
     max_um: float = LINK_UM,
+    use_velocity: bool = True,
 ) -> list[tuple[int, int]]:
     """Link detections in consecutive frames (nearest unused, ≤ φ⁵ µm).
 
@@ -438,13 +439,15 @@ def link_tracks(
             continue
         pa = pred_tzyx[a][:, 1:4]
         pb = pred_tzyx[b][:, 1:4]
-        # T2 linear: x̂_{t+1} = x_t + (x_t − x_{t−1}). A closer neighbor
-        # off the measured velocity is not the continuation.
+        # T2 linear: x̂_{t+1} = x_t + (x_t − x_{t−1}) when a parent exists.
+        # 223 dense Jaccard FN were within φ⁴ of the true child but assigned
+        # elsewhere — velocity can point at a neighbor. Position-only is the AB.
         pred_pos = pa.copy()
-        for k, i in enumerate(a):
-            par = parent.get(int(i))
-            if par is not None:
-                pred_pos[k] = pa[k] + (pa[k] - pred_tzyx[par, 1:4])
+        if use_velocity:
+            for k, i in enumerate(a):
+                par = parent.get(int(i))
+                if par is not None:
+                    pred_pos[k] = pa[k] + (pa[k] - pred_tzyx[par, 1:4])
         d_act = np.sqrt((((pa[:, None, :] - pb[None, :, :]) * sc) ** 2).sum(axis=2))
         d_inn = np.sqrt((((pred_pos[:, None, :] - pb[None, :, :]) * sc) ** 2).sum(axis=2))
         from scipy.optimize import linear_sum_assignment
@@ -473,10 +476,13 @@ def link_tracks_residual(
     *,
     scale_zyx: tuple[float, float, float] = (SCALE_Z_UM, SCALE_Y_UM, SCALE_X_UM),
     seed_um: float = LINK_UM,
+    use_velocity: bool = True,
 ) -> tuple[list[tuple[int, int]], dict[str, float]]:
     """Link, then widen the gate to φ · measured median step (residual, not free)."""
     sc = np.asarray(scale_zyx, dtype=float)
-    e1 = link_tracks(pred_tzyx, scale_zyx=scale_zyx, max_um=seed_um)
+    e1 = link_tracks(
+        pred_tzyx, scale_zyx=scale_zyx, max_um=seed_um, use_velocity=use_velocity
+    )
     steps = []
     for i, j in e1:
         steps.append(
@@ -486,13 +492,16 @@ def link_tracks_residual(
     # Do not floor at φ⁴ — that 6.85 µm gate let Hungarian steal the
     # true continuation (proxy lineage 0.78→0.56). Gate is φ · measured step.
     gate = max(seed_um, _PHI * med) if steps else seed_um
-    e2 = link_tracks(pred_tzyx, scale_zyx=scale_zyx, max_um=gate)
+    e2 = link_tracks(
+        pred_tzyx, scale_zyx=scale_zyx, max_um=gate, use_velocity=use_velocity
+    )
     return e2, {
         "seed_um": seed_um,
         "measured_step_median_um": med if steps else None,
         "residual_gate_um": gate,
         "n_edges_seed": len(e1),
         "n_edges_residual": len(e2),
+        "use_velocity": use_velocity,
     }
 
 
@@ -555,7 +564,11 @@ def _hungarian_gate(
     return out
 
 
-def link_tracks_staged(pred: np.ndarray) -> tuple[list[tuple[int, int]], dict[str, float]]:
+def link_tracks_staged(
+    pred: np.ndarray,
+    *,
+    use_velocity: bool = True,
+) -> tuple[list[tuple[int, int]], dict[str, float]]:
     """First-collapse links, leftover primaries, isolated mix, residual–residual.
 
     Halo residual↔primary stole tracks. Isolated residual (farther than
@@ -565,7 +578,7 @@ def link_tracks_staged(pred: np.ndarray) -> tuple[list[tuple[int, int]], dict[st
     if len(pred) == 0:
         return [], {}
     pri = np.where(pred[:, 4] == 1)[0] if pred.shape[1] >= 5 else np.arange(len(pred))
-    e_loc, meta = link_tracks_residual(pred[pri])
+    e_loc, meta = link_tracks_residual(pred[pri], use_velocity=use_velocity)
     edges = [(int(pri[i]), int(pri[j])) for i, j in e_loc]
     has_n = {i for i, _j in edges}
     has_p = {j for _i, j in edges}
@@ -646,12 +659,32 @@ def link_tracks_staged(pred: np.ndarray) -> tuple[list[tuple[int, int]], dict[st
             has_p.add(j)
             res_n += 1
 
+    # Unused destinations still inside φ⁴ of some source: 223 dense Jaccard
+    # FN were 1-1 steals (parent already had an out-edge). Fill dest-only.
+    # Gate is first-pass φ⁴ so this is not a long-shotgun.
+    fill_n = 0
+    fill_um = float(LINK_UM)
+    for t0, t1 in zip(frames, frames[1:]):
+        if t1 != t0 + 1:
+            continue
+        src = [int(i) for i in _indices_at(pred, t0)]
+        dst = [int(i) for i in _indices_at(pred, t1) if int(i) not in has_p]
+        for i, j in _hungarian_gate(pred, src, dst, sc, fill_um):
+            if j in has_p:
+                continue
+            edges.append((i, j))
+            has_n.add(i)
+            has_p.add(j)
+            fill_n += 1
+
     meta = dict(meta)
     meta["n_leftover_edges"] = extra
     meta["leftover_um"] = leftover_um
     meta["n_isolated_residual_edges"] = iso_n
     meta["n_residual_residual_edges"] = res_n
     meta["n_isolated_mix_edges"] = mix_n
+    meta["n_unmatched_dest_fill"] = fill_n
+    meta["dest_fill_um"] = fill_um
     return edges, meta
 
 
