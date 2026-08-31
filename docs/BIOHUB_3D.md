@@ -49,9 +49,9 @@ Refinement (FSOT, 0 free params):
 | Video | GT | 7 µm find | Follow 7 / 12 µm | Edge Jaccard (adj.) | Product nodes |
 |-------|---:|----------:|-----------------:|--------------------:|--------------:|
 | `44b6_0113de3b` (sparse) | 52 | **1.00** | **0.96 / 0.98** | **0.96 (0.96)** | 26,233 |
-| `6bba_09961292` (dense) | 1950 | **0.96** | **0.84 / 0.97** | **0.78 (0.79)** | 28,164 |
+| `6bba_09961292` (dense) | 1950 | **0.96** | **0.84 / 0.97** | **0.79 (0.80)** | 28,164 |
 
-Find-recall uses all peaks (observer). Lineage and Jaccard use the **product graph**: first-collapse + isolated residual, then unmatched destinations filled at φ⁴ µm (Hungarian 1-1 had already used the parent). Dense: TP 1478 / FP 12 / FN 393. Source: `data/biohub_3d_voxels.json`.
+Find-recall uses all peaks (observer). Lineage and Jaccard use the **product graph**: first-collapse + isolated residual, dest fill at φ⁴ µm, then 2-opt swaps that shorten two consecutive pairs (cross-stage leftover). Dense: TP 1491 / FP 14 / FN 380. Source: `data/biohub_3d_voxels.json`.
 
 The 7 µm official radius is peak/centroid vs annotator center. At one nucleus (12 µm) we recover almost every annotated cell and most of its next frame.
 

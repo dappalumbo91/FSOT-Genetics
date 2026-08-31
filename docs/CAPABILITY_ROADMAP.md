@@ -23,7 +23,7 @@ Older snapshots (`data/medical_stress_suite.json` fuse **1.16 Å**, bulk 16–17
 
 **Medical benches:** experimental PGx **10/10** (`data/experimental_pgx.json`, disclosure required). Variant panel drivers after recatalog — see `docs/MEDICAL_PLATFORM.md`. P72R is `common_polymorphism`, not a miss.
 
-**Organism 3-D (Biohub / Zebrahub):** native observer finds dense cells at 7 µm **0.96**. Product graph Jaccard **0.78 (adj. 0.79)**; proxy **0.96**. Kaggle U-Net leftover public **0.821** is not Final (0.848 holds). `docs/BIOHUB_3D.md`.
+**Organism 3-D (Biohub / Zebrahub):** native observer finds dense cells at 7 µm **0.96**. Product graph Jaccard **0.79 (adj. 0.80)**; proxy **0.96**. Kaggle U-Net leftover public **0.821** is not Final (0.848 holds). `docs/BIOHUB_3D.md`.
 
 ---
 

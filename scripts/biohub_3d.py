@@ -505,17 +505,20 @@ def link_tracks_residual(
     }
 
 
-def product_detections(pred: np.ndarray) -> np.ndarray:
-    """Primary peaks plus isolated residual (farther than NMS from every primary).
+def product_detections(pred: np.ndarray, *, iso_um: float | None = None) -> np.ndarray:
+    """Primary peaks plus isolated residual (farther than iso_um from every primary).
 
     Halo residual next to a primary steals the 7 µm GT match off a correctly
     linked first-collapse track. Isolated leftover nuclei stay — they are
-    the second collapse, not the neighbor ghost.
+    the second collapse, not the neighbor ghost. Default iso is φ² µm:
+    Default iso is NMS (φ³ µm). Tighter shells re-admit halo and steal
+    the 7 µm match (φ² Jaccard 0.78→0.75).
     """
     if len(pred) == 0 or pred.shape[1] < 5:
         return pred
     sc = np.array([SCALE_Z_UM, SCALE_Y_UM, SCALE_X_UM])
-    iso_um = float(NMS_UM)
+    if iso_um is None:
+        iso_um = float(NMS_UM)
     keep: list[int] = []
     for t in sorted({int(x) for x in pred[:, 0]}):
         pri = _indices_at(pred, t, 1)
@@ -562,6 +565,54 @@ def _hungarian_gate(
         if d[ia, jb] <= max_um:
             out.append((src[ia], dst[jb]))
     return out
+
+
+def _pairwise_swap_edges(
+    pred: np.ndarray,
+    edges: list[tuple[int, int]],
+    sc: np.ndarray,
+    max_um: float,
+) -> tuple[list[tuple[int, int]], int]:
+    """2-opt on consecutive-frame pairs. Hungarian per stage can leave a
+    cheaper swap across stages (223 dense FN were within φ⁴ of the true child).
+    """
+    from collections import defaultdict
+
+    def dist(i, j) -> float:
+        return float(np.linalg.norm((pred[j, 1:4] - pred[i, 1:4]) * sc))
+
+    by_t: dict[int, list[tuple[int, int]]] = defaultdict(list)
+    other: list[tuple[int, int]] = []
+    for i, j in edges:
+        if int(pred[j, 0]) == int(pred[i, 0]) + 1:
+            by_t[int(pred[i, 0])].append((i, j))
+        else:
+            other.append((i, j))
+    nswap = 0
+    out: list[tuple[int, int]] = list(other)
+    for t in sorted(by_t):
+        pairs = list(by_t[t])
+        changed = True
+        while changed:
+            changed = False
+            for a in range(len(pairs)):
+                i1, j1 = pairs[a]
+                for b in range(a + 1, len(pairs)):
+                    i2, j2 = pairs[b]
+                    d11, d22 = dist(i1, j1), dist(i2, j2)
+                    d12, d21 = dist(i1, j2), dist(i2, j1)
+                    if (
+                        d12 <= max_um
+                        and d21 <= max_um
+                        and d12 + d21 + 1e-9 < d11 + d22
+                    ):
+                        pairs[a] = (i1, j2)
+                        pairs[b] = (i2, j1)
+                        nswap += 1
+                        changed = True
+                        i1, j1 = pairs[a]
+        out.extend(pairs)
+    return out, nswap
 
 
 def link_tracks_staged(
@@ -677,6 +728,8 @@ def link_tracks_staged(
             has_p.add(j)
             fill_n += 1
 
+    edges, nswap = _pairwise_swap_edges(pred, edges, sc, float(LINK_UM))
+
     meta = dict(meta)
     meta["n_leftover_edges"] = extra
     meta["leftover_um"] = leftover_um
@@ -685,6 +738,7 @@ def link_tracks_staged(
     meta["n_isolated_mix_edges"] = mix_n
     meta["n_unmatched_dest_fill"] = fill_n
     meta["dest_fill_um"] = fill_um
+    meta["n_pairwise_swaps"] = nswap
     return edges, meta
 
 
