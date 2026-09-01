@@ -508,11 +508,11 @@ def link_tracks_residual(
 def product_detections(pred: np.ndarray, *, iso_um: float | None = None) -> np.ndarray:
     """Primary peaks plus isolated residual (farther than iso_um from every primary).
 
-    Halo residual next to a primary steals the 7 µm GT match off a correctly
-    linked first-collapse track. Isolated leftover nuclei stay — they are
-    the second collapse, not the neighbor ghost. Default iso is φ² µm:
-    Default iso is NMS (φ³ µm). Tighter shells re-admit halo and steal
-    the 7 µm match (φ² Jaccard 0.78→0.75).
+    Halo residual next to a primary steals the 7 µm GT match if it is a
+    second node. Isolated leftover nuclei stay. Halo inside the NMS shell
+    is folded into the primary centroid (intensity-weighted) so 7–12 µm
+    leftover brightness can move the reported center without extra nodes.
+    Default iso is NMS (φ³ µm).
     """
     if len(pred) == 0 or pred.shape[1] < 5:
         return pred
@@ -539,7 +539,33 @@ def product_detections(pred: np.ndarray, *, iso_um: float | None = None) -> np.n
     if not keep:
         return pred[:0]
     idx = np.array(sorted(set(keep)), dtype=int)
-    return pred[idx]
+    out = pred[idx].copy()
+    # Fold in-shell residual into the primary centroid (not a second node).
+    for t in sorted({int(x) for x in out[:, 0]}):
+        po = np.where((out[:, 0].astype(int) == t) & (out[:, 4] == 1))[0]
+        res = pred[(pred[:, 0].astype(int) == t) & (pred[:, 4] == 2)]
+        if len(po) == 0 or len(res) == 0:
+            continue
+        d = np.sqrt(
+            (
+                ((out[po][:, 1:4][:, None, :] - res[None, :, 1:4]) * sc)
+                ** 2
+            ).sum(axis=2)
+        )
+        for k, row in enumerate(po):
+            near = d[k] <= iso_um
+            if not np.any(near):
+                continue
+            xyz = np.vstack([out[row, 1:4], res[near][:, 1:4]])
+            if pred.shape[1] >= 6:
+                w = np.concatenate([[out[row, 5]], res[near, 5]])
+            else:
+                w = np.ones(len(xyz))
+            wsum = float(w.sum())
+            if wsum <= 0:
+                continue
+            out[row, 1:4] = (xyz * w[:, None]).sum(axis=0) / wsum
+    return out
 
 
 def _hungarian_gate(
@@ -1243,9 +1269,8 @@ def main(argv: list[str] | None = None) -> int:
                 "Centroid = half-max first moment. Gate = median+φ·MAD. "
                 "NMS = φ³ µm. Residual second collapse fills leftover "
                 "brightness (7 µm find). Product graph = first collapse + "
-                "isolated residual only (halo residual stole 7 µm GT matches). "
-                "Lineage: leftover unmatched + isolated mix. Jaccard is the "
-                "Kaggle reference metric."
+                "isolated residual; in-shell residual folds into the primary "
+                "centroid. Jaccard is the Kaggle reference metric."
             ),
             "estimated_true_cells": tracks["meta"].get("estimated_nodes"),
             "authority": "OME-Zarr voxels + measured blob centroids (no trained net)",
