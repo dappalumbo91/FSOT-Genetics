@@ -18,7 +18,7 @@ This list is what to clear next. One mechanism at a time. Pin `D1D38A`. 0 free p
 | Joint `predict_system` | **0.013 Å** protein · DNA C1′ **0.016 Å** · SC **0.016 Å** — apparatus min now matches the DNA job. |
 | Protein–RNA | U1A prot **0.23 Å** · RNA seed C1′ **0.28 Å** (9 nt). Full hairpin register still Superposed. |
 | Ligand site | trypsin–BEN **0.60 Å** (was 0.24 on 3PTB/1PPH). First-shell springs; not a Cα freeze item. |
-| Organism 3-D / lineage | Proxy find **1.00**, follow **0.98 / 0.98**, Jaccard **0.98**. Dense find **0.96**, follow **0.85 / 0.97**, Jaccard **0.80 (adj. 0.80)** — TP 1502 / FP 13 / FN 369. In-shell residual folded into the primary centroid (not a second node). Kaggle U-Net leftover public **0.821** (not Final; 0.848 holds). |
+| Organism 3-D / lineage | Proxy find **1.00**, follow **0.98 / 0.98**, Jaccard **0.98**. Dense find **0.96**, follow **0.85 / 0.97**, Jaccard **0.81 (adj. 0.82)** — TP 1520 / FP 11 / FN 351. 2-opt at leftover φ⁵ (true child ~2.7 µm, assigned ~8 µm past φ⁴). Kaggle U-Net leftover public **0.821** (not Final; 0.848 holds). |
 
 ## Historical wet-lab (not the 10-protein freeze)
 

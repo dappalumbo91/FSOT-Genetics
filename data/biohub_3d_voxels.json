@@ -58,7 +58,7 @@
         "n_isolated_mix_edges": 2500,
         "n_unmatched_dest_fill": 1314,
         "dest_fill_um": 6.854101966249686,
-        "n_pairwise_swaps": 217,
+        "n_pairwise_swaps": 348,
         "n_primary": 21587,
         "n_residual_peaks": 21079,
         "n_product_nodes": 26233,
@@ -76,7 +76,7 @@
           1
         ]
       },
-      "note": "Centroid = half-max first moment. Gate = median+\u03c6\u00b7MAD. NMS = \u03c6\u00b3 \u00b5m. Product graph = first collapse + isolated residual; in-shell residual folds into the primary centroid. Jaccard is the Kaggle reference metric.",
+      "note": "Centroid = half-max first moment. Gate = median+\u03c6\u00b7MAD. NMS = \u03c6\u00b3 \u00b5m. Residual second collapse fills leftover brightness (7 \u00b5m find). Product graph = first collapse + isolated residual; in-shell residual folds into the primary centroid. Jaccard is the Kaggle reference metric.",
       "estimated_true_cells": 25755,
       "authority": "OME-Zarr voxels + measured blob centroids (no trained net)",
       "free_parameters": 0
@@ -111,16 +111,16 @@
       "match_median_um": 1.8622415958762906,
       "n_pred_edges": 27112,
       "n_product_nodes": 28164,
-      "lineage_edge_recall_7um": 0.8455371459112774,
+      "lineage_edge_recall_7um": 0.8492784607161945,
       "lineage_edge_recall_12um": 0.968466060929984,
-      "n_gt_edges_matched": 1582,
+      "n_gt_edges_matched": 1589,
       "n_gt_edges": 1871,
-      "edge_jaccard": 0.79723991507431,
-      "adjusted_edge_jaccard": 0.8048057134135279,
+      "edge_jaccard": 0.8076514346439958,
+      "adjusted_edge_jaccard": 0.8153160381935145,
       "jaccard_tp_fp_fn": [
-        1502,
-        13,
-        369
+        1520,
+        11,
+        351
       ],
       "nms_um": 4.23606797749979,
       "link_um": 6.854101966249686,
@@ -138,25 +138,25 @@
         "n_isolated_mix_edges": 3225,
         "n_unmatched_dest_fill": 1697,
         "dest_fill_um": 6.854101966249686,
-        "n_pairwise_swaps": 576,
+        "n_pairwise_swaps": 1000,
         "n_primary": 19476,
         "n_residual_peaks": 19302,
         "n_product_nodes": 28164,
         "n_isolated_residual_nodes": 8688,
-        "lineage_primary_only_7um": 0.6830571886691609,
-        "lineage_pair_7um": 0.794762159273116,
+        "lineage_primary_only_7um": 0.6793158738642437,
+        "lineage_pair_7um": 0.7969000534473544,
         "n_gt_residual_fill": 245,
-        "edge_jaccard": 0.79723991507431,
-        "adjusted_edge_jaccard": 0.8048057134135279,
+        "edge_jaccard": 0.8076514346439958,
+        "adjusted_edge_jaccard": 0.8153160381935145,
         "edge_jaccard_primary": 0.6832264957264957,
         "adjusted_edge_jaccard_primary": 0.7087862850273671,
         "jaccard_tp_fp_fn": [
-          1502,
-          13,
-          369
+          1520,
+          11,
+          351
         ]
       },
-      "note": "Centroid = half-max first moment. Gate = median+\u03c6\u00b7MAD. NMS = \u03c6\u00b3 \u00b5m. Product graph = first collapse + isolated residual; in-shell residual folds into the primary centroid. Jaccard is the Kaggle reference metric.",
+      "note": "Centroid = half-max first moment. Gate = median+\u03c6\u00b7MAD. NMS = \u03c6\u00b3 \u00b5m. Residual second collapse fills leftover brightness (7 \u00b5m find). Product graph = first collapse + isolated residual; in-shell residual folds into the primary centroid. Jaccard is the Kaggle reference metric.",
       "estimated_true_cells": 31117,
       "authority": "OME-Zarr voxels + measured blob centroids (no trained net)",
       "free_parameters": 0

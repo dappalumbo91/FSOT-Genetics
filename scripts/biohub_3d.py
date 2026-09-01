@@ -600,7 +600,8 @@ def _pairwise_swap_edges(
     max_um: float,
 ) -> tuple[list[tuple[int, int]], int]:
     """2-opt on consecutive-frame pairs. Hungarian per stage can leave a
-    cheaper swap across stages (223 dense FN were within φ⁴ of the true child).
+    cheaper swap across stages. Gate is leftover φ⁵ so a long assigned
+    dest (~8 µm) can yield to a closer measured continuation.
     """
     from collections import defaultdict
 
@@ -754,7 +755,11 @@ def link_tracks_staged(
             has_p.add(j)
             fill_n += 1
 
-    edges, nswap = _pairwise_swap_edges(pred, edges, sc, float(LINK_UM))
+    # 2-opt at leftover φ⁵: 112 dense FN had the true child at ~2.7 µm
+    # and the assigned dest at ~8 µm (past φ⁴, so the first 2-opt refused).
+    # Those long edges were already admitted by leftover; rewiring them
+    # is the same interface, not a new length.
+    edges, nswap = _pairwise_swap_edges(pred, edges, sc, leftover_um)
 
     meta = dict(meta)
     meta["n_leftover_edges"] = extra
