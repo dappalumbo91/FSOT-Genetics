@@ -43,15 +43,15 @@ Refinement (FSOT, 0 free params):
 - Gate = median + φ·MAD (φ²·MAD if that paints > 1/φ of voxels).
 - NMS = φ³ µm (φ⁴ merged an annotated cell with an unannotated neighbor).
 - Residual second collapse on leftover brightness (7–12 µm ghosts).
-- Lineage = Hungarian on the first collapse (intensity identity). Unmatched primaries get a second pass at φ⁵ µm. Isolated residual peaks (farther than NMS from every primary) may meet an unmatched primary; leftover residual–residual tracks stay off the primary map. Halo residual↔primary is not mixed (that stole tracks).
-- Outcome = the parent's **predicted child** lands within 7 µm of the measured next cell. Pairing both GT ends independently was matching a closer ghost that was not the continuation (pair-match still in `link_meta`).
+- Lineage = Hungarian on the first collapse (intensity identity). Unmatched primaries get a second pass at φ⁵ µm. Isolated residual peaks (farther than NMS from every primary) may meet an unmatched primary; leftover residual–residual tracks stay off the primary map. Halo residual↔primary is not mixed (that stole tracks). Leftover-length dests (> φ⁴) yield to a closer first-pass dest when 2-opt cannot swap (return > leftover).
+- Outcome = the parent's **predicted child** lands within 7 µm of the measured next cell. Pairing both GT ends independently was matching a closer ghost that was not the continuation (pair-match still in `link_meta`). Kaggle scores **edge Jaccard**, not follow.
 
 | Video | GT | 7 µm find | Follow 7 / 12 µm | Edge Jaccard (adj.) | Product nodes |
 |-------|---:|----------:|-----------------:|--------------------:|--------------:|
-| `44b6_0113de3b` (sparse) | 52 | **1.00** | **0.98 / 0.98** | **0.98 (0.98)** | 26,233 |
-| `6bba_09961292` (dense) | 1950 | **0.96** | **0.85 / 0.97** | **0.81 (0.82)** | 28,164 |
+| `44b6_0113de3b` (sparse) | 52 | **1.00** | **1.00 / 1.00** | **1.00 (1.00)** | 26,233 |
+| `6bba_09961292` (dense) | 1950 | **0.96** | **0.84 / 0.94** | **0.82 (0.83)** | 28,164 |
 
-Find-recall uses all peaks (observer). Product graph: first-collapse + isolated residual; in-shell residual folds into the primary centroid. Dest fill + 2-opt at leftover φ⁵ µm (assigned dest ~8 µm past φ⁴ while the true child was closer). Dense: TP 1520 / FP 11 / FN 351. Source: `data/biohub_3d_voxels.json`.
+Find-recall uses all peaks (observer). Product graph: first-collapse + isolated residual; in-shell residual folds into the primary centroid. Dest fill + 2-opt at leftover φ⁵ µm; leftover-length dests then yield to a closer first-pass dest when the 2-opt return exceeds leftover. Dense: TP 1538 / FP 6 / FN 333. Source: `data/biohub_3d_voxels.json`.
 
 The 7 µm official radius is peak/centroid vs annotator center. At one nucleus (12 µm) we recover almost every annotated cell and most of its next frame.
 
@@ -74,6 +74,8 @@ Same pin `D1D38A`. Same law: **measured coordinates are authority**. Residual sc
 Sparse GT tracks are a subset of the true cells (`estimated_number_of_nodes` ~ 25k–30k per video). Evaluation in the Kaggle project is edge Jaccard on that subset. Here we only **read** and residual-score the measured graph.
 
 ## Next (when we need more)
+
+Dense leftover after leftover-yield: **333 FN** (Jaccard 0.82 vs Kaggle Final 0.848 / live top 0.962). Proxy is closed (1.00). Highest remaining: 7–12 µm node misses (no product node in the official 7 µm ball) and 1-1 collisions whose closer dest is still past φ⁴.
 
 1. Stream one time-point from the OME-Zarr (pixel 3-D) for a viewer — still no copy of the dump.  
 2. Join Zebrahub gene-expression tracks on `I:\` to Danio UniProt → product Cα on the same embryo.  

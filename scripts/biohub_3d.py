@@ -642,6 +642,83 @@ def _pairwise_swap_edges(
     return out, nswap
 
 
+def _leftover_yield_edges(
+    pred: np.ndarray,
+    edges: list[tuple[int, int]],
+    sc: np.ndarray,
+    leftover_um: float,
+    first_um: float,
+) -> tuple[list[tuple[int, int]], int]:
+    """Leftover-length assignments yield to a closer first-pass dest.
+
+    2-opt needs both new edges ≤ leftover. Observer: dense FN had the
+    true child at ~2.8 µm (≤ φ⁴) while the assigned dest was ~8.2 µm
+    (past φ⁴); the return was ~11.5 µm so 2-opt refused. First-pass
+    φ⁴ links stay. Intensity identity ranks the closer dest.
+    """
+    from collections import defaultdict
+
+    def dist(i, j) -> float:
+        return float(np.linalg.norm((pred[j, 1:4] - pred[i, 1:4]) * sc))
+
+    def cost(i, j) -> tuple[float, float]:
+        d = dist(i, j)
+        if pred.shape[1] >= 6:
+            ia = float(pred[i, 5])
+            ib = float(pred[j, 5])
+            rel = abs(ia - ib) / (max(ia, ib) + 1e-6)
+            return d, d * (1.0 + rel)
+        return d, d
+
+    by_t: dict[int, list[tuple[int, int]]] = defaultdict(list)
+    other: list[tuple[int, int]] = []
+    for i, j in edges:
+        if int(pred[j, 0]) == int(pred[i, 0]) + 1:
+            by_t[int(pred[i, 0])].append((i, j))
+        else:
+            other.append((i, j))
+    n_yield = 0
+    out: list[tuple[int, int]] = list(other)
+    for t in sorted(by_t):
+        pairs = list(by_t[t])
+        changed = True
+        while changed:
+            changed = False
+            for a in range(len(pairs)):
+                i1, j1 = pairs[a]
+                d11, c11 = cost(i1, j1)
+                if d11 <= first_um:
+                    continue
+                best_b: int | None = None
+                best_c: float | None = None
+                for b in range(len(pairs)):
+                    if b == a:
+                        continue
+                    i2, j2 = pairs[b]
+                    if j2 == j1:
+                        continue
+                    d12, c12 = cost(i1, j2)
+                    d21, _c21 = cost(i2, j1)
+                    if (
+                        d12 <= first_um
+                        and d21 > leftover_um
+                        and d12 + 1e-9 < d11
+                        and c12 + 1e-9 < c11
+                    ):
+                        if best_c is None or c12 < best_c:
+                            best_b = b
+                            best_c = c12
+                if best_b is not None:
+                    i2, j2 = pairs[best_b]
+                    pairs[a] = (i1, j2)
+                    pairs.pop(best_b)
+                    n_yield += 1
+                    changed = True
+                    break
+        out.extend(pairs)
+    return out, n_yield
+
+
 def link_tracks_staged(
     pred: np.ndarray,
     *,
@@ -760,6 +837,25 @@ def link_tracks_staged(
     # Those long edges were already admitted by leftover; rewiring them
     # is the same interface, not a new length.
     edges, nswap = _pairwise_swap_edges(pred, edges, sc, leftover_um)
+    # Leftover-length dests yield when 2-opt cannot swap (return > leftover).
+    edges, n_yield = _leftover_yield_edges(
+        pred, edges, sc, leftover_um, fill_um
+    )
+    has_n = {i for i, _j in edges}
+    has_p = {j for _i, j in edges}
+    fill2 = 0
+    for t0, t1 in zip(frames, frames[1:]):
+        if t1 != t0 + 1:
+            continue
+        src = [int(i) for i in _indices_at(pred, t0)]
+        dst = [int(i) for i in _indices_at(pred, t1) if int(i) not in has_p]
+        for i, j in _hungarian_gate(pred, src, dst, sc, fill_um):
+            if j in has_p:
+                continue
+            edges.append((i, j))
+            has_n.add(i)
+            has_p.add(j)
+            fill2 += 1
 
     meta = dict(meta)
     meta["n_leftover_edges"] = extra
@@ -767,9 +863,11 @@ def link_tracks_staged(
     meta["n_isolated_residual_edges"] = iso_n
     meta["n_residual_residual_edges"] = res_n
     meta["n_isolated_mix_edges"] = mix_n
-    meta["n_unmatched_dest_fill"] = fill_n
+    meta["n_unmatched_dest_fill"] = fill_n + fill2
+    meta["n_unmatched_dest_fill_after_yield"] = fill2
     meta["dest_fill_um"] = fill_um
     meta["n_pairwise_swaps"] = nswap
+    meta["n_leftover_yield"] = n_yield
     return edges, meta
 
 
@@ -1275,7 +1373,8 @@ def main(argv: list[str] | None = None) -> int:
                 "NMS = φ³ µm. Residual second collapse fills leftover "
                 "brightness (7 µm find). Product graph = first collapse + "
                 "isolated residual; in-shell residual folds into the primary "
-                "centroid. Jaccard is the Kaggle reference metric."
+                "centroid. Leftover-length dests yield to a closer first-pass "
+                "dest when 2-opt cannot swap. Jaccard is the Kaggle reference metric."
             ),
             "estimated_true_cells": tracks["meta"].get("estimated_nodes"),
             "authority": "OME-Zarr voxels + measured blob centroids (no trained net)",
