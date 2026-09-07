@@ -65,6 +65,22 @@ FSOT can score the **measured** field: voxels, blob centroids, parent→child st
 
 That gap is real. It is not a missing weight, and wrapping the U-Net does not close it inside the law. If the leftover 7–8 µm shell can move inside the official 7 µm ball, it is because the **blob mathematics** still under-reads the nucleus — not because we failed to fit intelligence. Residual scales the interface; it does not become the net.
 
+### Eye / relay (image as measurement)
+
+The math already derives components from **measurements**. It has not been the camera. A trained net can be the eye — cones: photons → an activation field — without being the brain.
+
+```text
+light-sheet pixels          measured scene (already in OME-Zarr)
+        ↓
+ML appearance field         optional apparatus (isolates what MAD+φ does not)
+        ↓
+FSOT relay                  half-max centroid, φ³ NMS, leftover residual, identity
+        ↓
+this cell / this protein    product (lineage now; Zebrahub gene → Cα later)
+```
+
+The image **is** the measurement. FSOT translates that field into structure. The net may paint leftover brightness the native gate missed; it must not emit the annotator coordinate. If the net outputs xyz, the relay is a pass-through and we are wrapping free parameters again. Claim path stays 0 free params (`docs/DESIGN.md`). U-Net stays lab apparatus, out of the claim, same as a microscope vendor’s ISP.
+
 ## How this sits next to the protein product
 
 ```text
@@ -89,4 +105,4 @@ Re-centroid of the same peaks in a φ⁴ window (nucleus / first-pass scale) **f
 
 1. Stream one time-point from the OME-Zarr (pixel 3-D) for a viewer — still no copy of the dump.  
 2. Join Zebrahub gene-expression tracks on `I:\` to Danio UniProt → product Cα on the same embryo.  
-3. Leave U-Net training in `biohub-fsot-unet`; this repo stays the genetics / 3-D *reader*.
+3. Leave U-Net training in `biohub-fsot-unet`; this repo stays the genetics / 3-D *reader*. If the net is used, it is the eye (activation field), not the reported center.
