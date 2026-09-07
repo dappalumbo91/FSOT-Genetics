@@ -57,6 +57,14 @@ The 7 µm official radius is peak/centroid vs annotator center. At one nucleus (
 
 Kaggle is the **reference metric** (7 µm Hungarian, adjusted edge Jaccard). A U-Net notebook is optional and only after it actually runs; v64 v1 died after predict on `import tracksdata` in the notebook kernel. This repo stays the genetics / 3-D reader.
 
+## Disconnect (do not paper over)
+
+The competition detector is almost nothing but free parameters (a trained U-Net). This reader is 0. Those are not the same object.
+
+FSOT can score the **measured** field: voxels, blob centroids, parent→child steps, residual \(r = 1+|S|·P_{\mathrm{NEW}}\). It does not train an appearance model, and it must not invent a nucleus the brightness field did not show. Where a net “knows” a center from labels, this observer only has the half-max first moment of leftover light.
+
+That gap is real. It is not a missing weight, and wrapping the U-Net does not close it inside the law. If the leftover 7–8 µm shell can move inside the official 7 µm ball, it is because the **blob mathematics** still under-reads the nucleus — not because we failed to fit intelligence. Residual scales the interface; it does not become the net.
+
 ## How this sits next to the protein product
 
 ```text
@@ -76,6 +84,8 @@ Sparse GT tracks are a subset of the true cells (`estimated_number_of_nodes` ~ 2
 ## Next (when we need more)
 
 Dense leftover after leftover-yield: **333 FN** (Jaccard 0.82 vs Kaggle Final 0.848 / live top 0.962). Proxy is closed (1.00). Highest remaining: 7–12 µm node misses (no product node in the official 7 µm ball) and 1-1 collisions whose closer dest is still past φ⁴.
+
+Re-centroid of the same peaks in a φ⁴ window (nucleus / first-pass scale) **failed**: find 0.96→0.92, product-find 0.95→0.88, Jaccard 0.82→0.67. The 7–8 µm shell is not an under-read of the same blob — a larger first moment merges the neighbor NMS already split. That is the free-parameter disconnect in numbers, not a missing radius.
 
 1. Stream one time-point from the OME-Zarr (pixel 3-D) for a viewer — still no copy of the dump.  
 2. Join Zebrahub gene-expression tracks on `I:\` to Danio UniProt → product Cα on the same embryo.  
