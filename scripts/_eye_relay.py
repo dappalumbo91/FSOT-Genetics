@@ -26,6 +26,7 @@ from biohub_3d import (  # noqa: E402
     SCALE_Y_UM,
     SCALE_Z_UM,
     TRAIN,
+    _PHI,
     _centroid_blob,
     detect_cache_path,
     detect_peaks_frame,
@@ -43,6 +44,7 @@ FT_WEIGHTS = Path(
     r"D:\Kaggle_Biohub_Data\cellmot\cellmot-ft-detector-biohub\edge_predictor_best.pth"
 )
 EYE_CACHE = BIOHUB_ROOT / "_fsot_eye_cache"
+CORR_WEIGHTS = EYE_CACHE / "correspondence" / "edge_predictor_correspondence.pth"
 SCALE = (SCALE_Z_UM, SCALE_Y_UM, SCALE_X_UM)
 
 
@@ -57,9 +59,15 @@ def eye_field_path(dataset: str) -> Path:
     return EYE_CACHE / f"{dataset}_ft_sigmoid.npy"
 
 
-def paint_eye(dataset: str, volp: Path) -> np.ndarray:
+def paint_eye(
+    dataset: str,
+    volp: Path,
+    *,
+    weights: Path | None = None,
+    cache_name: str | None = None,
+) -> np.ndarray:
     """Downsampled sigmoid field (T, Z, Yd, Xd). Cached on the game drive."""
-    cache = eye_field_path(dataset)
+    cache = EYE_CACHE / (cache_name or f"{dataset}_ft_sigmoid.npy")
     if cache.exists():
         field = np.load(cache)
         print(f"  eye cache {cache} {field.shape}", flush=True)
@@ -78,6 +86,10 @@ def paint_eye(dataset: str, volp: Path) -> np.ndarray:
     T, Z, Y, X = [int(x) for x in zarr_arr.shape]
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model, window_size, downsample = load_model(FT_WEIGHTS, device)
+    if weights is not None and Path(weights) != FT_WEIGHTS:
+        state = torch.load(Path(weights), map_location=device, weights_only=True)
+        model.load_state_dict(state)
+        print(f"  eye weights {weights}", flush=True)
     dz, dy, dx = downsample
     target_shape = [Z // dz, Y // dy, X // dx]
     W = int(window_size)
@@ -218,18 +230,29 @@ def fold_eye_into_native(
     return out
 
 
+def _field_at(fields: np.ndarray, t: int, zyx: np.ndarray) -> float:
+    """Eye sigmoid at a full-resolution voxel (field is Z, Y/4, X/4)."""
+    _, zd, yd, xd = fields.shape
+    z, y, x = [float(v) for v in zyx]
+    zi = int(np.clip(round(z), 0, zd - 1))
+    yi = int(np.clip(round(y / 4.0), 0, yd - 1))
+    xi = int(np.clip(round(x / 4.0), 0, xd - 1))
+    return float(fields[int(t), zi, yi, xi])
+
+
 def fill_isolated_eye(
     native_prod: np.ndarray,
     eye: np.ndarray,
     n_est: int,
     *,
     iso_um: float | None = None,
+    fields: np.ndarray | None = None,
 ) -> np.ndarray:
     """Add isolated eye leftover up to estimated_number_of_nodes.
 
-    Rank by measured photon intensity. Proxy is already over the estimate
-    so it receives none; dense leftover (~3k) can take the 7 µm misses
-    the eye painted without the 15k node tax.
+    Rank and gate by the eye sigmoid (what the net trained), not photons.
+    Isolated ghosts sit at ~0.002; GT leftover fills sit at ~1.0. Photons
+    re-amplified the silenced field. Gate is 1/φ of a unit field.
     """
     sc = np.array([SCALE_Z_UM, SCALE_Y_UM, SCALE_X_UM])
     if iso_um is None:
@@ -255,9 +278,18 @@ def fill_isolated_eye(
     if not iso_rows:
         return native_prod
     iso = np.vstack(iso_rows)
-    if iso.shape[1] >= 6:
-        order = np.argsort(-iso[:, 5])
-        iso = iso[order]
+    if fields is not None:
+        sig = np.array(
+            [_field_at(fields, int(row[0]), row[1:4]) for row in iso],
+            dtype=np.float64,
+        )
+        iso = iso[sig >= (1.0 / _PHI)]
+        sig = sig[sig >= (1.0 / _PHI)]
+        if len(iso) == 0:
+            return native_prod
+        iso = iso[np.argsort(-sig)]
+    elif iso.shape[1] >= 6:
+        iso = iso[np.argsort(-iso[:, 5])]
     iso = iso[:budget].copy()
     if iso.shape[1] >= 5:
         iso[:, 4] = 2
@@ -343,12 +375,49 @@ def main() -> int:
     mode = sys.argv[2] if len(sys.argv) > 2 else "fold"
     volp = TRAIN / f"{ds}.zarr"
     tracks = read_geff(BIOHUB_ROOT / "train" / f"{ds}.geff")
+    if mode == "corr":
+        native = np.load(detect_cache_path(ds))
+        nat_prod = product_detections(native)
+        fields = paint_eye(
+            ds, volp, weights=CORR_WEIGHTS, cache_name=f"{ds}_corr_sigmoid.npy"
+        )
+        pred_c = EYE_CACHE / f"{ds}_corr_relay.npy"
+        if pred_c.exists():
+            eye = np.load(pred_c)
+            print(f"  corr relay cache {pred_c} n={len(eye)}", flush=True)
+        else:
+            eye = detect_eye_relay(ds, volp, fields)
+            np.save(pred_c, eye)
+            print(f"  wrote {pred_c} n={len(eye)}", flush=True)
+        n_est = int(tracks["meta"].get("estimated_nodes") or len(nat_prod))
+        filled = fill_isolated_eye(nat_prod, eye, n_est, fields=fields)
+        reports = [
+            score(ds, nat_prod, tracks, "native_product", as_product=False),
+            score(ds, filled, tracks, "native_plus_corr_fill", as_product=False),
+        ]
+        print(
+            json.dumps(
+                {
+                    "dataset": ds,
+                    "mode": mode,
+                    "n_est": n_est,
+                    "n_native": int(len(nat_prod)),
+                    "n_filled": int(len(filled)),
+                    "reports": reports,
+                },
+                indent=2,
+                default=str,
+            ),
+            flush=True,
+        )
+        return 0
     if mode == "fill":
         native = np.load(detect_cache_path(ds))
         nat_prod = product_detections(native)
         eye = np.load(relay_pred_path(ds))
+        fields = np.load(eye_field_path(ds)) if eye_field_path(ds).exists() else None
         n_est = int(tracks["meta"].get("estimated_nodes") or len(nat_prod))
-        filled = fill_isolated_eye(nat_prod, eye, n_est)
+        filled = fill_isolated_eye(nat_prod, eye, n_est, fields=fields)
         reports = [
             score(ds, nat_prod, tracks, "native_product", as_product=False),
             score(ds, filled, tracks, "native_plus_eye_fill", as_product=False),

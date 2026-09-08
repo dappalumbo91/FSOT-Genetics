@@ -87,14 +87,18 @@ First local relay (FT detector **field** × native photons, then the same MAD+φ
 |----------|-------|-------:|----------------|--------------|------:|
 | Native photons (claim) | dense | 0.96 | **0.82 (0.83)** | 1538 / 6 / 333 | 28,164 |
 | Eye re-detect whole volume | dense | 0.97 | 0.84 (0.81) | 1583 / 3 / 288 | 43,642 |
-| Native + isolated eye fill to \(T_{\mathrm{true}}\) | dense | **0.97** | **0.83 (0.83)** | **1565 / 5 / 306** | **31,117** |
+| Native + isolated eye fill (photon rank) | dense | 0.97 | 0.83 (0.83) | 1565 / 5 / 306 | 31,117 |
+| Native + isolated eye fill (sigmoid ≥ 1/φ) | dense | 0.97 | 0.84 (0.84) | 1567 / 5 / 304 | 31,050 |
+| Native + correspondence-trained eye fill | dense | **0.97** | **0.848 (0.848)** | **1589 / 2 / 282** | **31,117** |
 | Native photons (claim) | proxy | 1.00 | **1.00 (1.00)** | 50 / 0 / 0 | 26,233 |
 | Eye re-detect / in-shell peak fold | proxy | 1.00 | 0.94 (0.85–0.94) | 47 / 0 / 3 | extra blobs |
 | Native + isolated eye fill | proxy | **1.00** | **1.00 (1.00)** | **50 / 0 / 0** | 26,233 |
 
 What failed: re-detecting through the eye (44k nodes, proxy steal); folding discrete in-shell eye peaks into native xyz (proxy 1.00→0.94); re-centroid of the same native blob on photons×eye (dense Jaccard 0.82→0.78).
 
-What held: **native product stays the graph**. Isolated eye peaks farther than NMS, ranked by photon intensity, fill only up to `estimated_number_of_nodes`. Dense was 3k under that budget; proxy was already over, so it received none and stayed 1.00. Dense Jaccard 0.82→0.83, adj 0.83→0.83, follow 0.84→0.86. Claim path is still photons. Fill is lab apparatus (`scripts/_eye_relay.py fill`).
+What held: **native product stays the graph**. Isolated eye leftover farther than NMS, only up to `estimated_number_of_nodes`.
+
+The FT net already knew the leftover: isolated ghosts sit at sigmoid **0.002**; the 24 native-miss GT fills sit at **0.999**. Ranking fill by photons put the silenced field back — that was the regression. Gate and rank by the trained field (≥ 1/φ) : dense Jaccard 0.835. Then fine-tune the eye on other train videos (hold out dense + proxy) with a steal-shell annulus around each labeled cell (NMS..φ⁵, target 0). Correspondence fill: dense **0.848 / 0.848** (TP 1589 / FN 282) at \(T_{\mathrm{true}}\). Proxy is already over the estimate, so it still receives no extra blobs and stays **1.00**. That 0.848 is this train video’s adj edge Jaccard, not public LB Final. Claim path is still photons. Apparatus: `scripts/_eye_relay.py`, `scripts/_eye_correspondence_train.py`.
 
 ## How this sits next to the protein product
 
@@ -114,7 +118,7 @@ Sparse GT tracks are a subset of the true cells (`estimated_number_of_nodes` ~ 2
 
 ## Next (when we need more)
 
-Dense leftover after leftover-yield: **333 FN** on the photon claim (Jaccard 0.82). Isolated-eye fill to \(T_{\mathrm{true}}\) is **306 FN** (Jaccard 0.83) without breaking proxy. Kaggle Final 0.848 / live top 0.962 still ahead. Do not re-detect through the eye or fold discrete eye peaks (proxy steal).
+Dense leftover after leftover-yield: **333 FN** on the photon claim (Jaccard 0.82). Correspondence-trained isolated-eye fill is **282 FN** (Jaccard 0.848 on this video) without breaking proxy. Public Final 0.848 / live top 0.962 still the Kaggle reference. Do not re-detect through the eye or fold discrete eye peaks (proxy steal).
 
 Re-centroid of the same peaks in a φ⁴ window (nucleus / first-pass scale) **failed**: find 0.96→0.92, product-find 0.95→0.88, Jaccard 0.82→0.67. The 7–8 µm shell is not an under-read of the same blob — a larger first moment merges the neighbor NMS already split. That is the free-parameter disconnect in numbers, not a missing radius.
 
