@@ -26,6 +26,8 @@ from biohub_3d import (  # noqa: E402
     SCALE_Y_UM,
     SCALE_Z_UM,
     TRAIN,
+    _centroid_blob,
+    detect_cache_path,
     detect_peaks_frame,
     edge_jaccard_official,
     lineage_recall,
@@ -174,11 +176,144 @@ def detect_eye_relay(dataset: str, volp: Path, fields: np.ndarray) -> np.ndarray
     return np.vstack(rows)
 
 
-def score(ds: str, pred: np.ndarray, tracks: dict, tag: str) -> dict:
+def fold_eye_into_native(
+    native_prod: np.ndarray,
+    eye: np.ndarray,
+    *,
+    iso_um: float | None = None,
+) -> np.ndarray:
+    """Move native centers with in-shell eye leftover. Do not add eye nodes.
+
+    37k dense eye peaks sit inside native NMS; 26k isolated extra nodes
+    paid the 0.1 tax and stole proxy tracks. Fold is residual brightness
+    on an already-measured blob, same as in-shell photon residual.
+    """
+    sc = np.array([SCALE_Z_UM, SCALE_Y_UM, SCALE_X_UM])
+    if iso_um is None:
+        iso_um = float(NMS_UM)
+    out = native_prod.copy()
+    if len(out) == 0 or len(eye) == 0:
+        return out
+    for t in sorted({int(x) for x in out[:, 0]}):
+        po = np.where(out[:, 0].astype(int) == t)[0]
+        ey = eye[eye[:, 0].astype(int) == t]
+        if len(po) == 0 or len(ey) == 0:
+            continue
+        d = np.sqrt(
+            (((out[po][:, 1:4][:, None, :] - ey[None, :, 1:4]) * sc) ** 2).sum(axis=2)
+        )
+        for k, row in enumerate(po):
+            near = d[k] <= iso_um
+            if not np.any(near):
+                continue
+            xyz = np.vstack([out[row, 1:4], ey[near][:, 1:4]])
+            if out.shape[1] >= 6 and ey.shape[1] >= 6:
+                w = np.concatenate([[out[row, 5]], ey[near, 5]])
+            else:
+                w = np.ones(len(xyz))
+            wsum = float(w.sum())
+            if wsum <= 0:
+                continue
+            out[row, 1:4] = (xyz * w[:, None]).sum(axis=0) / wsum
+    return out
+
+
+def fill_isolated_eye(
+    native_prod: np.ndarray,
+    eye: np.ndarray,
+    n_est: int,
+    *,
+    iso_um: float | None = None,
+) -> np.ndarray:
+    """Add isolated eye leftover up to estimated_number_of_nodes.
+
+    Rank by measured photon intensity. Proxy is already over the estimate
+    so it receives none; dense leftover (~3k) can take the 7 µm misses
+    the eye painted without the 15k node tax.
+    """
+    sc = np.array([SCALE_Z_UM, SCALE_Y_UM, SCALE_X_UM])
+    if iso_um is None:
+        iso_um = float(NMS_UM)
+    budget = int(n_est) - int(len(native_prod))
+    if budget <= 0 or len(eye) == 0:
+        return native_prod
+    iso_rows: list[np.ndarray] = []
+    for t in sorted({int(x) for x in eye[:, 0]}):
+        ey = eye[eye[:, 0].astype(int) == t]
+        nat = native_prod[native_prod[:, 0].astype(int) == t]
+        if len(ey) == 0:
+            continue
+        if len(nat) == 0:
+            iso_rows.append(ey)
+            continue
+        dmin = np.sqrt(
+            (((ey[:, 1:4][:, None, :] - nat[None, :, 1:4]) * sc) ** 2).sum(axis=2)
+        ).min(axis=1)
+        keep = ey[dmin > iso_um]
+        if len(keep):
+            iso_rows.append(keep)
+    if not iso_rows:
+        return native_prod
+    iso = np.vstack(iso_rows)
+    if iso.shape[1] >= 6:
+        order = np.argsort(-iso[:, 5])
+        iso = iso[order]
+    iso = iso[:budget].copy()
+    if iso.shape[1] >= 5:
+        iso[:, 4] = 2
+    return np.vstack([native_prod, iso])
+
+
+def reccentroid_native_on_field(
+    native_prod: np.ndarray,
+    fields: np.ndarray,
+    volp: Path,
+) -> np.ndarray:
+    """Half-max first moment of photons×eye in the native NMS patch.
+
+    Discrete in-shell eye peaks yanked centers toward neighbors (proxy
+    1.00→0.94). The field modulates leftover brightness of the same blob.
+    """
+    from scipy.ndimage import zoom
+
+    zg = zarr.open_group(str(volp), mode="r")
+    zarr_arr = zg["0"]
+    T, Z, Y, X = [int(x) for x in zarr_arr.shape]
+    _, Zd, Yd, Xd = fields.shape
+    zy, zx = Y / Yd, X / Xd
+    out = native_prod.copy()
+    for t in sorted({int(x) for x in out[:, 0]}):
+        if t % 10 == 0:
+            print(f"  field-centroid t={t}", flush=True)
+        photons = np.asarray(zarr_arr[int(t)]).astype(np.float32)
+        eye = np.asarray(fields[int(t)], dtype=np.float32)
+        if eye.shape != photons.shape:
+            eye = zoom(eye, (Z / Zd, zy, zx), order=1).astype(np.float32)
+        scene = photons * eye
+        rows = np.where(out[:, 0].astype(int) == int(t))[0]
+        for i in rows:
+            out[i, 1:4] = _centroid_blob(scene, out[i, 1:4], SCALE, float(NMS_UM))
+            zc, yc, xc = [int(round(c)) for c in out[i, 1:4]]
+            zc = int(np.clip(zc, 0, photons.shape[0] - 1))
+            yc = int(np.clip(yc, 0, photons.shape[1] - 1))
+            xc = int(np.clip(xc, 0, photons.shape[2] - 1))
+            if out.shape[1] >= 6:
+                out[i, 5] = float(photons[zc, yc, xc])
+    return out
+
+
+def score(
+    ds: str,
+    pred: np.ndarray,
+    tracks: dict,
+    tag: str,
+    *,
+    as_product: bool = True,
+) -> dict:
     gt = np.column_stack([tracks["t"].astype(float), tracks["xyz_vox"]])
     hit = match_centroids(pred[:, :4], gt, max_um=MATCH_UM)
     hit12 = match_centroids(pred[:, :4], gt, max_um=12.0)
-    prod = product_detections(pred)
+    prod = product_detections(pred) if as_product and pred.shape[1] >= 5 else pred
     hit_p = match_centroids(prod[:, :4], gt, max_um=MATCH_UM)
     edges, meta = link_tracks_staged(prod)
     jac = edge_jaccard_official(prod, edges, tracks)
@@ -205,8 +340,52 @@ def score(ds: str, pred: np.ndarray, tracks: dict, tag: str) -> dict:
 
 def main() -> int:
     ds = sys.argv[1] if len(sys.argv) > 1 else "6bba_09961292"
+    mode = sys.argv[2] if len(sys.argv) > 2 else "fold"
     volp = TRAIN / f"{ds}.zarr"
     tracks = read_geff(BIOHUB_ROOT / "train" / f"{ds}.geff")
+    if mode == "fill":
+        native = np.load(detect_cache_path(ds))
+        nat_prod = product_detections(native)
+        eye = np.load(relay_pred_path(ds))
+        n_est = int(tracks["meta"].get("estimated_nodes") or len(nat_prod))
+        filled = fill_isolated_eye(nat_prod, eye, n_est)
+        reports = [
+            score(ds, nat_prod, tracks, "native_product", as_product=False),
+            score(ds, filled, tracks, "native_plus_eye_fill", as_product=False),
+        ]
+        print(
+            json.dumps(
+                {
+                    "dataset": ds,
+                    "mode": mode,
+                    "n_est": n_est,
+                    "n_native": int(len(nat_prod)),
+                    "n_filled": int(len(filled)),
+                    "reports": reports,
+                },
+                indent=2,
+                default=str,
+            ),
+            flush=True,
+        )
+        return 0
+    if mode in ("fold", "field"):
+        native = np.load(detect_cache_path(ds))
+        nat_prod = product_detections(native)
+        if mode == "fold":
+            eye = np.load(relay_pred_path(ds))
+            moved = fold_eye_into_native(nat_prod, eye)
+            tag = "native_fold_eye_nms"
+        else:
+            fields = paint_eye(ds, volp)
+            moved = reccentroid_native_on_field(nat_prod, fields, volp)
+            tag = "native_field_centroid"
+        reports = [
+            score(ds, nat_prod, tracks, "native_product", as_product=False),
+            score(ds, moved, tracks, tag, as_product=False),
+        ]
+        print(json.dumps({"dataset": ds, "mode": mode, "reports": reports}, indent=2, default=str), flush=True)
+        return 0
     pred_path = relay_pred_path(ds)
     if pred_path.exists():
         pred = np.load(pred_path)
@@ -221,7 +400,7 @@ def main() -> int:
     if pred.shape[1] >= 5:
         pri = pred[pred[:, 4] == 1]
         reports.append(score(ds, pri, tracks, "eye_primary_only"))
-    print(json.dumps({"dataset": ds, "reports": reports}, indent=2, default=str), flush=True)
+    print(json.dumps({"dataset": ds, "mode": mode, "reports": reports}, indent=2, default=str), flush=True)
     return 0
 
 
