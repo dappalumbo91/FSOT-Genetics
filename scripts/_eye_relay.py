@@ -45,6 +45,9 @@ FT_WEIGHTS = Path(
 )
 EYE_CACHE = BIOHUB_ROOT / "_fsot_eye_cache"
 CORR_WEIGHTS = EYE_CACHE / "correspondence" / "edge_predictor_correspondence.pth"
+CORR_BALL_WEIGHTS = (
+    EYE_CACHE / "correspondence" / "edge_predictor_correspondence_ball.pth"
+)
 SCALE = (SCALE_Z_UM, SCALE_Y_UM, SCALE_X_UM)
 
 
@@ -375,13 +378,15 @@ def main() -> int:
     mode = sys.argv[2] if len(sys.argv) > 2 else "fold"
     volp = TRAIN / f"{ds}.zarr"
     tracks = read_geff(BIOHUB_ROOT / "train" / f"{ds}.geff")
-    if mode == "corr":
+    if mode in ("corr", "ball"):
+        wpath = CORR_BALL_WEIGHTS if mode == "ball" else CORR_WEIGHTS
+        tag = "native_plus_corr_ball_fill" if mode == "ball" else "native_plus_corr_fill"
+        sig_name = f"{ds}_corr_ball_sigmoid.npy" if mode == "ball" else f"{ds}_corr_sigmoid.npy"
+        rel_name = f"{ds}_corr_ball_relay.npy" if mode == "ball" else f"{ds}_corr_relay.npy"
         native = np.load(detect_cache_path(ds))
         nat_prod = product_detections(native)
-        fields = paint_eye(
-            ds, volp, weights=CORR_WEIGHTS, cache_name=f"{ds}_corr_sigmoid.npy"
-        )
-        pred_c = EYE_CACHE / f"{ds}_corr_relay.npy"
+        fields = paint_eye(ds, volp, weights=wpath, cache_name=sig_name)
+        pred_c = EYE_CACHE / rel_name
         if pred_c.exists():
             eye = np.load(pred_c)
             print(f"  corr relay cache {pred_c} n={len(eye)}", flush=True)
@@ -393,7 +398,7 @@ def main() -> int:
         filled = fill_isolated_eye(nat_prod, eye, n_est, fields=fields)
         reports = [
             score(ds, nat_prod, tracks, "native_product", as_product=False),
-            score(ds, filled, tracks, "native_plus_corr_fill", as_product=False),
+            score(ds, filled, tracks, tag, as_product=False),
         ]
         print(
             json.dumps(

@@ -118,10 +118,11 @@ Sparse GT tracks are a subset of the true cells (`estimated_number_of_nodes` ~ 2
 
 ## Next (when we need more)
 
-Dense leftover after leftover-yield: **333 FN** on the photon claim (Jaccard 0.82). Correspondence-trained isolated-eye fill is **282 FN** (Jaccard 0.848 on this video) without breaking proxy. Public Final 0.848 / live top 0.962 still the Kaggle reference. Do not re-detect through the eye or fold discrete eye peaks (proxy steal).
+Dense leftover after leftover-yield: **333 FN** on the photon claim (Jaccard 0.82). Steal-shell correspondence fill is **282 FN** (Jaccard **0.848** on this train video) without breaking proxy. Nucleus-ball extra train **regressed** (0.848→0.838) — keep the steal-shell weights. Of the 282: **86** still 7–12 µm node misses, **196** first-pass linker collisions (40 true-closer at 3.2 vs 6.0 µm). NMS-floor extra yield +1 TP only. Public Final 0.848 / live top **0.962** is the Kaggle target; 0.848 here is one train video, not public LB. Do not Final a kernel until public > 0.848 and the notebook actually runs.
 
 Re-centroid of the same peaks in a φ⁴ window (nucleus / first-pass scale) **failed**: find 0.96→0.92, product-find 0.95→0.88, Jaccard 0.82→0.67. The 7–8 µm shell is not an under-read of the same blob — a larger first moment merges the neighbor NMS already split. That is the free-parameter disconnect in numbers, not a missing radius.
 
 1. Stream one time-point from the OME-Zarr (pixel 3-D) for a viewer — still no copy of the dump.  
 2. Join Zebrahub gene-expression tracks on `I:\` to Danio UniProt → product Cα on the same embryo.  
-3. Leave U-Net training in `biohub-fsot-unet`; this repo stays the genetics / 3-D *reader*. If the net is used, it is the eye (activation field), not the reported center.
+3. Leave U-Net training in `biohub-fsot-unet`; this repo stays the genetics / 3-D *reader*. If the net is used, it is the eye (activation field), not the reported center.  
+4. Competition climb: steal-shell correspondence fill is **0.848** on held-out dense train (Final’s number, not public LB). Live top **0.962**. Next is the 196 first-pass linker FN + 86 localization, then a T4 kernel that actually runs (weights as data, FSOT fill, no leftover `import tracksdata` in the notebook). Do not Final until public > 0.848.
