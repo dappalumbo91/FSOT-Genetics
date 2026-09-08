@@ -81,6 +81,17 @@ this cell / this protein    product (lineage now; Zebrahub gene → Cα later)
 
 The image **is** the measurement. FSOT translates that field into structure. The net may paint leftover brightness the native gate missed; it must not emit the annotator coordinate. If the net outputs xyz, the relay is a pass-through and we are wrapping free parameters again. Claim path stays 0 free params (`docs/DESIGN.md`). U-Net stays lab apparatus, out of the claim, same as a microscope vendor’s ISP.
 
+First local relay (FT detector **field** × native photons, then the same MAD+φ / φ³ NMS / leftover-yield observer):
+
+| Observer | Video | Find 7 | Jaccard (adj.) | TP / FP / FN | Product nodes |
+|----------|-------|-------:|----------------|--------------|---------------|
+| Native photons | dense | 0.96 | **0.82 (0.83)** | 1538 / 6 / 333 | 28,164 |
+| Eye field × photons | dense | **0.97** | **0.84 (0.81)** | **1583 / 3 / 288** | 43,642 |
+| Native photons | proxy | 1.00 | **1.00 (1.00)** | 50 / 0 / 0 | 26,233 |
+| Eye field × photons | proxy | 1.00 | **0.94 (0.85)** | 47 / 0 / 3 | 50,592 |
+
+Dense: the eye moved the leftover 7–8 µm shell (match median 1.86→1.66 µm). Raw Jaccard 0.82→0.84, near Final 0.848. Adjusted Jaccard **dropped** (0.83→0.81) — 44k product nodes vs estimated 31k (native was slightly *under*, which the 0.1 node tax rewards). Proxy **regressed** (1.00→0.94): extra painted blobs stole three GT edges. Primary-only and wider isolation threw away leftover nuclei. Not the shipped default. Probe: `scripts/_eye_relay.py` (lab apparatus, not the claim path).
+
 ## How this sits next to the protein product
 
 ```text
