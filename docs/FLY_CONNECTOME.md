@@ -39,7 +39,38 @@ First live read (2026-09-07), table on `D:\FlyWire_Connectome` (31.7 MB TSV, not
 
 Source: `data/fly_connectome_inventory.json`. Voxel 4 × 4 × 40 nm. Paper count 139,255; dump is 7 rows short (non-neuronal / unreleased).
 
-Next table (when we need edges): Zenodo `proofread_connections_783.feather` (~852 MB) on the same `D:\` tree. Not the 9.5 GB raw synapse list until the atlas+graph is residual-scored.
+## Boot (measured cascade, not a mind)
+
+`python scripts/fly_connectome.py --boot --seed sensory`
+
+Proofread connections (~852 MB, Zenodo 10676866) on `D:\FlyWire_Connectome`. Edge weight = **measured synapse count**. GABA outgoing is inhibitory (predicted transmitter on the presynaptic cell). Hop count = leftover φ⁵. Each hop is rescaled to the observer max (half-max analog). Biochemistry residual scales the interface.
+
+First boot (v630 public connections, 3.79 M edges, 127,979 neurons; v783 Zenodo 504’d):
+
+`python scripts/fly_connectome.py --boot --seed sensory`
+
+| Hop | Sensory mass | Central | Descending | Motor |
+|----:|-------------:|--------:|-----------:|------:|
+| 0 | 9,708 | 0 | 0 | 0 |
+| 1 | 0.79 | 49.2 | **6.11** | **0.56** |
+| 2 | 1.56 | 179 | **2.98** | **1.35** (motor peak) |
+| 3–4 | leftover | olfactory LN hubs (lLN1 / lLN2) | falling | falling |
+
+Seed is every `super_class=sensory` cell (includes photoreceptors R1–6). Hop 1–2 already put mass on **descending** and **motor** neurons — the measured path from sensors to effectors. Later hops collapse onto dense olfactory local interneurons (hub leftover). GABA edges are inhibitory. Source: `data/fly_connectome_boot.json`.
+
+This is signal on the measured graph. It is **not** a trained RNN, not inner speech, and not a claim that the fly is solving a human puzzle. Flies navigate, court, fight, and walk. Those are the activities to match.
+
+## Behavior video (next measured observer)
+
+Do not invent kinematics. Public fly activity we can park on `D:\` later:
+
+| Source | What |
+|--------|------|
+| Janelia Fly Disco (Robie et al. 2024) | Freely walking / social groups, 21 keypoints, optogenetics |
+| Dryad treadmill (Pratt / Tuthill 2024) | Walking kinematics under perturbation |
+| FlyWire papers | Sensory→motor information flow already traced on this same graph |
+
+Loop we want: **video activity → which sensory super_class is on → boot the connectome → which motor/descending light up**. Then compare to the fly’s actual motor pattern. That is grounding for biological function, then predict *up* (other insects, then vertebrates) only where homologs exist — same product rule as protein Cα.
 
 Neuron table only (no 9.5 GB synapse dump until the atlas is live):
 

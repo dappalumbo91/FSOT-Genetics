@@ -1,0 +1,452 @@
+{
+  "seed": "sensory",
+  "n_seed": 9708,
+  "n_neurons": 127979,
+  "n_edges_used": 3794615,
+  "hops": 11,
+  "residual_Biochemistry": 1.091958932349586,
+  "gaba_inhibitory": true,
+  "authority": "FlyWire proofread connections v783 + Schlegel annotations",
+  "free_parameters": 0,
+  "trace": [
+    {
+      "hop": 0,
+      "l1": 9708.0,
+      "n_active": 9708,
+      "mass_by_super_class": {
+        "sensory": 9708.0,
+        "optic": 0.0,
+        "central": 0.0,
+        "ascending": 0.0,
+        "visual_projection": 0.0,
+        "descending": 0.0,
+        "visual_centrifugal": 0.0,
+        "endocrine": 0.0,
+        "motor": 0.0,
+        "nan": 0.0
+      },
+      "target_mass": {
+        "motor": 0.0,
+        "descending": 0.0,
+        "endocrine": 0.0,
+        "sensory": 9708.0
+      },
+      "top": [
+        {
+          "root_id": "720575940611011374",
+          "super_class": "sensory",
+          "cell_type": "R1-6",
+          "a": 1.0
+        },
+        {
+          "root_id": "720575940611007717",
+          "super_class": "sensory",
+          "cell_type": "BM_InOm",
+          "a": 1.0
+        },
+        {
+          "root_id": "720575940611006158",
+          "super_class": "sensory",
+          "cell_type": "BM_InOm",
+          "a": 1.0
+        },
+        {
+          "root_id": "720575940611015909",
+          "super_class": "sensory",
+          "cell_type": "BM_InOm",
+          "a": 1.0
+        },
+        {
+          "root_id": "720575940611013678",
+          "super_class": "sensory",
+          "cell_type": "R1-6",
+          "a": 1.0
+        },
+        {
+          "root_id": "720575940611025016",
+          "super_class": "sensory",
+          "cell_type": "R1-6",
+          "a": 1.0
+        },
+        {
+          "root_id": "720575940611018714",
+          "super_class": "sensory",
+          "cell_type": "nan",
+          "a": 1.0
+        },
+        {
+          "root_id": "720575940611017774",
+          "super_class": "sensory",
+          "cell_type": "R1-6",
+          "a": 1.0
+        }
+      ]
+    },
+    {
+      "hop": 1,
+      "l1": 66.72587955968055,
+      "n_active": 2,
+      "mass_by_super_class": {
+        "central": 49.23570041010131,
+        "optic": 7.070148931577784,
+        "descending": 6.110079861860563,
+        "ascending": 2.5900064752859917,
+        "sensory": 0.789337362400171,
+        "motor": 0.5564429095618388,
+        "visual_projection": 0.25965896827109847,
+        "endocrine": 0.09173321821713791,
+        "visual_centrifugal": 0.022771422404489525,
+        "nan": 0.0
+      },
+      "target_mass": {
+        "motor": 0.5564429095618388,
+        "descending": 6.110079861860563,
+        "endocrine": 0.09173321821713791,
+        "sensory": 0.789337362400171
+      },
+      "top": [
+        {
+          "root_id": "720575940625420531",
+          "super_class": "central",
+          "cell_type": "nan",
+          "a": 0.9999999999999998
+        },
+        {
+          "root_id": "720575940635094423",
+          "super_class": "central",
+          "cell_type": "nan",
+          "a": 0.9421541118066047
+        },
+        {
+          "root_id": "720575940614457086",
+          "super_class": "central",
+          "cell_type": "nan",
+          "a": 0.5042089358946685
+        },
+        {
+          "root_id": "720575940620904869",
+          "super_class": "central",
+          "cell_type": "nan",
+          "a": 0.5032376429958989
+        },
+        {
+          "root_id": "720575940637303182",
+          "super_class": "central",
+          "cell_type": "nan",
+          "a": 0.4868335851500107
+        },
+        {
+          "root_id": "720575940636000631",
+          "super_class": "central",
+          "cell_type": "nan",
+          "a": 0.4799266134254262
+        },
+        {
+          "root_id": "720575940609282825",
+          "super_class": "central",
+          "cell_type": "nan",
+          "a": 0.45586013382257706
+        },
+        {
+          "root_id": "720575940631205238",
+          "super_class": "central",
+          "cell_type": "nan",
+          "a": 0.40243902439024387
+        }
+      ]
+    },
+    {
+      "hop": 2,
+      "l1": 189.64137511848753,
+      "n_active": 3,
+      "mass_by_super_class": {
+        "central": 179.2079867486124,
+        "optic": 3.3442360449026713,
+        "descending": 2.975850139298355,
+        "sensory": 1.5645582423867055,
+        "motor": 1.3513559679706548,
+        "ascending": 0.7599677548183885,
+        "visual_centrifugal": 0.21555278387067248,
+        "visual_projection": 0.17658842404166666,
+        "endocrine": 0.04527901258668763,
+        "nan": 0.0
+      },
+      "target_mass": {
+        "motor": 1.3513559679706548,
+        "descending": 2.975850139298355,
+        "endocrine": 0.04527901258668763,
+        "sensory": 1.5645582423867055
+      },
+      "top": [
+        {
+          "root_id": "720575940624700140",
+          "super_class": "central",
+          "cell_type": "nan",
+          "a": 0.918861025398149
+        },
+        {
+          "root_id": "720575940631923267",
+          "super_class": "central",
+          "cell_type": "lLN2X08",
+          "a": 0.7394859467786083
+        },
+        {
+          "root_id": "720575940615657631",
+          "super_class": "central",
+          "cell_type": "lLN2X08",
+          "a": 0.6952902513144489
+        },
+        {
+          "root_id": "720575940611174702",
+          "super_class": "central",
+          "cell_type": "nan",
+          "a": 0.6179165942049399
+        },
+        {
+          "root_id": "720575940614135249",
+          "super_class": "central",
+          "cell_type": "nan",
+          "a": 0.6170762673126234
+        },
+        {
+          "root_id": "720575940630610425",
+          "super_class": "central",
+          "cell_type": "nan",
+          "a": 0.5949993847913538
+        },
+        {
+          "root_id": "720575940612003441",
+          "super_class": "central",
+          "cell_type": "nan",
+          "a": 0.5768802872715043
+        },
+        {
+          "root_id": "720575940626002064",
+          "super_class": "central",
+          "cell_type": "lLN2X08",
+          "a": 0.5440975714037264
+        }
+      ]
+    },
+    {
+      "hop": 3,
+      "l1": 65.36153879156511,
+      "n_active": 2,
+      "mass_by_super_class": {
+        "central": 60.560550854135634,
+        "sensory": 1.9149354651016028,
+        "optic": 1.2289138521463514,
+        "descending": 1.0611369197143792,
+        "motor": 0.21666360383933597,
+        "visual_projection": 0.19685548558508217,
+        "visual_centrifugal": 0.10268329349790188,
+        "ascending": 0.05636437154999223,
+        "endocrine": 0.023434945995157122,
+        "nan": 0.0
+      },
+      "target_mass": {
+        "motor": 0.21666360383933597,
+        "descending": 1.0611369197143792,
+        "endocrine": 0.023434945995157122,
+        "sensory": 1.9149354651016028
+      },
+      "top": [
+        {
+          "root_id": "720575940629174889",
+          "super_class": "central",
+          "cell_type": "nan",
+          "a": 0.7010711552679105
+        },
+        {
+          "root_id": "720575940630610425",
+          "super_class": "central",
+          "cell_type": "nan",
+          "a": 0.6937379506923995
+        },
+        {
+          "root_id": "720575940621280688",
+          "super_class": "central",
+          "cell_type": "nan",
+          "a": 0.5068258264444276
+        },
+        {
+          "root_id": "720575940630571052",
+          "super_class": "central",
+          "cell_type": "lLN1_bc",
+          "a": 0.4804635691600618
+        },
+        {
+          "root_id": "720575940630183286",
+          "super_class": "central",
+          "cell_type": "lLN1_bc",
+          "a": 0.47284527760977507
+        },
+        {
+          "root_id": "720575940627105301",
+          "super_class": "central",
+          "cell_type": "lLN1_bc",
+          "a": 0.4578162438196117
+        },
+        {
+          "root_id": "720575940621195947",
+          "super_class": "central",
+          "cell_type": "lLN1_bc",
+          "a": 0.4577418678294209
+        },
+        {
+          "root_id": "720575940608977347",
+          "super_class": "central",
+          "cell_type": "lLN1_bc",
+          "a": 0.45520554983632666
+        }
+      ]
+    },
+    {
+      "hop": 4,
+      "l1": 64.97590745636246,
+      "n_active": 2,
+      "mass_by_super_class": {
+        "central": 62.55010022234192,
+        "sensory": 1.0693314030694272,
+        "optic": 0.5025915544409069,
+        "descending": 0.47902717790326343,
+        "motor": 0.16006675780701807,
+        "ascending": 0.0914040536457396,
+        "visual_projection": 0.08959466027856589,
+        "visual_centrifugal": 0.027491799307580573,
+        "endocrine": 0.006299827567823484,
+        "nan": 0.0
+      },
+      "target_mass": {
+        "motor": 0.16006675780701807,
+        "descending": 0.47902717790326343,
+        "endocrine": 0.006299827567823484,
+        "sensory": 1.0693314030694272
+      },
+      "top": [
+        {
+          "root_id": "720575940621195947",
+          "super_class": "central",
+          "cell_type": "lLN1_bc",
+          "a": 0.6416622468593505
+        },
+        {
+          "root_id": "720575940630571052",
+          "super_class": "central",
+          "cell_type": "lLN1_bc",
+          "a": 0.6379850324687969
+        },
+        {
+          "root_id": "720575940630610425",
+          "super_class": "central",
+          "cell_type": "nan",
+          "a": 0.582632651253556
+        },
+        {
+          "root_id": "720575940634034839",
+          "super_class": "central",
+          "cell_type": "lLN1_bc",
+          "a": 0.5493550782419319
+        },
+        {
+          "root_id": "720575940641593051",
+          "super_class": "central",
+          "cell_type": "lLN1_bc",
+          "a": 0.5379724482239181
+        },
+        {
+          "root_id": "720575940630183286",
+          "super_class": "central",
+          "cell_type": "lLN1_bc",
+          "a": 0.5369578323080889
+        },
+        {
+          "root_id": "720575940606056905",
+          "super_class": "central",
+          "cell_type": "lLN1_bc",
+          "a": 0.5338574657752618
+        },
+        {
+          "root_id": "720575940618561403",
+          "super_class": "central",
+          "cell_type": "lLN1_bc",
+          "a": 0.5329106485146706
+        }
+      ]
+    },
+    {
+      "hop": 11,
+      "l1": 139.42205268285466,
+      "n_active": 30,
+      "mass_by_super_class": {
+        "central": 138.71634139120403,
+        "sensory": 0.34314243062039795,
+        "descending": 0.23872755911164337,
+        "visual_projection": 0.06576760948234207,
+        "optic": 0.02665718791725598,
+        "ascending": 0.019749782516617163,
+        "visual_centrifugal": 0.008905876561037456,
+        "motor": 0.0025110762032088457,
+        "endocrine": 0.0002497692381042393,
+        "nan": 0.0
+      },
+      "target_mass": {
+        "motor": 0.0025110762032088457,
+        "descending": 0.23872755911164337,
+        "endocrine": 0.0002497692381042393,
+        "sensory": 0.34314243062039795
+      },
+      "top": [
+        {
+          "root_id": "720575940637132389",
+          "super_class": "central",
+          "cell_type": "nan",
+          "a": 0.9999999999999996
+        },
+        {
+          "root_id": "720575940621195947",
+          "super_class": "central",
+          "cell_type": "lLN1_bc",
+          "a": 0.9637477177062189
+        },
+        {
+          "root_id": "720575940611174702",
+          "super_class": "central",
+          "cell_type": "nan",
+          "a": 0.942807844786993
+        },
+        {
+          "root_id": "720575940625585508",
+          "super_class": "central",
+          "cell_type": "lLN1_bc",
+          "a": 0.8101881586091263
+        },
+        {
+          "root_id": "720575940629174889",
+          "super_class": "central",
+          "cell_type": "nan",
+          "a": 0.7994776399807217
+        },
+        {
+          "root_id": "720575940630571052",
+          "super_class": "central",
+          "cell_type": "lLN1_bc",
+          "a": 0.7824557536200719
+        },
+        {
+          "root_id": "720575940660217729",
+          "super_class": "central",
+          "cell_type": "lLN1_bc",
+          "a": 0.7785290632350776
+        },
+        {
+          "root_id": "720575940629994743",
+          "super_class": "central",
+          "cell_type": "lLN1_bc",
+          "a": 0.7753234131768407
+        }
+      ]
+    }
+  ],
+  "note": "Cascade on measured synapse counts. GABA outgoing negative. Not a trained dynamics model and not a thought."
+}
