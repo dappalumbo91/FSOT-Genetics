@@ -115,7 +115,7 @@ Caches stay on the game drive (`_fsot_detect_cache`, `_fsot_eye_cache`). Test is
 
 `0b24845f`: background median 1120, MAD-gate 2432, GT intensity 1337 — **cell below the photon gate**. Paint fraction 0.6% (too *little*; the existing φ² tightening only fires when we paint too much). The photon observer is structurally blind here. The eye is the cone layer for that video. Source: `data/biohub_eye_variety.json`.
 
-**105 / 197** train videos have MAD-gate paint fraction < 1/φ³ (low contrast). Oversampling those in correspondence train (hold out dense+proxy) raised `0b24845f` fill Jaccard **0.47 → 0.67** (find 0.78 → 0.90). Same weights dropped held-out dense **0.848 → 0.839**, so they do **not** replace steal-shell. Residual switch: use low-contrast eye when the volume’s paint fraction < 1/φ³, else steal-shell. Proxy is over \(T_{\mathrm{true}}\) either way and stays 1.00.
+**105 / 197** train videos have MAD-gate paint fraction < 1/φ³ (low contrast). Oversampling those in correspondence train (hold out dense+proxy) raised `0b24845f` fill Jaccard **0.47 → 0.67** (find 0.78 → 0.90) but dropped `6bba_05db0fb1` **0.64 → 0.61** and held-out dense **0.848 → 0.839**. Low-contrast weights stay a specialist for the extreme gate-miss (`0b248`, paint 0.6%, GT below thr). They do **not** replace steal-shell, and paint-fraction < 1/φ³ is **not** a blanket switch. Proxy stays 1.00 either way (over \(T_{\mathrm{true}}\)).
 
 ## How this sits next to the protein product
 
