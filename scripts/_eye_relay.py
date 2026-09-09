@@ -48,6 +48,9 @@ CORR_WEIGHTS = EYE_CACHE / "correspondence" / "edge_predictor_correspondence.pth
 CORR_BALL_WEIGHTS = (
     EYE_CACHE / "correspondence" / "edge_predictor_correspondence_ball.pth"
 )
+CORR_LOWCON_WEIGHTS = (
+    EYE_CACHE / "correspondence" / "edge_predictor_correspondence_lowcon.pth"
+)
 SCALE = (SCALE_Z_UM, SCALE_Y_UM, SCALE_X_UM)
 
 
@@ -378,11 +381,23 @@ def main() -> int:
     mode = sys.argv[2] if len(sys.argv) > 2 else "fold"
     volp = TRAIN / f"{ds}.zarr"
     tracks = read_geff(BIOHUB_ROOT / "train" / f"{ds}.geff")
-    if mode in ("corr", "ball"):
-        wpath = CORR_BALL_WEIGHTS if mode == "ball" else CORR_WEIGHTS
-        tag = "native_plus_corr_ball_fill" if mode == "ball" else "native_plus_corr_fill"
-        sig_name = f"{ds}_corr_ball_sigmoid.npy" if mode == "ball" else f"{ds}_corr_sigmoid.npy"
-        rel_name = f"{ds}_corr_ball_relay.npy" if mode == "ball" else f"{ds}_corr_relay.npy"
+    if mode in ("corr", "ball", "lowcon"):
+        wpath = {
+            "ball": CORR_BALL_WEIGHTS,
+            "lowcon": CORR_LOWCON_WEIGHTS,
+        }.get(mode, CORR_WEIGHTS)
+        tag = {
+            "ball": "native_plus_corr_ball_fill",
+            "lowcon": "native_plus_corr_lowcon_fill",
+        }.get(mode, "native_plus_corr_fill")
+        sig_name = {
+            "ball": f"{ds}_corr_ball_sigmoid.npy",
+            "lowcon": f"{ds}_corr_lowcon_sigmoid.npy",
+        }.get(mode, f"{ds}_corr_sigmoid.npy")
+        rel_name = {
+            "ball": f"{ds}_corr_ball_relay.npy",
+            "lowcon": f"{ds}_corr_lowcon_relay.npy",
+        }.get(mode, f"{ds}_corr_relay.npy")
         native = np.load(detect_cache_path(ds))
         nat_prod = product_detections(native)
         fields = paint_eye(ds, volp, weights=wpath, cache_name=sig_name)

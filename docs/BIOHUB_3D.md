@@ -100,6 +100,23 @@ What held: **native product stays the graph**. Isolated eye leftover farther tha
 
 The FT net already knew the leftover: isolated ghosts sit at sigmoid **0.002**; the 24 native-miss GT fills sit at **0.999**. Ranking fill by photons put the silenced field back — that was the regression. Gate and rank by the trained field (≥ 1/φ) : dense Jaccard 0.835. Then fine-tune the eye on other train videos (hold out dense + proxy) with a steal-shell annulus around each labeled cell (NMS..φ⁵, target 0). Correspondence fill: dense **0.848 / 0.848** (TP 1589 / FN 282) at \(T_{\mathrm{true}}\). Proxy is already over the estimate, so it still receives no extra blobs and stays **1.00**. That 0.848 is this train video’s adj edge Jaccard, not public LB Final. Claim path is still photons. Apparatus: `scripts/_eye_relay.py`, `scripts/_eye_correspondence_train.py`.
 
+### Variety panel (existing 199 train GEFFs on `D:\` — no extra download)
+
+Caches stay on the game drive (`_fsot_detect_cache`, `_fsot_eye_cache`). Test is already 4 volumes (full submit set). Native find **0.96 is not universal**.
+
+| Video | GT / \(T_{\mathrm{true}}\) | Native find / Jac (adj.) | Corr-fill find / Jac (adj.) |
+|-------|---------------------------:|--------------------------|-----------------------------|
+| `44b6_0113de3b` (holdout proxy) | 52 / 25,755 | **1.00 / 1.00** | **1.00 / 1.00** (already over \(T_{\mathrm{true}}\), no add) |
+| `6bba_09961292` (holdout dense) | 1950 / 31,117 | 0.96 / 0.82 (0.83) | **0.97 / 0.848** |
+| `44b6_18ced818` (density) | 100 / 78,644 | 0.96 / 0.59 (0.60) | 0.96 / **0.63** |
+| `44b6_0b24845f` (low contrast) | 51 / 32,795 | **0.10 / 0.06** | **0.78 / 0.47** |
+| `6bba_05db0fb1` | 1229 / 69,800 | 0.55 / 0.41 (0.42) | **0.86 / 0.64** |
+| `6bba_48816121` | 935 / 23,965 | 0.95 / 0.75 (0.75) | 0.95 / 0.75 (native already over \(T_{\mathrm{true}}\)) |
+
+`0b24845f`: background median 1120, MAD-gate 2432, GT intensity 1337 — **cell below the photon gate**. Paint fraction 0.6% (too *little*; the existing φ² tightening only fires when we paint too much). The photon observer is structurally blind here. The eye is the cone layer for that video. Source: `data/biohub_eye_variety.json`.
+
+**105 / 197** train videos have MAD-gate paint fraction < 1/φ³ (low contrast). Oversampling those in correspondence train (hold out dense+proxy) raised `0b24845f` fill Jaccard **0.47 → 0.67** (find 0.78 → 0.90). Same weights dropped held-out dense **0.848 → 0.839**, so they do **not** replace steal-shell. Residual switch: use low-contrast eye when the volume’s paint fraction < 1/φ³, else steal-shell. Proxy is over \(T_{\mathrm{true}}\) either way and stays 1.00.
+
 ## How this sits next to the protein product
 
 ```text
@@ -125,4 +142,4 @@ Re-centroid of the same peaks in a φ⁴ window (nucleus / first-pass scale) **f
 1. Stream one time-point from the OME-Zarr (pixel 3-D) for a viewer — still no copy of the dump.  
 2. Join Zebrahub gene-expression tracks on `I:\` to Danio UniProt → product Cα on the same embryo.  
 3. Leave U-Net training in `biohub-fsot-unet`; this repo stays the genetics / 3-D *reader*. If the net is used, it is the eye (activation field), not the reported center.  
-4. Competition climb: steal-shell correspondence fill is **0.848** on held-out dense train (Final’s number, not public LB). Live top **0.962**. Next is the 196 first-pass linker FN + 86 localization, then a T4 kernel that actually runs (weights as data, FSOT fill, no leftover `import tracksdata` in the notebook). Do not Final until public > 0.848.
+4. Competition climb: steal-shell fill is **0.848** on held-out dense, **0.47–0.75** on other densities. Low-contrast videos need the eye (native find 0.10). Do not Final until public > 0.848. No extra Kaggle download — 199 train + 4 test already on `D:\`.

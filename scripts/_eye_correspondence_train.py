@@ -37,6 +37,21 @@ DOWNSAMPLE = (1, 4, 4)
 VOX_UM = 1.625  # after XY stride 4
 
 
+def _paint_frac(stem: str) -> float:
+    """MAD-gate paint fraction on a mid frame (low = photon observer is blind)."""
+    from scipy.ndimage import gaussian_filter
+    from biohub_3d import _mad_threshold, open_volume
+
+    volp = TRAIN / f"{stem}.zarr"
+    tracks = read_geff(BIOHUB_ROOT / "train" / f"{stem}.geff")
+    t = int(np.median(tracks["t"])) if len(tracks["t"]) else 0
+    arr = open_volume(volp)
+    vol = np.asarray(arr[t]).astype(np.float32)
+    sm = gaussian_filter(vol[:, ::2, ::2], sigma=(0.4, 0.8, 0.8))
+    thr = _mad_threshold(sm)
+    return float((sm >= thr).mean())
+
+
 def _stems() -> list[str]:
     return sorted(
         p.name[:-5]
@@ -93,6 +108,34 @@ def main() -> int:
     OUT.mkdir(parents=True, exist_ok=True)
     stems = _stems()
     rng = random.Random(1)
+    lowcon = "lowcon" in sys.argv[1:]
+    frac_path = OUT / "paint_frac.json"
+    weights = {s: 1 for s in stems}
+    if lowcon:
+        if frac_path.exists():
+            fr = json.loads(frac_path.read_text(encoding="utf-8"))
+        else:
+            fr = {}
+            print("  scanning paint fractions", flush=True)
+            for i, s in enumerate(stems):
+                try:
+                    fr[s] = _paint_frac(s)
+                except Exception:
+                    fr[s] = 1.0
+                if i % 20 == 0:
+                    print(f"  frac {i+1}/{len(stems)} {s} {fr[s]:.4f}", flush=True)
+            OUT.mkdir(parents=True, exist_ok=True)
+            frac_path.write_text(json.dumps(fr, indent=2), encoding="utf-8")
+        cut = 1.0 / (_PHI ** 3)
+        n_low = 0
+        for s in stems:
+            if float(fr.get(s, 1.0)) < cut:
+                weights[s] = 4
+                n_low += 1
+        print(f"  low-contrast stems {n_low}/{len(stems)} (frac < 1/phi^3={cut:.3f})", flush=True)
+    bag = []
+    for s, w in weights.items():
+        bag.extend([s] * int(w))
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model, window_size, _ds = load_model(FT_WEIGHTS, device)
     ckpt = OUT / "edge_predictor_correspondence.pth"
@@ -102,11 +145,24 @@ def main() -> int:
         print(f"  resume {ckpt}", flush=True)
     model.train()
     opt = torch.optim.Adam(model.parameters(), lr=5e-5)
-    n_iters = int(sys.argv[1]) if len(sys.argv) > 1 else 1500
+    n_iters = 800
+    for a in sys.argv[1:]:
+        if a.isdigit():
+            n_iters = int(a)
+            break
     log = []
-    print(f"correspondence train device={device} stems={len(stems)} iters={n_iters}", flush=True)
+    dest_name = (
+        "edge_predictor_correspondence_lowcon.pth"
+        if lowcon
+        else "edge_predictor_correspondence_ball.pth"
+    )
+    print(
+        f"correspondence train device={device} stems={len(stems)} "
+        f"iters={n_iters} lowcon={lowcon}",
+        flush=True,
+    )
     for it in range(n_iters):
-        stem = rng.choice(stems)
+        stem = rng.choice(bag)
         volp = TRAIN / f"{stem}.zarr"
         geff = BIOHUB_ROOT / "train" / f"{stem}.geff"
         try:
@@ -145,7 +201,8 @@ def main() -> int:
                 det_logits[f], coords_t, mask, neg_weight=0.1
             )
             ball, shell = _gt_masks(det_logits[f][0, 0], coords)
-            ball_loss = ball_loss + _ball_loss(det_logits[f][0, 0], ball)
+            if not lowcon:
+                ball_loss = ball_loss + _ball_loss(det_logits[f][0, 0], ball)
             ann_loss = ann_loss + _annulus_loss(det_logits[f][0, 0], shell)
         loss = det_loss + ball_loss + ann_loss
         if float(loss.detach()) == 0.0:
@@ -164,7 +221,7 @@ def main() -> int:
             log.append(rec)
             print(json.dumps(rec), flush=True)
         del imgs, _out, det_logits, loss
-    dest = OUT / "edge_predictor_correspondence_ball.pth"
+    dest = OUT / dest_name
     torch.save(model.state_dict(), dest)
     (OUT / "train_log.json").write_text(json.dumps(log, indent=2), encoding="utf-8")
     print(f"wrote {dest}", flush=True)
