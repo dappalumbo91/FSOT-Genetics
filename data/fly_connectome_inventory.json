@@ -1,0 +1,65 @@
+{
+  "path": "D:\\FlyWire_Connectome\\Supplemental_file1_neuron_annotations.tsv",
+  "n_neurons": 139248,
+  "n_with_cell_type": 137720,
+  "n_with_soma_xyz": 118104,
+  "super_class": {
+    "optic": 77541,
+    "central": 32383,
+    "sensory": 16907,
+    "visual_projection": 8038,
+    "ascending": 1750,
+    "descending": 1303,
+    "sensory_ascending": 612,
+    "visual_centrifugal": 524,
+    "motor": 110,
+    "endocrine": 80
+  },
+  "flow": {
+    "intrinsic": 118497,
+    "afferent": 19262,
+    "efferent": 1489
+  },
+  "top_nt": {
+    "acetylcholine": 86193,
+    "glutamate": 24875,
+    "gaba": 19171,
+    "dopamine": 5909,
+    "serotonin": 2282,
+    "unlabeled": 602,
+    "octopamine": 216
+  },
+  "side": {
+    "left": 69956,
+    "right": 69088,
+    "center": 174,
+    "na": 30
+  },
+  "dimorphism": {
+    "isomorphic": 138072,
+    "sexually dimorphic": 652,
+    "female-specific": 270,
+    "potentially sexually dimorphic": 161,
+    "potentially female-specific": 93
+  },
+  "fru_dsx": {
+    "unlabeled": 135940,
+    "fru": 3174,
+    "coexpress": 80,
+    "dsx": 54
+  },
+  "soma_span_nm": [
+    817108.0,
+    368756.0,
+    278360.0
+  ],
+  "voxel_nm": [
+    4.0,
+    4.0,
+    40.0
+  ],
+  "authority": "FlyWire FAFB v783 + Schlegel et al. 2024 annotations",
+  "free_parameters": 0,
+  "phi": 1.618033988749895,
+  "residual_Biochemistry": 1.091958932349586
+}

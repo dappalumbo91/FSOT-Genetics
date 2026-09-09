@@ -23,7 +23,7 @@ Older snapshots (`data/medical_stress_suite.json` fuse **1.16 Å**, bulk 16–17
 
 **Medical benches:** experimental PGx **10/10** (`data/experimental_pgx.json`, disclosure required). Variant panel drivers after recatalog — see `docs/MEDICAL_PLATFORM.md`. P72R is `common_polymorphism`, not a miss.
 
-**Organism 3-D (Biohub / Zebrahub):** native observer finds dense cells at 7 µm **0.96**. Product graph Jaccard **0.82 (adj. 0.83)**; proxy **1.00**. Kaggle U-Net leftover public **0.821** is not Final (0.848 holds). `docs/BIOHUB_3D.md`.
+**Organism 3-D:** Biohub tracking is **back burner** (`docs/BIOHUB_FREEZE.md`). FlyWire adult Drosophila atlas is live: **139,248** neurons, 118k soma xyz (`docs/FLY_CONNECTOME.md`). Protein product freeze unchanged (0.13 Å).
 
 ---
 
