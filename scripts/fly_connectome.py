@@ -341,17 +341,38 @@ def _snapshot(
         by_sc[(m.get("super_class") or "unlabeled") or "unlabeled"] += p
         by_cl[(m.get("cell_class") or "unlabeled") or "unlabeled"] += p
     top = np.argsort(-pos)[:8]
-    targets = ("motor", "descending", "endocrine", "sensory")
+
+    def _sum(*keys: str) -> float:
+        return float(sum(by_sc.get(k, 0.0) for k in keys))
+
     return {
         "hop": step,
         "l1": float(pos.sum()),
         "n_active": int((pos > 1.0 / _PHI).sum()),
         "mass_by_super_class": dict(by_sc.most_common(12)),
         "mass_by_class": dict(by_cl.most_common(12)),
-        "target_mass": {t: float(by_sc.get(t, 0.0)) for t in targets},
+        "target_mass": {
+            "motor": _sum("motor", "vnc_motor", "cb_motor"),
+            "descending": _sum("descending", "descending_neuron"),
+            "endocrine": _sum("endocrine", "cb_endocrine", "vnc_endocrine"),
+            "sensory": _sum(
+                "sensory",
+                "vnc_sensory",
+                "cb_sensory",
+                "ol_sensory",
+                "sensory_ascending",
+            ),
+            "vnc_motor": _sum("vnc_motor"),
+            "cb_motor": _sum("cb_motor"),
+            "vnc_sensory": _sum("vnc_sensory"),
+        },
         "class_mass": {
             "DN": float(by_cl.get("DN", 0.0)),
-            "mechanosensory": float(by_cl.get("mechanosensory", 0.0)),
+            "mechanosensory": float(
+                by_cl.get("mechanosensory", 0.0)
+                + by_cl.get("mechanosensory_tactile", 0.0)
+                + by_cl.get("mechanosensory_proprioceptive", 0.0)
+            ),
             "olfactory": float(by_cl.get("olfactory", 0.0)),
             "motor": float(by_cl.get("motor", 0.0)),
         },
@@ -438,11 +459,12 @@ def residual_cascade(
                     a = at.detach().cpu().numpy()
                     snap = _snapshot(a, step=h, ids=ids, idx=idx, meta=meta)
                     trace.append(snap)
+                    tm = snap["target_mass"]
                     print(
                         f"  hop {h} active={snap['n_active']} "
-                        f"motor={snap['target_mass']['motor']:.4f} "
-                        f"desc={snap['target_mass']['descending']:.4f} "
-                        f"DN={snap['class_mass']['DN']:.4f}",
+                        f"motor={tm['motor']:.4f} "
+                        f"vnc_motor={tm.get('vnc_motor', 0.0):.4f} "
+                        f"desc={tm['descending']:.4f}",
                         flush=True,
                     )
         except Exception as exc:
@@ -459,11 +481,12 @@ def residual_cascade(
             if h in keep:
                 snap = _snapshot(a, step=h, ids=ids, idx=idx, meta=meta)
                 trace.append(snap)
+                tm = snap["target_mass"]
                 print(
                     f"  hop {h} active={snap['n_active']} "
-                    f"motor={snap['target_mass']['motor']:.4f} "
-                    f"desc={snap['target_mass']['descending']:.4f} "
-                    f"DN={snap['class_mass']['DN']:.4f}",
+                    f"motor={tm['motor']:.4f} "
+                    f"vnc_motor={tm.get('vnc_motor', 0.0):.4f} "
+                    f"desc={tm['descending']:.4f}",
                     flush=True,
                 )
     elapsed = time.perf_counter() - t0

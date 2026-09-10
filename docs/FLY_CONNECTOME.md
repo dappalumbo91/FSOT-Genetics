@@ -12,7 +12,7 @@ Adult *Drosophila melanogaster* is the first animal with a complete brain-scale 
 |----------|------|------------|
 | FlyWire FAFB v783 | 139,255 neurons, ~50 M chemical synapses, 8,453 cell types | annotations TSV (small); proofread connections ~0.85 GB; full synapses 9.5 GB |
 | Schlegel et al. 2024 | superclass, hemilineage, neurotransmitter, soma xyz, VFB/FBbt | GitHub `flyconnectome/flywire_annotations` |
-| Male CNS v1.0 | **166,700** neurons, brain + nerve cord | Berg et al. *Cell* 2026-09-03; neuPrint `male-cns:v1.0` — **next dump** (VNC leg MNs) |
+| Male CNS v1.0 | **165,122 traced** (brain + VNC), 25.6 M edges | Berg et al. *Cell* 2026-09-03; on `D:\FlyWire_Connectome\male_cns` |
 | BANC | female brain + cord, intact neck | Bates et al. *Nature* 2026; Codex |
 
 Paper: Dorkenwald et al., *Nature* **634**, 124–138 (2024). Annotations: Schlegel et al., *Nature* **634**, 139–152 (2024). Portal: [codex.flywire.ai](https://codex.flywire.ai/) (sign-in). Open dumps: GitHub annotations + [Zenodo 10676866](https://zenodo.org/records/10676866).
@@ -97,6 +97,21 @@ Hop 2 of the mechanosensory seed peaks on a **motor** neuron. v630 is brain-only
 
 Source: `data/fly_behavior_flow.json`.
 
+### Male CNS — brain + nerve cord (live)
+
+`python scripts/male_cns.py`
+
+Traced neurons **165,122**, **25,563,197** edges, **22,055** GABA. RTX 5070. Walking seed is VNC sensory (leg/body afferents) and mechanosensory class. **vnc_motor** (708 cells) are the leg/body motor neurons.
+
+| Program | n seed | Hop 2 vnc_motor | Hop 2 descending | Hop 1 peak |
+|---------|-------:|----------------:|-----------------:|------------|
+| vnc_sensory | 6,365 | **10.74** | 11.39 | IN05B011a (VNC intrinsic) |
+| mechanosensory | 5,832 | **7.55** | 13.89 | IN01B001 (VNC intrinsic) |
+| JO | 672 | **7.77** | **24.21** | **DNg29** (descending) |
+| olfactory | 2,639 | 0.001 | 0.57 | il3LN6 (antennal lobe) |
+
+VNC sensory and JO put mass on **vnc_motor**. Olfactory does not. JO hop 1 peaks on descending neuron DNg29, then the cord. Source: `data/male_cns_boot.json`.
+
 Loop that ran: **video + 3-D tarsus → walking is on → seed mechanosensory / JO → residual hops → descending / DN mass**. Iron inaccuracies only against these kinematics. Predict *up* (other insects, then vertebrates) only where measured homologs exist — same product rule as protein Cα.
 
 Other animals that are actually mapped: `docs/SPECIES_CONNECTOMES.md`. Only three whole-body synapse maps exist (*C. elegans*, *Ciona* larva, *Platynereis* larva). The worm whole-animal boot is live (`scripts/worm_connectome.py`): sensory → AVA → motor + body-wall muscle. Genetics join for fly walking proteins: `data/fly_genetics_join.json` (*iav*, *nan*, *nompC*, *Gad1*).
@@ -133,3 +148,4 @@ Biohub / Zebrahub          back burner — docs/BIOHUB_FREEZE.md
 - Do not call leftover hub collapse (lLN1 / MBIN) a thought.
 - Do not mix v783 annotations onto v630 root IDs.
 - Do not download the 9.5 GB raw synapse dump for this loop.
+- Male CNS syn-points (12.7 GB) are not required for the weight-graph boot.

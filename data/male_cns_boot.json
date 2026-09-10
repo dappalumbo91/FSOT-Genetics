@@ -1,0 +1,567 @@
+{
+  "dataset": "male-cns:v1.0",
+  "n_neurons": 165122,
+  "n_edges": 25563197,
+  "n_gaba": 22055,
+  "authority": "Male CNS v1.0 Berg et al. Cell 2026; traced neurons only; GABA from consensus_nt; weights = measured synapse counts",
+  "free_parameters": 0,
+  "programs": [
+    {
+      "name": "vnc_sensory",
+      "seed": "vnc_sensory",
+      "how": "class",
+      "n_seed": 6365,
+      "gpu": true,
+      "device": "NVIDIA GeForce RTX 5070",
+      "elapsed_s": 2.4116754999995464,
+      "flow": [
+        {
+          "hop": 0,
+          "l1": 6365.0,
+          "n_active": 6365,
+          "motor": 0.0,
+          "vnc_motor": 0.0,
+          "cb_motor": 0.0,
+          "descending": 0.0,
+          "vnc_sensory": 6365.0,
+          "top": {
+            "cell_type": "SNta23",
+            "super_class": "vnc_sensory",
+            "a": 1.0
+          }
+        },
+        {
+          "hop": 1,
+          "l1": 225.07450150232177,
+          "n_active": 19,
+          "motor": 3.977874897568966,
+          "vnc_motor": 3.977874897568966,
+          "cb_motor": 0.0,
+          "descending": 2.8894427751980323,
+          "vnc_sensory": 29.983064736410956,
+          "top": {
+            "cell_type": "IN05B011a",
+            "super_class": "vnc_intrinsic",
+            "a": 0.9999999999999999
+          }
+        },
+        {
+          "hop": 2,
+          "l1": 214.45692528286426,
+          "n_active": 2,
+          "motor": 11.178332295872302,
+          "vnc_motor": 10.740180804833885,
+          "cb_motor": 0.4381514910384162,
+          "descending": 11.38578833493545,
+          "vnc_sensory": 0.04373418211440058,
+          "top": {
+            "cell_type": "AN08B034",
+            "super_class": "ascending_neuron",
+            "a": 0.9999999999999991
+          }
+        },
+        {
+          "hop": 3,
+          "l1": 96.07562007664627,
+          "n_active": 0,
+          "motor": 6.4697988173201235,
+          "vnc_motor": 5.935200683103565,
+          "cb_motor": 0.5345981342165587,
+          "descending": 6.1205795512536625,
+          "vnc_sensory": 0.1296695444549694,
+          "top": {
+            "cell_type": "AVLP076",
+            "super_class": "cb_intrinsic",
+            "a": 0.42056664506824176
+          }
+        },
+        {
+          "hop": 4,
+          "l1": 204.68126454785698,
+          "n_active": 9,
+          "motor": 3.1217449083267472,
+          "vnc_motor": 3.0134650649653905,
+          "cb_motor": 0.10827984336135672,
+          "descending": 6.052580793234158,
+          "vnc_sensory": 72.8324659392182,
+          "top": {
+            "cell_type": "SNxx25",
+            "super_class": "vnc_sensory",
+            "a": 0.8294213603550963
+          }
+        },
+        {
+          "hop": 11,
+          "l1": 74.42429130633592,
+          "n_active": 0,
+          "motor": 0.8005691219051709,
+          "vnc_motor": 0.6379969028501575,
+          "cb_motor": 0.16257221905501346,
+          "descending": 2.446867422190807,
+          "vnc_sensory": 0.11319219888634542,
+          "top": {
+            "cell_type": "DNp35",
+            "super_class": "descending_neuron",
+            "a": 0.4652834941394758
+          }
+        }
+      ]
+    },
+    {
+      "name": "mechanosensory",
+      "seed": "mechanosensory",
+      "how": "substring",
+      "n_seed": 5832,
+      "gpu": true,
+      "device": "NVIDIA GeForce RTX 5070",
+      "elapsed_s": 0.5636666000063997,
+      "flow": [
+        {
+          "hop": 0,
+          "l1": 5832.0,
+          "n_active": 5832,
+          "motor": 0.0,
+          "vnc_motor": 0.0,
+          "cb_motor": 0.0,
+          "descending": 0.0,
+          "vnc_sensory": 3664.0,
+          "top": {
+            "cell_type": "BM_Vt_PoOc",
+            "super_class": "cb_sensory",
+            "a": 1.0
+          }
+        },
+        {
+          "hop": 1,
+          "l1": 243.35034651447202,
+          "n_active": 17,
+          "motor": 6.1660008153281725,
+          "vnc_motor": 5.034488381573587,
+          "cb_motor": 1.1315124337545859,
+          "descending": 13.4075010191602,
+          "vnc_sensory": 15.282918874847129,
+          "top": {
+            "cell_type": "IN01B001",
+            "super_class": "vnc_intrinsic",
+            "a": 0.9999999999999999
+          }
+        },
+        {
+          "hop": 2,
+          "l1": 202.25457397929026,
+          "n_active": 2,
+          "motor": 8.668041124115877,
+          "vnc_motor": 7.549628185600906,
+          "cb_motor": 1.1184129385149708,
+          "descending": 13.890959775127437,
+          "vnc_sensory": 0.035849640685626,
+          "top": {
+            "cell_type": "AN08B034",
+            "super_class": "ascending_neuron",
+            "a": 0.9999999999999992
+          }
+        },
+        {
+          "hop": 3,
+          "l1": 227.49042705303032,
+          "n_active": 0,
+          "motor": 10.82753822553228,
+          "vnc_motor": 9.363822900320844,
+          "cb_motor": 1.4637153252114348,
+          "descending": 12.382461614846074,
+          "vnc_sensory": 6.407178306603243,
+          "top": {
+            "cell_type": "AVLP080",
+            "super_class": "cb_intrinsic",
+            "a": 0.6175220983350098
+          }
+        },
+        {
+          "hop": 4,
+          "l1": 205.50367360334633,
+          "n_active": 4,
+          "motor": 3.706536637135484,
+          "vnc_motor": 3.384083057430263,
+          "cb_motor": 0.322453579705221,
+          "descending": 6.553932069740586,
+          "vnc_sensory": 53.87538899589679,
+          "top": {
+            "cell_type": "AVLP001",
+            "super_class": "cb_intrinsic",
+            "a": 0.8439450240574002
+          }
+        },
+        {
+          "hop": 11,
+          "l1": 13.97509782698157,
+          "n_active": 0,
+          "motor": 0.08268663681355418,
+          "vnc_motor": 0.06305811230384084,
+          "cb_motor": 0.019628524509713342,
+          "descending": 0.34672086305562066,
+          "vnc_sensory": 0.02414526003969221,
+          "top": {
+            "cell_type": "AVLP400",
+            "super_class": "cb_intrinsic",
+            "a": 0.07475878818498637
+          }
+        }
+      ]
+    },
+    {
+      "name": "JO",
+      "seed": "jo",
+      "how": "type_prefix",
+      "n_seed": 672,
+      "gpu": true,
+      "device": "NVIDIA GeForce RTX 5070",
+      "elapsed_s": 0.585379500000272,
+      "flow": [
+        {
+          "hop": 0,
+          "l1": 672.0,
+          "n_active": 672,
+          "motor": 0.0,
+          "vnc_motor": 0.0,
+          "cb_motor": 0.0,
+          "descending": 0.0,
+          "vnc_sensory": 0.0,
+          "top": {
+            "cell_type": "JO-A2",
+            "super_class": "cb_sensory",
+            "a": 1.0
+          }
+        },
+        {
+          "hop": 1,
+          "l1": 80.69366626065771,
+          "n_active": 3,
+          "motor": 0.1419001218026796,
+          "vnc_motor": 0.0,
+          "cb_motor": 0.1419001218026796,
+          "descending": 14.6854445797807,
+          "vnc_sensory": 0.0,
+          "top": {
+            "cell_type": "DNg29",
+            "super_class": "descending_neuron",
+            "a": 0.9999999999999998
+          }
+        },
+        {
+          "hop": 2,
+          "l1": 277.7543098076277,
+          "n_active": 4,
+          "motor": 9.649764257213652,
+          "vnc_motor": 7.772920928859141,
+          "cb_motor": 1.8768433283545116,
+          "descending": 24.213046671127728,
+          "vnc_sensory": 0.057420960496066355,
+          "top": {
+            "cell_type": "IN23B001",
+            "super_class": "vnc_intrinsic",
+            "a": 0.999999999999997
+          }
+        },
+        {
+          "hop": 3,
+          "l1": 385.8809427356366,
+          "n_active": 8,
+          "motor": 13.172261099056556,
+          "vnc_motor": 10.647841400975143,
+          "cb_motor": 2.5244196980814126,
+          "descending": 17.827958302365722,
+          "vnc_sensory": 0.793499048579825,
+          "top": {
+            "cell_type": "lLN2T_b",
+            "super_class": "cb_intrinsic",
+            "a": 0.9999999999999981
+          }
+        },
+        {
+          "hop": 4,
+          "l1": 150.42740760029676,
+          "n_active": 6,
+          "motor": 0.7087382811376017,
+          "vnc_motor": 0.5940509344611992,
+          "cb_motor": 0.11468734667640254,
+          "descending": 6.524438221032212,
+          "vnc_sensory": 4.814914646909748,
+          "top": {
+            "cell_type": "il3LN6",
+            "super_class": "cb_intrinsic",
+            "a": 0.9999999999999996
+          }
+        },
+        {
+          "hop": 11,
+          "l1": 5.1633087973267955,
+          "n_active": 0,
+          "motor": 0.009103499788158203,
+          "vnc_motor": 0.0072283783061012925,
+          "cb_motor": 0.001875121482056911,
+          "descending": 0.07873630875613595,
+          "vnc_sensory": 0.004316599390290527,
+          "top": {
+            "cell_type": "ALBN1",
+            "super_class": "cb_intrinsic",
+            "a": 0.058177655145673066
+          }
+        }
+      ]
+    },
+    {
+      "name": "olfactory",
+      "seed": "olfactory",
+      "how": "class",
+      "n_seed": 2639,
+      "gpu": true,
+      "device": "NVIDIA GeForce RTX 5070",
+      "elapsed_s": 0.5682034000055864,
+      "flow": [
+        {
+          "hop": 0,
+          "l1": 2639.0,
+          "n_active": 2639,
+          "motor": 0.0,
+          "vnc_motor": 0.0,
+          "cb_motor": 0.0,
+          "descending": 0.0,
+          "vnc_sensory": 0.0,
+          "top": {
+            "cell_type": "ORN_DP1m",
+            "super_class": "cb_sensory",
+            "a": 1.0
+          }
+        },
+        {
+          "hop": 1,
+          "l1": 35.25634531021516,
+          "n_active": 2,
+          "motor": 0.0,
+          "vnc_motor": 0.0,
+          "cb_motor": 0.0,
+          "descending": 0.013578441612701064,
+          "vnc_sensory": 0.0,
+          "top": {
+            "cell_type": "il3LN6",
+            "super_class": "cb_intrinsic",
+            "a": 1.0
+          }
+        },
+        {
+          "hop": 2,
+          "l1": 78.51924895706301,
+          "n_active": 1,
+          "motor": 0.0018941351115418447,
+          "vnc_motor": 0.0005710214203076791,
+          "cb_motor": 0.0013231136912341657,
+          "descending": 0.5732455413367352,
+          "vnc_sensory": 0.00018224774471025968,
+          "top": {
+            "cell_type": "v2LN30",
+            "super_class": "cb_intrinsic",
+            "a": 0.6641666272470417
+          }
+        },
+        {
+          "hop": 3,
+          "l1": 47.426924996960295,
+          "n_active": 2,
+          "motor": 0.10681942579361328,
+          "vnc_motor": 0.09571516932083064,
+          "cb_motor": 0.011104256472782632,
+          "descending": 0.9370730406139607,
+          "vnc_sensory": 0.004172521855066789,
+          "top": {
+            "cell_type": "lLN1_bc",
+            "super_class": "cb_intrinsic",
+            "a": 0.6599460504000221
+          }
+        },
+        {
+          "hop": 4,
+          "l1": 98.9010478632404,
+          "n_active": 21,
+          "motor": 0.2839570551629571,
+          "vnc_motor": 0.23475635779255855,
+          "cb_motor": 0.04920069737039855,
+          "descending": 0.8363280055041344,
+          "vnc_sensory": 0.0022478939041872203,
+          "top": {
+            "cell_type": "lLN2F_a",
+            "super_class": "cb_intrinsic",
+            "a": 0.9999999999999997
+          }
+        },
+        {
+          "hop": 11,
+          "l1": 105.18507809457262,
+          "n_active": 19,
+          "motor": 0.04189697052851443,
+          "vnc_motor": 0.03779398228520959,
+          "cb_motor": 0.004102988243304842,
+          "descending": 0.49294457633834743,
+          "vnc_sensory": 0.0009110967472851557,
+          "top": {
+            "cell_type": "lLN1_bc",
+            "super_class": "cb_intrinsic",
+            "a": 0.9999999999999998
+          }
+        }
+      ]
+    }
+  ],
+  "compare": {
+    "hop_1": {
+      "vnc_sensory": {
+        "vnc_motor": 3.977874897568966,
+        "cb_motor": 0.0,
+        "motor": 3.977874897568966,
+        "descending": 2.8894427751980323,
+        "n_active": 19,
+        "top": {
+          "cell_type": "IN05B011a",
+          "super_class": "vnc_intrinsic",
+          "a": 0.9999999999999999
+        }
+      },
+      "mechanosensory": {
+        "vnc_motor": 5.034488381573587,
+        "cb_motor": 1.1315124337545859,
+        "motor": 6.1660008153281725,
+        "descending": 13.4075010191602,
+        "n_active": 17,
+        "top": {
+          "cell_type": "IN01B001",
+          "super_class": "vnc_intrinsic",
+          "a": 0.9999999999999999
+        }
+      },
+      "JO": {
+        "vnc_motor": 0.0,
+        "cb_motor": 0.1419001218026796,
+        "motor": 0.1419001218026796,
+        "descending": 14.6854445797807,
+        "n_active": 3,
+        "top": {
+          "cell_type": "DNg29",
+          "super_class": "descending_neuron",
+          "a": 0.9999999999999998
+        }
+      },
+      "olfactory": {
+        "vnc_motor": 0.0,
+        "cb_motor": 0.0,
+        "motor": 0.0,
+        "descending": 0.013578441612701064,
+        "n_active": 2,
+        "top": {
+          "cell_type": "il3LN6",
+          "super_class": "cb_intrinsic",
+          "a": 1.0
+        }
+      }
+    },
+    "hop_2": {
+      "vnc_sensory": {
+        "vnc_motor": 10.740180804833885,
+        "cb_motor": 0.4381514910384162,
+        "motor": 11.178332295872302,
+        "descending": 11.38578833493545,
+        "n_active": 2,
+        "top": {
+          "cell_type": "AN08B034",
+          "super_class": "ascending_neuron",
+          "a": 0.9999999999999991
+        }
+      },
+      "mechanosensory": {
+        "vnc_motor": 7.549628185600906,
+        "cb_motor": 1.1184129385149708,
+        "motor": 8.668041124115877,
+        "descending": 13.890959775127437,
+        "n_active": 2,
+        "top": {
+          "cell_type": "AN08B034",
+          "super_class": "ascending_neuron",
+          "a": 0.9999999999999992
+        }
+      },
+      "JO": {
+        "vnc_motor": 7.772920928859141,
+        "cb_motor": 1.8768433283545116,
+        "motor": 9.649764257213652,
+        "descending": 24.213046671127728,
+        "n_active": 4,
+        "top": {
+          "cell_type": "IN23B001",
+          "super_class": "vnc_intrinsic",
+          "a": 0.999999999999997
+        }
+      },
+      "olfactory": {
+        "vnc_motor": 0.0005710214203076791,
+        "cb_motor": 0.0013231136912341657,
+        "motor": 0.0018941351115418447,
+        "descending": 0.5732455413367352,
+        "n_active": 1,
+        "top": {
+          "cell_type": "v2LN30",
+          "super_class": "cb_intrinsic",
+          "a": 0.6641666272470417
+        }
+      }
+    },
+    "hop_3": {
+      "vnc_sensory": {
+        "vnc_motor": 5.935200683103565,
+        "cb_motor": 0.5345981342165587,
+        "motor": 6.4697988173201235,
+        "descending": 6.1205795512536625,
+        "n_active": 0,
+        "top": {
+          "cell_type": "AVLP076",
+          "super_class": "cb_intrinsic",
+          "a": 0.42056664506824176
+        }
+      },
+      "mechanosensory": {
+        "vnc_motor": 9.363822900320844,
+        "cb_motor": 1.4637153252114348,
+        "motor": 10.82753822553228,
+        "descending": 12.382461614846074,
+        "n_active": 0,
+        "top": {
+          "cell_type": "AVLP080",
+          "super_class": "cb_intrinsic",
+          "a": 0.6175220983350098
+        }
+      },
+      "JO": {
+        "vnc_motor": 10.647841400975143,
+        "cb_motor": 2.5244196980814126,
+        "motor": 13.172261099056556,
+        "descending": 17.827958302365722,
+        "n_active": 8,
+        "top": {
+          "cell_type": "lLN2T_b",
+          "super_class": "cb_intrinsic",
+          "a": 0.9999999999999981
+        }
+      },
+      "olfactory": {
+        "vnc_motor": 0.09571516932083064,
+        "cb_motor": 0.011104256472782632,
+        "motor": 0.10681942579361328,
+        "descending": 0.9370730406139607,
+        "n_active": 2,
+        "top": {
+          "cell_type": "lLN1_bc",
+          "super_class": "cb_intrinsic",
+          "a": 0.6599460504000221
+        }
+      }
+    }
+  },
+  "note": "Traced Male CNS brain+VNC. vnc_motor are leg/body motor neurons. Walking observer seeds vnc_sensory / mechanosensory. GABA inhibitory. Not a trained RNN."
+}
