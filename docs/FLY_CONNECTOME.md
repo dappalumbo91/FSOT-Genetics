@@ -60,17 +60,44 @@ Seed is every `super_class=sensory` cell (includes photoreceptors R1–6). Hop 1
 
 This is signal on the measured graph. It is **not** a trained RNN, not inner speech, and not a claim that the fly is solving a human puzzle. Flies navigate, court, fight, and walk. Those are the activities to match.
 
-## Behavior video (next measured observer)
+## Behavior video (measured observer, live)
 
-Do not invent kinematics. Public fly activity we can park on `D:\` later:
+`python scripts/fly_behavior.py`
 
-| Source | What |
-|--------|------|
-| Janelia Fly Disco (Robie et al. 2024) | Freely walking / social groups, 21 keypoints, optogenetics |
-| Dryad treadmill (Pratt / Tuthill 2024) | Walking kinematics under perturbation |
-| FlyWire papers | Sensory→motor information flow already traced on this same graph |
+Harvard Dataverse [doi:10.7910/DVN/BBNPYX](https://doi.org/10.7910/DVN/BBNPYX) tethered walking on a spherical treadmill. Files stay on `D:\FlyWire_Connectome\behavior` (not git). 3-D leg keypoints are the observer — not a trained pose net. cam-0 mp4 is corroboration only.
 
-Loop we want: **video activity → which sensory super_class is on → boot the connectome → which motor/descending light up**. Then compare to the fly’s actual motor pattern. That is grounding for biological function, then predict *up* (other insects, then vertebrates) only where homologs exist — same product rule as protein Cα.
+| Trial | Frames | s | Tarsus MAD+φ on | Paint | Bouts | Whole clip walking |
+|-------|-------:|--:|----------------:|------:|------:|:-------------------|
+| Fly01_T001 | 334 | 13.36 | 57 / 333 | 0.171 | 29 | yes (energy floor > median / φ⁵) |
+| Fly01_T002 | 348 | 13.92 | 61 / 347 | 0.176 | 26 | yes |
+| Fly02_T002 | 338 | 13.52 | 54 / 337 | 0.160 | 34 | yes |
+
+Gate = median + φ·MAD on 6-leg tarsus speed. Tighten to φ² if paint > 1/φ (did not fire). Never loosen. These trials have no rest state — they are walking clips; the gate splits high vs low step energy.
+
+cam-0 frame-diff Jaccard vs tarsus gate is ~0.12. One camera is not 6-leg 3-D. Keypoints stay authority.
+
+Dryad Pratt freely-walking CSV and the Y-maze zip on `D:\` are auth stubs (56–92 bytes), not data.
+
+### Residual boot on the walking program
+
+Walking-on seeds **measured** brain afferents (mechanosensory class / Johnston’s organ), not photoreceptors. Olfactory is the contrast program (same graph, different seed). GPU sparse CSR hops on RTX 5070 (~1 s / 11 hops after the graph is in RAM). Residual Biochemistry 1.092. GABA inhibitory. 0 free parameters.
+
+| Program | n seed | Hop 1 DN / desc | Hop 2 DN / desc | Hop 2 motor | Hop 1 peak |
+|---------|-------:|----------------:|----------------:|------------:|------------|
+| mechanosensory | 2,646 | **17.97** | **23.82 / 23.84** | **9.71** | **DNg15** (descending) |
+| JO (`jo-` types) | 1,105 | 12.74 | 16.50 / 16.55 | 0.28 | CB0478 (central) |
+| sensory (incl. R1–6) | 9,708 | 6.06 / 6.11 | 2.97 | 1.35 | ALLN (central hub) |
+| olfactory | 2,276 | 0.003 | 0.245 | ~0 | ALLN → MBIN |
+
+Mechanosensory / JO put mass on **descending neurons at hop 1–2**; olfactory does not (hop-2 DN mass ~100× smaller). That is the measured brain→cord walking command lighting up when the observer says the legs are moving.
+
+Hop 2 of the mechanosensory seed peaks on a **motor** neuron. v630 is brain-only: those 100 motor cells are not VNC leg MNs. Do not claim a step-cycle CPG. DNs are the honest product.
+
+`n_active` uses 1/φ of the global max — a hub can zero that count while class mass is still the right monitor.
+
+Source: `data/fly_behavior_flow.json`.
+
+Loop that ran: **video + 3-D tarsus → walking is on → seed mechanosensory / JO → residual hops → descending / DN mass**. Iron inaccuracies only against these kinematics. Predict *up* (other insects, then vertebrates) only where measured homologs exist — same product rule as protein Cα.
 
 Neuron table only (no 9.5 GB synapse dump until the atlas is live):
 
@@ -100,4 +127,7 @@ Biohub / Zebrahub          back burner — docs/BIOHUB_FREEZE.md
 
 - Do not embed the 139k graph with MDS and call it a fold.
 - Do not train a contact net on FlyWire.
-- Do not copy 100 TB of EM voxels. We read tables and, later, proofread connections.
+- Do not copy 100 TB of EM voxels. We read tables and proofread connections.
+- Do not call leftover hub collapse (lLN1 / MBIN) a thought.
+- Do not mix v783 annotations onto v630 root IDs.
+- Do not download the 9.5 GB raw synapse dump for this loop.
