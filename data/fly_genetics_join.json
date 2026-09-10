@@ -1,0 +1,60 @@
+{
+  "product": "named fly proteins on named walking-program cells → FSOT product Cα",
+  "free_parameters": 0,
+  "pin": "D1D38A",
+  "rule": "Fold only where a measured homolog exists. Do not MDS a fly protein brain.",
+  "connectome_seed": "mechanosensory / JO from fly_behavior_flow.json",
+  "genes": [
+    {
+      "symbol": "iav",
+      "name": "inactive",
+      "flybase": "FBgn0032043",
+      "uniprot": "Q9W3W0",
+      "aa": 1123,
+      "sits_on": "Johnston organ chordotonal (JO types in v630)",
+      "function": "TRPV mechanotransduction, hearing / antennal vibration",
+      "fold": "product Cα if measured homolog; otherwise no_measured_map"
+    },
+    {
+      "symbol": "nan",
+      "name": "nanchung",
+      "flybase": "FBgn0036414",
+      "uniprot": "Q9VUD5",
+      "aa": 833,
+      "sits_on": "Johnston organ, partners with iav",
+      "function": "TRPV, sound / humidity / startle",
+      "fold": "product Cα if measured homolog; otherwise no_measured_map"
+    },
+    {
+      "symbol": "nompC",
+      "name": "no mechanoreceptor potential C",
+      "flybase": "FBgn0026324",
+      "uniprot": "Q7KIQ2",
+      "aa": 1619,
+      "sits_on": "mechanosensory bristles / campaniform",
+      "function": "TRPN mechanotransduction channel",
+      "fold": "product Cα if measured homolog; otherwise no_measured_map"
+    },
+    {
+      "symbol": "Gad1",
+      "name": "glutamic acid decarboxylase 1",
+      "flybase": "FBgn0004516",
+      "uniprot": "P20228",
+      "aa": 510,
+      "sits_on": "GABAergic neurons (inhibitory residual already used on the graph)",
+      "function": "GABA synthesis",
+      "fold": "measured homolog class (group II decarboxylase); product path live"
+    }
+  ],
+  "missing_for_whole_fly": [
+    "Male CNS / BANC VNC so DN mass can land on named leg motor neurons",
+    "Fly Cell Atlas joined to FlyWire root_id (per-cell transcriptome)",
+    "Muscle / cuticle / gut cells (not in CNS dumps)",
+    "Rest and odor observer videos on the same kinematics rig"
+  ],
+  "other_species_whole_body": [
+    "C. elegans Cook 2019 — live boot scripts/worm_connectome.py",
+    "Ciona intestinalis larva Ryan 2016",
+    "Platynereis dumerilii 3-day larva Verasztó 2025"
+  ]
+}

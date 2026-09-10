@@ -12,8 +12,8 @@ Adult *Drosophila melanogaster* is the first animal with a complete brain-scale 
 |----------|------|------------|
 | FlyWire FAFB v783 | 139,255 neurons, ~50 M chemical synapses, 8,453 cell types | annotations TSV (small); proofread connections ~0.85 GB; full synapses 9.5 GB |
 | Schlegel et al. 2024 | superclass, hemilineage, neurotransmitter, soma xyz, VFB/FBbt | GitHub `flyconnectome/flywire_annotations` |
-| Male CNS v1.0 | 166,700 neurons, brain + nerve cord | later (neuPrint / Codex) |
-| BANC v888 | female brain + cord | later |
+| Male CNS v1.0 | **166,700** neurons, brain + nerve cord | Berg et al. *Cell* 2026-09-03; neuPrint `male-cns:v1.0` — **next dump** (VNC leg MNs) |
+| BANC | female brain + cord, intact neck | Bates et al. *Nature* 2026; Codex |
 
 Paper: Dorkenwald et al., *Nature* **634**, 124–138 (2024). Annotations: Schlegel et al., *Nature* **634**, 139–152 (2024). Portal: [codex.flywire.ai](https://codex.flywire.ai/) (sign-in). Open dumps: GitHub annotations + [Zenodo 10676866](https://zenodo.org/records/10676866).
 
@@ -98,6 +98,8 @@ Hop 2 of the mechanosensory seed peaks on a **motor** neuron. v630 is brain-only
 Source: `data/fly_behavior_flow.json`.
 
 Loop that ran: **video + 3-D tarsus → walking is on → seed mechanosensory / JO → residual hops → descending / DN mass**. Iron inaccuracies only against these kinematics. Predict *up* (other insects, then vertebrates) only where measured homologs exist — same product rule as protein Cα.
+
+Other animals that are actually mapped: `docs/SPECIES_CONNECTOMES.md`. Only three whole-body synapse maps exist (*C. elegans*, *Ciona* larva, *Platynereis* larva). The worm whole-animal boot is live (`scripts/worm_connectome.py`): sensory → AVA → motor + body-wall muscle. Genetics join for fly walking proteins: `data/fly_genetics_join.json` (*iav*, *nan*, *nompC*, *Gad1*).
 
 Neuron table only (no 9.5 GB synapse dump until the atlas is live):
 
