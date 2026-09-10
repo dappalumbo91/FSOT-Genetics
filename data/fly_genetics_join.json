@@ -13,7 +13,7 @@
       "aa": 1123,
       "sits_on": "Johnston organ chordotonal (JO types in v630)",
       "function": "TRPV mechanotransduction, hearing / antennal vibration",
-      "fold": "product Cα if measured homolog; otherwise no_measured_map"
+      "fold": "no_measured_map (Rg 29.38 Å). 9NVN contains an Inactive chain (stink-bug Nan-Iav) that the automatic search did not select for Drosophila iav."
     },
     {
       "symbol": "nan",
@@ -23,7 +23,7 @@
       "aa": 833,
       "sits_on": "Johnston organ, partners with iav",
       "function": "TRPV, sound / humidity / startle",
-      "fold": "product Cα if measured homolog; otherwise no_measured_map"
+      "fold": "product Cα: 9NVN (Halyomorpha Nan-Iav cryo-EM) 74% id, 86% cov"
     },
     {
       "symbol": "nompC",
@@ -33,7 +33,7 @@
       "aa": 1619,
       "sits_on": "mechanosensory bristles / campaniform",
       "function": "TRPN mechanotransduction channel",
-      "fold": "product Cα if measured homolog; otherwise no_measured_map"
+      "fold": "no_measured_map (Rg 33.01 Å)"
     },
     {
       "symbol": "Gad1",
@@ -43,11 +43,10 @@
       "aa": 510,
       "sits_on": "GABAergic neurons (inhibitory residual already used on the graph)",
       "function": "GABA synthesis",
-      "fold": "measured homolog class (group II decarboxylase); product path live"
+      "fold": "product Cα: 2OKJ human GAD67 2.3 Å, 64% id, 94% cov"
     }
   ],
   "missing_for_whole_fly": [
-    "Male CNS / BANC VNC so DN mass can land on named leg motor neurons",
     "Fly Cell Atlas joined to FlyWire root_id (per-cell transcriptome)",
     "Muscle / cuticle / gut cells (not in CNS dumps)",
     "Rest and odor observer videos on the same kinematics rig"

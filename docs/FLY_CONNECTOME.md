@@ -114,7 +114,16 @@ VNC sensory and JO put mass on **vnc_motor**. Olfactory does not. JO hop 1 peaks
 
 Loop that ran: **video + 3-D tarsus → walking is on → seed mechanosensory / JO → residual hops → descending / DN mass**. Iron inaccuracies only against these kinematics. Predict *up* (other insects, then vertebrates) only where measured homologs exist — same product rule as protein Cα.
 
-Other animals that are actually mapped: `docs/SPECIES_CONNECTOMES.md`. Only three whole-body synapse maps exist (*C. elegans*, *Ciona* larva, *Platynereis* larva). The worm whole-animal boot is live (`scripts/worm_connectome.py`): sensory → AVA → motor + body-wall muscle. Genetics join for fly walking proteins: `data/fly_genetics_join.json` (*iav*, *nan*, *nompC*, *Gad1*).
+Other animals that are actually mapped: `docs/SPECIES_CONNECTOMES.md`. Only three whole-body synapse maps exist (*C. elegans*, *Ciona* larva, *Platynereis* larva). The worm whole-animal boot is live (`scripts/worm_connectome.py`): sensory → AVA → motor + body-wall muscle. Genetics join for fly walking proteins (`data/fly_walking_product.json`):
+
+| Gene | n | Mode | Homolog |
+|------|--:|------|---------|
+| *Gad1* | 510 | **product Cα** | 2OKJ human GAD67, 64% id / 94% cov |
+| *nan* | 833 | **product Cα** | 9NVN stink-bug Nan-Iav, 74% id / 86% cov |
+| *iav* | 1123 | no_measured_map | Rg 29.4 Å; 9NVN has an Inactive chain the search did not pick |
+| *nompC* | 1619 | no_measured_map | Rg 33.0 Å |
+
+PDBs on `D:\FlyWire_Connectome\male_cns\product`.
 
 Neuron table only (no 9.5 GB synapse dump until the atlas is live):
 
