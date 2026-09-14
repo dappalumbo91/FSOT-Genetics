@@ -62,6 +62,21 @@ First live boot (Cook 2019 SI5, 453 cells, 4,879 chemical edges, **956 NMJs** on
 
 Sensory in → AVA command interneuron → motor + muscle. Same residual law as the fly. Source: `data/worm_connectome_boot.json`.
 
+### Ciona (chordate sibling) — live
+
+`python scripts/ciona_connectome.py --boot --seed sensory`
+
+Ryan et al. 2016. 205 nodes, 2,903 edges, contact-depth weights. **NT sign is not annotated** — unsigned residual, no invented GABA.
+
+| Hop | Motor | Muscle | Peak |
+|----:|------:|-------:|------|
+| 1 | 0 | 0 | Em2 |
+| 2 | **1.40** | 0.32 | **MGIN1L** (motor-ganglion interneuron) |
+| 3–4 | 2.43–2.49 | 0.33 | MGIN1R |
+| 11 | 3.40 | 0.55 | MGIN1R |
+
+Photoreceptor/palp seed → MGIN command → motor / tail muscle. Same residual as fly and worm. Source: `data/ciona_connectome_boot.json`.
+
 ## Not in this class (do not treat as fly-equivalents)
 
 | Resource | Why it is not a fly-class map |

@@ -1,0 +1,20 @@
+{
+  "source": "male-cns:v1.0 traced annotations",
+  "n_traced": 165122,
+  "fruDsx": {
+    "fru_high": 2611,
+    "fru_low": 1989,
+    "coexpress_high": 193,
+    "dsx_high": 138,
+    "coexpress_low": 65,
+    "dsx_low": 16
+  },
+  "n_with_receptorType": 752,
+  "receptorType_top": {
+    "putative_ppk23": 269,
+    "putative_ppk25": 257,
+    "putative_IR52b": 226
+  },
+  "note": "Measured genetics already on Male CNS cells (fru/dsx, receptorType). Fly Cell Atlas has no published bodyId join; do not invent one.",
+  "free_parameters": 0
+}

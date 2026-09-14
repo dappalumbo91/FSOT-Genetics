@@ -135,6 +135,10 @@ Cell → gene → product on both live graphs (`data/organism_product_join.json`
 | unc-25 | worm | GABA motor DD/VD/RME | 7LZ6 58% / 94% |
 | mec-4 | worm | ALML/ALMR (hop-0 peak) | 6VTL 48% / 56% leftover |
 | myo-3 | worm | body-wall muscle (hop-4) | 6XE9 61% / 58% leftover |
+| VGlut | fly | glutamatergic vnc_motor NMJ | 7T3O 61% / 69% |
+| Mhc | fly | muscle (not in CNS dump) | 5W1A 97% / 40% leftover |
+
+Male CNS already carries measured genetics on cells: **fru/dsx** on 5,012 traced neurons, **receptorType** on 752 (`data/male_cns_genetics_on_cells.json`). Fly Cell Atlas has no published `bodyId` join — do not invent one.
 
 Neuron table only (no 9.5 GB synapse dump until the atlas is live):
 

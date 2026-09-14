@@ -53,6 +53,22 @@
       "proteins": [
         "myo-3"
       ]
+    },
+    {
+      "cell": "vnc_motor (glutamatergic NMJ)",
+      "graph": "male-cns",
+      "boot": "vnc_sensory / JO \u2192 vnc_motor",
+      "proteins": [
+        "VGlut"
+      ]
+    },
+    {
+      "cell": "leg/body muscle (not in CNS EM)",
+      "graph": "fly body",
+      "boot": "effector of vnc_motor",
+      "proteins": [
+        "Mhc"
+      ]
     }
   ],
   "walking_folds": [
@@ -209,6 +225,46 @@
       "rg_target_A": null,
       "engine": "fsot_template_product_v7_chemlink",
       "pdb": "D:\\FlyWire_Connectome\\male_cns\\product\\myo-3_P12844.pdb"
+    },
+    {
+      "symbol": "VGlut",
+      "uniprot": "Q9VQC0",
+      "organism": "Drosophila melanogaster",
+      "sits_on": "glutamatergic motor neurons (vnc_motor NMJ)",
+      "graph": "male-cns",
+      "function": "vesicular glutamate transporter (FlyBase FBgn0031424; TrEMBL)",
+      "length": 632,
+      "predict_rc": 0,
+      "free_parameters": 0,
+      "structure_mode": "template_msa_fuse",
+      "deploy_regime": "template_msa_fuse",
+      "template_pdb": "7T3O",
+      "template_identity": 0.6114942528735632,
+      "template_coverage": 0.6882911392405063,
+      "mean_confidence": 0.09337278428180186,
+      "rg_target_A": null,
+      "engine": "fsot_template_product_v7_chemlink",
+      "pdb": "D:\\FlyWire_Connectome\\male_cns\\product\\VGlut_Q9VQC0.pdb"
+    },
+    {
+      "symbol": "Mhc",
+      "uniprot": "P05661",
+      "organism": "Drosophila melanogaster",
+      "sits_on": "muscle (effector of vnc_motor; not a CNS cell)",
+      "graph": "fly body, not in Male CNS dump",
+      "function": "muscle myosin heavy chain",
+      "length": 1962,
+      "predict_rc": 0,
+      "free_parameters": 0,
+      "structure_mode": "template_raw",
+      "deploy_regime": "template_physics",
+      "template_pdb": "5W1A",
+      "template_identity": 0.9656488549618321,
+      "template_coverage": 0.40061162079510704,
+      "mean_confidence": 0.0,
+      "rg_target_A": null,
+      "engine": "fsot_template_product_v7_chemlink",
+      "pdb": "D:\\FlyWire_Connectome\\male_cns\\product\\Mhc_P05661.pdb"
     }
   ]
 }

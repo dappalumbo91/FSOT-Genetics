@@ -1,0 +1,402 @@
+{
+  "organism": "Ciona intestinalis tadpole larva",
+  "seed": "sensory",
+  "n_seed": 57,
+  "n_cells": 205,
+  "n_edges": 2903,
+  "type_counts": {
+    "sensory": 57,
+    "coronet": 12,
+    "unlabeled": 91,
+    "interneuron": 25,
+    "other": 6,
+    "motor": 10,
+    "muscle": 4
+  },
+  "hops": 11,
+  "residual_Biochemistry": 1.091958932349586,
+  "gaba_inhibitory": false,
+  "authority": "Ryan, Lu & Meinertzhagen 2016 via Netzschleuder; weight = contact depth \u00b5m; synaptic sign not annotated \u2014 unsigned residual, no invented GABA",
+  "free_parameters": 0,
+  "trace": [
+    {
+      "hop": 0,
+      "l1": 57.0,
+      "n_active": 57,
+      "mass_by_type": {
+        "sensory": 57.0,
+        "coronet": 0.0,
+        "unlabeled": 0.0,
+        "interneuron": 0.0,
+        "other": 0.0,
+        "motor": 0.0,
+        "muscle": 0.0
+      },
+      "target_mass": {
+        "sensory": 57.0,
+        "motor": 0.0,
+        "muscle": 0.0,
+        "interneuron": 0.0,
+        "coronet": 0.0
+      },
+      "top": [
+        {
+          "name": "pns1",
+          "type": "sensory",
+          "a": 1.0
+        },
+        {
+          "name": "pns10",
+          "type": "sensory",
+          "a": 1.0
+        },
+        {
+          "name": "pns11",
+          "type": "sensory",
+          "a": 1.0
+        },
+        {
+          "name": "pns12",
+          "type": "sensory",
+          "a": 1.0
+        },
+        {
+          "name": "pns13",
+          "type": "sensory",
+          "a": 1.0
+        },
+        {
+          "name": "pns14",
+          "type": "sensory",
+          "a": 1.0
+        },
+        {
+          "name": "pns2",
+          "type": "sensory",
+          "a": 1.0
+        },
+        {
+          "name": "pns3",
+          "type": "sensory",
+          "a": 1.0
+        }
+      ]
+    },
+    {
+      "hop": 1,
+      "l1": 11.725130890051888,
+      "n_active": 2,
+      "mass_by_type": {
+        "unlabeled": 4.58311518324589,
+        "sensory": 4.217059336823567,
+        "other": 1.597731239092432,
+        "interneuron": 1.2958115183245555,
+        "coronet": 0.031413612565443776,
+        "motor": 0.0,
+        "muscle": 0.0
+      },
+      "target_mass": {
+        "sensory": 4.217059336823567,
+        "motor": 0.0,
+        "muscle": 0.0,
+        "interneuron": 1.2958115183245555,
+        "coronet": 0.031413612565443776
+      },
+      "top": [
+        {
+          "name": "Em2",
+          "type": "other",
+          "a": 0.9999999999999601
+        },
+        {
+          "name": "AMG5",
+          "type": "interneuron",
+          "a": 0.9895287958114789
+        },
+        {
+          "name": "Em1",
+          "type": "other",
+          "a": 0.5977312390924718
+        },
+        {
+          "name": "4",
+          "type": "unlabeled",
+          "a": 0.38743455497380647
+        },
+        {
+          "name": "130",
+          "type": "unlabeled",
+          "a": 0.3298429319371596
+        },
+        {
+          "name": "116",
+          "type": "unlabeled",
+          "a": 0.30366492146595647
+        },
+        {
+          "name": "121",
+          "type": "unlabeled",
+          "a": 0.29842931937171585
+        },
+        {
+          "name": "105",
+          "type": "unlabeled",
+          "a": 0.2198952879581064
+        }
+      ]
+    },
+    {
+      "hop": 2,
+      "l1": 19.275472666567435,
+      "n_active": 2,
+      "mass_by_type": {
+        "unlabeled": 9.44254549620123,
+        "interneuron": 4.703902735127206,
+        "sensory": 2.2098642552781707,
+        "motor": 1.3995215311001872,
+        "other": 1.1748196814965775,
+        "muscle": 0.31793187174170345,
+        "coronet": 0.026887095622361034
+      },
+      "target_mass": {
+        "sensory": 2.2098642552781707,
+        "motor": 1.3995215311001872,
+        "muscle": 0.31793187174170345,
+        "interneuron": 4.703902735127206,
+        "coronet": 0.026887095622361034
+      },
+      "top": [
+        {
+          "name": "MGIN1L",
+          "type": "interneuron",
+          "a": 0.9999999999997918
+        },
+        {
+          "name": "MN2R",
+          "type": "motor",
+          "a": 0.626401485395856
+        },
+        {
+          "name": "MGIN1R",
+          "type": "interneuron",
+          "a": 0.6085362660381032
+        },
+        {
+          "name": "MGIN2R",
+          "type": "interneuron",
+          "a": 0.5972648718130584
+        },
+        {
+          "name": "Em2",
+          "type": "other",
+          "a": 0.5347782618009312
+        },
+        {
+          "name": "140",
+          "type": "unlabeled",
+          "a": 0.47306529553181137
+        },
+        {
+          "name": "124",
+          "type": "unlabeled",
+          "a": 0.46535266252460017
+        },
+        {
+          "name": "AMG5",
+          "type": "interneuron",
+          "a": 0.43915589516523035
+        }
+      ]
+    },
+    {
+      "hop": 3,
+      "l1": 20.221228926409616,
+      "n_active": 5,
+      "mass_by_type": {
+        "unlabeled": 9.114048311975106,
+        "interneuron": 6.387627689131613,
+        "motor": 2.4323641776618268,
+        "sensory": 1.1765157670506263,
+        "other": 0.7464746100046901,
+        "muscle": 0.33675416673318764,
+        "coronet": 0.027444203852563468
+      },
+      "target_mass": {
+        "sensory": 1.1765157670506263,
+        "motor": 2.4323641776618268,
+        "muscle": 0.33675416673318764,
+        "interneuron": 6.387627689131613,
+        "coronet": 0.027444203852563468
+      },
+      "top": [
+        {
+          "name": "MGIN1R",
+          "type": "interneuron",
+          "a": 0.9999999999998819
+        },
+        {
+          "name": "MGIN1L",
+          "type": "interneuron",
+          "a": 0.9347128499735661
+        },
+        {
+          "name": "MGIN2L",
+          "type": "interneuron",
+          "a": 0.847552094724974
+        },
+        {
+          "name": "MGIN2R",
+          "type": "interneuron",
+          "a": 0.8306679677006981
+        },
+        {
+          "name": "MN2R",
+          "type": "motor",
+          "a": 0.8014897613495214
+        },
+        {
+          "name": "ddNL",
+          "type": "interneuron",
+          "a": 0.48801687545584127
+        },
+        {
+          "name": "MN1L",
+          "type": "motor",
+          "a": 0.45442123804775203
+        },
+        {
+          "name": "147",
+          "type": "unlabeled",
+          "a": 0.4317758412693767
+        }
+      ]
+    },
+    {
+      "hop": 4,
+      "l1": 18.050172345358906,
+      "n_active": 5,
+      "mass_by_type": {
+        "unlabeled": 7.186792038605517,
+        "interneuron": 6.5345381676409,
+        "motor": 2.4893181231376245,
+        "sensory": 0.752350537708739,
+        "other": 0.7334609152441052,
+        "muscle": 0.33151653393226477,
+        "coronet": 0.022196029089759352
+      },
+      "target_mass": {
+        "sensory": 0.752350537708739,
+        "motor": 2.4893181231376245,
+        "muscle": 0.33151653393226477,
+        "interneuron": 6.5345381676409,
+        "coronet": 0.022196029089759352
+      },
+      "top": [
+        {
+          "name": "MGIN1R",
+          "type": "interneuron",
+          "a": 0.9999999999999042
+        },
+        {
+          "name": "MGIN2R",
+          "type": "interneuron",
+          "a": 0.9984301209987254
+        },
+        {
+          "name": "MGIN1L",
+          "type": "interneuron",
+          "a": 0.8512823105683699
+        },
+        {
+          "name": "MGIN2L",
+          "type": "interneuron",
+          "a": 0.8322732835498742
+        },
+        {
+          "name": "MN2R",
+          "type": "motor",
+          "a": 0.6706561996146273
+        },
+        {
+          "name": "ddNR",
+          "type": "interneuron",
+          "a": 0.5844960887657636
+        },
+        {
+          "name": "ddNL",
+          "type": "interneuron",
+          "a": 0.5736511645379002
+        },
+        {
+          "name": "MN1L",
+          "type": "motor",
+          "a": 0.39663610283858114
+        }
+      ]
+    },
+    {
+      "hop": 11,
+      "l1": 18.903268830837355,
+      "n_active": 7,
+      "mass_by_type": {
+        "interneuron": 7.361205570680612,
+        "unlabeled": 6.18244160656892,
+        "motor": 3.399453906964508,
+        "other": 0.8263351305150773,
+        "sensory": 0.5689332987982052,
+        "muscle": 0.5481705449609251,
+        "coronet": 0.01672877234910664
+      },
+      "target_mass": {
+        "sensory": 0.5689332987982052,
+        "motor": 3.399453906964508,
+        "muscle": 0.5481705449609251,
+        "interneuron": 7.361205570680612,
+        "coronet": 0.01672877234910664
+      },
+      "top": [
+        {
+          "name": "MGIN1R",
+          "type": "interneuron",
+          "a": 0.9999999999998911
+        },
+        {
+          "name": "ddNR",
+          "type": "interneuron",
+          "a": 0.9906161712701725
+        },
+        {
+          "name": "MN2R",
+          "type": "motor",
+          "a": 0.9152229969286704
+        },
+        {
+          "name": "MGIN2R",
+          "type": "interneuron",
+          "a": 0.9073251462792856
+        },
+        {
+          "name": "MGIN1L",
+          "type": "interneuron",
+          "a": 0.8528557850465659
+        },
+        {
+          "name": "MGIN2L",
+          "type": "interneuron",
+          "a": 0.8188587009953495
+        },
+        {
+          "name": "ddNL",
+          "type": "interneuron",
+          "a": 0.7160925983042925
+        },
+        {
+          "name": "MN1R",
+          "type": "motor",
+          "a": 0.5887959202438459
+        }
+      ]
+    }
+  ],
+  "note": "Chordate sibling of vertebrates. Photoreceptor seed \u2192 motor / tail muscle. Not a trained dynamics model."
+}

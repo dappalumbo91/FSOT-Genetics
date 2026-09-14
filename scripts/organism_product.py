@@ -19,6 +19,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from fsot_predict import main as predict_main  # noqa: E402
 
 FASTA = Path(r"D:\FlyWire_Connectome\male_cns\next_proteins.fasta")
+FASTA2 = Path(r"D:\FlyWire_Connectome\male_cns\open_proteins.fasta")
 OUT_D = Path(r"D:\FlyWire_Connectome\male_cns\product")
 OUT_GIT = ROOT / "data" / "organism_product_join.json"
 WALKING = ROOT / "data" / "fly_walking_product.json"
@@ -55,6 +56,22 @@ NEW = [
         "organism": "Caenorhabditis elegans",
         "sits_on": "body-wall muscles (worm hop-4 effector mass)",
         "graph": "C. elegans SI5",
+        "function": "muscle myosin heavy chain",
+    },
+    {
+        "symbol": "VGlut",
+        "uniprot": "Q9VQC0",
+        "organism": "Drosophila melanogaster",
+        "sits_on": "glutamatergic motor neurons (vnc_motor NMJ)",
+        "graph": "male-cns",
+        "function": "vesicular glutamate transporter (FlyBase FBgn0031424; TrEMBL)",
+    },
+    {
+        "symbol": "Mhc",
+        "uniprot": "P05661",
+        "organism": "Drosophila melanogaster",
+        "sits_on": "muscle (effector of vnc_motor; not a CNS cell)",
+        "graph": "fly body, not in Male CNS dump",
         "function": "muscle myosin heavy chain",
     },
 ]
@@ -132,6 +149,8 @@ def main(argv: list[str] | None = None) -> int:
     if not FASTA.exists():
         raise SystemExit(f"missing {FASTA}")
     seqs = _parse_fasta(FASTA)
+    if FASTA2.exists():
+        seqs.update(_parse_fasta(FASTA2))
     OUT_D.mkdir(parents=True, exist_ok=True)
     want = {s.lower() for s in args.only} if args.only else None
     prior = []
@@ -196,6 +215,18 @@ def main(argv: list[str] | None = None) -> int:
                 "graph": "C. elegans SI5",
                 "boot": "hop 4 effector mass",
                 "proteins": ["myo-3"],
+            },
+            {
+                "cell": "vnc_motor (glutamatergic NMJ)",
+                "graph": "male-cns",
+                "boot": "vnc_sensory / JO → vnc_motor",
+                "proteins": ["VGlut"],
+            },
+            {
+                "cell": "leg/body muscle (not in CNS EM)",
+                "graph": "fly body",
+                "boot": "effector of vnc_motor",
+                "proteins": ["Mhc"],
             },
         ],
         "walking_folds": walking,
