@@ -26,7 +26,7 @@ Mouse cortex cubes, zebrafish larval volumes, and human tractography are **not**
 | MANC / FANC | male / female | VNC only | ~16k / sparse | neuPrint / GitHub |
 | Larval CNS | — | complete first-instar CNS | ~3,000 | Winding et al. 2023 |
 
-What we have on disk: **female brain** (v630, 128k neurons, 3.79 M edges). Walking prediction is descending/DN mass. Leg motor neurons live in the VNC — that is why Male CNS / BANC is the next measured graph, not a trained RNN.
+What we have on disk: female brain (v630) **and Male CNS v1.0** (165,122 traced, brain+VNC, 25.6 M edges). Walking seed hits **vnc_motor**. Cell → gene → product Cα: `data/organism_product_join.json`.
 
 Genome / genetics: FlyBase complete; ~14k protein-coding genes; UniProt proteome `UP000000803`. **304 Drosophilidae genomes** are annotated (Zenodo 2025) — genomes, not brains.
 

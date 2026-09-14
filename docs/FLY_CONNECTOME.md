@@ -127,6 +127,15 @@ First pass missed *iav* and *nompC*: query-coverage 0.65 vetoed a fully-used Ina
 
 PDBs on `D:\FlyWire_Connectome\male_cns\product`.
 
+Cell → gene → product on both live graphs (`data/organism_product_join.json`):
+
+| Gene | Organism | Sits on | Template |
+|------|----------|---------|----------|
+| ChAT | fly | cholinergic DN / motor (ACh edges) | 2FY4 53% / 78% |
+| unc-25 | worm | GABA motor DD/VD/RME | 7LZ6 58% / 94% |
+| mec-4 | worm | ALML/ALMR (hop-0 peak) | 6VTL 48% / 56% leftover |
+| myo-3 | worm | body-wall muscle (hop-4) | 6XE9 61% / 58% leftover |
+
 Neuron table only (no 9.5 GB synapse dump until the atlas is live):
 
 - `root_id`, soma and backbone `(x,y,z)` nm-scale voxels

@@ -1,0 +1,214 @@
+{
+  "product": "named cell on measured graph \u2192 UniProt sequence \u2192 FSOT product C\u03b1",
+  "pin": "D1D38A",
+  "free_parameters": 0,
+  "law": "S=K(T1+T2+T3); residual Biochemistry on synapses; product C\u03b1 when a homolog exists",
+  "cells": [
+    {
+      "cell": "JO-* / Johnston organ",
+      "graph": "male-cns / FlyWire",
+      "boot": "JO seed \u2192 DNg29 \u2192 vnc_motor",
+      "proteins": [
+        "iav",
+        "nan"
+      ]
+    },
+    {
+      "cell": "mechanosensory / vnc_sensory",
+      "graph": "male-cns",
+      "boot": "vnc_sensory seed \u2192 vnc_motor",
+      "proteins": [
+        "nompC"
+      ]
+    },
+    {
+      "cell": "GABAergic (fly) / DD VD RME (worm)",
+      "graph": "both",
+      "boot": "GABA edges inhibitory",
+      "proteins": [
+        "Gad1",
+        "unc-25"
+      ]
+    },
+    {
+      "cell": "cholinergic DN / motor",
+      "graph": "male-cns",
+      "boot": "ACh default excitatory",
+      "proteins": [
+        "ChAT"
+      ]
+    },
+    {
+      "cell": "ALML/ALMR",
+      "graph": "C. elegans SI5",
+      "boot": "hop 0 peak on sensory seed",
+      "proteins": [
+        "mec-4"
+      ]
+    },
+    {
+      "cell": "body-wall muscle",
+      "graph": "C. elegans SI5",
+      "boot": "hop 4 effector mass",
+      "proteins": [
+        "myo-3"
+      ]
+    }
+  ],
+  "walking_folds": [
+    {
+      "symbol": "Gad1",
+      "uniprot": "P20228",
+      "sits_on": "GABAergic neurons",
+      "length": 510,
+      "predict_rc": 0,
+      "structure_mode": "template_physics",
+      "deploy_regime": "template_msa_fuse",
+      "homolog": "human GAD67 X-ray 2.3 \u00c5",
+      "template_pdb": "2OKJ",
+      "template_identity": 0.6395833333333333,
+      "template_coverage": 0.9411764705882353,
+      "mean_confidence": 0.20879233175726766,
+      "rg_target_A": null,
+      "engine": "fsot_template_product_v7_chemlink",
+      "pdb": "D:\\FlyWire_Connectome\\male_cns\\product\\Gad1_P20228.pdb",
+      "free_parameters": 0
+    },
+    {
+      "symbol": "nan",
+      "uniprot": "Q9VUD5",
+      "sits_on": "Johnston organ",
+      "length": 833,
+      "predict_rc": 0,
+      "structure_mode": "template_raw",
+      "deploy_regime": "template_physics",
+      "homolog": "Halyomorpha Nan-Iav cryo-EM 2.89 \u00c5",
+      "template_pdb": "9NVN",
+      "template_identity": 0.7366946778711485,
+      "template_coverage": 0.8571428571428571,
+      "mean_confidence": 0.0,
+      "rg_target_A": null,
+      "engine": "fsot_template_product_v7_chemlink",
+      "pdb": "D:\\FlyWire_Connectome\\male_cns\\product\\nan_Q9VUD5.pdb",
+      "free_parameters": 0
+    },
+    {
+      "symbol": "iav",
+      "uniprot": "Q9W3W0",
+      "sits_on": "Johnston organ",
+      "length": 1123,
+      "predict_rc": 0,
+      "structure_mode": "template_raw",
+      "deploy_regime": "template_physics",
+      "homolog": "Halyomorpha Inactive chain 9NVP (Nan-Iav); leftover query tails 59.7% cov",
+      "template_pdb": "9NVP",
+      "template_identity": 0.8104477611940298,
+      "template_coverage": 0.5966162065894924,
+      "mean_confidence": 0.0,
+      "rg_target_A": null,
+      "engine": "fsot_template_product_v7_chemlink",
+      "pdb": "D:\\FlyWire_Connectome\\male_cns\\product\\iav_Q9W3W0.pdb",
+      "free_parameters": 0
+    },
+    {
+      "symbol": "nompC",
+      "uniprot": "Q7KIQ2",
+      "sits_on": "mechanosensory transduction",
+      "length": 1619,
+      "predict_rc": 0,
+      "structure_mode": "template_physics",
+      "deploy_regime": "template_physics",
+      "homolog": "Drosophila NOMPC cryo-EM 5VKQ; elongated channel, globular Rg gate skipped at id\u22651/\u03c6",
+      "template_pdb": "5VKQ",
+      "template_identity": 0.9712182061579652,
+      "template_coverage": 0.922791846819024,
+      "mean_confidence": 0.0,
+      "rg_target_A": null,
+      "engine": "fsot_template_product_v7_chemlink",
+      "pdb": "D:\\FlyWire_Connectome\\male_cns\\product\\nompC_Q7KIQ2.pdb",
+      "free_parameters": 0
+    }
+  ],
+  "new_folds": [
+    {
+      "symbol": "ChAT",
+      "uniprot": "P07668",
+      "organism": "Drosophila melanogaster",
+      "sits_on": "cholinergic neurons (most DNs, many sensory); ACh is the default excitatory edge",
+      "graph": "male-cns / FlyWire",
+      "function": "acetylcholine synthesis",
+      "length": 721,
+      "predict_rc": 0,
+      "free_parameters": 0,
+      "structure_mode": "template_physics",
+      "deploy_regime": "template_msa_fuse",
+      "template_pdb": "2FY4",
+      "template_identity": 0.5258467023172906,
+      "template_coverage": 0.7780859916782247,
+      "mean_confidence": 0.24149663809927052,
+      "rg_target_A": null,
+      "engine": "fsot_template_product_v7_chemlink",
+      "pdb": "D:\\FlyWire_Connectome\\male_cns\\product\\ChAT_P07668.pdb"
+    },
+    {
+      "symbol": "unc-25",
+      "uniprot": "G5EDB7",
+      "organism": "Caenorhabditis elegans",
+      "sits_on": "GABAergic motor neurons DD/VD/RME (inhibitory residual on the worm graph)",
+      "graph": "C. elegans SI5",
+      "function": "GABA synthesis (Gad1 homolog)",
+      "length": 508,
+      "predict_rc": 0,
+      "free_parameters": 0,
+      "structure_mode": "template_physics",
+      "deploy_regime": "template_msa_fuse",
+      "template_pdb": "7LZ6",
+      "template_identity": 0.5815899581589958,
+      "template_coverage": 0.9409448818897638,
+      "mean_confidence": 0.21295077746142793,
+      "rg_target_A": null,
+      "engine": "fsot_template_product_v7_chemlink",
+      "pdb": "D:\\FlyWire_Connectome\\male_cns\\product\\unc-25_G5EDB7.pdb"
+    },
+    {
+      "symbol": "mec-4",
+      "uniprot": "P24612",
+      "organism": "Caenorhabditis elegans",
+      "sits_on": "ALML/ALMR touch neurons (worm hop-0 peak)",
+      "graph": "C. elegans SI5",
+      "function": "DEG/ENaC mechanotransduction",
+      "length": 768,
+      "predict_rc": 0,
+      "free_parameters": 0,
+      "structure_mode": "template_raw",
+      "deploy_regime": "template_msa_fuse",
+      "template_pdb": "6VTL",
+      "template_identity": 0.48484848484848486,
+      "template_coverage": 0.55859375,
+      "mean_confidence": 0.11683532867727421,
+      "rg_target_A": null,
+      "engine": "fsot_template_product_v7_chemlink",
+      "pdb": "D:\\FlyWire_Connectome\\male_cns\\product\\mec-4_P24612.pdb"
+    },
+    {
+      "symbol": "myo-3",
+      "uniprot": "P12844",
+      "organism": "Caenorhabditis elegans",
+      "sits_on": "body-wall muscles (worm hop-4 effector mass)",
+      "graph": "C. elegans SI5",
+      "function": "muscle myosin heavy chain",
+      "length": 1969,
+      "predict_rc": 0,
+      "free_parameters": 0,
+      "structure_mode": "template_raw",
+      "deploy_regime": "template_physics",
+      "template_pdb": "6XE9",
+      "template_identity": 0.6141114982578397,
+      "template_coverage": 0.5830370746571863,
+      "mean_confidence": 0.0,
+      "rg_target_A": null,
+      "engine": "fsot_template_product_v7_chemlink",
+      "pdb": "D:\\FlyWire_Connectome\\male_cns\\product\\myo-3_P12844.pdb"
+    }
+  ]
+}
