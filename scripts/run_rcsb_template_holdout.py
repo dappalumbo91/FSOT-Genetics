@@ -47,6 +47,9 @@ MAX_CANDIDATES = 8
 # Multi-template measured coverage (seed-closed; zero free params)
 # top_k = round(φ³) ≈ 4; power = φ⁶ ≈ 17.94 — near-greedy blend of real homolog Cα
 _PHI = (1.0 + 5.0 ** 0.5) / 2.0
+# Leftover unmatched query (disordered tails) is not a missing homolog.
+# Admit when the measured map is fully used and query coverage ≥ 1/φ².
+_LEFTOVER_QUERY_FLOOR = 1.0 / (_PHI * _PHI)
 MULTI_TOP_K = max(2, int(round(_PHI ** 3)))
 MULTI_POWER = float(_PHI ** 6)
 MAX_TEMPLATE_PDBS = 120  # scan deep pool; no early-exit on first high-id hit
@@ -550,6 +553,21 @@ def pdb_is_ensemble(text: str) -> bool:
     return False
 
 
+def coverage_ok(coverage_query: float, coverage_template: float) -> bool:
+    """Primary: template spans most of the query.
+
+    Leftover: the measured chain is almost fully aligned (cov_t ≥ MIN_COVERAGE)
+    and unmatched query is extra sequence, not a failed homolog.
+    Floor 1/φ² keeps peptide fragments out. Does not loosen the template side.
+    """
+    if coverage_query >= MIN_COVERAGE:
+        return True
+    return (
+        coverage_template >= MIN_COVERAGE
+        and coverage_query >= _LEFTOVER_QUERY_FLOOR
+    )
+
+
 def collect_template_candidates(
     sequence: str,
     exclude_pdb: str,
@@ -597,10 +615,13 @@ def collect_template_candidates(
                     1 for qi, ti in pairs if sequence[qi] == tseq[ti]
                 ) / len(pairs)
                 coverage = len(pairs) / len(sequence)
-                if identity > identity_cap or identity < MIN_IDENTITY or coverage < MIN_COVERAGE:
+                coverage_t = len(pairs) / len(tseq)
+                if identity > identity_cap or identity < MIN_IDENTITY:
+                    continue
+                if not coverage_ok(coverage, coverage_t):
                     continue
                 model = build_from_template(len(sequence), tcoords, pairs)
-                if not model_is_sane(model, len(sequence)):
+                if not model_is_sane(model, len(sequence), identity=identity):
                     continue
                 # Data eligibility only: id × coverage (alignment observables).
                 # Ranking is residual-at-interface energy — NOT free geometric scores.
@@ -613,6 +634,7 @@ def collect_template_candidates(
                         "model": model,
                         "identity": identity,
                         "coverage": coverage,
+                        "coverage_template": coverage_t,
                         "pairs": pairs,
                         "tcoords": tcoords,
                         "tmpl_len": len(tseq),
@@ -1302,13 +1324,23 @@ def build_from_template(n: int, tcoords: np.ndarray, pairs: list[tuple[int, int]
     return coord - coord.mean(axis=0)
 
 
-def model_is_sane(coord: np.ndarray, n: int) -> bool:
-    """Intrinsic reject gate: catches assemblies, wrong chains, gap spikes."""
+def model_is_sane(
+    coord: np.ndarray, n: int, *, identity: float | None = None
+) -> bool:
+    """Intrinsic reject gate: catches assemblies, wrong chains, gap spikes.
+
+    Globular Rg window is for unknown shape. A close homolog (id ≥ 1/φ)
+    already measured the shape — elongated channels must not be vetoed
+    for failing a globular Rg target.
+    """
     rg = float(np.sqrt(((coord - coord.mean(axis=0)) ** 2).sum(axis=1).mean()))
     target = target_rg_fsot(n)
     bonds = np.linalg.norm(coord[1:] - coord[:-1], axis=1)
     frac_broken = float(np.mean(bonds > 5.0))
-    return (0.5 * target < rg < 2.0 * target) and frac_broken < 0.1
+    rg_ok = 0.5 * target < rg < 2.0 * target
+    if identity is not None and identity >= 1.0 / _PHI:
+        rg_ok = True
+    return rg_ok and frac_broken < 0.1
 
 
 def main() -> int:

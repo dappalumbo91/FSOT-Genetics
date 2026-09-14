@@ -49,13 +49,32 @@ def _parse_fasta(path: Path) -> dict[str, str]:
     return acc
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
+    import argparse
+
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--only", nargs="*", default=None, help="subset of symbols")
+    args = ap.parse_args(argv)
     if not FASTA.exists():
         raise SystemExit(f"missing {FASTA}")
     seqs = _parse_fasta(FASTA)
     OUT_D.mkdir(parents=True, exist_ok=True)
+    want = {s.lower() for s in args.only} if args.only else None
     rows = []
+    existing = {}
+    if OUT_GIT.exists() and want:
+        try:
+            existing = {
+                g["symbol"]: g
+                for g in json.loads(OUT_GIT.read_text(encoding="utf-8")).get("genes", [])
+            }
+        except Exception:
+            existing = {}
     for g in GENES:
+        if want and g["symbol"].lower() not in want:
+            if g["symbol"] in existing:
+                rows.append(existing[g["symbol"]])
+            continue
         acc = g["uniprot"]
         seq = seqs.get(acc)
         if not seq:

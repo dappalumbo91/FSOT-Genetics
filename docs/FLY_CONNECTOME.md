@@ -120,8 +120,10 @@ Other animals that are actually mapped: `docs/SPECIES_CONNECTOMES.md`. Only thre
 |------|--:|------|---------|
 | *Gad1* | 510 | **product Cα** | 2OKJ human GAD67, 64% id / 94% cov |
 | *nan* | 833 | **product Cα** | 9NVN stink-bug Nan-Iav, 74% id / 86% cov |
-| *iav* | 1123 | no_measured_map | Rg 29.4 Å; 9NVN has an Inactive chain the search did not pick |
-| *nompC* | 1619 | no_measured_map | Rg 33.0 Å |
+| *iav* | 1123 | **product Cα** | 9NVP Inactive chain, 81% id / 60% cov (leftover tails) |
+| *nompC* | 1619 | **product Cα** | 5VKQ Drosophila NOMPC, 97% id / 92% cov |
+
+First pass missed *iav* and *nompC*: query-coverage 0.65 vetoed a fully-used Inactive chain (cov_t 0.99, cov_q 0.59), and a globular Rg window vetoed elongated 5VKQ. Leftover floor 1/φ² + close-homolog (id ≥ 1/φ) keeps the measured map. Front door now uses product identity cap 1.0 (not the 0.95 H2H handicap).
 
 PDBs on `D:\FlyWire_Connectome\male_cns\product`.
 

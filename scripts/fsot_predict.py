@@ -39,9 +39,13 @@ from msa_template_fuse import fuse_predict, select_regime  # noqa: E402
 
 # optional template search (network)
 try:
-    from run_rcsb_template_holdout import best_template  # noqa: E402
+    from run_rcsb_template_holdout import (  # noqa: E402
+        PRODUCT_IDENTITY_CAP,
+        best_template,
+    )
 except Exception:  # noqa: BLE001
     best_template = None  # type: ignore
+    PRODUCT_IDENTITY_CAP = 1.0
 
 BUILTINS = {
     "1UBQ": {
@@ -104,7 +108,9 @@ def main(argv: list[str] | None = None) -> int:
     tmpl = None
     if not args.no_template and best_template is not None:
         try:
-            tmpl = best_template(seq, default_excl)
+            tmpl = best_template(
+                seq, default_excl, identity_cap=PRODUCT_IDENTITY_CAP
+            )
         except Exception:
             tmpl = None
 

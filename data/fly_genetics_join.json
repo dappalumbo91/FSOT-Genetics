@@ -13,7 +13,7 @@
       "aa": 1123,
       "sits_on": "Johnston organ chordotonal (JO types in v630)",
       "function": "TRPV mechanotransduction, hearing / antennal vibration",
-      "fold": "no_measured_map (Rg 29.38 Å). 9NVN contains an Inactive chain (stink-bug Nan-Iav) that the automatic search did not select for Drosophila iav."
+      "fold": "product Cα: 9NVP Inactive (Halyomorpha Nan-Iav) 81% id, 60% cov; leftover query tails"
     },
     {
       "symbol": "nan",
@@ -33,7 +33,7 @@
       "aa": 1619,
       "sits_on": "mechanosensory bristles / campaniform",
       "function": "TRPN mechanotransduction channel",
-      "fold": "no_measured_map (Rg 33.01 Å)"
+      "fold": "product Cα: 5VKQ Drosophila NOMPC 97% id, 92% cov"
     },
     {
       "symbol": "Gad1",
