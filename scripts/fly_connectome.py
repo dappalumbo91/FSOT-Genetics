@@ -306,11 +306,17 @@ def seed_indices(graph: dict[str, Any], seed: str, *, how: str = "substring") ->
         ct = (m.get("cell_type") or "").lower()
         fl = (m.get("flow") or "").lower()
         sub = (m.get("sub_class") or "").lower()
+        fru = (m.get("fru_dsx") or "").lower()
+        dim = (m.get("dimorphism") or "").lower()
         hit = False
         if how == "class":
             hit = sc == seed_l or cc == seed_l
         elif how == "type_prefix":
             hit = ct.startswith(seed_l)
+        elif how == "fru_dsx":
+            hit = bool(fru) if seed_l in {"*", "any", "labeled"} else seed_l in fru
+        elif how == "dimorphism":
+            hit = seed_l in dim
         else:
             hit = (
                 seed_l in sc
@@ -318,6 +324,8 @@ def seed_indices(graph: dict[str, Any], seed: str, *, how: str = "substring") ->
                 or seed_l in ct
                 or seed_l in fl
                 or seed_l in sub
+                or seed_l in fru
+                or seed_l in dim
             )
         if hit:
             out.append(idx[rid])

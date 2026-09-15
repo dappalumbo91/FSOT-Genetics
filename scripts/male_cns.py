@@ -77,6 +77,8 @@ def load_male_graph() -> dict[str, Any]:
     types = _s("type")
     sub = _s("subclass")
     side = _s("somaSide")
+    fru = _s("fruDsx")
+    dim = _s("dimorphism")
     meta: dict[str, dict[str, str]] = {}
     for i, bid in enumerate(bodies):
         rid = ids[i]
@@ -88,6 +90,8 @@ def load_male_graph() -> dict[str, Any]:
             "flow": "",
             "sub_class": sub[i],
             "side": side[i],
+            "fru_dsx": fru[i],
+            "dimorphism": dim[i],
         }
 
     pre = wdf["body_pre"].map(lambda x: str(int(x)))

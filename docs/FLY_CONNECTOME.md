@@ -131,6 +131,31 @@ Observer (not a trained pose net): green-excess ≥ observer-max / φ = odor on;
 
 Olfactory hop 1 peaks on **il3LN6** (antennal lobe). Hop-2 vnc_motor ≈ 0. Rest is not a cell class — odor off and motion below MAD+φ means no afferent seed. Offset search is not an invented OFF class. The pulse raises energy and shifts motion upwind; the walking command on this graph is still JO / vnc_sensory, not the olfactory cascade. Source: `data/fly_odor_flow.json`.
 
+### Courtship observer (live)
+
+`python scripts/fly_courtship.py`
+
+Pan et al. *PLOS ONE* 2011 Movie S1: solitary male **UAS-dTrpA1 / fru-GAL4** at 29 °C (wing extension, abdomen bending, copulation attempts). MOV on `D:\FlyWire_Connectome\behavior\courtship` (not git). Leftover dark CC inside the arena (drop components ≥ max/φ) is the fly — not a trained pose net. MAD+φ on frame-diff energy and fly Rg.
+
+| | |
+|--|--|
+| Frames | 2,877 / 96 s, tracked 2,848 |
+| Motion MAD+φ on | 1,225 (paint 0.426) |
+| Spread (Rg) on | 707 (paint 0.246) |
+| Union courtship-on | 1,647 |
+
+Seed is **measured** Male CNS genetics, not an invented P1 list: `fruDsx` labeled cells, type prefix `pC1_` (not optic LLPC1), `TN1` song motor neurons.
+
+| Program | n seed | Hop 2 vnc_motor | Hop 2 descending | Hop 1 peak |
+|---------|-------:|----------------:|-----------------:|------------|
+| fru/dsx | 5,012 | 7.26 | **35.21** | TuTuA_2 (central; fru is broad) |
+| pC1_ | 148 | 1.28 | **30.74** | SIP106m (brain, then cord) |
+| TN1 | 35 | **10.07** | 1.22 | **hg3 MN** (VNC motor) |
+| JO (walking) | 672 | **7.77** | 24.21 | DNg29 |
+| olfactory | 2,639 | 0.001 | 0.57 | il3LN6 |
+
+TN1 hits **hg3 MN** at hop 1 — song/flight motor on this dump. pC1 stays in the brain at hop 1 then loads descending. fru/dsx is 5,012 cells, not a command singleton. Olfactory still does not light vnc_motor. Source: `data/fly_courtship_flow.json`.
+
 Other animals that are actually mapped: `docs/SPECIES_CONNECTOMES.md`. Only three whole-body synapse maps exist (*C. elegans*, *Ciona* larva, *Platynereis* larva). The worm whole-animal boot is live (`scripts/worm_connectome.py`): sensory → AVA → motor + body-wall muscle. Genetics join for fly walking proteins (`data/fly_walking_product.json`):
 
 | Gene | n | Mode | Homolog |
