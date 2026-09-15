@@ -278,16 +278,35 @@
       "engine": "fsot_template_product_v7_chemlink"
     },
     {
-      "symbol": "nompC",
-      "uniprot": "Q7KIQ2",
-      "organism": "Drosophila melanogaster",
+      "source_symbol": "nompC",
+      "source_uniprot": "Q7KIQ2",
+      "source_organism": "Drosophila melanogaster",
       "sits_on": "mechanosensory transduction",
+      "orthodb": "195446at2759",
+      "correspondence": "ncbi_gene_named",
       "target_organism": "Tribolium castaneum",
       "taxid": 7070,
-      "orthodb": "195446at2759",
-      "status": "no_measured_homolog",
-      "reason": "no UniProt OrthoDB or UniRef50 member in taxon",
-      "n_hits": 0
+      "uniprot": "XP_015838654.2",
+      "ncbi_gene": 662890,
+      "refseq": "XP_015838654.2",
+      "uniparc": "UPI0030FF3C31",
+      "tc": "TC012313",
+      "gene": "nompC",
+      "length": 1741,
+      "reviewed": false,
+      "status": "measured_homolog",
+      "note": "NCBI Gene 662890 is named nompC; full-length RefSeq is not in UniProtKB (UniParc only). UniProt models are split AUGUSTUS fragments. Kim 2014 RNAi dsnompC is lethal at eclosion.",
+      "free_parameters": 0,
+      "predict_rc": 0,
+      "pdb": "D:\\FlyWire_Connectome\\homologs\\product\\nompC_7070_XP_015838654.2.pdb",
+      "structure_mode": "template_raw",
+      "deploy_regime": "template_physics",
+      "template_pdb": "5VKQ",
+      "template_identity": 0.8106111484217595,
+      "template_coverage": 0.855255600229753,
+      "mean_confidence": 0.0,
+      "rg_target_A": null,
+      "engine": "fsot_template_product_v7_chemlink"
     },
     {
       "source_symbol": "iav",
@@ -825,8 +844,12 @@
       "taxid": 7165,
       "orthodb": "5874059at2759",
       "status": "no_measured_homolog",
-      "reason": "no UniProt OrthoDB or UniRef50 member in taxon",
-      "n_hits": 0
+      "reason": "No 1:1 in mec-4 UniRef50. Anopheles has ~26 ppk-family genes. Fly ppk vs worm mec-4 is ~18% (below leftover 1/\u03c6\u00b2 and close-homolog 1/\u03c6). Insect gentle-touch on the live graphs is nompC TRPN, not DEG/ENaC. Do not pick a random ppk as mec-4.",
+      "n_hits": 0,
+      "family": "DEG/ENaC (IPR001873); insect pickpocket (ppk)",
+      "n_family_in_taxon": 26,
+      "fly_analog": "ppk (FBgn0020258); DIOPT identity to mec-4 ~18%",
+      "closest_anopheles_to_fly_ppk": "AGAP011610"
     },
     {
       "source_symbol": "mec-4",
@@ -937,14 +960,9 @@
   "miss_audit": {
     "no_measured_homolog": [
       {
-        "source": "nompC",
-        "target": "Tribolium castaneum",
-        "reason": "no UniProt OrthoDB or UniRef50 member in taxon"
-      },
-      {
         "source": "mec-4",
         "target": "Anopheles gambiae",
-        "reason": "no UniProt OrthoDB or UniRef50 member in taxon"
+        "reason": "No 1:1 in mec-4 UniRef50. Anopheles has ~26 ppk-family genes. Fly ppk vs worm mec-4 is ~18% (below leftover 1/\u03c6\u00b2 and close-homolog 1/\u03c6). Insect gentle-touch on the live graphs is nompC TRPN, not DEG/ENaC. Do not pick a random ppk as mec-4."
       }
     ],
     "covered_by_orthodb_paralog": [
@@ -978,6 +996,6 @@
     ],
     "note": "UniRef50_{accession} misses isoform clusters (P05661-2, Q9VMR4). Fragments shorter than source/\u03c6\u00b2 dropped. DEG/ENaC family in Anopheles is not a mec-4 1:1. Tribolium nompC has no full-length UniRef50 member."
   },
-  "n_measured_homologs": 25,
-  "n_folded": 25
+  "n_measured_homologs": 26,
+  "n_folded": 26
 }

@@ -185,6 +185,93 @@ def _uniref50_cluster_ids(acc: str) -> list[str]:
     return out
 
 
+def _ncbi_fasta(protein_acc: str) -> str:
+    url = (
+        "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi"
+        f"?db=protein&id={urllib.parse.quote(protein_acc)}&rettype=fasta&retmode=text"
+    )
+    req = urllib.request.Request(url, headers={"User-Agent": _UA})
+    with urllib.request.urlopen(req, timeout=90) as fh:
+        raw = fh.read().decode("utf-8")
+    seq = "".join(
+        ln.strip() for ln in raw.splitlines() if ln and not ln.startswith(">")
+    )
+    return seq
+
+
+def _recover_ncbi_named(rows: list[dict[str, Any]], fasta_chunks: list[str]) -> None:
+    """Tribolium nompC is NCBI Gene 662890 / XP_015838654.2, not in UniProtKB.
+
+    UniProt only has split AUGUSTUS fragments (244 aa). Named gene + full-length
+    RefSeq is measured correspondence. Not an invented sequence.
+    """
+    for r in rows:
+        if r.get("status") != "no_measured_homolog":
+            continue
+        if (r.get("source_symbol") or r.get("symbol")) != "nompC":
+            continue
+        if r.get("taxid") != 7070:
+            continue
+        acc = "XP_015838654.2"
+        print(f"  NCBI recover nompC Tribolium {acc}", flush=True)
+        seq = _ncbi_fasta(acc)
+        if len(seq) < 600:
+            print(f"  NCBI fasta too short n={len(seq)}", flush=True)
+            continue
+        fasta_chunks.append(f">nompC|{acc}|Tribolium castaneum\n")
+        for i in range(0, len(seq), 60):
+            fasta_chunks.append(seq[i : i + 60] + "\n")
+        r.clear()
+        r.update(
+            {
+                "source_symbol": "nompC",
+                "source_uniprot": "Q7KIQ2",
+                "source_organism": "Drosophila melanogaster",
+                "sits_on": "mechanosensory transduction",
+                "orthodb": "195446at2759",
+                "correspondence": "ncbi_gene_named",
+                "target_organism": "Tribolium castaneum",
+                "taxid": 7070,
+                "uniprot": acc,
+                "ncbi_gene": 662890,
+                "refseq": acc,
+                "uniparc": "UPI0030FF3C31",
+                "tc": "TC012313",
+                "gene": "nompC",
+                "length": len(seq),
+                "reviewed": False,
+                "status": "measured_homolog",
+                "note": (
+                    "NCBI Gene 662890 is named nompC; full-length RefSeq is not "
+                    "in UniProtKB (UniParc only). UniProt models are split "
+                    "AUGUSTUS fragments. Kim 2014 RNAi dsnompC is lethal at eclosion."
+                ),
+                "free_parameters": 0,
+            }
+        )
+
+
+def _annotate_mec4_family(rows: list[dict[str, Any]]) -> None:
+    for r in rows:
+        if r.get("status") != "no_measured_homolog":
+            continue
+        if (r.get("source_symbol") or r.get("symbol")) != "mec-4":
+            continue
+        if r.get("taxid") != 7165:
+            continue
+        r["family"] = "DEG/ENaC (IPR001873); insect pickpocket (ppk)"
+        r["n_family_in_taxon"] = 26
+        r["fly_analog"] = "ppk (FBgn0020258); DIOPT identity to mec-4 ~18%"
+        r["closest_anopheles_to_fly_ppk"] = "AGAP011610"
+        r["reason"] = (
+            "No 1:1 in mec-4 UniRef50. Anopheles has ~26 ppk-family genes. "
+            "Fly ppk vs worm mec-4 is ~18% (below leftover 1/φ² and close-homolog "
+            "1/φ). Insect gentle-touch on the live graphs is nompC TRPN, not DEG/ENaC. "
+            "Do not pick a random ppk as mec-4."
+        )
+        print("  mec-4 Anopheles: family present, 1:1 absent (~18% to fly ppk)", flush=True)
+
+
 def _ensembl_id(rec: dict[str, Any]) -> str:
     for x in rec.get("uniProtKBCrossReferences") or []:
         if x.get("database") == "EnsemblMetazoa":
@@ -361,6 +448,8 @@ def resolve() -> dict[str, Any]:
             f"{cover.get('uniprot')}",
             flush=True,
         )
+    _recover_ncbi_named(rows, fasta_chunks)
+    _annotate_mec4_family(rows)
     FASTA.write_text("".join(fasta_chunks), encoding="utf-8")
     print(f"  wrote {FASTA}", flush=True)
     return {
@@ -464,18 +553,17 @@ def fold_rows(join: dict[str, Any]) -> dict[str, Any]:
             f"== fold {row['source_symbol']} {row['target_organism']} {acc} n={len(seq)}",
             flush=True,
         )
-        rc = predict_main(
-            [
-                "--seq",
-                seq,
-                "--uniprot",
-                acc,
-                "--pdb-out",
-                str(pdb_out),
-                "--json-out",
-                str(json_out),
-            ]
-        )
+        cmd = [
+            "--seq",
+            seq,
+            "--pdb-out",
+            str(pdb_out),
+            "--json-out",
+            str(json_out),
+        ]
+        if acc and not str(acc).upper().startswith("XP_"):
+            cmd.extend(["--uniprot", acc])
+        rc = predict_main(cmd)
         rec = {
             **row,
             "predict_rc": rc,

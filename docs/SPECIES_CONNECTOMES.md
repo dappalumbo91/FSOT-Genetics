@@ -180,7 +180,7 @@ The experiment — map another insect from genetics without that species’ EM �
 
 `python scripts/homolog_correspondence.py`
 
-First pass: **23 measured, 7 misses.** The seven were a sieve, not seven missing genes. Isoform-aware UniRef50 (`Q9VMR4`, `P05661-2`) plus same-OrthoDB cover: **25 measured, 3 covered, 2 true misses.**
+First pass: **23 measured, 7 misses.** The seven were a sieve, not seven missing genes. Isoform-aware UniRef50 plus NCBI named gene plus same-OrthoDB cover: **26 measured, 3 covered, 1 true 1:1 miss** (`mec-4` Anopheles).
 
 | Miss | What it actually is |
 |------|---------------------|
@@ -189,8 +189,8 @@ First pass: **23 measured, 7 misses.** The seven were a sieve, not seven missing
 | myo-3 Anopheles | Same OrthoDB as Mhc — already AGAP010147. |
 | nan Anopheles | Same OrthoDB as *iav* — already Q7QFD0. |
 | unc-25 Anopheles | Same OrthoDB as Gad1 — already Q7PNL7. Worm GAD UniRef50 does not reach insects. |
-| nompC Tribolium | UniRef50 hit is a **244 aa fragment** (dropped: shorter than source/φ²). Full-length beetle nompC is not in UniProt at 50% / OrthoDB. **True miss.** |
-| mec-4 Anopheles | DEG/ENaC *family* exists (ppk-like). No 1:1 in the mec-4 UniRef50 cluster. **True miss.** |
+| nompC Tribolium | UniProt is split fragments (244 aa). **NCBI Gene 662890 / TC012313 / XP_015838654.2 (1741 aa)** is named nompC; UniParc `UPI0030FF3C31`, **not in UniProtKB**. Kim 2014 RNAi `dsnompC` is lethal at eclosion. Recovered as `ncbi_gene_named`. |
+| mec-4 Anopheles | DEG/ENaC *family* exists (~26 ppk genes). Fly *ppk* vs worm *mec-4* is **~18%** (below leftover 1/φ²). Insect gentle-touch on the live graphs is **nompC TRPN**, not a 1:1 degenerin. Closest fly-*ppk* mosquito ortholog is AGAP011610 — not folded as mec-4. **True 1:1 miss.** |
 
 Bee nompC folds on 5VKQ at **81%** identity. *mec-4* bee/beetle: sequence homolog, **no measured structure map**. Source: `data/homolog_correspondence.json`. Sequences on `D:\FlyWire_Connectome\homologs` (not git).
 
