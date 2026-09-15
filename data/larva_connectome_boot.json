@@ -1,0 +1,554 @@
+{
+  "organism": "Drosophila melanogaster first-instar larva",
+  "n_cells": 2952,
+  "n_edges": 110677,
+  "n_typed": 2606,
+  "type_counts": {
+    "pre-DN-VNC": 476,
+    "sensory": 430,
+    "unlabeled": 346,
+    "PN": 206,
+    "LHN": 202,
+    "DN-VNC": 182,
+    "DN-SEZ": 164,
+    "PN-somato": 152,
+    "KC": 144,
+    "LN": 110,
+    "MB-FBN": 108,
+    "pre-DN-SEZ": 102,
+    "CN": 100,
+    "MB-FFN": 54,
+    "RGN": 54,
+    "MBON": 48,
+    "ascending": 46,
+    "MBIN": 28
+  },
+  "residual_Biochemistry": 1.091958932349586,
+  "gaba_inhibitory": false,
+  "free_parameters": 0,
+  "phi": 1.618033988749895,
+  "authority": "Winding et al. Science 2023; all-all synapse counts + cell-type annotations (Supplementary-Data-S1). Unsigned \u2014 NT not in this dump.",
+  "programs": [
+    {
+      "name": "sensory",
+      "seed": "sensory",
+      "how": "celltype",
+      "n_seed": 430,
+      "flow": [
+        {
+          "hop": 0,
+          "l1": 430.0,
+          "n_active": 430,
+          "DN_VNC": 0.0,
+          "DN_SEZ": 0.0,
+          "pre_DN_VNC": 0.0,
+          "sensory": 430.0,
+          "ascending": 0.0,
+          "top": {
+            "celltype": "sensory",
+            "extra": "visual",
+            "a": 1.0
+          }
+        },
+        {
+          "hop": 1,
+          "l1": 47.369496855345844,
+          "n_active": 8,
+          "DN_VNC": 0.11477987421383633,
+          "DN_SEZ": 5.410377358490556,
+          "pre_DN_VNC": 0.17610062893081738,
+          "sensory": 2.261006289308165,
+          "ascending": 0.3018867924528298,
+          "top": {
+            "celltype": "LN",
+            "extra": "no official annotation",
+            "a": 0.9999999999999986
+          }
+        },
+        {
+          "hop": 2,
+          "l1": 47.283241690968424,
+          "n_active": 7,
+          "DN_VNC": 0.32274993878141545,
+          "DN_SEZ": 1.428463302241708,
+          "pre_DN_VNC": 1.0623483448721065,
+          "sensory": 5.558569488657846,
+          "ascending": 0.03523964292869693,
+          "top": {
+            "celltype": "LN",
+            "extra": "no official annotation",
+            "a": 0.9999999999999967
+          }
+        },
+        {
+          "hop": 3,
+          "l1": 42.22305059795739,
+          "n_active": 8,
+          "DN_VNC": 0.3812682025548187,
+          "DN_SEZ": 1.0551815234087494,
+          "pre_DN_VNC": 1.3773743238267042,
+          "sensory": 3.6306774169782248,
+          "ascending": 0.020394870247716572,
+          "top": {
+            "celltype": "LN",
+            "extra": "no official annotation",
+            "a": 0.9999999999999971
+          }
+        },
+        {
+          "hop": 4,
+          "l1": 42.76880164607776,
+          "n_active": 6,
+          "DN_VNC": 0.4308510978409644,
+          "DN_SEZ": 0.9885719666826202,
+          "pre_DN_VNC": 1.5357204557996316,
+          "sensory": 4.0227170841370254,
+          "ascending": 0.019133583442085513,
+          "top": {
+            "celltype": "LN",
+            "extra": "no official annotation",
+            "a": 0.9999999999999969
+          }
+        },
+        {
+          "hop": 11,
+          "l1": 43.271052954240815,
+          "n_active": 3,
+          "DN_VNC": 0.5705878757900157,
+          "DN_SEZ": 0.908440862697147,
+          "pre_DN_VNC": 2.0614210057996933,
+          "sensory": 3.5299706001145097,
+          "ascending": 0.017778149668540723,
+          "top": {
+            "celltype": "LN",
+            "extra": "no official annotation",
+            "a": 0.9999999999999969
+          }
+        }
+      ]
+    },
+    {
+      "name": "olfactory",
+      "seed": "olfactory",
+      "how": "extra",
+      "n_seed": 114,
+      "flow": [
+        {
+          "hop": 0,
+          "l1": 114.0,
+          "n_active": 114,
+          "DN_VNC": 0.0,
+          "DN_SEZ": 0.0,
+          "pre_DN_VNC": 0.0,
+          "sensory": 42.0,
+          "ascending": 0.0,
+          "top": {
+            "celltype": "sensory",
+            "extra": "olfactory",
+            "a": 1.0
+          }
+        },
+        {
+          "hop": 1,
+          "l1": 47.388451443569494,
+          "n_active": 8,
+          "DN_VNC": 0.39895013123359524,
+          "DN_SEZ": 0.9330708661417311,
+          "pre_DN_VNC": 1.0564304461942238,
+          "sensory": 0.0328083989501312,
+          "ascending": 0.034120734908136434,
+          "top": {
+            "celltype": "LN",
+            "extra": "no official annotation",
+            "a": 0.9999999999999988
+          }
+        },
+        {
+          "hop": 2,
+          "l1": 51.10116221421336,
+          "n_active": 8,
+          "DN_VNC": 0.4292231565699886,
+          "DN_SEZ": 1.0544781953740219,
+          "pre_DN_VNC": 1.73427816867837,
+          "sensory": 5.400039090059668,
+          "ascending": 0.02744884922677946,
+          "top": {
+            "celltype": "LN",
+            "extra": "no official annotation",
+            "a": 0.9999999999999966
+          }
+        },
+        {
+          "hop": 3,
+          "l1": 47.37947674748382,
+          "n_active": 8,
+          "DN_VNC": 0.498879320382261,
+          "DN_SEZ": 1.040795126480429,
+          "pre_DN_VNC": 1.8107210713144775,
+          "sensory": 3.7011116484999254,
+          "ascending": 0.01994139476284726,
+          "top": {
+            "celltype": "LN",
+            "extra": "no official annotation",
+            "a": 0.9999999999999971
+          }
+        },
+        {
+          "hop": 4,
+          "l1": 47.232864665627005,
+          "n_active": 6,
+          "DN_VNC": 0.5376632973130893,
+          "DN_SEZ": 1.0232034327685464,
+          "pre_DN_VNC": 2.0168545970488543,
+          "sensory": 4.007323137285647,
+          "ascending": 0.02015305366983365,
+          "top": {
+            "celltype": "LN",
+            "extra": "no official annotation",
+            "a": 0.9999999999999969
+          }
+        },
+        {
+          "hop": 11,
+          "l1": 44.17043475192484,
+          "n_active": 3,
+          "DN_VNC": 0.6005574940662568,
+          "DN_SEZ": 0.9204028665734219,
+          "pre_DN_VNC": 2.165823920766622,
+          "sensory": 3.5328329504325,
+          "ascending": 0.018135877025015342,
+          "top": {
+            "celltype": "LN",
+            "extra": "no official annotation",
+            "a": 0.9999999999999969
+          }
+        }
+      ]
+    },
+    {
+      "name": "mechano",
+      "seed": "mechano",
+      "how": "extra",
+      "n_seed": 94,
+      "flow": [
+        {
+          "hop": 0,
+          "l1": 94.0,
+          "n_active": 94,
+          "DN_VNC": 0.0,
+          "DN_SEZ": 0.0,
+          "pre_DN_VNC": 0.0,
+          "sensory": 0.0,
+          "ascending": 14.0,
+          "top": {
+            "celltype": "PN-somato",
+            "extra": "mechano-Ch 2nd_order PN",
+            "a": 1.0
+          }
+        },
+        {
+          "hop": 1,
+          "l1": 128.12790697674282,
+          "n_active": 26,
+          "DN_VNC": 6.348837209302261,
+          "DN_SEZ": 4.848837209302276,
+          "pre_DN_VNC": 20.511627906976546,
+          "sensory": 0.15116279069767283,
+          "ascending": 2.511627906976718,
+          "top": {
+            "celltype": "LHN",
+            "extra": "mechano-Ch 2nd_order PN",
+            "a": 0.9999999999999895
+          }
+        },
+        {
+          "hop": 2,
+          "l1": 235.68638021245943,
+          "n_active": 38,
+          "DN_VNC": 16.601553829078608,
+          "DN_SEZ": 10.36752814333268,
+          "pre_DN_VNC": 40.00126843190055,
+          "sensory": 0.065482796892341,
+          "ascending": 1.510702394165195,
+          "top": {
+            "celltype": "PN-somato",
+            "extra": "noci 2nd_order PN",
+            "a": 0.9999999999999876
+          }
+        },
+        {
+          "hop": 3,
+          "l1": 209.0159174178155,
+          "n_active": 19,
+          "DN_VNC": 13.860464110840498,
+          "DN_SEZ": 8.192084340973421,
+          "pre_DN_VNC": 32.42409468766285,
+          "sensory": 0.22625196507072295,
+          "ascending": 0.6475125355184485,
+          "top": {
+            "celltype": "MB-FBN",
+            "extra": "FB2N-3",
+            "a": 0.9999999999999947
+          }
+        },
+        {
+          "hop": 4,
+          "l1": 189.56895978931365,
+          "n_active": 24,
+          "DN_VNC": 10.124536002369439,
+          "DN_SEZ": 5.356034013737114,
+          "pre_DN_VNC": 26.752335489569635,
+          "sensory": 0.3309306468311234,
+          "ascending": 0.2712317036233949,
+          "top": {
+            "celltype": "MBON",
+            "extra": "MBON-c1; CN-59",
+            "a": 0.9999999999999956
+          }
+        },
+        {
+          "hop": 11,
+          "l1": 113.95609188512212,
+          "n_active": 2,
+          "DN_VNC": 3.4868833610564436,
+          "DN_SEZ": 1.6264666652210034,
+          "pre_DN_VNC": 12.129045655112384,
+          "sensory": 1.6609456326258116,
+          "ascending": 0.04515030626075342,
+          "top": {
+            "celltype": "MBON",
+            "extra": "MBON-c1; CN-59",
+            "a": 0.9999999999999961
+          }
+        }
+      ]
+    },
+    {
+      "name": "gustatory",
+      "seed": "gustatory",
+      "how": "extra",
+      "n_seed": 358,
+      "flow": [
+        {
+          "hop": 0,
+          "l1": 358.0,
+          "n_active": 358,
+          "DN_VNC": 0.0,
+          "DN_SEZ": 0.0,
+          "pre_DN_VNC": 0.0,
+          "sensory": 238.0,
+          "ascending": 0.0,
+          "top": {
+            "celltype": "sensory",
+            "extra": "gustatory-external",
+            "a": 1.0
+          }
+        },
+        {
+          "hop": 1,
+          "l1": 162.3113207547163,
+          "n_active": 13,
+          "DN_VNC": 2.7830188679245156,
+          "DN_SEZ": 14.16981132075465,
+          "pre_DN_VNC": 8.655660377358439,
+          "sensory": 4.0094339622641355,
+          "ascending": 0.21698113207547076,
+          "top": {
+            "celltype": "LN",
+            "extra": "no official annotation",
+            "a": 0.9999999999999957
+          }
+        },
+        {
+          "hop": 2,
+          "l1": 230.9394306258697,
+          "n_active": 11,
+          "DN_VNC": 5.3655440604592775,
+          "DN_SEZ": 7.5435101621541785,
+          "pre_DN_VNC": 19.74623963607003,
+          "sensory": 5.645682001614155,
+          "ascending": 0.22719935431799682,
+          "top": {
+            "celltype": "LN",
+            "extra": "no official annotation",
+            "a": 0.9999999999999929
+          }
+        },
+        {
+          "hop": 3,
+          "l1": 157.36350548947306,
+          "n_active": 10,
+          "DN_VNC": 4.247893830990577,
+          "DN_SEZ": 4.010339891176116,
+          "pre_DN_VNC": 14.0514763050569,
+          "sensory": 3.7210382763478647,
+          "ascending": 0.1157428877694179,
+          "top": {
+            "celltype": "LN",
+            "extra": "no official annotation",
+            "a": 0.9999999999999969
+          }
+        },
+        {
+          "hop": 4,
+          "l1": 116.53352672054973,
+          "n_active": 6,
+          "DN_VNC": 3.098278616645153,
+          "DN_SEZ": 2.5468920236673545,
+          "pre_DN_VNC": 10.330944786069809,
+          "sensory": 4.215338108388562,
+          "ascending": 0.06352029978370674,
+          "top": {
+            "celltype": "LN",
+            "extra": "no official annotation",
+            "a": 0.999999999999997
+          }
+        },
+        {
+          "hop": 11,
+          "l1": 53.56769221417774,
+          "n_active": 3,
+          "DN_VNC": 0.918812497492745,
+          "DN_SEZ": 1.0450958823875698,
+          "pre_DN_VNC": 3.2673411521667246,
+          "sensory": 3.556950798677485,
+          "ascending": 0.021850645722977853,
+          "top": {
+            "celltype": "LN",
+            "extra": "no official annotation",
+            "a": 0.9999999999999969
+          }
+        }
+      ]
+    }
+  ],
+  "compare": {
+    "hop_1": {
+      "sensory": {
+        "DN_VNC": 0.11477987421383633,
+        "DN_SEZ": 5.410377358490556,
+        "n_active": 8,
+        "top": {
+          "celltype": "LN",
+          "extra": "no official annotation",
+          "a": 0.9999999999999986
+        }
+      },
+      "olfactory": {
+        "DN_VNC": 0.39895013123359524,
+        "DN_SEZ": 0.9330708661417311,
+        "n_active": 8,
+        "top": {
+          "celltype": "LN",
+          "extra": "no official annotation",
+          "a": 0.9999999999999988
+        }
+      },
+      "mechano": {
+        "DN_VNC": 6.348837209302261,
+        "DN_SEZ": 4.848837209302276,
+        "n_active": 26,
+        "top": {
+          "celltype": "LHN",
+          "extra": "mechano-Ch 2nd_order PN",
+          "a": 0.9999999999999895
+        }
+      },
+      "gustatory": {
+        "DN_VNC": 2.7830188679245156,
+        "DN_SEZ": 14.16981132075465,
+        "n_active": 13,
+        "top": {
+          "celltype": "LN",
+          "extra": "no official annotation",
+          "a": 0.9999999999999957
+        }
+      }
+    },
+    "hop_2": {
+      "sensory": {
+        "DN_VNC": 0.32274993878141545,
+        "DN_SEZ": 1.428463302241708,
+        "n_active": 7,
+        "top": {
+          "celltype": "LN",
+          "extra": "no official annotation",
+          "a": 0.9999999999999967
+        }
+      },
+      "olfactory": {
+        "DN_VNC": 0.4292231565699886,
+        "DN_SEZ": 1.0544781953740219,
+        "n_active": 8,
+        "top": {
+          "celltype": "LN",
+          "extra": "no official annotation",
+          "a": 0.9999999999999966
+        }
+      },
+      "mechano": {
+        "DN_VNC": 16.601553829078608,
+        "DN_SEZ": 10.36752814333268,
+        "n_active": 38,
+        "top": {
+          "celltype": "PN-somato",
+          "extra": "noci 2nd_order PN",
+          "a": 0.9999999999999876
+        }
+      },
+      "gustatory": {
+        "DN_VNC": 5.3655440604592775,
+        "DN_SEZ": 7.5435101621541785,
+        "n_active": 11,
+        "top": {
+          "celltype": "LN",
+          "extra": "no official annotation",
+          "a": 0.9999999999999929
+        }
+      }
+    },
+    "hop_3": {
+      "sensory": {
+        "DN_VNC": 0.3812682025548187,
+        "DN_SEZ": 1.0551815234087494,
+        "n_active": 8,
+        "top": {
+          "celltype": "LN",
+          "extra": "no official annotation",
+          "a": 0.9999999999999971
+        }
+      },
+      "olfactory": {
+        "DN_VNC": 0.498879320382261,
+        "DN_SEZ": 1.040795126480429,
+        "n_active": 8,
+        "top": {
+          "celltype": "LN",
+          "extra": "no official annotation",
+          "a": 0.9999999999999971
+        }
+      },
+      "mechano": {
+        "DN_VNC": 13.860464110840498,
+        "DN_SEZ": 8.192084340973421,
+        "n_active": 19,
+        "top": {
+          "celltype": "MB-FBN",
+          "extra": "FB2N-3",
+          "a": 0.9999999999999947
+        }
+      },
+      "gustatory": {
+        "DN_VNC": 4.247893830990577,
+        "DN_SEZ": 4.010339891176116,
+        "n_active": 10,
+        "top": {
+          "celltype": "LN",
+          "extra": "no official annotation",
+          "a": 0.9999999999999969
+        }
+      }
+    }
+  },
+  "note": "Larval brain (not the adult Male CNS). DN-VNC is the brain\u2192cord crawling command analog of adult DNg. Sensory vs olfactory vs mechanosensory on the same measured graph. Not a trained RNN."
+}

@@ -204,6 +204,21 @@ Seed is **measured** Male CNS types: `ER*` ellipsoid-body rings (includes ER5 / 
 
 Sleep seeds stay in the central complex and do **not** light the walking command. LNv (clock) leaks more toward descending than ER/FB. Source: `data/fly_sleep_flow.json`.
 
+### Larval brain (first instar) — live
+
+`python scripts/larva_connectome.py --boot`
+
+Winding et al. *Science* 2023. 2,952 neurons, 110,677 chemical edges. Unsigned (NT not in this dump). Files on `D:\FlyWire_Connectome\larva`.
+
+| Program | n seed | Hop 2 DN-VNC | Hop 2 DN-SEZ | Hop 1 peak |
+|---------|-------:|-------------:|-------------:|------------|
+| mechanosensory | 94 | **16.60** | 10.37 | LHN (chordotonal 2nd-order) |
+| gustatory | 358 | 5.37 | **7.54** | LN |
+| olfactory | 114 | 0.43 | 1.05 | LN |
+| all sensory | 430 | 0.32 | 1.43 | LN (hub leftover) |
+
+Same split as the adult: **mechanosensory lights the brain→cord command (DN-VNC)**; olfactory stays in local interneurons. All-sensory is swamped by hubs, as in the first adult sensory boot. Source: `data/larva_connectome_boot.json`.
+
 Other animals that are actually mapped: `docs/SPECIES_CONNECTOMES.md`. Only three whole-body synapse maps exist (*C. elegans*, *Ciona* larva, *Platynereis* larva). The worm whole-animal boot is live (`scripts/worm_connectome.py`): sensory → AVA → motor + body-wall muscle. Genetics join for fly walking proteins (`data/fly_walking_product.json`):
 
 | Gene | n | Mode | Homolog |

@@ -24,9 +24,9 @@ Mouse cortex cubes, zebrafish larval volumes, and human tractography are **not**
 | BANC | female | brain **+** VNC, intact neck | ~142k | Codex; Bates et al. *Nature* 2026 |
 | Male CNS v1.0 | male | brain **+** VNC | **166,700** | neuPrint `male-cns:v1.0`; Berg et al. *Cell* 2026-09-03 |
 | MANC / FANC | male / female | VNC only | ~16k / sparse | neuPrint / GitHub |
-| Larval CNS | — | complete first-instar CNS | ~3,000 | Winding et al. 2023 |
+| Larval CNS | — | complete first-instar brain | **2,952** | Winding et al. 2023; live `scripts/larva_connectome.py` |
 
-What we have on disk: female brain (v630) **and Male CNS v1.0** (165,122 traced, brain+VNC, 25.6 M edges). Walking seed hits **vnc_motor**. Cell → gene → product Cα: `data/organism_product_join.json`.
+What we have on disk: female brain (v630), Male CNS v1.0 (165,122 traced, brain+VNC, 25.6 M edges), **and the first-instar larval brain** (2,952 cells, 110,677 edges). Walking seed hits **vnc_motor**. Larval mechanosensory seed hits **DN-VNC**. Cell → gene → product Cα: `data/organism_product_join.json`.
 
 Genome / genetics: FlyBase complete; ~14k protein-coding genes; UniProt proteome `UP000000803`. **304 Drosophilidae genomes** are annotated (Zenodo 2025) — genomes, not brains.
 
