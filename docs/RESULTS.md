@@ -108,4 +108,19 @@ Source: `data/plant_homolog.json`. Still not a plant connectome.
 | Point a clade-restricted 1:1 at the mapped residual job | Treat a genome as synapses |
 | Same law on animals and plants (proteins) | Skip VNC and call a fly brain a whole animal |
 
-Scripts: `verify_cross.py` is the merge gate. Biohub/Kaggle stay frozen (`docs/BIOHUB_FREEZE.md`).
+## 6. Multi-prover stamp
+
+`python verification/run_cross_proof.py` → `data/cross_proof_report.json`. **41** obligations (13 engine, 28 measured). **overall_ok = true.** Does not inherit the hub report.
+
+| Layer | Status |
+|-------|--------|
+| Python D1D38A + formula path | PASS |
+| SMT python + Z3 | PASS |
+| Lean 4 + Mathlib (`Catalog.lean`) | PASS |
+| Coq / Rocq | PASS |
+| Isabelle/HOL | PASS |
+| F* | PASS |
+| Rust f64 kernel | PASS |
+| TLA+ TLC routing | PASS |
+
+Labeled archive: `docs/VERIFIED_SOLVES.md`. Biohub/Kaggle stay frozen (`docs/BIOHUB_FREEZE.md`).

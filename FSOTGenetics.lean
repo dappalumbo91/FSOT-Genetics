@@ -8,3 +8,4 @@ import FSOTGenetics.SeedsReal
 import FSOTGenetics.ChemLink
 import FSOTGenetics.ZeroFreeParams
 import FSOTGenetics.Observer
+import FSOTGenetics.Catalog

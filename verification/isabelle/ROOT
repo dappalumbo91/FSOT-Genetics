@@ -1,0 +1,4 @@
+session FSOTGenetics = HOL +
+  options [document = false, timeout = 120]
+  theories
+    GeneticsSpine

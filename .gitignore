@@ -51,6 +51,18 @@ data/public/
 zig/.zig-cache/
 zig/zig-out/
 
+# Multi-prover build artifacts (sources stay)
+verification/coq/*.vo
+verification/coq/*.vok
+verification/coq/*.vos
+verification/coq/*.glob
+verification/coq/*.aux
+verification/coq/.*aux
+verification/isabelle/output/
+verification/rust_genetics_kernel/target/
+verification/fstar/*.checked
+verification/tla/states/
+
 # Field console is generated but committed for demos; rebuild anytime:
 # python scripts/build_field_console.py
 

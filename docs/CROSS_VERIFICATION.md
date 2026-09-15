@@ -11,10 +11,13 @@ Modeled on **FSOT-2.1-Lean** multi-prover / green-gate discipline:
 ```powershell
 cd FSOT-Genetics
 python scripts/verify_cross.py
+python verification/run_cross_proof.py
 # optional (network):
 python scripts/run_fsot_vs_alphafold_structure.py --max-proteins 8 --rounds 24 --sleep 0.2
 python scripts/run_fsot_distogram_contact_eval.py
 ```
+
+Full gauntlet (Lean · Coq · Isabelle · F* · SMT · Rust · TLA+) writes `data/cross_proof_report.json`. Labeled solves: `docs/VERIFIED_SOLVES.md`.
 
 ## What is *not* a green gate
 
