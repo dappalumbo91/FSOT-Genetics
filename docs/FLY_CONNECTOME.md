@@ -178,6 +178,32 @@ Seed is **measured** Male CNS genetics: `pC1_` (paper: pC1SS2 promotes tussling)
 
 pC1 / dsx / male-specific load **descending**, not song MNs. TN1 is the courtship-song contrast. Chamber translation energy *falls* during light-on (tussling is in-place grappling, not locomotion). Leftover two-fly distance did not beat the well rim — the overlay is the authority marker. Source: `data/fly_aggression_flow.json`.
 
+### Sleep observer (live)
+
+`python scripts/fly_sleep.py`
+
+TriKinetics DAM2 IR beam counts (rethomics/damr monitor M064). File on `D:\FlyWire_Connectome\behavior\sleep` (not git). 30 live channels, 3,443 one-minute bins, 12:12 LD from the light column.
+
+The field’s **5-minute** sleep cut is not used. Inactive = zero beam counts. Sleep = consecutive zeros longer than MAD+φ of length-weighted bout durations (leftover consolidated immobility).
+
+| | |
+|--|--|
+| Sleep cut | **170 min** leftover |
+| Fraction sleep | 0.172 |
+| Night / day | **0.205 / 0.141** (1.45×) |
+
+Seed is **measured** Male CNS types: `ER*` ellipsoid-body rings (includes ER5 / ER3m), `FB*` fan-shaped body, `LNv` clock neurons.
+
+| Program | n seed | Hop 2 vnc_motor | Hop 2 descending | Hop 1 peak |
+|---------|-------:|----------------:|-----------------:|------------|
+| ER | 282 | 0 | ~0 | (recurrent; GABA can cancel outgoing) |
+| FB | 602 | 0.07 | 1.51 | **hDeltaF** |
+| LNv | 20 | 0.28 | 4.30 | SMP368 |
+| JO (walking) | 672 | **7.77** | 24.21 | DNg29 |
+| olfactory | 2,639 | 0.001 | 0.57 | il3LN6 |
+
+Sleep seeds stay in the central complex and do **not** light the walking command. LNv (clock) leaks more toward descending than ER/FB. Source: `data/fly_sleep_flow.json`.
+
 Other animals that are actually mapped: `docs/SPECIES_CONNECTOMES.md`. Only three whole-body synapse maps exist (*C. elegans*, *Ciona* larva, *Platynereis* larva). The worm whole-animal boot is live (`scripts/worm_connectome.py`): sensory → AVA → motor + body-wall muscle. Genetics join for fly walking proteins (`data/fly_walking_product.json`):
 
 | Gene | n | Mode | Homolog |
