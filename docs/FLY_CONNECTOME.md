@@ -114,6 +114,23 @@ VNC sensory and JO put mass on **vnc_motor**. Olfactory does not. JO hop 1 peaks
 
 Loop that ran: **video + 3-D tarsus → walking is on → seed mechanosensory / JO → residual hops → descending / DN mass**. Iron inaccuracies only against these kinematics. Predict *up* (other insects, then vertebrates) only where measured homologs exist — same product rule as protein Cα.
 
+### Rest / odor observer (live)
+
+`python scripts/fly_odor.py`
+
+Harvard tethered-walk clips never rest. Álvarez-Salvado et al. *eLife* 7:e37815 Video 1 does: four walking flies, **ACV 10% pulse**, green overlay at the top of the frame. MPEG-4 on `D:\FlyWire_Connectome\behavior\odor` (not git). Dryad kinematics zip is 6.94 GB and was not downloaded. GitHub is LabVIEW / MATLAB, not CSV.
+
+Observer (not a trained pose net): green-excess ≥ observer-max / φ = odor on; MAD+φ on chamber frame-diff = motion on; four lanes ≥ observer-max / φ of column mean.
+
+| Epoch | Frames | Energy | Motion *y* (up is smaller) | Seed |
+|-------|-------:|-------:|---------------------------:|------|
+| rest (pre-odor, still) | 384 | 0.0046 | 356 | none |
+| odor on (green overlay) | 302 / 10.07 s | **0.018** (4.0× rest) | **316** | olfactory |
+| offset (odor off, moving) | 384 | **0.044** | 319 | none |
+| JO / vnc_sensory (walking contrast) | — | — | — | hop-2 vnc_motor **7.77 / 10.74** |
+
+Olfactory hop 1 peaks on **il3LN6** (antennal lobe). Hop-2 vnc_motor ≈ 0. Rest is not a cell class — odor off and motion below MAD+φ means no afferent seed. Offset search is not an invented OFF class. The pulse raises energy and shifts motion upwind; the walking command on this graph is still JO / vnc_sensory, not the olfactory cascade. Source: `data/fly_odor_flow.json`.
+
 Other animals that are actually mapped: `docs/SPECIES_CONNECTOMES.md`. Only three whole-body synapse maps exist (*C. elegans*, *Ciona* larva, *Platynereis* larva). The worm whole-animal boot is live (`scripts/worm_connectome.py`): sensory → AVA → motor + body-wall muscle. Genetics join for fly walking proteins (`data/fly_walking_product.json`):
 
 | Gene | n | Mode | Homolog |

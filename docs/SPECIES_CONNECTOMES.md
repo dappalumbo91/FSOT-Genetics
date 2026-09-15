@@ -112,17 +112,17 @@ Thousands of species have a genome. A handful have a cell atlas. **Three** have 
 measured genome          → trinary codon / AA map (already live)
 measured protein homolog → FSOT product Cα (0.13 Å freeze)
 measured cell + synapses → residual hops on the graph (fly brain live; worm whole-animal live)
-measured behavior        → observer seed (fly walking live)
+measured behavior        → observer seed (fly walking + rest/odor live)
 ```
 
 Missing for a *Drosophila* whole-animal molecular recreation (need these, do not invent them):
 
-1. **VNC** — Male CNS / BANC (published; not yet on `D:`).
+1. **VNC** — Male CNS v1.0 is on `D:` and boots. BANC (female brain+cord) is not.
 2. **Muscles, gut, cuticle** — not in any fly EM CNS dump.
 3. **Per-cell transcriptome joined to `root_id`** — Fly Cell Atlas exists; it is not yet wired to FlyWire IDs here.
 4. **Named proteins on named cells** — FlyBase / UniProt join, then product Cα only where a measured homolog exists.
-5. **Rest / odor / courtship observers** — walking is one program; we do not have a rest trial in the Harvard clip.
-6. **Other species** — worm is the next whole-animal boot; Platynereis and Ciona after that; vertebrates only as homologs.
+5. **Courtship observer** — walking and rest/odor are live (`scripts/fly_behavior.py`, `scripts/fly_odor.py`). No courtship trial yet.
+6. **Other species** — worm, Ciona, and Platynereis whole-body maps boot. Vertebrates only as homologs.
 
 Genetics join for the walking program (measured, not guessed):
 
