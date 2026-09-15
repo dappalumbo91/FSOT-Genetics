@@ -1,0 +1,603 @@
+{
+  "dataset": "banc:v888",
+  "n_neurons": 175401,
+  "n_edges": 13542180,
+  "n_gaba": 21300,
+  "authority": "BANC v888 Bates et al. Nature 2026; female brain+VNC; GABA from neurotransmitter_predicted; weights = measured synapse counts (edgelist_simple_v3); glia/trachea dropped; vnc_motor = super_class motor \u2229 region VNC",
+  "free_parameters": 0,
+  "programs": [
+    {
+      "name": "vnc_sensory",
+      "seed": "vnc_sensory",
+      "how": "class",
+      "n_seed": 7845,
+      "gpu": true,
+      "device": "NVIDIA GeForce RTX 5070",
+      "elapsed_s": 3.9124315000372007,
+      "flow": [
+        {
+          "hop": 0,
+          "l1": 7845.0,
+          "n_active": 7845,
+          "motor": 0.0,
+          "vnc_motor": 0.0,
+          "cb_motor": 0.0,
+          "descending": 0.0,
+          "vnc_sensory": 7845.0,
+          "top": {
+            "cell_type": "SNpp52",
+            "super_class": "vnc_sensory",
+            "cell_class": "hair_plate_neuron",
+            "a": 1.0
+          }
+        },
+        {
+          "hop": 1,
+          "l1": 266.70616520693795,
+          "n_active": 14,
+          "motor": 7.573244032285758,
+          "vnc_motor": 7.573244032285758,
+          "cb_motor": 0.0,
+          "descending": 2.5292804396359143,
+          "vnc_sensory": 24.271166065602042,
+          "top": {
+            "cell_type": "AN05B009",
+            "super_class": "ascending",
+            "cell_class": "ascending_neuron",
+            "a": 0.9999999999999999
+          }
+        },
+        {
+          "hop": 2,
+          "l1": 126.57290227271562,
+          "n_active": 0,
+          "motor": 10.385788198090898,
+          "vnc_motor": 10.16192409541084,
+          "cb_motor": 0.22386410268005896,
+          "descending": 6.48013747845617,
+          "vnc_sensory": 0.12779969147744094,
+          "top": {
+            "cell_type": "AN19B001_b",
+            "super_class": "ascending",
+            "cell_class": "ascending_neuron",
+            "a": 0.45746492272699024
+          }
+        },
+        {
+          "hop": 3,
+          "l1": 101.49313678203592,
+          "n_active": 0,
+          "motor": 6.325474030125848,
+          "vnc_motor": 6.013894377356217,
+          "cb_motor": 0.3115796527696315,
+          "descending": 5.572809821391429,
+          "vnc_sensory": 6.633035169838012,
+          "top": {
+            "cell_type": "IN27X001",
+            "super_class": "ventral_nerve_cord_intrinsic",
+            "cell_class": "",
+            "a": 0.35086480791822117
+          }
+        },
+        {
+          "hop": 4,
+          "l1": 254.89161455208836,
+          "n_active": 5,
+          "motor": 7.955548063823874,
+          "vnc_motor": 7.7975002953470955,
+          "cb_motor": 0.1580477684767777,
+          "descending": 8.929714765974683,
+          "vnc_sensory": 94.61996199387376,
+          "top": {
+            "cell_type": "ANXXX093",
+            "super_class": "ascending",
+            "cell_class": "ascending_neuron",
+            "a": 0.9999999999999979
+          }
+        },
+        {
+          "hop": 11,
+          "l1": 11.02368254594186,
+          "n_active": 0,
+          "motor": 0.5746956942256416,
+          "vnc_motor": 0.5532306634968729,
+          "cb_motor": 0.021465030728768666,
+          "descending": 0.2310866535828365,
+          "vnc_sensory": 0.11224140790588014,
+          "top": {
+            "cell_type": "INXXX464",
+            "super_class": "ventral_nerve_cord_intrinsic",
+            "cell_class": "single_leg_neuromere",
+            "a": 0.08494035510413395
+          }
+        }
+      ]
+    },
+    {
+      "name": "chordotonal",
+      "seed": "chordotonal",
+      "how": "substring",
+      "n_seed": 2136,
+      "gpu": true,
+      "device": "NVIDIA GeForce RTX 5070",
+      "elapsed_s": 0.5001771000097506,
+      "flow": [
+        {
+          "hop": 0,
+          "l1": 2136.0,
+          "n_active": 2136,
+          "motor": 0.0,
+          "vnc_motor": 0.0,
+          "cb_motor": 0.0,
+          "descending": 0.0,
+          "vnc_sensory": 918.0,
+          "top": {
+            "cell_type": "SApp23",
+            "super_class": "sensory_ascending",
+            "cell_class": "chordotonal_organ_neuron",
+            "a": 1.0
+          }
+        },
+        {
+          "hop": 1,
+          "l1": 217.7664184157074,
+          "n_active": 6,
+          "motor": 7.887610020311445,
+          "vnc_motor": 7.719702098849021,
+          "cb_motor": 0.16790792146242373,
+          "descending": 13.574136763710241,
+          "vnc_sensory": 3.955991875423178,
+          "top": {
+            "cell_type": "INXXX007",
+            "super_class": "ventral_nerve_cord_intrinsic",
+            "cell_class": "ventral_nerve_cord_serially_convergent",
+            "a": 0.9999999999999994
+          }
+        },
+        {
+          "hop": 2,
+          "l1": 116.5484502554794,
+          "n_active": 0,
+          "motor": 5.304384941916407,
+          "vnc_motor": 5.010851171929309,
+          "cb_motor": 0.29353376998709807,
+          "descending": 6.933491307083613,
+          "vnc_sensory": 0.030212823962075277,
+          "top": {
+            "cell_type": "CB3885",
+            "super_class": "central_brain_intrinsic",
+            "cell_class": "",
+            "a": 0.3596293996400835
+          }
+        },
+        {
+          "hop": 3,
+          "l1": 115.3467675205199,
+          "n_active": 1,
+          "motor": 5.296077634182426,
+          "vnc_motor": 4.837467050336757,
+          "cb_motor": 0.4586105838456686,
+          "descending": 5.285088880156549,
+          "vnc_sensory": 3.1348538354229176,
+          "top": {
+            "cell_type": "tibia_extensor_FETi",
+            "super_class": "vnc_motor",
+            "cell_class": "leg_motor_neuron",
+            "a": 0.6469624537349445
+          }
+        },
+        {
+          "hop": 4,
+          "l1": 170.7490387667287,
+          "n_active": 1,
+          "motor": 12.442774423440486,
+          "vnc_motor": 11.943804931307502,
+          "cb_motor": 0.4989694921329837,
+          "descending": 11.930586417398859,
+          "vnc_sensory": 10.532456015500577,
+          "top": {
+            "cell_type": "tibia_extensor_FETi",
+            "super_class": "vnc_motor",
+            "cell_class": "leg_motor_neuron",
+            "a": 0.7767197585401908
+          }
+        },
+        {
+          "hop": 11,
+          "l1": 1.9102432393824944,
+          "n_active": 0,
+          "motor": 0.012880049190475105,
+          "vnc_motor": 0.01244453453627649,
+          "cb_motor": 0.00043551465419861446,
+          "descending": 0.018715398464533822,
+          "vnc_sensory": 0.0014556851289493338,
+          "top": {
+            "cell_type": "ORN_DP1l",
+            "super_class": "sensory",
+            "cell_class": "olfactory_receptor_neuron",
+            "a": 0.007855314893093369
+          }
+        }
+      ]
+    },
+    {
+      "name": "JO",
+      "seed": "jo",
+      "how": "type_prefix",
+      "n_seed": 1198,
+      "gpu": true,
+      "device": "NVIDIA GeForce RTX 5070",
+      "elapsed_s": 0.49914410000201315,
+      "flow": [
+        {
+          "hop": 0,
+          "l1": 1198.0,
+          "n_active": 1198,
+          "motor": 0.0,
+          "vnc_motor": 0.0,
+          "cb_motor": 0.0,
+          "descending": 0.0,
+          "vnc_sensory": 0.0,
+          "top": {
+            "cell_type": "JO-B",
+            "super_class": "sensory",
+            "cell_class": "chordotonal_organ_neuron",
+            "a": 1.0
+          }
+        },
+        {
+          "hop": 1,
+          "l1": 114.12223206377315,
+          "n_active": 6,
+          "motor": 0.21612046058458792,
+          "vnc_motor": 0.0,
+          "cb_motor": 0.21612046058458792,
+          "descending": 17.52435783879537,
+          "vnc_sensory": 0.02922940655447296,
+          "top": {
+            "cell_type": "DNg29",
+            "super_class": "descending",
+            "cell_class": "descending_neuron",
+            "a": 0.9999999999999992
+          }
+        },
+        {
+          "hop": 2,
+          "l1": 227.7091272274023,
+          "n_active": 9,
+          "motor": 7.292131364516605,
+          "vnc_motor": 6.636908411047969,
+          "cb_motor": 0.6552229534686361,
+          "descending": 16.28235088730722,
+          "vnc_sensory": 0.07662388807463819,
+          "top": {
+            "cell_type": "WED109",
+            "super_class": "central_brain_intrinsic",
+            "cell_class": "",
+            "a": 0.9999999999999958
+          }
+        },
+        {
+          "hop": 3,
+          "l1": 281.26320216685224,
+          "n_active": 1,
+          "motor": 18.487278625481302,
+          "vnc_motor": 17.34516717707008,
+          "cb_motor": 1.1421114484112196,
+          "descending": 16.157135597873392,
+          "vnc_sensory": 0.43668547427991683,
+          "top": {
+            "cell_type": "DNp35",
+            "super_class": "descending",
+            "cell_class": "descending_neuron",
+            "a": 0.679336490183394
+          }
+        },
+        {
+          "hop": 4,
+          "l1": 83.96452938486595,
+          "n_active": 0,
+          "motor": 3.173481289011777,
+          "vnc_motor": 2.823294579771138,
+          "cb_motor": 0.35018670924063894,
+          "descending": 8.811011837145552,
+          "vnc_sensory": 1.5978988263453666,
+          "top": {
+            "cell_type": "AVLP082",
+            "super_class": "central_brain_intrinsic",
+            "cell_class": "",
+            "a": 0.41650351108593475
+          }
+        },
+        {
+          "hop": 11,
+          "l1": 1.93010672951562,
+          "n_active": 0,
+          "motor": 0.012375316171790746,
+          "vnc_motor": 0.011949902019895892,
+          "cb_motor": 0.0004254141518948538,
+          "descending": 0.01893376584310345,
+          "vnc_sensory": 0.0014516585638990136,
+          "top": {
+            "cell_type": "ORN_DP1l",
+            "super_class": "sensory",
+            "cell_class": "olfactory_receptor_neuron",
+            "a": 0.007859673281352808
+          }
+        }
+      ]
+    },
+    {
+      "name": "olfactory",
+      "seed": "olfactory_receptor_neuron",
+      "how": "class",
+      "n_seed": 3007,
+      "gpu": true,
+      "device": "NVIDIA GeForce RTX 5070",
+      "elapsed_s": 0.49237240001093596,
+      "flow": [
+        {
+          "hop": 0,
+          "l1": 3007.0,
+          "n_active": 3007,
+          "motor": 0.0,
+          "vnc_motor": 0.0,
+          "cb_motor": 0.0,
+          "descending": 0.0,
+          "vnc_sensory": 0.0,
+          "top": {
+            "cell_type": "ORN_DC2",
+            "super_class": "sensory",
+            "cell_class": "olfactory_receptor_neuron",
+            "a": 1.0
+          }
+        },
+        {
+          "hop": 1,
+          "l1": 47.926514568913944,
+          "n_active": 4,
+          "motor": 0.0,
+          "vnc_motor": 0.0,
+          "cb_motor": 0.0,
+          "descending": 0.01281722635221738,
+          "vnc_sensory": 0.0,
+          "top": {
+            "cell_type": "il3LN6",
+            "super_class": "central_brain_intrinsic",
+            "cell_class": "antennal_lobe_local_neuron",
+            "a": 0.9999999999999999
+          }
+        },
+        {
+          "hop": 2,
+          "l1": 167.70477638181833,
+          "n_active": 18,
+          "motor": 0.0010869679462699729,
+          "vnc_motor": 0.0007640599289252,
+          "cb_motor": 0.0003229080173447729,
+          "descending": 0.9603830401468657,
+          "vnc_sensory": 6.028978804854938e-05,
+          "top": {
+            "cell_type": "v2LN30",
+            "super_class": "central_brain_intrinsic",
+            "cell_class": "antennal_lobe_local_neuron",
+            "a": 0.9999999999999984
+          }
+        },
+        {
+          "hop": 3,
+          "l1": 136.97322532120566,
+          "n_active": 32,
+          "motor": 0.13380409815726987,
+          "vnc_motor": 0.1263680020151805,
+          "cb_motor": 0.007436096142089361,
+          "descending": 1.0308552166749594,
+          "vnc_sensory": 0.0025458921814603317,
+          "top": {
+            "cell_type": "lLN1_bc",
+            "super_class": "central_brain_intrinsic",
+            "cell_class": "antennal_lobe_local_neuron",
+            "a": 0.9999999999999994
+          }
+        },
+        {
+          "hop": 4,
+          "l1": 131.76275975104969,
+          "n_active": 32,
+          "motor": 0.10565786209670808,
+          "vnc_motor": 0.09931258747291612,
+          "cb_motor": 0.006345274623791961,
+          "descending": 0.5963979384797131,
+          "vnc_sensory": 0.0018510116403290969,
+          "top": {
+            "cell_type": "lLN1_bc",
+            "super_class": "central_brain_intrinsic",
+            "cell_class": "antennal_lobe_local_neuron",
+            "a": 0.9999999999999997
+          }
+        },
+        {
+          "hop": 11,
+          "l1": 128.09173684790312,
+          "n_active": 34,
+          "motor": 0.043679847761495014,
+          "vnc_motor": 0.04130759114520433,
+          "cb_motor": 0.00237225661629068,
+          "descending": 0.4623638192243067,
+          "vnc_sensory": 0.0006781363293666723,
+          "top": {
+            "cell_type": "lLN1_bc",
+            "super_class": "central_brain_intrinsic",
+            "cell_class": "antennal_lobe_local_neuron",
+            "a": 0.9999999999999997
+          }
+        }
+      ]
+    }
+  ],
+  "compare": {
+    "hop_1": {
+      "vnc_sensory": {
+        "vnc_motor": 7.573244032285758,
+        "cb_motor": 0.0,
+        "motor": 7.573244032285758,
+        "descending": 2.5292804396359143,
+        "n_active": 14,
+        "top": {
+          "cell_type": "AN05B009",
+          "super_class": "ascending",
+          "cell_class": "ascending_neuron",
+          "a": 0.9999999999999999
+        }
+      },
+      "chordotonal": {
+        "vnc_motor": 7.719702098849021,
+        "cb_motor": 0.16790792146242373,
+        "motor": 7.887610020311445,
+        "descending": 13.574136763710241,
+        "n_active": 6,
+        "top": {
+          "cell_type": "INXXX007",
+          "super_class": "ventral_nerve_cord_intrinsic",
+          "cell_class": "ventral_nerve_cord_serially_convergent",
+          "a": 0.9999999999999994
+        }
+      },
+      "JO": {
+        "vnc_motor": 0.0,
+        "cb_motor": 0.21612046058458792,
+        "motor": 0.21612046058458792,
+        "descending": 17.52435783879537,
+        "n_active": 6,
+        "top": {
+          "cell_type": "DNg29",
+          "super_class": "descending",
+          "cell_class": "descending_neuron",
+          "a": 0.9999999999999992
+        }
+      },
+      "olfactory": {
+        "vnc_motor": 0.0,
+        "cb_motor": 0.0,
+        "motor": 0.0,
+        "descending": 0.01281722635221738,
+        "n_active": 4,
+        "top": {
+          "cell_type": "il3LN6",
+          "super_class": "central_brain_intrinsic",
+          "cell_class": "antennal_lobe_local_neuron",
+          "a": 0.9999999999999999
+        }
+      }
+    },
+    "hop_2": {
+      "vnc_sensory": {
+        "vnc_motor": 10.16192409541084,
+        "cb_motor": 0.22386410268005896,
+        "motor": 10.385788198090898,
+        "descending": 6.48013747845617,
+        "n_active": 0,
+        "top": {
+          "cell_type": "AN19B001_b",
+          "super_class": "ascending",
+          "cell_class": "ascending_neuron",
+          "a": 0.45746492272699024
+        }
+      },
+      "chordotonal": {
+        "vnc_motor": 5.010851171929309,
+        "cb_motor": 0.29353376998709807,
+        "motor": 5.304384941916407,
+        "descending": 6.933491307083613,
+        "n_active": 0,
+        "top": {
+          "cell_type": "CB3885",
+          "super_class": "central_brain_intrinsic",
+          "cell_class": "",
+          "a": 0.3596293996400835
+        }
+      },
+      "JO": {
+        "vnc_motor": 6.636908411047969,
+        "cb_motor": 0.6552229534686361,
+        "motor": 7.292131364516605,
+        "descending": 16.28235088730722,
+        "n_active": 9,
+        "top": {
+          "cell_type": "WED109",
+          "super_class": "central_brain_intrinsic",
+          "cell_class": "",
+          "a": 0.9999999999999958
+        }
+      },
+      "olfactory": {
+        "vnc_motor": 0.0007640599289252,
+        "cb_motor": 0.0003229080173447729,
+        "motor": 0.0010869679462699729,
+        "descending": 0.9603830401468657,
+        "n_active": 18,
+        "top": {
+          "cell_type": "v2LN30",
+          "super_class": "central_brain_intrinsic",
+          "cell_class": "antennal_lobe_local_neuron",
+          "a": 0.9999999999999984
+        }
+      }
+    },
+    "hop_3": {
+      "vnc_sensory": {
+        "vnc_motor": 6.013894377356217,
+        "cb_motor": 0.3115796527696315,
+        "motor": 6.325474030125848,
+        "descending": 5.572809821391429,
+        "n_active": 0,
+        "top": {
+          "cell_type": "IN27X001",
+          "super_class": "ventral_nerve_cord_intrinsic",
+          "cell_class": "",
+          "a": 0.35086480791822117
+        }
+      },
+      "chordotonal": {
+        "vnc_motor": 4.837467050336757,
+        "cb_motor": 0.4586105838456686,
+        "motor": 5.296077634182426,
+        "descending": 5.285088880156549,
+        "n_active": 1,
+        "top": {
+          "cell_type": "tibia_extensor_FETi",
+          "super_class": "vnc_motor",
+          "cell_class": "leg_motor_neuron",
+          "a": 0.6469624537349445
+        }
+      },
+      "JO": {
+        "vnc_motor": 17.34516717707008,
+        "cb_motor": 1.1421114484112196,
+        "motor": 18.487278625481302,
+        "descending": 16.157135597873392,
+        "n_active": 1,
+        "top": {
+          "cell_type": "DNp35",
+          "super_class": "descending",
+          "cell_class": "descending_neuron",
+          "a": 0.679336490183394
+        }
+      },
+      "olfactory": {
+        "vnc_motor": 0.1263680020151805,
+        "cb_motor": 0.007436096142089361,
+        "motor": 0.13380409815726987,
+        "descending": 1.0308552166749594,
+        "n_active": 32,
+        "top": {
+          "cell_type": "lLN1_bc",
+          "super_class": "central_brain_intrinsic",
+          "cell_class": "antennal_lobe_local_neuron",
+          "a": 0.9999999999999994
+        }
+      }
+    }
+  },
+  "note": "Female BANC brain+VNC, intact neck. vnc_motor = motor in the cord. Walking observer analog is vnc_sensory / chordotonal / JO. Olfactory is the local-hub contrast. GABA inhibitory. Not a trained RNN and not an invented bee brain."
+}

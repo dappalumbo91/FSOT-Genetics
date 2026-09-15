@@ -1,0 +1,413 @@
+{
+  "organism": "Caenorhabditis elegans male",
+  "sex": "male",
+  "seed": "sex",
+  "n_seed": 138,
+  "n_cells": 575,
+  "n_edges": 5306,
+  "n_nmj_to_bwm": 913,
+  "type_counts": {
+    "INTERNEURONS": 81,
+    "SENSORY NEURONS": 83,
+    "MOTOR NEURONS": 108,
+    "SEX-SPECIFIC CELLS": 138,
+    "OTHER END ORGANS": 20,
+    "PHARYNX": 50,
+    "BODYWALL MUSCLES": 95
+  },
+  "n_gaba": 26,
+  "graph_source": "D:\\FlyWire_Connectome\\C_elegans\\SI5.xlsx",
+  "sheet": "male chemical",
+  "hops": 11,
+  "residual_Biochemistry": 1.091958932349586,
+  "gaba_inhibitory": true,
+  "authority": "Cook et al. 2019 SI5 male chemical adjacency (OpenWorm ConnectomeToolbox copy); GABA names WormAtlas/Pereira 2015 (DD01/VD01 = DD1/VD1); NMJs onto body-wall muscles included. Male sheet lumped dBWM/vBWM under MOTOR NEURONS \u2014 relabeled by the measured Cook names. Netzschleuder CSV listed muscle nodes but dropped every NMJ.",
+  "free_parameters": 0,
+  "trace": [
+    {
+      "hop": 0,
+      "l1": 138.0,
+      "n_active": 138,
+      "mass_by_type": {
+        "SEX-SPECIFIC CELLS": 138.0,
+        "INTERNEURONS": 0.0,
+        "SENSORY NEURONS": 0.0,
+        "MOTOR NEURONS": 0.0,
+        "OTHER END ORGANS": 0.0,
+        "PHARYNX": 0.0,
+        "BODYWALL MUSCLES": 0.0
+      },
+      "target_mass": {
+        "sensory": 0.0,
+        "motor": 0.0,
+        "bodywall_muscle": 0.0,
+        "interneuron": 0.0,
+        "sex_specific": 138.0,
+        "other_end_organs": 0.0
+      },
+      "top": [
+        {
+          "name": "vsrR",
+          "type": "SEX-SPECIFIC CELLS",
+          "a": 1.0
+        },
+        {
+          "name": "vsrL",
+          "type": "SEX-SPECIFIC CELLS",
+          "a": 1.0
+        },
+        {
+          "name": "vspR",
+          "type": "SEX-SPECIFIC CELLS",
+          "a": 1.0
+        },
+        {
+          "name": "vspL",
+          "type": "SEX-SPECIFIC CELLS",
+          "a": 1.0
+        },
+        {
+          "name": "pobL",
+          "type": "SEX-SPECIFIC CELLS",
+          "a": 1.0
+        },
+        {
+          "name": "pobR",
+          "type": "SEX-SPECIFIC CELLS",
+          "a": 1.0
+        },
+        {
+          "name": "polL",
+          "type": "SEX-SPECIFIC CELLS",
+          "a": 1.0
+        },
+        {
+          "name": "polR",
+          "type": "SEX-SPECIFIC CELLS",
+          "a": 1.0
+        }
+      ]
+    },
+    {
+      "hop": 1,
+      "l1": 22.960159362549774,
+      "n_active": 4,
+      "mass_by_type": {
+        "SEX-SPECIFIC CELLS": 17.34794156706502,
+        "INTERNEURONS": 2.0119521912350575,
+        "SENSORY NEURONS": 1.5298804780876476,
+        "MOTOR NEURONS": 1.4342629482071696,
+        "BODYWALL MUSCLES": 0.4541832669322704,
+        "OTHER END ORGANS": 0.18193891102257614,
+        "PHARYNX": 0.0
+      },
+      "target_mass": {
+        "sensory": 1.5298804780876476,
+        "motor": 1.4342629482071696,
+        "bodywall_muscle": 0.4541832669322704,
+        "interneuron": 2.0119521912350575,
+        "sex_specific": 17.34794156706502,
+        "other_end_organs": 0.18193891102257614
+      },
+      "top": [
+        {
+          "name": "PVV",
+          "type": "SEX-SPECIFIC CELLS",
+          "a": 0.9999999999999988
+        },
+        {
+          "name": "PVX",
+          "type": "SEX-SPECIFIC CELLS",
+          "a": 0.8220451527224425
+        },
+        {
+          "name": "PHCL",
+          "type": "SENSORY NEURONS",
+          "a": 0.6308100929614866
+        },
+        {
+          "name": "EF3",
+          "type": "SEX-SPECIFIC CELLS",
+          "a": 0.6228419654714468
+        },
+        {
+          "name": "PHCR",
+          "type": "SENSORY NEURONS",
+          "a": 0.6069057104913671
+        },
+        {
+          "name": "EF2",
+          "type": "SEX-SPECIFIC CELLS",
+          "a": 0.5683930942895079
+        },
+        {
+          "name": "EF1",
+          "type": "SEX-SPECIFIC CELLS",
+          "a": 0.5670650730411679
+        },
+        {
+          "name": "PDB",
+          "type": "MOTOR NEURONS",
+          "a": 0.565737051792828
+        }
+      ]
+    },
+    {
+      "hop": 2,
+      "l1": 22.210684912571597,
+      "n_active": 2,
+      "mass_by_type": {
+        "SEX-SPECIFIC CELLS": 14.998831985624363,
+        "INTERNEURONS": 2.688803649180995,
+        "MOTOR NEURONS": 2.3747805653465917,
+        "SENSORY NEURONS": 1.2484622295942989,
+        "BODYWALL MUSCLES": 0.7151496302439666,
+        "OTHER END ORGANS": 0.18431819752574383,
+        "PHARYNX": 0.0003386550556361861
+      },
+      "target_mass": {
+        "sensory": 1.2484622295942989,
+        "motor": 2.3747805653465917,
+        "bodywall_muscle": 0.7151496302439666,
+        "interneuron": 2.688803649180995,
+        "sex_specific": 14.998831985624363,
+        "other_end_organs": 0.18431819752574383
+      },
+      "top": [
+        {
+          "name": "PVX",
+          "type": "SEX-SPECIFIC CELLS",
+          "a": 0.9999999999999952
+        },
+        {
+          "name": "PVV",
+          "type": "SEX-SPECIFIC CELLS",
+          "a": 0.7834750155504835
+        },
+        {
+          "name": "PVY",
+          "type": "SEX-SPECIFIC CELLS",
+          "a": 0.6018107678485007
+        },
+        {
+          "name": "AVG",
+          "type": "INTERNEURONS",
+          "a": 0.4928882438316378
+        },
+        {
+          "name": "PHCR",
+          "type": "SENSORY NEURONS",
+          "a": 0.49269472665698827
+        },
+        {
+          "name": "PVZ",
+          "type": "SEX-SPECIFIC CELLS",
+          "a": 0.48388969521044767
+        },
+        {
+          "name": "PHCL",
+          "type": "SENSORY NEURONS",
+          "a": 0.4800677310111249
+        },
+        {
+          "name": "PDB",
+          "type": "MOTOR NEURONS",
+          "a": 0.4765429539014421
+        }
+      ]
+    },
+    {
+      "hop": 3,
+      "l1": 25.675452623530404,
+      "n_active": 5,
+      "mass_by_type": {
+        "SEX-SPECIFIC CELLS": 15.80673806905478,
+        "MOTOR NEURONS": 3.606014926682185,
+        "INTERNEURONS": 3.399089602599818,
+        "SENSORY NEURONS": 1.6998289826659045,
+        "BODYWALL MUSCLES": 0.9456097684155425,
+        "OTHER END ORGANS": 0.218012374200251,
+        "PHARYNX": 0.00015889991191833566
+      },
+      "target_mass": {
+        "sensory": 1.6998289826659045,
+        "motor": 3.606014926682185,
+        "bodywall_muscle": 0.9456097684155425,
+        "interneuron": 3.399089602599818,
+        "sex_specific": 15.80673806905478,
+        "other_end_organs": 0.218012374200251
+      },
+      "top": [
+        {
+          "name": "PVX",
+          "type": "SEX-SPECIFIC CELLS",
+          "a": 0.9999999999999942
+        },
+        {
+          "name": "PVV",
+          "type": "SEX-SPECIFIC CELLS",
+          "a": 0.7919495115522711
+        },
+        {
+          "name": "PHCL",
+          "type": "SENSORY NEURONS",
+          "a": 0.7092152039399487
+        },
+        {
+          "name": "PVY",
+          "type": "SEX-SPECIFIC CELLS",
+          "a": 0.6830020209321905
+        },
+        {
+          "name": "PHCR",
+          "type": "SENSORY NEURONS",
+          "a": 0.6462997921523052
+        },
+        {
+          "name": "AVG",
+          "type": "INTERNEURONS",
+          "a": 0.5952910080643408
+        },
+        {
+          "name": "PVZ",
+          "type": "SEX-SPECIFIC CELLS",
+          "a": 0.5858717116171709
+        },
+        {
+          "name": "PDB",
+          "type": "MOTOR NEURONS",
+          "a": 0.4842273148427006
+        }
+      ]
+    },
+    {
+      "hop": 4,
+      "l1": 24.46951074843949,
+      "n_active": 4,
+      "mass_by_type": {
+        "SEX-SPECIFIC CELLS": 14.662385004389579,
+        "MOTOR NEURONS": 3.828956542061976,
+        "INTERNEURONS": 3.2248175773114847,
+        "SENSORY NEURONS": 1.5471490332364144,
+        "BODYWALL MUSCLES": 0.9979596222575078,
+        "OTHER END ORGANS": 0.2079603319226089,
+        "PHARYNX": 0.0002826372599234781
+      },
+      "target_mass": {
+        "sensory": 1.5471490332364144,
+        "motor": 3.828956542061976,
+        "bodywall_muscle": 0.9979596222575078,
+        "interneuron": 3.2248175773114847,
+        "sex_specific": 14.662385004389579,
+        "other_end_organs": 0.2079603319226089
+      },
+      "top": [
+        {
+          "name": "PVX",
+          "type": "SEX-SPECIFIC CELLS",
+          "a": 0.9999999999999951
+        },
+        {
+          "name": "PVV",
+          "type": "SEX-SPECIFIC CELLS",
+          "a": 0.7017416058990269
+        },
+        {
+          "name": "PVY",
+          "type": "SEX-SPECIFIC CELLS",
+          "a": 0.6942710506260374
+        },
+        {
+          "name": "PHCL",
+          "type": "SENSORY NEURONS",
+          "a": 0.6298289391062968
+        },
+        {
+          "name": "PHCR",
+          "type": "SENSORY NEURONS",
+          "a": 0.6017383997656622
+        },
+        {
+          "name": "AVG",
+          "type": "INTERNEURONS",
+          "a": 0.595867900504287
+        },
+        {
+          "name": "PVZ",
+          "type": "SEX-SPECIFIC CELLS",
+          "a": 0.5468312749501801
+        },
+        {
+          "name": "AVAL",
+          "type": "INTERNEURONS",
+          "a": 0.4529020975300106
+        }
+      ]
+    },
+    {
+      "hop": 11,
+      "l1": 24.59023594262561,
+      "n_active": 5,
+      "mass_by_type": {
+        "SEX-SPECIFIC CELLS": 14.514676048313623,
+        "MOTOR NEURONS": 3.9257088387187578,
+        "INTERNEURONS": 3.2245019809496673,
+        "SENSORY NEURONS": 1.6845475383182245,
+        "BODYWALL MUSCLES": 1.038572145131866,
+        "OTHER END ORGANS": 0.20201215714055382,
+        "PHARYNX": 0.0002172340529210103
+      },
+      "target_mass": {
+        "sensory": 1.6845475383182245,
+        "motor": 3.9257088387187578,
+        "bodywall_muscle": 1.038572145131866,
+        "interneuron": 3.2245019809496673,
+        "sex_specific": 14.514676048313623,
+        "other_end_organs": 0.20201215714055382
+      },
+      "top": [
+        {
+          "name": "PVX",
+          "type": "SEX-SPECIFIC CELLS",
+          "a": 0.9999999999999949
+        },
+        {
+          "name": "PVY",
+          "type": "SEX-SPECIFIC CELLS",
+          "a": 0.7436366572843472
+        },
+        {
+          "name": "PHCL",
+          "type": "SENSORY NEURONS",
+          "a": 0.7126565647690567
+        },
+        {
+          "name": "PHCR",
+          "type": "SENSORY NEURONS",
+          "a": 0.6605410781186634
+        },
+        {
+          "name": "AVG",
+          "type": "INTERNEURONS",
+          "a": 0.6377080583914289
+        },
+        {
+          "name": "PVV",
+          "type": "SEX-SPECIFIC CELLS",
+          "a": 0.6155239040193363
+        },
+        {
+          "name": "PVZ",
+          "type": "SEX-SPECIFIC CELLS",
+          "a": 0.5945869779228594
+        },
+        {
+          "name": "AVAL",
+          "type": "INTERNEURONS",
+          "a": 0.47569679957564903
+        }
+      ]
+    }
+  ],
+  "note": "Whole-animal graph: neurons + muscles. Not a trained dynamics model and not a thought. This is the organism-complete analog of the fly brain boot."
+}

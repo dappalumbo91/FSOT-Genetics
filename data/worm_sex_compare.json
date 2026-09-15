@@ -1,0 +1,112 @@
+{
+  "authority": "Cook 2019 SI5 hermaphrodite vs male chemical",
+  "free_parameters": 0,
+  "seed": "sensory",
+  "compare": {
+    "hop_1": {
+      "hermaphrodite": {
+        "n_active": 3,
+        "motor": 5.117021276595726,
+        "bodywall_muscle": 1.0177304964538973,
+        "interneuron": 15.797872340425476,
+        "sex_specific": 0.07446808510638274,
+        "top": {
+          "name": "AVAR",
+          "type": "INTERNEURONS",
+          "a": 0.9999999999999967
+        }
+      },
+      "male": {
+        "n_active": 17,
+        "motor": 6.953488372092983,
+        "bodywall_muscle": 1.5348837209302244,
+        "interneuron": 20.313953488371986,
+        "sex_specific": 7.744186046511583,
+        "top": {
+          "name": "AIAR",
+          "type": "INTERNEURONS",
+          "a": 0.9999999999999947
+        }
+      }
+    },
+    "hop_2": {
+      "hermaphrodite": {
+        "n_active": 4,
+        "motor": 9.876800170999484,
+        "bodywall_muscle": 2.2995431105885955,
+        "interneuron": 11.764955780586122,
+        "sex_specific": 0.0689341918935523,
+        "top": {
+          "name": "AVAR",
+          "type": "INTERNEURONS",
+          "a": 0.9999999999999931
+        }
+      },
+      "male": {
+        "n_active": 7,
+        "motor": 10.16364484186846,
+        "bodywall_muscle": 2.2310393065803464,
+        "interneuron": 11.172916038072204,
+        "sex_specific": 6.850289382011658,
+        "top": {
+          "name": "RIAR",
+          "type": "INTERNEURONS",
+          "a": 0.9999999999999957
+        }
+      }
+    },
+    "hop_3": {
+      "hermaphrodite": {
+        "n_active": 10,
+        "motor": 16.459485687397088,
+        "bodywall_muscle": 6.855623395793071,
+        "interneuron": 12.217657003747004,
+        "sex_specific": 0.049319258305634925,
+        "top": {
+          "name": "RMDDL",
+          "type": "MOTOR NEURONS",
+          "a": 0.9999999999999902
+        }
+      },
+      "male": {
+        "n_active": 4,
+        "motor": 10.064518396381061,
+        "bodywall_muscle": 2.9396542760561055,
+        "interneuron": 5.365313642404183,
+        "sex_specific": 5.647838783022223,
+        "top": {
+          "name": "RMDDR",
+          "type": "MOTOR NEURONS",
+          "a": 0.999999999999996
+        }
+      }
+    },
+    "hop_4": {
+      "hermaphrodite": {
+        "n_active": 10,
+        "motor": 14.651713281840134,
+        "bodywall_muscle": 7.4425231181657185,
+        "interneuron": 9.108040153064593,
+        "sex_specific": 0.02888920667048965,
+        "top": {
+          "name": "RMDDL",
+          "type": "MOTOR NEURONS",
+          "a": 0.9999999999999929
+        }
+      },
+      "male": {
+        "n_active": 4,
+        "motor": 8.063395861832394,
+        "bodywall_muscle": 3.704670854950444,
+        "interneuron": 3.786764124704869,
+        "sex_specific": 5.682760924372624,
+        "top": {
+          "name": "RMDDR",
+          "type": "MOTOR NEURONS",
+          "a": 0.9999999999999948
+        }
+      }
+    }
+  },
+  "note": "Same residual law. Male has extra sex-specific cells; dBWM/vBWM relabeled from MOTOR by measured Cook names. Not an invented connectome."
+}

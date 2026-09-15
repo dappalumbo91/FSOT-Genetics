@@ -1,14 +1,19 @@
 #!/usr/bin/env python3
 """C. elegans whole-animal connectome — measured authority.
 
-Cook et al. 2019 hermaphrodite chemical graph lives on the game drive:
+Cook et al. 2019 SI5 chemical graphs live on the game drive:
 
-  D:\\FlyWire_Connectome\\C_elegans
+  D:\\FlyWire_Connectome\\C_elegans\\SI5.xlsx
 
-This is the only adult animal with named neurons AND named muscles on
-the same synaptic graph. Seed sensory → residual hops → motor + body-wall
-muscle mass. GABA names are the WormAtlas / Pereira set (measured), not
-a trained classifier.
+Sheets: hermaphrodite chemical, male chemical. Named neurons AND named
+muscles on the same synaptic graph. Seed sensory → residual hops →
+motor + body-wall muscle. GABA names are the WormAtlas / Pereira set
+(measured), not a trained classifier. SI5 pads DD01/VD01; Pereira is
+DD1/VD1 — same cells.
+
+Male sheet lumps dBWM/vBWM and herm 'other end organs' under MOTOR
+NEURONS (no group header). Relabel by the measured Cook names, not a
+guessed type. SI5 typo SENSOSRY → SENSORY.
 
 Same pin as the fly boot. 0 free parameters. Not a thought.
 """
@@ -51,9 +56,59 @@ _GABA = frozenset(
     }
 )
 
+# SI5 male sheet has no BODYWALL / OTHER END ORGANS header. These are
+# the same Cook names as the hermaphrodite groups.
+_OTHER_END = frozenset(
+    {
+        "CANL",
+        "CANR",
+        "EXC_CELL",
+        "EXC_GL",
+        "HYP",
+        "INT",
+    }
+)
+_TYPE_ALIAS = {
+    "SENSOSRY NEURONS": "SENSORY NEURONS",
+    "SEX-SPECIFIC": "SEX-SPECIFIC CELLS",
+    "SEX SPECIFIC": "SEX-SPECIFIC CELLS",
+}
 
-def _read_si5(path: Path = SI5) -> dict[str, Any] | None:
-    """Cook 2019 SI5 hermaphrodite chemical, including NMJs onto muscles.
+SHEETS = {
+    "hermaphrodite": "hermaphrodite chemical",
+    "male": "male chemical",
+}
+
+
+def _is_gaba(name: str) -> bool:
+    n = name.strip().upper()
+    if n in _GABA:
+        return True
+    if n.startswith("DD") or n.startswith("VD"):
+        prefix, rest = n[:2], n[2:]
+        if rest.isdigit():
+            return f"{prefix}{int(rest)}" in _GABA
+    return False
+
+
+def _relabel_type(name: str, group: str) -> str:
+    g = _TYPE_ALIAS.get(group, group)
+    nu = name.strip().upper()
+    if nu.startswith("DBWM") or nu.startswith("VBWM"):
+        return "BODYWALL MUSCLES"
+    if nu.startswith("MU_") or nu.startswith("CEPSH") or nu.startswith("GLR"):
+        return "OTHER END ORGANS"
+    if nu in _OTHER_END:
+        return "OTHER END ORGANS"
+    return g
+
+
+def _read_si5(
+    path: Path = SI5,
+    *,
+    sheet_name: str = "hermaphrodite chemical",
+) -> dict[str, Any] | None:
+    """Cook 2019 SI5 chemical adjacency, including NMJs onto muscles.
 
     Netzschleuder CSV lists muscle nodes but drops every edge into them.
     SI5 is the measured adjacency (pre = rows, post = columns).
@@ -63,7 +118,7 @@ def _read_si5(path: Path = SI5) -> dict[str, Any] | None:
     import pandas as pd
     from scipy.sparse import csr_matrix
 
-    df = pd.read_excel(path, sheet_name="hermaphrodite chemical", header=None)
+    df = pd.read_excel(path, sheet_name=sheet_name, header=None)
     groups: list[str] = []
     cur = "UNLABELED"
     for c in range(df.shape[1]):
@@ -80,7 +135,7 @@ def _read_si5(path: Path = SI5) -> dict[str, Any] | None:
     type_of: dict[str, str] = {}
     for c, nm in enumerate(post_names):
         if nm:
-            type_of[nm] = groups[c]
+            type_of[nm] = _relabel_type(nm, groups[c])
     for r, nm in pre_rows:
         type_of.setdefault(nm, "UNLABELED")
     names = sorted(type_of)
@@ -108,7 +163,7 @@ def _read_si5(path: Path = SI5) -> dict[str, Any] | None:
             wts.append(wt)
     sign = np.ones(len(src), dtype=np.float64)
     for k, si in enumerate(src):
-        if names[int(si)] in _GABA:
+        if _is_gaba(names[int(si)]):
             sign[k] = -1.0
     n = len(names)
     W = csr_matrix(
@@ -128,13 +183,15 @@ def _read_si5(path: Path = SI5) -> dict[str, Any] | None:
         "n_edges": int(len(src)),
         "n_nmj_to_bwm": int(n_nmj),
         "type_counts": dict(Counter(types)),
-        "n_gaba": int(sum(1 for nm in names if nm in _GABA)),
+        "n_gaba": int(sum(1 for nm in names if _is_gaba(nm))),
         "source": str(path),
+        "sheet": sheet_name,
     }
 
 
-def _read_graph(chem_dir: Path = CHEM) -> dict[str, Any]:
-    si5 = _read_si5()
+def _read_graph(chem_dir: Path = CHEM, *, sex: str = "hermaphrodite") -> dict[str, Any]:
+    sheet = SHEETS.get(sex, SHEETS["hermaphrodite"])
+    si5 = _read_si5(sheet_name=sheet)
     if si5 is not None:
         return si5
     import pandas as pd
@@ -156,7 +213,7 @@ def _read_graph(chem_dir: Path = CHEM) -> dict[str, Any]:
     w = edges["connectivity"].to_numpy(dtype=np.float64)
     sign = np.ones(len(src), dtype=np.float64)
     for k, si in enumerate(src):
-        if names[int(si)] in _GABA:
+        if _is_gaba(names[int(si)]):
             sign[k] = -1.0
     W = csr_matrix((w * sign, (tgt, src)), shape=(n, n))
     return {
@@ -167,8 +224,9 @@ def _read_graph(chem_dir: Path = CHEM) -> dict[str, Any]:
         "n_edges": int(len(src)),
         "n_nmj_to_bwm": 0,
         "type_counts": dict(Counter(types)),
-        "n_gaba": int(sum(1 for nm in names if nm in _GABA)),
+        "n_gaba": int(sum(1 for nm in names if _is_gaba(nm))),
         "source": str(chem_dir),
+        "sheet": "netzschleuder-csv",
     }
 
 
@@ -181,10 +239,16 @@ def _seed_i(graph: dict[str, Any], seed: str) -> list[int]:
     return out
 
 
-def boot_activity(seed: str = "sensory", hops: int | None = None) -> dict[str, Any]:
+def boot_activity(
+    seed: str = "sensory",
+    hops: int | None = None,
+    *,
+    sex: str = "hermaphrodite",
+    graph: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     if hops is None:
         hops = int(round(_PHI ** 5))
-    g = _read_graph()
+    g = graph if graph is not None else _read_graph(sex=sex)
     seed_i = _seed_i(g, seed)
     n = g["n"]
     a = np.zeros(n, dtype=np.float64)
@@ -214,6 +278,8 @@ def boot_activity(seed: str = "sensory", hops: int | None = None) -> dict[str, A
                 "motor": motor,
                 "bodywall_muscle": muscle,
                 "interneuron": float(by.get("INTERNEURONS", 0.0)),
+                "sex_specific": float(by.get("SEX-SPECIFIC CELLS", 0.0)),
+                "other_end_organs": float(by.get("OTHER END ORGANS", 0.0)),
             },
             "top": [
                 {
@@ -228,7 +294,7 @@ def boot_activity(seed: str = "sensory", hops: int | None = None) -> dict[str, A
 
     trace = [snap(0)]
     print(
-        f"  C. elegans hermaphrodite chemical n={n} edges={g['n_edges']} "
+        f"  C. elegans {sex} chemical n={n} edges={g['n_edges']} "
         f"NMJ={g.get('n_nmj_to_bwm', 0)} seed={seed} n_seed={len(seed_i)} "
         f"GABA={g['n_gaba']}",
         flush=True,
@@ -243,11 +309,14 @@ def boot_activity(seed: str = "sensory", hops: int | None = None) -> dict[str, A
             tm = s["target_mass"]
             print(
                 f"  hop {h} active={s['n_active']} "
-                f"motor={tm['motor']:.4f} muscle={tm['bodywall_muscle']:.4f}",
+                f"motor={tm['motor']:.4f} muscle={tm['bodywall_muscle']:.4f} "
+                f"sex={tm['sex_specific']:.4f}",
                 flush=True,
             )
+    sex_label = "male" if sex == "male" else "hermaphrodite"
     return {
-        "organism": "Caenorhabditis elegans hermaphrodite",
+        "organism": f"Caenorhabditis elegans {sex_label}",
+        "sex": sex_label,
         "seed": seed,
         "n_seed": len(seed_i),
         "n_cells": n,
@@ -256,13 +325,16 @@ def boot_activity(seed: str = "sensory", hops: int | None = None) -> dict[str, A
         "type_counts": g["type_counts"],
         "n_gaba": g["n_gaba"],
         "graph_source": g.get("source"),
+        "sheet": g.get("sheet"),
         "hops": hops,
         "residual_Biochemistry": _R_BIO,
         "gaba_inhibitory": True,
         "authority": (
-            "Cook et al. 2019 SI5 hermaphrodite chemical adjacency "
+            f"Cook et al. 2019 SI5 {g.get('sheet')} adjacency "
             "(OpenWorm ConnectomeToolbox copy); GABA names "
-            "WormAtlas/Pereira 2015; NMJs onto body-wall muscles included. "
+            "WormAtlas/Pereira 2015 (DD01/VD01 = DD1/VD1); NMJs onto "
+            "body-wall muscles included. Male sheet lumped dBWM/vBWM "
+            "under MOTOR NEURONS — relabeled by the measured Cook names. "
             "Netzschleuder CSV listed muscle nodes but dropped every NMJ."
         ),
         "free_parameters": 0,
@@ -275,33 +347,104 @@ def boot_activity(seed: str = "sensory", hops: int | None = None) -> dict[str, A
     }
 
 
+def _out_path(sex: str) -> Path:
+    if sex == "male":
+        return ROOT / "data" / "worm_male_connectome_boot.json"
+    return ROOT / "data" / "worm_connectome_boot.json"
+
+
+def _hop_row(run: dict[str, Any], hop: int) -> dict[str, Any] | None:
+    hit = next((t for t in run.get("trace") or [] if t.get("hop") == hop), None)
+    if not hit:
+        return None
+    tm = hit.get("target_mass") or {}
+    top = (hit.get("top") or [{}])[0]
+    return {
+        "n_active": hit.get("n_active"),
+        "motor": tm.get("motor"),
+        "bodywall_muscle": tm.get("bodywall_muscle"),
+        "interneuron": tm.get("interneuron"),
+        "sex_specific": tm.get("sex_specific"),
+        "top": {"name": top.get("name"), "type": top.get("type"), "a": top.get("a")},
+    }
+
+
 def main(argv: list[str] | None = None) -> int:
     import argparse
 
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--boot", action="store_true")
     ap.add_argument("--seed", default="sensory")
+    ap.add_argument(
+        "--sex",
+        choices=["hermaphrodite", "male", "both"],
+        default="hermaphrodite",
+    )
     args = ap.parse_args(argv)
+    sexes = ["hermaphrodite", "male"] if args.sex == "both" else [args.sex]
     if not args.boot:
-        g = _read_graph()
-        inv = {
-            "n_cells": g["n"],
-            "n_edges": g["n_edges"],
-            "type_counts": g["type_counts"],
-            "n_gaba": g["n_gaba"],
-            "path": str(CHEM),
-            "free_parameters": 0,
-        }
+        inv = {}
+        for sx in sexes:
+            g = _read_graph(sex=sx)
+            inv[sx] = {
+                "n_cells": g["n"],
+                "n_edges": g["n_edges"],
+                "n_nmj_to_bwm": g.get("n_nmj_to_bwm", 0),
+                "type_counts": g["type_counts"],
+                "n_gaba": g["n_gaba"],
+                "sheet": g.get("sheet"),
+                "path": str(SI5),
+                "free_parameters": 0,
+            }
         print(json.dumps(inv, indent=2))
         out = ROOT / "data" / "worm_connectome_inventory.json"
         out.write_text(json.dumps(inv, indent=2), encoding="utf-8")
         print(f"  wrote {out}", flush=True)
         return 0
-    run = boot_activity(seed=args.seed)
-    print(json.dumps({k: run[k] for k in run if k != "trace"}, indent=2))
-    out = ROOT / "data" / "worm_connectome_boot.json"
-    out.write_text(json.dumps(run, indent=2), encoding="utf-8")
-    print(f"  wrote {out}", flush=True)
+    runs = {}
+    for sx in sexes:
+        extra = ["sex"] if sx == "male" else []
+        seeds = [args.seed] + extra
+        programs = []
+        g = _read_graph(sex=sx)
+        for sd in seeds:
+            if sd != args.seed and not _seed_i(g, sd):
+                continue
+            run = boot_activity(seed=sd, sex=sx, graph=g)
+            programs.append(run)
+            if sd == args.seed:
+                runs[sx] = run
+                out = _out_path(sx)
+                out.write_text(json.dumps(run, indent=2), encoding="utf-8")
+                print(f"  wrote {out}", flush=True)
+        if sx == "male" and len(programs) > 1:
+            extra_out = ROOT / "data" / "worm_male_sex_specific_boot.json"
+            extra_out.write_text(json.dumps(programs[-1], indent=2), encoding="utf-8")
+            print(f"  wrote {extra_out}", flush=True)
+    if "hermaphrodite" in runs and "male" in runs:
+        compare = {}
+        for hop in (1, 2, 3, 4):
+            compare[f"hop_{hop}"] = {
+                sx: _hop_row(runs[sx], hop) for sx in ("hermaphrodite", "male")
+            }
+        cmp_path = ROOT / "data" / "worm_sex_compare.json"
+        payload = {
+            "authority": "Cook 2019 SI5 hermaphrodite vs male chemical",
+            "free_parameters": 0,
+            "seed": args.seed,
+            "compare": compare,
+            "note": (
+                "Same residual law. Male has extra sex-specific cells; "
+                "dBWM/vBWM relabeled from MOTOR by measured Cook names. "
+                "Not an invented connectome."
+            ),
+        }
+        cmp_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+        print(json.dumps(compare, indent=2), flush=True)
+        print(f"  wrote {cmp_path}", flush=True)
+    elif runs:
+        run = next(iter(runs.values()))
+        print(json.dumps({k: run[k] for k in run if k != "trace"}, indent=2))
     return 0
 
 

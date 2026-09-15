@@ -21,12 +21,12 @@ Mouse cortex cubes, zebrafish larval volumes, and human tractography are **not**
 | Dataset | Sex | What | Neurons | Open dump |
 |---------|-----|------|--------:|-----------|
 | FlyWire FAFB v783 | female | whole brain | 139,255 | GitHub annotations + Zenodo connections (v630 public used here) |
-| BANC | female | brain **+** VNC, intact neck | ~142k | Codex; Bates et al. *Nature* 2026 |
+| BANC | female | brain **+** VNC, intact neck | **175,401** neurons (glia dropped) | Bates et al. *Nature* 2026; live `scripts/banc_connectome.py` |
 | Male CNS v1.0 | male | brain **+** VNC | **166,700** | neuPrint `male-cns:v1.0`; Berg et al. *Cell* 2026-09-03 |
 | MANC / FANC | male / female | VNC only | ~16k / sparse | neuPrint / GitHub |
 | Larval CNS | — | complete first-instar brain | **2,952** | Winding et al. 2023; live `scripts/larva_connectome.py` |
 
-What we have on disk: female brain (v630), Male CNS v1.0 (165,122 traced, brain+VNC, 25.6 M edges), **and the first-instar larval brain** (2,952 cells, 110,677 edges). Walking seed hits **vnc_motor**. Larval mechanosensory seed hits **DN-VNC**. Cell → gene → product Cα: `data/organism_product_join.json`.
+What we have on disk: female brain (v630), **BANC v888** (175,401 neurons, 13.5 M edges, intact neck), Male CNS v1.0 (165,122 traced, brain+VNC, 25.6 M edges), **and the first-instar larval brain** (2,952 cells, 110,677 edges). Walking seed hits **vnc_motor** on both sexes. Larval mechanosensory seed hits **DN-VNC**. Cell → gene → product Cα: `data/organism_product_join.json`. Homologs of those proteins in bee / mosquito / beetle: `data/homolog_correspondence.json` (protein only — not a connectome).
 
 Genome / genetics: FlyBase complete; ~14k protein-coding genes; UniProt proteome `UP000000803`. **304 Drosophilidae genomes** are annotated (Zenodo 2025) — genomes, not brains.
 
@@ -60,7 +60,22 @@ First live boot (Cook 2019 SI5, 453 cells, 4,879 chemical edges, **956 NMJs** on
 | 3 | — | 12.22 | **16.47** | 6.91 | **RMD** (head motor) |
 | 4 | — | 9.12 | 14.80 | **8.13** | RMD |
 
-Sensory in → AVA command interneuron → motor + muscle. Same residual law as the fly. Source: `data/worm_connectome_boot.json`.
+Sensory in → AVA command interneuron → motor + muscle. Same residual law as the fly. Source: `data/worm_connectome_boot.json`. GABA count is **26** (Pereira DD1–6 / VD1–13 match SI5 `DD01`/`VD01`; earlier boot missed the zero-pad and counted 11).
+
+### C. elegans male — live
+
+`python scripts/worm_connectome.py --boot --sex both --seed sensory`
+
+Cook 2019 SI5 sheet `male chemical`. 575 cells, 5,306 chemical edges, **913 NMJs** onto the same 95 body-wall muscles. SI5 lumped `dBWM`/`vBWM` under MOTOR NEURONS (no group header) — relabeled by the measured Cook names, not a guessed type. Extra **138 sex-specific cells** (rays, CEM, hook, spicules, sex muscles).
+
+| Hop | Herm motor / muscle / sex | Male motor / muscle / sex | Male peak |
+|----:|--------------------------:|--------------------------:|-----------|
+| 1 | 5.12 / 1.02 / 0.07 | 6.95 / 1.53 / **7.74** | **AIAR** (PVX sex-specific #2; AVA still high) |
+| 2 | 9.88 / 2.30 / 0.07 | 10.16 / 2.23 / 6.85 | RIAR |
+| 3 | 16.46 / 6.86 / 0.05 | 10.06 / 2.94 / 5.65 | RMDDR |
+| 4 | 14.65 / 7.44 / 0.03 | 8.06 / 3.70 / 5.68 | RMDDR |
+
+Same sensory seed (n=83). Male sensory hops dump mass onto the sex circuit; herm does not. Body-wall muscle still lights. Sex-specific seed (n=138) stays in sex cells (hop-1 sex 17.35, motor 1.43) — sex program ≠ locomotion, same split as fly courtship vs walking. Source: `data/worm_male_connectome_boot.json`, `data/worm_sex_compare.json`.
 
 ### Ciona (chordate sibling) — live
 
@@ -117,12 +132,12 @@ measured behavior        → observer seed (fly walking + rest/odor + courtship 
 
 Missing for a *Drosophila* whole-animal molecular recreation (need these, do not invent them):
 
-1. **VNC** — Male CNS v1.0 is on `D:` and boots. BANC (female brain+cord) is not.
+1. **VNC** — Male CNS v1.0 **and BANC v888** both boot (female brain+cord, intact neck).
 2. **Muscles, gut, cuticle** — not in any fly EM CNS dump.
 3. **Per-cell transcriptome joined to `root_id`** — Fly Cell Atlas exists; it is not yet wired to FlyWire IDs here.
 4. **Named proteins on named cells** — FlyBase / UniProt join, then product Cα only where a measured homolog exists.
 5. **Fly observers** — walking, rest/odor, courtship, aggression, and sleep are live (`scripts/fly_behavior.py`, `scripts/fly_odor.py`, `scripts/fly_courtship.py`, `scripts/fly_aggression.py`, `scripts/fly_sleep.py`).
-6. **Other species** — worm, Ciona, and Platynereis whole-body maps boot. Vertebrates only as homologs.
+6. **Other species** — worm (both sexes), Ciona, and Platynereis whole-body maps boot. Bee / mosquito / beetle: protein homologs only.
 
 Genetics join for the walking program (measured, not guessed):
 
@@ -135,6 +150,38 @@ Genetics join for the walking program (measured, not guessed):
 
 Fold those with the **existing protein product** (measured homologs). Do not MDS a 13 Å “fly protein brain.”
 
+## BANC female brain+cord — live
+
+`python scripts/banc_connectome.py`
+
+Bates et al. *Nature* 2026. Files on `D:\FlyWire_Connectome\banc` (GCS `compiled_data/banc_888/`, Dataverse 10.7910/DVN/7WTH1N). 175,401 neurons after dropping glia/trachea, 13.5 M edges, 21,300 GABA (predicted transmitter). `vnc_motor` = measured `super_class=motor` ∩ `region=ventral_nerve_cord`.
+
+Hop-2 `vnc_motor` (same split as Male CNS):
+
+| Seed | n | hop-2 vnc_motor | hop-1 peak |
+|------|--:|----------------:|------------|
+| vnc_sensory | 7,845 | **10.16** | AN05B009 (ascending) |
+| chordotonal | 2,136 | **5.01** | INXXX007 (VNC intrinsic) |
+| JO (`type_prefix jo`) | 1,198 | **6.64** (hop-3 **17.35**) | **DNg29** (same DN as male walking) |
+| olfactory ORN | 3,007 | **0.0008** | **il3LN6** (AL local hub) |
+
+Female brain+cord independently reproduces the rule: which sensory class is on decides whether cord motor lights. Olfactory stays in the antennal lobe. Source: `data/banc_connectome_boot.json`.
+
+## What predicts *up* (and what does not)
+
+The experiment — map another insect from genetics without that species’ EM — is **product Cα of measured homologs**, not an invented graph.
+
+| Predicts up | Does not |
+|-------------|----------|
+| UniProt OrthoDB or UniRef50 member of a residual-mass protein (Gad1, nompC, iav, nan, ChAT, VGlut, Mhc, unc-25, mec-4, myo-3) | A bee / mosquito / beetle connectome |
+| Same residual law on a **measured** graph (BANC, Male CNS, larva, worm both sexes, Ciona, Platynereis) | Synapses inferred from a genome or cell atlas |
+| Sensory-class split (mechanosensory/JO → motor; olfactory local) as a **hypothesis to test** when a map exists | Seeding an unmeasured mosquito brain with fly types |
+| GABA inhibitory **only** where the dump annotates GABA | Invented transmitter signs |
+
+`python scripts/homolog_correspondence.py`
+
+**23 measured homologs, 7 misses.** Bee and beetle have OrthoDB members for most residual-mass genes. Anopheles often lacks the OrthoDB xref; UniRef50 still hits Gad1 / iav / ChAT / VGlut and **misses** nompC / nan / Mhc / mec-4. *iav* and *nan* collapse to the same bee TRPV (paralogs in one OrthoDB group). Bee nompC folds on 5VKQ at **81%** identity (same template as fly nompC). *mec-4* has an OrthoDB member in bee/beetle but **no measured structure map** — product stays `no_measured_map`, no invented 3-D. That is correspondence, not a wiring diagram. Source: `data/homolog_correspondence.json`. Sequences on `D:\FlyWire_Connectome\homologs` (not git).
+
 ## Anti-goals
 
 - Do not call a genome a connectome.
@@ -142,3 +189,4 @@ Fold those with the **existing protein product** (measured homologs). Do not MDS
 - Do not claim a mouse or human whole-brain synapse map exists.
 - Do not skip the VNC and call the fly brain a whole animal.
 - Predict *up* only where measured homologs exist — same rule as Cα.
+- Do not invent a honey-bee or mosquito synapse graph from fly hops.

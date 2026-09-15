@@ -13,7 +13,7 @@ Adult *Drosophila melanogaster* is the first animal with a complete brain-scale 
 | FlyWire FAFB v783 | 139,255 neurons, ~50 M chemical synapses, 8,453 cell types | annotations TSV (small); proofread connections ~0.85 GB; full synapses 9.5 GB |
 | Schlegel et al. 2024 | superclass, hemilineage, neurotransmitter, soma xyz, VFB/FBbt | GitHub `flyconnectome/flywire_annotations` |
 | Male CNS v1.0 | **165,122 traced** (brain + VNC), 25.6 M edges | Berg et al. *Cell* 2026-09-03; on `D:\FlyWire_Connectome\male_cns` |
-| BANC | female brain + cord, intact neck | Bates et al. *Nature* 2026; Codex |
+| BANC v888 | **175,401** neurons (glia dropped), 13.5 M edges, female brain+VNC intact neck | Bates et al. *Nature* 2026; on `D:\FlyWire_Connectome\banc`; live `scripts/banc_connectome.py` |
 
 Paper: Dorkenwald et al., *Nature* **634**, 124–138 (2024). Annotations: Schlegel et al., *Nature* **634**, 139–152 (2024). Portal: [codex.flywire.ai](https://codex.flywire.ai/) (sign-in). Open dumps: GitHub annotations + [Zenodo 10676866](https://zenodo.org/records/10676866).
 
@@ -113,6 +113,21 @@ Traced neurons **165,122**, **25,563,197** edges, **22,055** GABA. RTX 5070. Wal
 VNC sensory and JO put mass on **vnc_motor**. Olfactory does not. JO hop 1 peaks on descending neuron DNg29, then the cord. Source: `data/male_cns_boot.json`.
 
 Loop that ran: **video + 3-D tarsus → walking is on → seed mechanosensory / JO → residual hops → descending / DN mass**. Iron inaccuracies only against these kinematics. Predict *up* (other insects, then vertebrates) only where measured homologs exist — same product rule as protein Cα.
+
+### BANC — female brain + cord (live)
+
+`python scripts/banc_connectome.py`
+
+Bates et al. *Nature* 2026. v888 meta + edgelist_simple_v3 on `D:\FlyWire_Connectome\banc` (GCS public). **175,401** neurons after dropping glia/trachea, **13,542,180** edges, **21,300** GABA. `vnc_motor` = `super_class=motor` ∩ VNC region (measured, not invented).
+
+| Program | n seed | Hop 2 vnc_motor | Hop 1 peak |
+|---------|-------:|----------------:|------------|
+| vnc_sensory | 7,845 | **10.16** | AN05B009 (ascending) |
+| chordotonal | 2,136 | **5.01** | INXXX007 (VNC intrinsic) |
+| JO | 1,198 | **6.64** (hop-3 **17.35**) | **DNg29** |
+| olfactory ORN | 3,007 | **0.0008** | **il3LN6** |
+
+Same split as Male CNS on the other sex, intact neck. Source: `data/banc_connectome_boot.json`.
 
 ### Rest / odor observer (live)
 
