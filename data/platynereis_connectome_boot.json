@@ -1,0 +1,409 @@
+{
+  "organism": "Platynereis dumerilii 3-day larva",
+  "seed": "sensory",
+  "n_seed": 297,
+  "n_cells": 1720,
+  "n_edges": 8451,
+  "type_counts": {
+    "sensory": 297,
+    "motor": 178,
+    "other": 422,
+    "interneuron": 530,
+    "pigment": 3,
+    "ciliated": 57,
+    "muscle": 209,
+    "gland": 24
+  },
+  "hops": 11,
+  "residual_Biochemistry": 1.091958932349586,
+  "gaba_inhibitory": false,
+  "authority": "Veraszt\u00f3 et al. eLife 2025; JekelyLab/Platynereis_3D_connectome_2024 full_connectome_adjacency_matrix.csv; synapse counts; unsigned residual \u2014 transmitter mostly unannotated",
+  "free_parameters": 0,
+  "trace": [
+    {
+      "hop": 0,
+      "l1": 297.0,
+      "n_active": 297,
+      "mass_by_type": {
+        "sensory": 297.0,
+        "motor": 0.0,
+        "other": 0.0,
+        "interneuron": 0.0,
+        "pigment": 0.0,
+        "ciliated": 0.0,
+        "muscle": 0.0,
+        "gland": 0.0
+      },
+      "target_mass": {
+        "sensory": 297.0,
+        "motor": 0.0,
+        "muscle": 0.0,
+        "ciliated": 0.0,
+        "interneuron": 0.0
+      },
+      "top": [
+        {
+          "name": "PRC_pr1",
+          "type": "sensory",
+          "a": 1.0
+        },
+        {
+          "name": "PRC_pr2",
+          "type": "sensory",
+          "a": 1.0
+        },
+        {
+          "name": "SN-DLSO1.2__DLSOr11",
+          "type": "sensory",
+          "a": 1.0
+        },
+        {
+          "name": "SN-DLSO1.1NP_r",
+          "type": "sensory",
+          "a": 1.0
+        },
+        {
+          "name": "SNnuchPDF_l1",
+          "type": "sensory",
+          "a": 1.0
+        },
+        {
+          "name": "SN-DLSO2_necklace-l",
+          "type": "sensory",
+          "a": 1.0
+        },
+        {
+          "name": "SNMB 758790",
+          "type": "sensory",
+          "a": 1.0
+        },
+        {
+          "name": "antPUc_1l; SN",
+          "type": "sensory",
+          "a": 1.0
+        }
+      ]
+    },
+    {
+      "hop": 1,
+      "l1": 29.387387387387147,
+      "n_active": 2,
+      "mass_by_type": {
+        "interneuron": 15.97297297297289,
+        "sensory": 7.297297297297254,
+        "motor": 3.0540540540540277,
+        "other": 3.0360360360360086,
+        "muscle": 0.027027027027026803,
+        "pigment": 0.0,
+        "ciliated": 0.0,
+        "gland": 0.0
+      },
+      "target_mass": {
+        "sensory": 7.297297297297254,
+        "motor": 3.0540540540540277,
+        "muscle": 0.027027027027026803,
+        "ciliated": 0.0,
+        "interneuron": 15.97297297297289
+      },
+      "top": [
+        {
+          "name": "IN1_pl",
+          "type": "interneuron",
+          "a": 0.9999999999999918
+        },
+        {
+          "name": "IN1_pr",
+          "type": "interneuron",
+          "a": 0.8738738738738667
+        },
+        {
+          "name": "INsplitCR_sg2r2",
+          "type": "interneuron",
+          "a": 0.4594594594594557
+        },
+        {
+          "name": "MNant_r",
+          "type": "motor",
+          "a": 0.4414414414414378
+        },
+        {
+          "name": "IN1_ar",
+          "type": "interneuron",
+          "a": 0.4414414414414378
+        },
+        {
+          "name": "MNant_l",
+          "type": "motor",
+          "a": 0.42342342342341993
+        },
+        {
+          "name": "IN1_al",
+          "type": "interneuron",
+          "a": 0.42342342342341993
+        },
+        {
+          "name": "INsplitBronto_sg1r; ATO",
+          "type": "interneuron",
+          "a": 0.3513513513513485
+        }
+      ]
+    },
+    {
+      "hop": 2,
+      "l1": 58.51843817787096,
+      "n_active": 7,
+      "mass_by_type": {
+        "interneuron": 21.337310195226564,
+        "other": 11.19522776572604,
+        "ciliated": 8.447939262472422,
+        "motor": 7.7689804772230024,
+        "sensory": 4.367136659435771,
+        "gland": 3.366594360086583,
+        "muscle": 1.8834056399131298,
+        "pigment": 0.1518438177874103
+      },
+      "target_mass": {
+        "sensory": 4.367136659435771,
+        "motor": 7.7689804772230024,
+        "muscle": 1.8834056399131298,
+        "ciliated": 8.447939262472422,
+        "interneuron": 21.337310195226564
+      },
+      "top": [
+        {
+          "name": "IN1_ar",
+          "type": "interneuron",
+          "a": 0.9999999999999449
+        },
+        {
+          "name": "spinGland_sg3r",
+          "type": "gland",
+          "a": 0.8156182212580896
+        },
+        {
+          "name": "INintr1",
+          "type": "interneuron",
+          "a": 0.8042299349240338
+        },
+        {
+          "name": "Ser-h1_l",
+          "type": "other",
+          "a": 0.7933839479392191
+        },
+        {
+          "name": "prototroch_2P",
+          "type": "ciliated",
+          "a": 0.7434924078090698
+        },
+        {
+          "name": "Ser-h1_r",
+          "type": "other",
+          "a": 0.686550976138791
+        },
+        {
+          "name": "prototroch_3P",
+          "type": "ciliated",
+          "a": 0.6258134490238269
+        },
+        {
+          "name": "MNspinning_sg2r",
+          "type": "motor",
+          "a": 0.5612798264641775
+        }
+      ]
+    },
+    {
+      "hop": 3,
+      "l1": 48.21197442626498,
+      "n_active": 2,
+      "mass_by_type": {
+        "interneuron": 12.845245407336792,
+        "ciliated": 11.923404433524762,
+        "other": 9.298257859176735,
+        "motor": 5.004215757440272,
+        "muscle": 4.3752861689652205,
+        "gland": 2.895317996537985,
+        "sensory": 1.698950248478377,
+        "pigment": 0.17129655480484265
+      },
+      "target_mass": {
+        "sensory": 1.698950248478377,
+        "motor": 5.004215757440272,
+        "muscle": 4.3752861689652205,
+        "ciliated": 11.923404433524762,
+        "interneuron": 12.845245407336792
+      },
+      "top": [
+        {
+          "name": "MC",
+          "type": "other",
+          "a": 0.9999999999999764
+        },
+        {
+          "name": "spinGland_sg3r",
+          "type": "gland",
+          "a": 0.6567507956893027
+        },
+        {
+          "name": "prototroch_9P",
+          "type": "ciliated",
+          "a": 0.5576386174548977
+        },
+        {
+          "name": "Ser-h1_r",
+          "type": "other",
+          "a": 0.530920207716778
+        },
+        {
+          "name": "Ser-h1_l",
+          "type": "other",
+          "a": 0.46536657546483906
+        },
+        {
+          "name": "prototroch_10P",
+          "type": "ciliated",
+          "a": 0.4610670612541071
+        },
+        {
+          "name": "spinGland_sg2r",
+          "type": "gland",
+          "a": 0.4538221006197894
+        },
+        {
+          "name": "spinGland_sg2l",
+          "type": "gland",
+          "a": 0.4204589871014475
+        }
+      ]
+    },
+    {
+      "hop": 4,
+      "l1": 47.2289480071114,
+      "n_active": 9,
+      "mass_by_type": {
+        "ciliated": 19.090492240939,
+        "interneuron": 8.877536203170083,
+        "other": 8.285687220458135,
+        "motor": 4.047662623270633,
+        "muscle": 3.40576774165844,
+        "gland": 2.0718437489164487,
+        "sensory": 1.3225941464042474,
+        "pigment": 0.12736408229441323
+      },
+      "target_mass": {
+        "sensory": 1.3225941464042474,
+        "motor": 4.047662623270633,
+        "muscle": 3.40576774165844,
+        "ciliated": 19.090492240939,
+        "interneuron": 8.877536203170083
+      },
+      "top": [
+        {
+          "name": "prototroch_11P",
+          "type": "ciliated",
+          "a": 0.9999999999999729
+        },
+        {
+          "name": "prototroch_2P",
+          "type": "ciliated",
+          "a": 0.9401683895264396
+        },
+        {
+          "name": "MC",
+          "type": "other",
+          "a": 0.8772914365530019
+        },
+        {
+          "name": "prototroch_10P",
+          "type": "ciliated",
+          "a": 0.8722854845553266
+        },
+        {
+          "name": "prototroch_1P",
+          "type": "ciliated",
+          "a": 0.8522501192875863
+        },
+        {
+          "name": "prototroch_3P",
+          "type": "ciliated",
+          "a": 0.7980704300462571
+        },
+        {
+          "name": "prototroch_2A",
+          "type": "ciliated",
+          "a": 0.7912256327196203
+        },
+        {
+          "name": "prototroch_6P",
+          "type": "ciliated",
+          "a": 0.7756934778983376
+        }
+      ]
+    },
+    {
+      "hop": 11,
+      "l1": 39.951406711225154,
+      "n_active": 9,
+      "mass_by_type": {
+        "ciliated": 18.847168282044706,
+        "other": 7.809690404223271,
+        "interneuron": 6.089138216282563,
+        "motor": 2.7101071856616246,
+        "muscle": 1.9020410350590309,
+        "gland": 1.4816991590736561,
+        "sensory": 0.999325220329569,
+        "pigment": 0.11223720855074418
+      },
+      "target_mass": {
+        "sensory": 0.999325220329569,
+        "motor": 2.7101071856616246,
+        "muscle": 1.9020410350590309,
+        "ciliated": 18.847168282044706,
+        "interneuron": 6.089138216282563
+      },
+      "top": [
+        {
+          "name": "prototroch_11P",
+          "type": "ciliated",
+          "a": 0.9999999999999702
+        },
+        {
+          "name": "prototroch_2P",
+          "type": "ciliated",
+          "a": 0.9768402610068553
+        },
+        {
+          "name": "MC",
+          "type": "other",
+          "a": 0.9101951347826204
+        },
+        {
+          "name": "prototroch_1P",
+          "type": "ciliated",
+          "a": 0.847997026728041
+        },
+        {
+          "name": "prototroch_10P",
+          "type": "ciliated",
+          "a": 0.8445315169835766
+        },
+        {
+          "name": "prototroch_2A",
+          "type": "ciliated",
+          "a": 0.8086672594735707
+        },
+        {
+          "name": "prototroch_3P",
+          "type": "ciliated",
+          "a": 0.80337702454171
+        },
+        {
+          "name": "prototroch_6P",
+          "type": "ciliated",
+          "a": 0.7672667591543673
+        }
+      ]
+    }
+  ],
+  "note": "Segmented annelid whole body: neurons, muscle, ciliary bands. Sensory seed \u2192 motor / muscle / cilia. Not a trained dynamics model."
+}

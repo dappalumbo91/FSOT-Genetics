@@ -77,6 +77,22 @@ Ryan et al. 2016. 205 nodes, 2,903 edges, contact-depth weights. **NT sign is no
 
 Photoreceptor/palp seed → MGIN command → motor / tail muscle. Same residual as fly and worm. Source: `data/ciona_connectome_boot.json`.
 
+### Platynereis (segmented annelid) — live
+
+`python scripts/platynereis_connectome.py --boot --seed sensory`
+
+Verasztó et al. *eLife* 2025. 1,720 cells, 8,451 chemical edges. Unsigned (transmitter mostly unannotated). Effectors include **ciliary bands** (swimming), not only muscle.
+
+| Hop | Motor | Muscle | Cilia | Peak |
+|----:|------:|-------:|------:|------|
+| 0 | 0 | 0 | 0 | PRC (photoreceptor) |
+| 1 | 3.05 | 0.03 | 0 | **IN1** (visual interneuron) |
+| 2 | **7.77** | 1.88 | 8.45 | IN1 |
+| 4 | 4.05 | 3.41 | **19.09** | **prototroch** (ciliary band) |
+| 11 | 2.71 | 1.90 | 18.85 | prototroch |
+
+Sensory → IN1 → motor / muscle / cilia. Same residual. Source: `data/platynereis_connectome_boot.json`. All three whole-body maps now boot.
+
 ## Not in this class (do not treat as fly-equivalents)
 
 | Resource | Why it is not a fly-class map |
