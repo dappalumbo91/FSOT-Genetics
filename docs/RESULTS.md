@@ -84,6 +84,21 @@ No fly-class EM connectome. Genome + crystals only.
 
 Source: `data/plant_product.json`. No plant synapses invented.
 
+`python scripts/plant_homolog.py` — same six systems into rice (Japonica `39947` / `UP000059680`) and maize (`4577` / `UP000007305`). **12/12** measured homologs folded, all `template_raw` (not bulk). Median template identity **0.95**; **12/12** close-homolog ≥ 1/φ; median coverage **0.89**. True 1:1 miss: **0**.
+
+| Gene | Rice | id | Maize | id |
+|------|------|---:|-------|---:|
+| *rbcL* | P0C512 (named *rbcL*) | **1.00** | P00874 (named *rbcL*) | **0.95** |
+| *psbA* | P0C434 (named *psbA*) | **1.00** | P48183 (named *psbA*) | **1.00** |
+| *LHCB1.3* | P12330 *CAB1R* | **1.00** | P12329 *CAB1* | **1.00** |
+| *GAPA1* | Q7X8A1 Os04g0459500 (UniRef50) | **0.92** | P09315 *GAPA* (UniRef50) | **0.91** |
+| *ACT2* | A3C6D7 named *ACT2* | **0.95** | P02582 *ACT1* (no maize *ACT2*) | **0.89** |
+| *CESA3* | Q69V23 named *CESA3* | **0.83** | A0A1D6P4I8 UniRef50 of AtCESA3 | **0.74** |
+
+UniRef50 of Arabidopsis chloroplast *rbcL*/*psbA* is a **split cluster** (rice *rbcL* is UniRef50_P00877, not UniRef50_O03042). Named UniProt gene is the measured recover — same bar as Tribolium *nompC* NCBI Gene 662890. OrthoDB at Eukaryota lumps CESA with CSLD and GAPA with cytosolic GAPC; longest-reviewed would have folded the wrong paralog. We did not. Maize has no gene *CESA3* and no *ACT2*; those are UniRef50 / named *ACT1*, not invented CesA numbers.
+
+Source: `data/plant_homolog.json`. Still not a plant connectome.
+
 ## What this is capable of
 
 | Can | Cannot |
