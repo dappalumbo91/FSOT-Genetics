@@ -156,6 +156,28 @@ Seed is **measured** Male CNS genetics, not an invented P1 list: `fruDsx` labele
 
 TN1 hits **hg3 MN** at hop 1 — song/flight motor on this dump. pC1 stays in the brain at hop 1 then loads descending. fru/dsx is 5,012 cells, not a command singleton. Olfactory still does not light vnc_motor. Source: `data/fly_courtship_flow.json`.
 
+### Aggression observer (live)
+
+`python scripts/fly_aggression.py`
+
+Gao et al. *eLife* 13:RP104212. MPEG-4 on `D:\FlyWire_Connectome\behavior\aggression` (not git).
+
+- **fig4 video 1** — *pC1SS2>CsChrimson*. Red “Light ON” overlay is the published stimulus (same cut as the odor green dot: observer-max / φ). 596 / 1,888 frames, **19.87 s** pulse. Four wells.
+- **fig1 video 1** — Canton-S G14 males tussling. 1,487 live frames, MAD+φ motion 286 (paint 0.192).
+
+Seed is **measured** Male CNS genetics: `pC1_` (paper: pC1SS2 promotes tussling), `dsx`, `male-specific` dimorphism. Same `pC1_` cells also seed courtship — not an invented fight class.
+
+| Program | n seed | Hop 2 vnc_motor | Hop 2 descending | Hop 1 peak |
+|---------|-------:|----------------:|-----------------:|------------|
+| pC1_ | 148 | 1.28 | **30.74** | SIP106m (brain → cord) |
+| dsx | 154 | 4.21 | **56.60** | oviIN |
+| male-specific | 1,420 | 4.66 | **36.90** | SIP133m |
+| TN1 (courtship song) | 35 | **10.07** | 1.22 | hg3 MN |
+| JO (walking) | 672 | **7.77** | 24.21 | DNg29 |
+| olfactory | 2,639 | 0.001 | 0.57 | il3LN6 |
+
+pC1 / dsx / male-specific load **descending**, not song MNs. TN1 is the courtship-song contrast. Chamber translation energy *falls* during light-on (tussling is in-place grappling, not locomotion). Leftover two-fly distance did not beat the well rim — the overlay is the authority marker. Source: `data/fly_aggression_flow.json`.
+
 Other animals that are actually mapped: `docs/SPECIES_CONNECTOMES.md`. Only three whole-body synapse maps exist (*C. elegans*, *Ciona* larva, *Platynereis* larva). The worm whole-animal boot is live (`scripts/worm_connectome.py`): sensory → AVA → motor + body-wall muscle. Genetics join for fly walking proteins (`data/fly_walking_product.json`):
 
 | Gene | n | Mode | Homolog |

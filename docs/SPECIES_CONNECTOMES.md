@@ -121,7 +121,7 @@ Missing for a *Drosophila* whole-animal molecular recreation (need these, do not
 2. **Muscles, gut, cuticle** — not in any fly EM CNS dump.
 3. **Per-cell transcriptome joined to `root_id`** — Fly Cell Atlas exists; it is not yet wired to FlyWire IDs here.
 4. **Named proteins on named cells** — FlyBase / UniProt join, then product Cα only where a measured homolog exists.
-5. **Other fly observers** — walking, rest/odor, and courtship are live (`scripts/fly_behavior.py`, `scripts/fly_odor.py`, `scripts/fly_courtship.py`). Aggression / sleep still open.
+5. **Other fly observers** — walking, rest/odor, courtship, and aggression are live (`scripts/fly_behavior.py`, `scripts/fly_odor.py`, `scripts/fly_courtship.py`, `scripts/fly_aggression.py`). Sleep still open.
 6. **Other species** — worm, Ciona, and Platynereis whole-body maps boot. Vertebrates only as homologs.
 
 Genetics join for the walking program (measured, not guessed):
