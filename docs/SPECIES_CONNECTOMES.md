@@ -190,7 +190,7 @@ First pass: **23 measured, 7 misses.** The seven were a sieve, not seven missing
 | nan Anopheles | Same OrthoDB as *iav* — already Q7QFD0. |
 | unc-25 Anopheles | Same OrthoDB as Gad1 — already Q7PNL7. Worm GAD UniRef50 does not reach insects. |
 | nompC Tribolium | UniProt is split fragments (244 aa). **NCBI Gene 662890 / TC012313 / XP_015838654.2 (1741 aa)** is named nompC; UniParc `UPI0030FF3C31`, **not in UniProtKB**. Kim 2014 RNAi `dsnompC` is lethal at eclosion. Recovered as `ncbi_gene_named`. |
-| mec-4 Anopheles | DEG/ENaC *family* exists (~26 ppk genes). Fly *ppk* vs worm *mec-4* is **~18%** (below leftover 1/φ²). Insect gentle-touch on the live graphs is **nompC TRPN**, not a 1:1 degenerin. Closest fly-*ppk* mosquito ortholog is AGAP011610 — not folded as mec-4. **True 1:1 miss.** |
+| mec-4 Anopheles | **True 1:1 miss.** UniRef50/90 of mec-4 is **Nematoda only**. Insect DEG/ENaC is the *ppk* expansion (~26 genes in *An. gambiae*); 29/30 have no OrthoDB xref. The one tagged (AGAP010146) is fly **ppk17**, not mec-4. AGAP011610 (DIOPT-best to fly *ppk*) sits in an **Anopheles-only** UniRef50 Pickpocket cluster. Fly *ppk* vs worm mec-4 is **~18%**. Worm ALM touch is mec-4; fly walking/JO on the live graphs is **nompC TRPN** (already folded in Anopheles at 85%). Do not pick a random ppk as mec-4. |
 
 Bee nompC folds on 5VKQ at **81%** identity. *mec-4* bee/beetle: sequence homolog, **no measured structure map**. Source: `data/homolog_correspondence.json`. Sequences on `D:\FlyWire_Connectome\homologs` (not git).
 

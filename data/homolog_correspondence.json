@@ -849,7 +849,26 @@
       "family": "DEG/ENaC (IPR001873); insect pickpocket (ppk)",
       "n_family_in_taxon": 26,
       "fly_analog": "ppk (FBgn0020258); DIOPT identity to mec-4 ~18%",
-      "closest_anopheles_to_fly_ppk": "AGAP011610"
+      "closest_anopheles_to_fly_ppk": "AGAP011610",
+      "true_1to1": false,
+      "uniref50_clade": "Nematoda only",
+      "orthodb_gambiae_members": 0,
+      "gambiae_degenac_n": 26,
+      "gambiae_degenac_orthodb_tagged": 1,
+      "tagged_is": "Q7Q0V0 AGAP010146 fly ppk17, not mec-4",
+      "predict_up": {
+        "not": "any Anopheles ppk as mec-4",
+        "instead": "nompC A0A1S4GZD0 / AGAP008559 (already folded)",
+        "why": "live fly walking/JO seed is nompC TRPN; worm ALM is mec-4 DEG/ENaC"
+      },
+      "audit": {
+        "uniref50": "UniRef50_P24612 is nematodes only (Caenorhabditis, Brugia, Haemonchus, ...). Zero insects at 50% or 90%.",
+        "orthodb_5874059at2759": "Eukaryotic DEG/ENaC superfamily. Fly ppk7/14/20/30, bee LOC725359, beetle Nach-like, Aedes, An. albimanus. An. gambiae: 0 members xreffed.",
+        "gambiae_family": "~26 IPR001873 proteins; 29/30 have no OrthoDB xref (annotation). The one tagged (Q7Q0V0 / AGAP010146) is fly ppk17, not mec-4.",
+        "agap011610": "DIOPT-best fly ppk mosquito gene. UniRef50_A0A182KHA8 is an Anopheles-only Pickpocket cluster (16 anophelines). Not fly, not worm.",
+        "identity": "Fly ppk vs worm mec-4 ~18% (DIOPT). Below leftover 1/phi^2 and close-homolog 1/phi.",
+        "live_graph_analog": "Worm ALM hop-0 is mec-4 DEG/ENaC. Fly walking/JO is nompC TRPN (Anopheles AGAP008559 / A0A1S4GZD0 already folded 5VKQ 85%). Do not substitute a random ppk."
+      }
     },
     {
       "source_symbol": "mec-4",
@@ -994,7 +1013,13 @@
         }
       }
     ],
-    "note": "UniRef50_{accession} misses isoform clusters (P05661-2, Q9VMR4). Fragments shorter than source/\u03c6\u00b2 dropped. DEG/ENaC family in Anopheles is not a mec-4 1:1. Tribolium nompC has no full-length UniRef50 member."
+    "note": "mec-4 1:1 is nematode-restricted (UniRef50/90). Insect DEG/ENaC is the ppk expansion. An. gambiae has ~26 family genes but almost no OrthoDB xrefs. Touch analog on live graphs is nompC.",
+    "true_1to1_misses": [
+      {
+        "source": "mec-4",
+        "target": "Anopheles gambiae"
+      }
+    ]
   },
   "n_measured_homologs": 26,
   "n_folded": 26
