@@ -2,6 +2,8 @@
 
 Pin `D1D38A`. Same product rule as protein Cα and the fly boot: **measured cells and measured edges are authority**. Residual does not invent synapses. A genome is not a connectome. An fMRI “connectome” is not this object.
 
+Live scoreboard (Å product, hop splits, homolog transfers, plant panel): [`RESULTS.md`](RESULTS.md). Analog pointer when a 1:1 is clade-restricted: `data/analog_pointer.json`.
+
 ## Short answer
 
 **Three species have a whole-body synaptic wiring diagram** (every reconstructed cell, including effectors):
