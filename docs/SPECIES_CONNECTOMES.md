@@ -180,7 +180,19 @@ The experiment — map another insect from genetics without that species’ EM �
 
 `python scripts/homolog_correspondence.py`
 
-**23 measured homologs, 7 misses.** Bee and beetle have OrthoDB members for most residual-mass genes. Anopheles often lacks the OrthoDB xref; UniRef50 still hits Gad1 / iav / ChAT / VGlut and **misses** nompC / nan / Mhc / mec-4. *iav* and *nan* collapse to the same bee TRPV (paralogs in one OrthoDB group). Bee nompC folds on 5VKQ at **81%** identity (same template as fly nompC). *mec-4* has an OrthoDB member in bee/beetle but **no measured structure map** — product stays `no_measured_map`, no invented 3-D. That is correspondence, not a wiring diagram. Source: `data/homolog_correspondence.json`. Sequences on `D:\FlyWire_Connectome\homologs` (not git).
+First pass: **23 measured, 7 misses.** The seven were a sieve, not seven missing genes. Isoform-aware UniRef50 (`Q9VMR4`, `P05661-2`) plus same-OrthoDB cover: **25 measured, 3 covered, 2 true misses.**
+
+| Miss | What it actually is |
+|------|---------------------|
+| nompC Anopheles | UniRef50 of fly nompC is `Q9VMR4` (isoform H), not `Q7KIQ2`. **AGAP008559** (A0A1S4GZD0, 1842 aa, ankyrin + ion_trans) folds on 5VKQ at **85%**. Separate newer name **AGAP029867** “Ion channel nompc” is not in that cluster. |
+| Mhc Anopheles | UniRef50 of fly Mhc is **`P05661-2`** (isoform B). **AGAP010147** (A0A1S4H3X2, 1961 aa, myofibril, muscle contraction) folds on 6XE9 at **65%**. |
+| myo-3 Anopheles | Same OrthoDB as Mhc — already AGAP010147. |
+| nan Anopheles | Same OrthoDB as *iav* — already Q7QFD0. |
+| unc-25 Anopheles | Same OrthoDB as Gad1 — already Q7PNL7. Worm GAD UniRef50 does not reach insects. |
+| nompC Tribolium | UniRef50 hit is a **244 aa fragment** (dropped: shorter than source/φ²). Full-length beetle nompC is not in UniProt at 50% / OrthoDB. **True miss.** |
+| mec-4 Anopheles | DEG/ENaC *family* exists (ppk-like). No 1:1 in the mec-4 UniRef50 cluster. **True miss.** |
+
+Bee nompC folds on 5VKQ at **81%** identity. *mec-4* bee/beetle: sequence homolog, **no measured structure map**. Source: `data/homolog_correspondence.json`. Sequences on `D:\FlyWire_Connectome\homologs` (not git).
 
 ## Anti-goals
 

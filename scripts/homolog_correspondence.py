@@ -21,8 +21,14 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
+sys.path.insert(0, str(ROOT / "vendor"))
 
+import fsot_compute as fc  # noqa: E402
 from fsot_predict import main as predict_main  # noqa: E402
+
+_PHI = float(fc.PHI)
+# Leftover coverage analog: hit shorter than source/φ² is a fragment, not a homolog.
+_MIN_LEN_FRAC = 1.0 / (_PHI ** 2)
 
 OUT_D = Path(r"D:\FlyWire_Connectome\homologs\product")
 FASTA = Path(r"D:\FlyWire_Connectome\homologs\homologs.fasta")
@@ -126,13 +132,64 @@ def _seq_of(rec: dict[str, Any]) -> str:
     return str(((rec.get("sequence") or {}).get("value")) or "")
 
 
-def _pick_hit(results: list[dict[str, Any]]) -> dict[str, Any] | None:
+def _pick_hit(
+    results: list[dict[str, Any]],
+    *,
+    min_length: int = 0,
+) -> dict[str, Any] | None:
     if not results:
         return None
-    reviewed = [r for r in results if r.get("entryType") == "UniProtKB reviewed (Swiss-Prot)"]
-    pool = reviewed or results
+    long_enough = [
+        r
+        for r in results
+        if int(((r.get("sequence") or {}).get("length")) or 0) >= min_length
+    ]
+    pool = long_enough or []
+    if not pool:
+        return None
+    reviewed = [r for r in pool if r.get("entryType") == "UniProtKB reviewed (Swiss-Prot)"]
+    pool = reviewed or pool
     pool = sorted(pool, key=lambda r: int(((r.get("sequence") or {}).get("length")) or 0), reverse=True)
     return pool[0]
+
+
+def _isoform_accessions(entry: dict[str, Any], acc: str) -> list[str]:
+    out = [acc]
+    for c in entry.get("comments") or []:
+        if c.get("commentType") != "ALTERNATIVE PRODUCTS":
+            continue
+        for iso in c.get("isoforms") or []:
+            for iid in iso.get("isoformIds") or []:
+                if iid and iid not in out:
+                    out.append(str(iid))
+    return out
+
+
+def _uniref50_cluster_ids(acc: str) -> list[str]:
+    """Actual UniRef50 cluster IDs, including isoform clusters (P05661-2).
+
+    Querying UniRef50_{accession} misses when the representative is an
+    isoform or a different member (nompC Q7KIQ2 lives in UniRef50_Q9VMR4).
+    """
+    url = (
+        "https://rest.uniprot.org/uniref/search?query="
+        + urllib.parse.quote(f"uniprot_id:{acc} AND identity:0.5")
+        + "&size=10&format=json"
+    )
+    recs = _get_json(url).get("results") or []
+    out: list[str] = []
+    for rec in recs:
+        cid = rec.get("id")
+        if cid and cid not in out:
+            out.append(str(cid))
+    return out
+
+
+def _ensembl_id(rec: dict[str, Any]) -> str:
+    for x in rec.get("uniProtKBCrossReferences") or []:
+        if x.get("database") == "EnsemblMetazoa":
+            return str(x.get("id") or "")
+    return ""
 
 
 def resolve() -> dict[str, Any]:
@@ -144,7 +201,19 @@ def resolve() -> dict[str, Any]:
         print(f"== {src['symbol']} {src['uniprot']}", flush=True)
         entry = _get_json(f"https://rest.uniprot.org/uniprotkb/{src['uniprot']}.json")
         odb = _orthodb_id(entry)
-        src_row = {**src, "orthodb": odb, "length": int(((entry.get("sequence") or {}).get("length")) or 0)}
+        src_len = int(((entry.get("sequence") or {}).get("length")) or 0)
+        min_len = int(round(src_len * _MIN_LEN_FRAC))
+        clusters: list[str] = []
+        for iso_acc in _isoform_accessions(entry, src["uniprot"])[:12]:
+            for cid in _uniref50_cluster_ids(iso_acc):
+                if cid not in clusters:
+                    clusters.append(cid)
+        src_row = {
+            **src,
+            "orthodb": odb,
+            "length": src_len,
+            "uniref50_clusters": clusters,
+        }
         sources_out.append(src_row)
         if not odb:
             print("  no OrthoDB xref — no_measured_homolog", flush=True)
@@ -164,7 +233,7 @@ def resolve() -> dict[str, Any]:
             url = (
                 "https://rest.uniprot.org/uniprotkb/search?query="
                 + urllib.parse.quote(q)
-                + "&fields=accession,gene_names,organism_name,protein_name,sequence,reviewed"
+                + "&fields=accession,gene_names,organism_name,protein_name,sequence,reviewed,xref_ensemblmetazoa"
                 + "&size=50&format=json"
             )
             via = "orthodb"
@@ -183,25 +252,27 @@ def resolve() -> dict[str, Any]:
                     }
                 )
                 continue
-            hit = _pick_hit(hits)
+            hit = _pick_hit(hits, min_length=min_len)
             if not hit:
-                q50 = (
-                    f"uniref_cluster_50:UniRef50_{src['uniprot']} "
-                    f"AND organism_id:{tx['taxid']}"
-                )
-                url50 = (
-                    "https://rest.uniprot.org/uniprotkb/search?query="
-                    + urllib.parse.quote(q50)
-                    + "&fields=accession,gene_names,organism_name,protein_name,sequence,reviewed"
-                    + "&size=50&format=json"
-                )
-                try:
-                    hits = _get_json(url50).get("results") or []
-                except Exception as exc:
-                    hits = []
-                    print(f"  {tx['organism']} UniRef50 fail ({exc})", flush=True)
-                hit = _pick_hit(hits)
+                hits = []
                 via = "uniref50"
+                for cid in clusters or [f"UniRef50_{src['uniprot']}"]:
+                    q50 = f"uniref_cluster_50:{cid} AND organism_id:{tx['taxid']}"
+                    url50 = (
+                        "https://rest.uniprot.org/uniprotkb/search?query="
+                        + urllib.parse.quote(q50)
+                        + "&fields=accession,gene_names,organism_name,protein_name,sequence,reviewed,xref_ensemblmetazoa"
+                        + "&size=50&format=json"
+                    )
+                    try:
+                        hits = _get_json(url50).get("results") or []
+                    except Exception as exc:
+                        print(f"  {tx['organism']} UniRef50 {cid} fail ({exc})", flush=True)
+                        hits = []
+                    hit = _pick_hit(hits, min_length=min_len)
+                    if hit:
+                        via = f"uniref50:{cid}"
+                        break
             if not hit:
                 print(f"  {tx['organism']}: no OrthoDB/UniRef50 member", flush=True)
                 rows.append(
@@ -244,9 +315,52 @@ def resolve() -> dict[str, Any]:
                     "reviewed": reviewed,
                     "n_hits": len(hits),
                     "status": "measured_homolog",
+                    "ensembl": _ensembl_id(hit),
+                    "uniref50_cluster": via.split(":", 1)[1] if via.startswith("uniref50:") else None,
                     "free_parameters": 0,
                 }
             )
+    # Same OrthoDB group already hit in this taxon under another source
+    # (nan vs iav, unc-25 vs Gad1, myo-3 vs Mhc).
+    measured = [
+        r
+        for r in rows
+        if r.get("status") == "measured_homolog"
+    ]
+    for r in rows:
+        if r.get("status") != "no_measured_homolog":
+            continue
+        odb = r.get("orthodb")
+        tax = r.get("taxid")
+        cover = next(
+            (
+                m
+                for m in measured
+                if m.get("orthodb") == odb
+                and m.get("taxid") == tax
+                and m.get("source_uniprot") != r.get("source_uniprot")
+                and m.get("source_uniprot") != r.get("uniprot")
+            ),
+            None,
+        )
+        if not cover:
+            continue
+        r["status"] = "covered_by_orthodb_paralog"
+        r["covered_by"] = {
+            "source_symbol": cover.get("source_symbol"),
+            "uniprot": cover.get("uniprot"),
+            "ensembl": cover.get("ensembl"),
+        }
+        r["reason"] = (
+            f"same OrthoDB {odb} already measured as "
+            f"{cover.get('source_symbol')} {cover.get('uniprot')}"
+        )
+        print(
+            f"  cover {r.get('source_symbol') or r.get('symbol')} "
+            f"{r.get('target_organism')} via {cover.get('source_symbol')} "
+            f"{cover.get('uniprot')}",
+            flush=True,
+        )
     FASTA.write_text("".join(fasta_chunks), encoding="utf-8")
     print(f"  wrote {FASTA}", flush=True)
     return {
@@ -262,6 +376,32 @@ def resolve() -> dict[str, Any]:
         "taxa": TAXA,
         "homologs": rows,
         "fasta": str(FASTA),
+        "miss_audit": {
+            "no_measured_homolog": [
+                {
+                    "source": r.get("source_symbol") or r.get("symbol"),
+                    "target": r.get("target_organism"),
+                    "reason": r.get("reason"),
+                }
+                for r in rows
+                if r.get("status") == "no_measured_homolog"
+            ],
+            "covered_by_orthodb_paralog": [
+                {
+                    "source": r.get("source_symbol") or r.get("symbol"),
+                    "target": r.get("target_organism"),
+                    "covered_by": r.get("covered_by"),
+                }
+                for r in rows
+                if r.get("status") == "covered_by_orthodb_paralog"
+            ],
+            "note": (
+                "UniRef50_{accession} misses isoform clusters "
+                "(P05661-2, Q9VMR4). Fragments shorter than source/φ² dropped. "
+                "DEG/ENaC family in Anopheles is not a mec-4 1:1. "
+                "Tribolium nompC has no full-length UniRef50 member."
+            ),
+        },
     }
 
 
@@ -300,6 +440,21 @@ def fold_rows(join: dict[str, Any]) -> dict[str, Any]:
             continue
         pdb_out = OUT_D / f"{row['source_symbol']}_{row['taxid']}_{acc}.pdb"
         json_out = OUT_D / f"{row['source_symbol']}_{row['taxid']}_{acc}.json"
+        if json_out.exists() and acc not in cache:
+            full = json.loads(json_out.read_text(encoding="utf-8"))
+            cache[acc] = {
+                "predict_rc": 0,
+                "pdb": str(pdb_out) if pdb_out.exists() else None,
+                "structure_mode": full.get("structure_mode"),
+                "deploy_regime": full.get("deploy_regime"),
+                "template_pdb": full.get("template_pdb"),
+                "template_identity": full.get("template_identity"),
+                "template_coverage": full.get("template_coverage"),
+                "mean_confidence": full.get("mean_confidence"),
+                "rg_target_A": full.get("rg_target_A"),
+                "engine": full.get("engine"),
+            }
+            print(f"  skip existing {json_out.name}", flush=True)
         if acc in cache:
             rec = {**row, **cache[acc], "pdb": str(pdb_out) if pdb_out.exists() else cache[acc].get("pdb")}
             folded.append(rec)

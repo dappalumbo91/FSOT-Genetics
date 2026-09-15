@@ -11,7 +11,10 @@
       "organism": "Drosophila melanogaster",
       "sits_on": "GABAergic neurons (inhibitory residual)",
       "orthodb": "392571at2759",
-      "length": 510
+      "length": 510,
+      "uniref50_clusters": [
+        "UniRef50_P20228"
+      ]
     },
     {
       "symbol": "nompC",
@@ -19,7 +22,10 @@
       "organism": "Drosophila melanogaster",
       "sits_on": "mechanosensory transduction",
       "orthodb": "195446at2759",
-      "length": 1619
+      "length": 1619,
+      "uniref50_clusters": [
+        "UniRef50_Q9VMR4"
+      ]
     },
     {
       "symbol": "iav",
@@ -27,7 +33,10 @@
       "organism": "Drosophila melanogaster",
       "sits_on": "Johnston organ TRPV",
       "orthodb": "533508at2759",
-      "length": 1123
+      "length": 1123,
+      "uniref50_clusters": [
+        "UniRef50_Q9W3W0"
+      ]
     },
     {
       "symbol": "nan",
@@ -35,7 +44,10 @@
       "organism": "Drosophila melanogaster",
       "sits_on": "Johnston organ TRPV",
       "orthodb": "533508at2759",
-      "length": 833
+      "length": 833,
+      "uniref50_clusters": [
+        "UniRef50_M9PI57"
+      ]
     },
     {
       "symbol": "ChAT",
@@ -43,7 +55,10 @@
       "organism": "Drosophila melanogaster",
       "sits_on": "cholinergic neurons (default excitatory edge)",
       "orthodb": "240216at2759",
-      "length": 721
+      "length": 721,
+      "uniref50_clusters": [
+        "UniRef50_P07668"
+      ]
     },
     {
       "symbol": "VGlut",
@@ -51,7 +66,10 @@
       "organism": "Drosophila melanogaster",
       "sits_on": "glutamatergic motor neurons (vnc_motor NMJ)",
       "orthodb": "2985014at2759",
-      "length": 632
+      "length": 632,
+      "uniref50_clusters": [
+        "UniRef50_Q9VQC0"
+      ]
     },
     {
       "symbol": "Mhc",
@@ -59,7 +77,11 @@
       "organism": "Drosophila melanogaster",
       "sits_on": "muscle (effector of vnc_motor; not a CNS cell)",
       "orthodb": "6108017at2759",
-      "length": 1962
+      "length": 1962,
+      "uniref50_clusters": [
+        "UniRef50_P05661",
+        "UniRef50_P05661-2"
+      ]
     },
     {
       "symbol": "unc-25",
@@ -67,7 +89,10 @@
       "organism": "Caenorhabditis elegans",
       "sits_on": "GABAergic motor neurons DD/VD/RME",
       "orthodb": "392571at2759",
-      "length": 508
+      "length": 508,
+      "uniref50_clusters": [
+        "UniRef50_G5EDB7"
+      ]
     },
     {
       "symbol": "mec-4",
@@ -75,7 +100,10 @@
       "organism": "Caenorhabditis elegans",
       "sits_on": "ALML/ALMR touch neurons",
       "orthodb": "5874059at2759",
-      "length": 768
+      "length": 768,
+      "uniref50_clusters": [
+        "UniRef50_P24612"
+      ]
     },
     {
       "symbol": "myo-3",
@@ -83,7 +111,10 @@
       "organism": "Caenorhabditis elegans",
       "sits_on": "body-wall muscle myosin",
       "orthodb": "6108017at2759",
-      "length": 1969
+      "length": 1969,
+      "uniref50_clusters": [
+        "UniRef50_P12844"
+      ]
     }
   ],
   "taxa": [
@@ -116,6 +147,8 @@
       "reviewed": false,
       "n_hits": 5,
       "status": "measured_homolog",
+      "ensembl": "",
+      "uniref50_cluster": null,
       "free_parameters": 0,
       "predict_rc": 0,
       "pdb": "D:\\FlyWire_Connectome\\homologs\\product\\Gad1_7460_A0A7M7R9C7.pdb",
@@ -134,7 +167,7 @@
       "source_organism": "Drosophila melanogaster",
       "sits_on": "GABAergic neurons (inhibitory residual)",
       "orthodb": "392571at2759",
-      "correspondence": "uniref50",
+      "correspondence": "uniref50:UniRef50_P20228",
       "target_organism": "Anopheles gambiae",
       "taxid": 7165,
       "uniprot": "Q7PNL7",
@@ -143,6 +176,8 @@
       "reviewed": false,
       "n_hits": 1,
       "status": "measured_homolog",
+      "ensembl": "AGAP005866-RA",
+      "uniref50_cluster": "UniRef50_P20228",
       "free_parameters": 0,
       "predict_rc": 0,
       "pdb": "D:\\FlyWire_Connectome\\homologs\\product\\Gad1_7165_Q7PNL7.pdb",
@@ -170,6 +205,8 @@
       "reviewed": false,
       "n_hits": 2,
       "status": "measured_homolog",
+      "ensembl": "",
+      "uniref50_cluster": null,
       "free_parameters": 0,
       "predict_rc": 0,
       "pdb": "D:\\FlyWire_Connectome\\homologs\\product\\Gad1_7070_A7U8C7.pdb",
@@ -197,6 +234,8 @@
       "reviewed": false,
       "n_hits": 4,
       "status": "measured_homolog",
+      "ensembl": "",
+      "uniref50_cluster": null,
       "free_parameters": 0,
       "predict_rc": 0,
       "pdb": "D:\\FlyWire_Connectome\\homologs\\product\\nompC_7460_A0A7M7IF52.pdb",
@@ -210,16 +249,33 @@
       "engine": "fsot_template_product_v7_chemlink"
     },
     {
-      "symbol": "nompC",
-      "uniprot": "Q7KIQ2",
-      "organism": "Drosophila melanogaster",
+      "source_symbol": "nompC",
+      "source_uniprot": "Q7KIQ2",
+      "source_organism": "Drosophila melanogaster",
       "sits_on": "mechanosensory transduction",
+      "orthodb": "195446at2759",
+      "correspondence": "uniref50:UniRef50_Q9VMR4",
       "target_organism": "Anopheles gambiae",
       "taxid": 7165,
-      "orthodb": "195446at2759",
-      "status": "no_measured_homolog",
-      "reason": "no UniProt OrthoDB or UniRef50 member in taxon",
-      "n_hits": 0
+      "uniprot": "A0A1S4GZD0",
+      "gene": "",
+      "length": 1842,
+      "reviewed": false,
+      "n_hits": 2,
+      "status": "measured_homolog",
+      "ensembl": "AGAP008559-RB",
+      "uniref50_cluster": "UniRef50_Q9VMR4",
+      "free_parameters": 0,
+      "predict_rc": 0,
+      "pdb": "D:\\FlyWire_Connectome\\homologs\\product\\nompC_7165_A0A1S4GZD0.pdb",
+      "structure_mode": "template_raw",
+      "deploy_regime": "template_physics",
+      "template_pdb": "5VKQ",
+      "template_identity": 0.8513060951105157,
+      "template_coverage": 0.8105320304017373,
+      "mean_confidence": 0.0,
+      "rg_target_A": null,
+      "engine": "fsot_template_product_v7_chemlink"
     },
     {
       "symbol": "nompC",
@@ -248,6 +304,8 @@
       "reviewed": false,
       "n_hits": 8,
       "status": "measured_homolog",
+      "ensembl": "",
+      "uniref50_cluster": null,
       "free_parameters": 0,
       "predict_rc": 0,
       "pdb": "D:\\FlyWire_Connectome\\homologs\\product\\iav_7460_A0A7M7M0I9.pdb",
@@ -266,7 +324,7 @@
       "source_organism": "Drosophila melanogaster",
       "sits_on": "Johnston organ TRPV",
       "orthodb": "533508at2759",
-      "correspondence": "uniref50",
+      "correspondence": "uniref50:UniRef50_Q9W3W0",
       "target_organism": "Anopheles gambiae",
       "taxid": 7165,
       "uniprot": "Q7QFD0",
@@ -275,6 +333,8 @@
       "reviewed": false,
       "n_hits": 1,
       "status": "measured_homolog",
+      "ensembl": "AGAP000413-RA",
+      "uniref50_cluster": "UniRef50_Q9W3W0",
       "free_parameters": 0,
       "predict_rc": 0,
       "pdb": "D:\\FlyWire_Connectome\\homologs\\product\\iav_7165_Q7QFD0.pdb",
@@ -302,6 +362,8 @@
       "reviewed": false,
       "n_hits": 1,
       "status": "measured_homolog",
+      "ensembl": "",
+      "uniref50_cluster": null,
       "free_parameters": 0,
       "predict_rc": 0,
       "pdb": "D:\\FlyWire_Connectome\\homologs\\product\\iav_7070_D6WNB8.pdb",
@@ -329,6 +391,8 @@
       "reviewed": false,
       "n_hits": 8,
       "status": "measured_homolog",
+      "ensembl": "",
+      "uniref50_cluster": null,
       "free_parameters": 0,
       "predict_rc": 0,
       "pdb": "D:\\FlyWire_Connectome\\homologs\\product\\iav_7460_A0A7M7M0I9.pdb",
@@ -349,9 +413,14 @@
       "target_organism": "Anopheles gambiae",
       "taxid": 7165,
       "orthodb": "533508at2759",
-      "status": "no_measured_homolog",
-      "reason": "no UniProt OrthoDB or UniRef50 member in taxon",
-      "n_hits": 0
+      "status": "covered_by_orthodb_paralog",
+      "reason": "same OrthoDB 533508at2759 already measured as iav Q7QFD0",
+      "n_hits": 0,
+      "covered_by": {
+        "source_symbol": "iav",
+        "uniprot": "Q7QFD0",
+        "ensembl": "AGAP000413-RA"
+      }
     },
     {
       "source_symbol": "nan",
@@ -368,6 +437,8 @@
       "reviewed": false,
       "n_hits": 1,
       "status": "measured_homolog",
+      "ensembl": "",
+      "uniref50_cluster": null,
       "free_parameters": 0,
       "predict_rc": 0,
       "pdb": "D:\\FlyWire_Connectome\\homologs\\product\\iav_7070_D6WNB8.pdb",
@@ -395,6 +466,8 @@
       "reviewed": false,
       "n_hits": 6,
       "status": "measured_homolog",
+      "ensembl": "",
+      "uniref50_cluster": null,
       "free_parameters": 0,
       "predict_rc": 0,
       "pdb": "D:\\FlyWire_Connectome\\homologs\\product\\ChAT_7460_A0A7M7KYL4.pdb",
@@ -413,7 +486,7 @@
       "source_organism": "Drosophila melanogaster",
       "sits_on": "cholinergic neurons (default excitatory edge)",
       "orthodb": "240216at2759",
-      "correspondence": "uniref50",
+      "correspondence": "uniref50:UniRef50_P07668",
       "target_organism": "Anopheles gambiae",
       "taxid": 7165,
       "uniprot": "A0A1S4GEW3",
@@ -422,6 +495,8 @@
       "reviewed": false,
       "n_hits": 1,
       "status": "measured_homolog",
+      "ensembl": "AGAP002370-RA",
+      "uniref50_cluster": "UniRef50_P07668",
       "free_parameters": 0,
       "predict_rc": 0,
       "pdb": "D:\\FlyWire_Connectome\\homologs\\product\\ChAT_7165_A0A1S4GEW3.pdb",
@@ -449,6 +524,8 @@
       "reviewed": false,
       "n_hits": 3,
       "status": "measured_homolog",
+      "ensembl": "",
+      "uniref50_cluster": null,
       "free_parameters": 0,
       "predict_rc": 0,
       "pdb": "D:\\FlyWire_Connectome\\homologs\\product\\ChAT_7070_D6WI25.pdb",
@@ -476,6 +553,8 @@
       "reviewed": false,
       "n_hits": 33,
       "status": "measured_homolog",
+      "ensembl": "",
+      "uniref50_cluster": null,
       "free_parameters": 0,
       "predict_rc": 0,
       "pdb": "D:\\FlyWire_Connectome\\homologs\\product\\VGlut_7460_A0A7M7IGJ9.pdb",
@@ -494,7 +573,7 @@
       "source_organism": "Drosophila melanogaster",
       "sits_on": "glutamatergic motor neurons (vnc_motor NMJ)",
       "orthodb": "2985014at2759",
-      "correspondence": "uniref50",
+      "correspondence": "uniref50:UniRef50_Q9VQC0",
       "target_organism": "Anopheles gambiae",
       "taxid": 7165,
       "uniprot": "A0A1S4GXM0",
@@ -503,6 +582,8 @@
       "reviewed": false,
       "n_hits": 1,
       "status": "measured_homolog",
+      "ensembl": "AGAP007992-RA",
+      "uniref50_cluster": "UniRef50_Q9VQC0",
       "free_parameters": 0,
       "predict_rc": 0,
       "pdb": "D:\\FlyWire_Connectome\\homologs\\product\\VGlut_7165_A0A1S4GXM0.pdb",
@@ -530,6 +611,8 @@
       "reviewed": false,
       "n_hits": 22,
       "status": "measured_homolog",
+      "ensembl": "",
+      "uniref50_cluster": null,
       "free_parameters": 0,
       "predict_rc": 0,
       "pdb": "D:\\FlyWire_Connectome\\homologs\\product\\VGlut_7070_D2A242.pdb",
@@ -557,6 +640,8 @@
       "reviewed": false,
       "n_hits": 50,
       "status": "measured_homolog",
+      "ensembl": "",
+      "uniref50_cluster": null,
       "free_parameters": 0,
       "predict_rc": 0,
       "pdb": "D:\\FlyWire_Connectome\\homologs\\product\\Mhc_7460_A0A7M7L2C0.pdb",
@@ -570,16 +655,33 @@
       "engine": "fsot_template_product_v7_chemlink"
     },
     {
-      "symbol": "Mhc",
-      "uniprot": "P05661",
-      "organism": "Drosophila melanogaster",
+      "source_symbol": "Mhc",
+      "source_uniprot": "P05661",
+      "source_organism": "Drosophila melanogaster",
       "sits_on": "muscle (effector of vnc_motor; not a CNS cell)",
+      "orthodb": "6108017at2759",
+      "correspondence": "uniref50:UniRef50_P05661-2",
       "target_organism": "Anopheles gambiae",
       "taxid": 7165,
-      "orthodb": "6108017at2759",
-      "status": "no_measured_homolog",
-      "reason": "no UniProt OrthoDB or UniRef50 member in taxon",
-      "n_hits": 0
+      "uniprot": "A0A1S4H3X2",
+      "gene": "",
+      "length": 1961,
+      "reviewed": false,
+      "n_hits": 11,
+      "status": "measured_homolog",
+      "ensembl": "AGAP010147-RI",
+      "uniref50_cluster": "UniRef50_P05661-2",
+      "free_parameters": 0,
+      "predict_rc": 0,
+      "pdb": "D:\\FlyWire_Connectome\\homologs\\product\\Mhc_7165_A0A1S4H3X2.pdb",
+      "structure_mode": "template_raw",
+      "deploy_regime": "template_physics",
+      "template_pdb": "6XE9",
+      "template_identity": 0.6454465075154731,
+      "template_coverage": 0.5767465578786334,
+      "mean_confidence": 0.0,
+      "rg_target_A": null,
+      "engine": "fsot_template_product_v7_chemlink"
     },
     {
       "source_symbol": "Mhc",
@@ -596,6 +698,8 @@
       "reviewed": false,
       "n_hits": 6,
       "status": "measured_homolog",
+      "ensembl": "",
+      "uniref50_cluster": null,
       "free_parameters": 0,
       "predict_rc": 0,
       "pdb": "D:\\FlyWire_Connectome\\homologs\\product\\Mhc_7070_D6WM41.pdb",
@@ -623,6 +727,8 @@
       "reviewed": false,
       "n_hits": 5,
       "status": "measured_homolog",
+      "ensembl": "",
+      "uniref50_cluster": null,
       "free_parameters": 0,
       "predict_rc": 0,
       "pdb": "D:\\FlyWire_Connectome\\homologs\\product\\Gad1_7460_A0A7M7R9C7.pdb",
@@ -643,9 +749,14 @@
       "target_organism": "Anopheles gambiae",
       "taxid": 7165,
       "orthodb": "392571at2759",
-      "status": "no_measured_homolog",
-      "reason": "no UniProt OrthoDB or UniRef50 member in taxon",
-      "n_hits": 0
+      "status": "covered_by_orthodb_paralog",
+      "reason": "same OrthoDB 392571at2759 already measured as Gad1 Q7PNL7",
+      "n_hits": 0,
+      "covered_by": {
+        "source_symbol": "Gad1",
+        "uniprot": "Q7PNL7",
+        "ensembl": "AGAP005866-RA"
+      }
     },
     {
       "source_symbol": "unc-25",
@@ -662,6 +773,8 @@
       "reviewed": false,
       "n_hits": 2,
       "status": "measured_homolog",
+      "ensembl": "",
+      "uniref50_cluster": null,
       "free_parameters": 0,
       "predict_rc": 0,
       "pdb": "D:\\FlyWire_Connectome\\homologs\\product\\Gad1_7070_A7U8C7.pdb",
@@ -689,6 +802,8 @@
       "reviewed": false,
       "n_hits": 1,
       "status": "measured_homolog",
+      "ensembl": "",
+      "uniref50_cluster": null,
       "free_parameters": 0,
       "predict_rc": 0,
       "pdb": null,
@@ -728,6 +843,8 @@
       "reviewed": false,
       "n_hits": 1,
       "status": "measured_homolog",
+      "ensembl": "",
+      "uniref50_cluster": null,
       "free_parameters": 0,
       "predict_rc": 0,
       "pdb": null,
@@ -755,6 +872,8 @@
       "reviewed": false,
       "n_hits": 50,
       "status": "measured_homolog",
+      "ensembl": "",
+      "uniref50_cluster": null,
       "free_parameters": 0,
       "predict_rc": 0,
       "pdb": "D:\\FlyWire_Connectome\\homologs\\product\\Mhc_7460_A0A7M7L2C0.pdb",
@@ -775,9 +894,14 @@
       "target_organism": "Anopheles gambiae",
       "taxid": 7165,
       "orthodb": "6108017at2759",
-      "status": "no_measured_homolog",
-      "reason": "no UniProt OrthoDB or UniRef50 member in taxon",
-      "n_hits": 0
+      "status": "covered_by_orthodb_paralog",
+      "reason": "same OrthoDB 6108017at2759 already measured as Mhc A0A1S4H3X2",
+      "n_hits": 0,
+      "covered_by": {
+        "source_symbol": "Mhc",
+        "uniprot": "A0A1S4H3X2",
+        "ensembl": "AGAP010147-RI"
+      }
     },
     {
       "source_symbol": "myo-3",
@@ -794,6 +918,8 @@
       "reviewed": false,
       "n_hits": 6,
       "status": "measured_homolog",
+      "ensembl": "",
+      "uniref50_cluster": null,
       "free_parameters": 0,
       "predict_rc": 0,
       "pdb": "D:\\FlyWire_Connectome\\homologs\\product\\Mhc_7070_D6WM41.pdb",
@@ -808,6 +934,50 @@
     }
   ],
   "fasta": "D:\\FlyWire_Connectome\\homologs\\homologs.fasta",
-  "n_measured_homologs": 23,
-  "n_folded": 23
+  "miss_audit": {
+    "no_measured_homolog": [
+      {
+        "source": "nompC",
+        "target": "Tribolium castaneum",
+        "reason": "no UniProt OrthoDB or UniRef50 member in taxon"
+      },
+      {
+        "source": "mec-4",
+        "target": "Anopheles gambiae",
+        "reason": "no UniProt OrthoDB or UniRef50 member in taxon"
+      }
+    ],
+    "covered_by_orthodb_paralog": [
+      {
+        "source": "nan",
+        "target": "Anopheles gambiae",
+        "covered_by": {
+          "source_symbol": "iav",
+          "uniprot": "Q7QFD0",
+          "ensembl": "AGAP000413-RA"
+        }
+      },
+      {
+        "source": "unc-25",
+        "target": "Anopheles gambiae",
+        "covered_by": {
+          "source_symbol": "Gad1",
+          "uniprot": "Q7PNL7",
+          "ensembl": "AGAP005866-RA"
+        }
+      },
+      {
+        "source": "myo-3",
+        "target": "Anopheles gambiae",
+        "covered_by": {
+          "source_symbol": "Mhc",
+          "uniprot": "A0A1S4H3X2",
+          "ensembl": "AGAP010147-RI"
+        }
+      }
+    ],
+    "note": "UniRef50_{accession} misses isoform clusters (P05661-2, Q9VMR4). Fragments shorter than source/\u03c6\u00b2 dropped. DEG/ENaC family in Anopheles is not a mec-4 1:1. Tribolium nompC has no full-length UniRef50 member."
+  },
+  "n_measured_homologs": 25,
+  "n_folded": 25
 }
