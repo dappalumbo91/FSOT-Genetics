@@ -133,7 +133,7 @@ Proteins that sit on those seeds (`python scripts/plant_signal_product.py`):
 
 | Gene | UniProt | Template | id | cov | Mode |
 |------|---------|----------|---:|----:|------|
-| *PHOT1* | Q2V2M9 | — | — | — | **no_measured_map** |
+| *PHOT1* | **O48963** | 5HZI | 0.61 | 0.46 | leftover map (id &lt; 1/φ). Q2V2M9 was human FHOD3 — dropped |
 | *PHYB* | P14713 | 7RZW | **1.00** | 0.74 | product |
 | *CRY1* | Q43125 | 1U3C | **1.00** | 0.71 | product |
 | *PIF3* | Q495N3 | 9V3V | **0.69** | 0.89 | product |
@@ -142,7 +142,11 @@ Proteins that sit on those seeds (`python scripts/plant_signal_product.py`):
 | *PIN1* | Q9C6B8 | 7Y9T | **1.00** | 0.61 | product |
 | *TIR1* | Q570C0 | 2P1N | **1.00** | 0.96 | product |
 
-*PHOT1* has no measured homolog structure — Rg + secondary only. Not bulk MDS. Source: `data/plant_signal_product.json`.
+*PHOT1* live UniProt is **O48963** (Phototropin-1, 996 aa). Q2V2M9 is human FHOD3 formin — wrong accession, dropped (same class of miss as wheat *acT2*). Full-chain leftover map 5HZI (id 0.61 &lt; 1/φ, cov 0.46). Per-domain crystals (`python scripts/plant_signal_domains.py`): LOV1 205–301 **2Z6C** id 1.00; LOV2 485–577 **4HHD** id 1.00; kinase 665–952 4L3J id 0.55 (not close-homolog). Inter-domain pose is not claimed.
+
+*UVR8* Q9FN03 is missing from the IntAct photoreceptor hop. Crystal product **8GQE** id 1.00 / cov 0.88 — not a license to invent a PPI edge.
+
+Source: `data/plant_signal_product.json`, `data/plant_signal_domains.json`.
 
 ## What this is capable of
 

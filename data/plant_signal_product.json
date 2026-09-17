@@ -8,19 +8,19 @@
   "genes": [
     {
       "symbol": "PHOT1",
-      "uniprot": "Q2V2M9",
+      "uniprot": "O48963",
       "sits_on": "blue-light phototropin",
       "system": "light receptor",
       "organism": "Arabidopsis thaliana",
       "taxid": 3702,
-      "length": 1422,
+      "length": 996,
       "free_parameters": 0,
       "predict_rc": 0,
-      "structure_mode": "no_measured_map",
-      "template_pdb": null,
-      "template_identity": null,
-      "template_coverage": null,
-      "pdb": null
+      "structure_mode": "template_raw",
+      "template_pdb": "5HZI",
+      "template_identity": 0.6100217864923747,
+      "template_coverage": 0.4608433734939759,
+      "pdb": "D:\\FlyWire_Connectome\\plants\\product\\PHOT1_O48963.pdb"
     },
     {
       "symbol": "PHYB",

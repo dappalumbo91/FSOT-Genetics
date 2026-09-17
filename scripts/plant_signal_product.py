@@ -24,7 +24,7 @@ FASTA = Path(r"D:\FlyWire_Connectome\plants\arabidopsis_signal.fasta")
 OUT_GIT = ROOT / "data" / "plant_signal_product.json"
 
 PANEL = [
-    {"symbol": "PHOT1", "uniprot": "Q2V2M9", "sits_on": "blue-light phototropin", "system": "light receptor"},
+    {"symbol": "PHOT1", "uniprot": "O48963", "sits_on": "blue-light phototropin", "system": "light receptor"},
     {"symbol": "PHYB", "uniprot": "P14713", "sits_on": "red-light phytochrome", "system": "light receptor"},
     {"symbol": "CRY1", "uniprot": "Q43125", "sits_on": "blue-light cryptochrome", "system": "light receptor"},
     {"symbol": "PIF3", "uniprot": "Q495N3", "sits_on": "phytochrome-interacting bHLH", "system": "light transcription"},

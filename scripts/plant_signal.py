@@ -45,7 +45,7 @@ PSICQUIC = (
 # Not invented. UniProt Swiss-Prot.
 CLASSES: dict[str, dict[str, str]] = {
     # light receptors
-    "Q2V2M9": {"symbol": "PHOT1", "class": "photoreceptor", "job": "blue-light phototropism"},
+    "O48963": {"symbol": "PHOT1", "class": "photoreceptor", "job": "blue-light phototropism"},
     "P93025": {"symbol": "PHOT2", "class": "photoreceptor", "job": "blue-light phototropism"},
     "P14713": {"symbol": "PHYB", "class": "photoreceptor", "job": "red-light phytochrome"},
     "P42497": {"symbol": "PHYA", "class": "photoreceptor", "job": "far-red phytochrome"},

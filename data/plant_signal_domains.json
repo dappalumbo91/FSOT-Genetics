@@ -1,0 +1,69 @@
+{
+  "product": "Plant signaling domain product (not a connectome)",
+  "pin": "D1D38A",
+  "free_parameters": 0,
+  "law": "S=K(T1+T2+T3); per-domain measured homolog; inter-domain pose not claimed",
+  "close_homolog_floor": 0.6180339887498948,
+  "PHOT1": {
+    "uniprot": "O48963",
+    "length": 996,
+    "full_chain": "leftover_template_5HZI_id_0.61_cov_0.46",
+    "n_domains": 3,
+    "n_close_homolog_domains": 2,
+    "covered_fraction": 0.4799196787148594,
+    "joint_template": null,
+    "domains": [
+      {
+        "pfam": "PF13426",
+        "name": "PAS domain",
+        "start": 205,
+        "end": 301,
+        "length": 97,
+        "source": "template_raw",
+        "template_pdb": "2Z6C",
+        "template_identity": 1.0,
+        "template_coverage": 1.0,
+        "close_homolog": true
+      },
+      {
+        "pfam": "PF13426",
+        "name": "PAS domain",
+        "start": 485,
+        "end": 577,
+        "length": 93,
+        "source": "template_physics",
+        "template_pdb": "4HHD",
+        "template_identity": 1.0,
+        "template_coverage": 1.0,
+        "close_homolog": true
+      },
+      {
+        "pfam": "PF00069",
+        "name": "Protein kinase domain",
+        "start": 665,
+        "end": 952,
+        "length": 288,
+        "source": "template_msa_fuse",
+        "template_pdb": "4L3J",
+        "template_identity": 0.5473251028806584,
+        "template_coverage": 0.84375,
+        "close_homolog": false
+      }
+    ],
+    "note": "Full-chain leftover map 5HZI id 0.61 (<1/\u03c6) cov 0.46. Domain crystals: LOV2 4HHD id 1.00. Kinase 4L3J id 0.55 is not close-homolog. Inter-domain pose not claimed."
+  },
+  "UVR8": {
+    "symbol": "UVR8",
+    "uniprot": "Q9FN03",
+    "length": 440,
+    "predict_rc": 0,
+    "on_intact_graph": false,
+    "note": "Missing from IntAct photoreceptor hop (seed_missing). Product only if homolog exists.",
+    "structure_mode": "template_raw",
+    "template_pdb": "8GQE",
+    "template_identity": 0.9974093264248705,
+    "template_coverage": 0.8772727272727273,
+    "pdb": "D:\\FlyWire_Connectome\\plants\\product\\UVR8_Q9FN03.pdb"
+  },
+  "not": "Not plant synapses. Not a 13 \u00c5 MDS PHOT1 brain."
+}

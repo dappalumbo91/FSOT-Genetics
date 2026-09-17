@@ -351,8 +351,12 @@ def assemble_domains(
         covered[s0:s1] = True
         cursor = placed.mean(axis=0) + axis * (rg + INTERFACE_PAD * 0.5)
         entry["rg_A"] = rg
-        # replace any prior joint stub report for this domain
-        domain_reports = [r for r in domain_reports if r.get("name") != dom.name]
+        # replace any prior joint stub for this span (two PAS/LOV copies share a name)
+        domain_reports = [
+            r
+            for r in domain_reports
+            if not (r.get("start") == dom.start and r.get("end") == dom.end)
+        ]
         domain_reports.append(entry)
 
     # Rebuild ONLY uncovered linker residues. Never rewrite domain interiors —

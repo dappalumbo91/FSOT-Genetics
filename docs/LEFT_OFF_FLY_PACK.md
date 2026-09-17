@@ -1,18 +1,20 @@
-# Fly pack + plant panel (2026-09-17)
+# Genetics plant panel (fly pack is a separate system)
 
-Fly experiment folder: `C:\Users\damia\Desktop\fsot fly nuron net`
+Fly experiment folder stays on its own pin. Do not copy Genetics `D1D38A` over it.
 
-Hemibrain hops recorded: `data/hemibrain_connectome_boot.json` (JO hop-2 descending 2.68 Giant Fiber vs olfactory 0.072 AL LN). Script `scripts/hemibrain_connectome.py`. Cache on `D:\FlyWire_Connectome\hemibrain` (not git).
+## Plant findings (this repo)
 
-## Plant findings to pick up (HEAD started at 61872b4)
+IntAct hops unchanged (gene-symbol class match already used real PHOT1 O48963 on the graph).
 
-| Seed | hop-1 top | hop-2 top | note |
-|------|-----------|-----------|------|
-| photoreceptor | PIF3 (`light_tf=1.00`) | PHYB | UVR8 missing from IntAct graph |
-| ABA | ABI1 | PYL9 | SLAC1 ~0.001 |
-| auxin | ABCB19 | TIR1 | |
-| calvin / PSII | CML9 | psbA | stays on photosystem |
+Product accession bug: Q2V2M9 is **human FHOD3**, not Arabidopsis PHOT1. Fixed to **O48963**.
 
-Signaling product: 7 folded, **PHOT1 Q2V2M9 `no_measured_map`**. PIF3 identity 0.69 ≥ 1/φ.
+| Item | Result |
+|------|--------|
+| PHOT1 O48963 full chain | leftover 5HZI id 0.61 cov 0.46 (below close-homolog 1/φ) |
+| PHOT1 LOV1 205–301 | **2Z6C** id 1.00 |
+| PHOT1 LOV2 485–577 | **4HHD** id 1.00 |
+| PHOT1 kinase 665–952 | 4L3J id 0.55 — not close-homolog |
+| UVR8 Q9FN03 | **8GQE** id 1.00 / 0.88; still missing from IntAct hops |
+| SLAC1 | still ~0.001 — do not invent a phospho edge |
 
-Gauntlet re-stamped on **e0e3994**: overall_ok=true, 42 obligations, 10 layers. Do not invent plant synapses or plasmodesmata. PHOT1 still `no_measured_map`.
+Not a plant connectome. Inter-domain PHOT1 pose is not a claimed fold.
