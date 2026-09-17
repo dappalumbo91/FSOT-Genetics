@@ -1,13 +1,11 @@
-# Genetics plant panel
+# Genetics system verify (fly pack is a separate system)
 
-Fly pack is a separate system. Do not copy Genetics D1D38A over it.
+Pin **D1D38A**. Do not copy this pin onto the fly pack.
 
-## This commit
+Full claim inventory: `docs/SYSTEM_VERIFY.md`.
 
-Live UniProt audit of the signaling class table. Several accessions were the wrong gene (human/yeast/paralog). Fixed; hops re-run; product panel expanded.
+- `python scripts/system_verify.py` → **52/52**
+- `python scripts/verify_cross.py` → PASS
+- `python verification/run_cross_proof.py` → **overall_ok**, 42 obligations, 10 layers
 
-Hops unchanged in split: photoreceptor → PIF3; ABA → ABI1; auxin → TIR1; calvin → psbA. SLAC1 still unlit.
-
-Product: PIF3 O80536 / HY5 / ARF5 `no_measured_map`. PHOT1/PHOT2 leftover. PYL4 id 0.55 not close-homolog. SLAC1 has crystal 8J0J — still not a PPI edge.
-
-Not a plant connectome.
+Plant accession audit remains in `docs/RESULTS.md`. CASP/CAMEO still open (`docs/OPEN.md`). Biohub/Kaggle frozen.

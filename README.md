@@ -27,6 +27,8 @@ AlphaFold is a trained interpolator over the Protein Data Bank. This repository 
 
 The product does not “beat AlphaFold at folding from sequence alone.” It uses the **same information universe** AlphaFold trained on and applies \(S = K(T_1+T_2+T_3)\) instead of learned weights. Bulk remains the fallback when there is no measured map.
 
+**Do not cross-cite:** product **0.13 Å** · AF **~0.47 Å** · cryo-EM FSC **~1.2 Å** · bulk MDS **~13 Å**. CASP16 / AF3 ensemble / FSC-map papers are not a 0.13 Å hit. Blind protocol lives in the Lean hub (`docs/CASP_CAMEO_BLIND_PROTOCOL.md`); this repo’s OPEN list flags the run as still open.
+
 ---
 
 ## 1. Mathematical foundation
@@ -220,8 +222,10 @@ Host residual must match pin: `r_bond≈1.100 r_clash≈1.122 r_anchor≈1.092`.
 git clone https://github.com/dappalumbo91/FSOT-Genetics.git
 cd FSOT-Genetics
 python -m pip install -r requirements.txt
-python scripts/verify_cross.py              # pin + 0 free params
-python scripts/bench_product_vs_af.py       # → data/product_vs_alphafold.json
+python scripts/system_verify.py             # 52 published claims vs live JSON
+python scripts/verify_cross.py              # pin + 0 free params + Lean chem-link
+python verification/run_cross_proof.py      # Lean / Coq / Isabelle / F* / SMT / Rust / TLA+
+python scripts/bench_product_vs_af.py       # → data/product_vs_alphafold.json (freeze; do not silently overwrite)
 python scripts/bench_af_coverage.py         # → data/af_coverage.json
 ```
 
@@ -288,8 +292,12 @@ Same spirit as Lean green gates in FSOT-2.1-Lean:
 5. Derivations document present
 
 ```text
-python scripts/verify_cross.py   → exit 0 only if all pass
+python scripts/system_verify.py          → 52/52 claims
+python scripts/verify_cross.py           → exit 0 only if all pass
+python verification/run_cross_proof.py   → overall_ok, 42 obligations
 ```
+
+Inventory: `docs/SYSTEM_VERIFY.md`. Labeled solves: `docs/VERIFIED_SOLVES.md`.
 
 CI: `.github/workflows/ci.yml`  
 Agent rules: `AGENTS.md`  

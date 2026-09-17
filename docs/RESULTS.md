@@ -3,6 +3,8 @@
 Pin `D1D38A`. Law \(S = K(T_1+T_2+T_3)\). **0 free parameters.**  
 Data stays on `D:\FlyWire_Connectome` (not git). Do not mix product Å with hop mass.
 
+Full claim inventory + re-run: `docs/SYSTEM_VERIFY.md`. Last stamp: `python scripts/system_verify.py` **52/52**; gauntlet **overall_ok** (42 obligations).
+
 ## 1. Protein product (accuracy that is Å)
 
 Same-data homolog Cα vs eval PDB. Source: `docs/PRODUCT_FREEZE.md`, `data/product_vs_alphafold.json`.
@@ -183,7 +185,9 @@ Source: `data/plant_signal_product.json`, `data/plant_signal_domains.json`.
 | Point a clade-restricted 1:1 at the mapped residual job | Treat a genome as synapses |
 | Same law on animals and plants (proteins) | Skip VNC and call a fly brain a whole animal |
 
-## 6. Multi-prover stamp
+## 6. System verify + multi-prover stamp
+
+`python scripts/system_verify.py` → `data/system_verify.json`. **52/52** published claims vs live JSON + engine.
 
 `python verification/run_cross_proof.py` → `data/cross_proof_report.json`. **42** obligations (13 engine, 29 measured). **overall_ok = true.** Does not inherit the hub report.
 

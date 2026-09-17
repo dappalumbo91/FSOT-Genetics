@@ -1,0 +1,271 @@
+{
+  "pin": "D1D38A",
+  "free_parameters": 0,
+  "law": "S=K(T1+T2+T3)",
+  "n": 52,
+  "n_fail": 0,
+  "overall_ok": true,
+  "failed": [],
+  "checks": [
+    {
+      "name": "pin",
+      "ok": true,
+      "detail": "sha=D1D38A185487B452\u2026 bytes=59945"
+    },
+    {
+      "name": "pin_cert",
+      "ok": true,
+      "detail": "certificate matches file"
+    },
+    {
+      "name": "residual_Biochemistry",
+      "ok": true,
+      "detail": "r=1.091958932"
+    },
+    {
+      "name": "seeds",
+      "ok": true,
+      "detail": "\u03c6=1.618034 \u03c0=3.141593"
+    },
+    {
+      "name": "trinary_20_unique",
+      "ok": true,
+      "detail": "20"
+    },
+    {
+      "name": "pair_FW_d8",
+      "ok": true,
+      "detail": "w=1.670052401"
+    },
+    {
+      "name": "product_n",
+      "ok": true,
+      "detail": "n=10"
+    },
+    {
+      "name": "product_median",
+      "ok": true,
+      "detail": "0.1325 \u00c5"
+    },
+    {
+      "name": "af_median",
+      "ok": true,
+      "detail": "0.4706 \u00c5"
+    },
+    {
+      "name": "product_beats_af",
+      "ok": true,
+      "detail": "0.13 < 0.47"
+    },
+    {
+      "name": "product_sub2A",
+      "ok": true,
+      "detail": "10"
+    },
+    {
+      "name": "product_free_params",
+      "ok": true,
+      "detail": "0"
+    },
+    {
+      "name": "bulk_not_product",
+      "ok": true,
+      "detail": "bulk=13.57 \u00c5"
+    },
+    {
+      "name": "product_beats_af_each",
+      "ok": true,
+      "detail": "10/10"
+    },
+    {
+      "name": "male_n",
+      "ok": true,
+      "detail": "165122"
+    },
+    {
+      "name": "male_gaba",
+      "ok": true,
+      "detail": "22055"
+    },
+    {
+      "name": "banc_n",
+      "ok": true,
+      "detail": "175401"
+    },
+    {
+      "name": "male_vnc",
+      "ok": true,
+      "detail": "10.7402"
+    },
+    {
+      "name": "male_jo",
+      "ok": true,
+      "detail": "7.7729"
+    },
+    {
+      "name": "male_olf_dark",
+      "ok": true,
+      "detail": "0.000571"
+    },
+    {
+      "name": "male_split",
+      "ok": true,
+      "detail": "VNC > JO >> olfactory"
+    },
+    {
+      "name": "banc_vnc",
+      "ok": true,
+      "detail": "10.1619"
+    },
+    {
+      "name": "banc_jo",
+      "ok": true,
+      "detail": "6.6369"
+    },
+    {
+      "name": "banc_olf_dark",
+      "ok": true,
+      "detail": "0.000764"
+    },
+    {
+      "name": "banc_split",
+      "ok": true,
+      "detail": "VNC > JO >> olfactory"
+    },
+    {
+      "name": "larva_split",
+      "ok": true,
+      "detail": "mech=16.60 olf=0.43"
+    },
+    {
+      "name": "hemibrain_split",
+      "ok": true,
+      "detail": "JO desc=2.68 olf=0.072"
+    },
+    {
+      "name": "hemibrain_no_dng29",
+      "ok": true,
+      "detail": "DNg29 absent"
+    },
+    {
+      "name": "hemibrain_unsigned",
+      "ok": true,
+      "detail": "no invented GABA"
+    },
+    {
+      "name": "worm_nonempty",
+      "ok": true,
+      "detail": "453"
+    },
+    {
+      "name": "ciona_nonempty",
+      "ok": true,
+      "detail": "205"
+    },
+    {
+      "name": "platy_nonempty",
+      "ok": true,
+      "detail": "1720"
+    },
+    {
+      "name": "ciona_unsigned",
+      "ok": true,
+      "detail": "False"
+    },
+    {
+      "name": "platy_unsigned",
+      "ok": true,
+      "detail": "False"
+    },
+    {
+      "name": "homolog_measured",
+      "ok": true,
+      "detail": "26"
+    },
+    {
+      "name": "homolog_folded",
+      "ok": true,
+      "detail": "26"
+    },
+    {
+      "name": "homolog_true_miss",
+      "ok": true,
+      "detail": "[{'source': 'mec-4', 'target': 'Anopheles gambiae'}]"
+    },
+    {
+      "name": "analog_jobs",
+      "ok": true,
+      "detail": "2"
+    },
+    {
+      "name": "plant_arabidopsis",
+      "ok": true,
+      "detail": "6"
+    },
+    {
+      "name": "plant_crop_folded",
+      "ok": true,
+      "detail": "24"
+    },
+    {
+      "name": "plant_crop_miss",
+      "ok": true,
+      "detail": "0"
+    },
+    {
+      "name": "plant_signal_nodes",
+      "ok": true,
+      "detail": "8329"
+    },
+    {
+      "name": "plant_signal_edges",
+      "ok": true,
+      "detail": "39664"
+    },
+    {
+      "name": "plant_light_PIF3",
+      "ok": true,
+      "detail": "PIF3"
+    },
+    {
+      "name": "plant_slac_unlit",
+      "ok": true,
+      "detail": "aba hop-2 stomata=0.0021881838074397373"
+    },
+    {
+      "name": "plant_classes_n",
+      "ok": true,
+      "detail": "22"
+    },
+    {
+      "name": "plant_signal_product_n",
+      "ok": true,
+      "detail": "20"
+    },
+    {
+      "name": "pif3_not_human",
+      "ok": true,
+      "detail": "PIF3 acc=O80536 mode=no_measured_map"
+    },
+    {
+      "name": "phot1_O48963",
+      "ok": true,
+      "detail": "O48963"
+    },
+    {
+      "name": "pgx_n",
+      "ok": true,
+      "detail": "10"
+    },
+    {
+      "name": "pgx_concordant",
+      "ok": true,
+      "detail": "10"
+    },
+    {
+      "name": "pgx_disclosure",
+      "ok": true,
+      "detail": "disclosure present"
+    }
+  ]
+}

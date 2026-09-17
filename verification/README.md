@@ -8,6 +8,7 @@ This tree does **not** inherit `FSOT-2.1-Lean` `overall_ok`. Every layer re-runs
 
 ```powershell
 cd FSOT-Genetics
+python scripts/system_verify.py
 python verification/export_obligations.py
 python verification/run_cross_proof.py
 ```

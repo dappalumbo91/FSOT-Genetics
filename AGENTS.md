@@ -72,8 +72,9 @@ is never a count of Cartesian axes. Concretely:
 
 ## 7. Gates and hygiene
 
-- `python scripts/verify_cross.py` must pass (authority pin, seeds, zero free
-  parameters, Lean + Mathlib). Do not merge or commit if it fails.
+- `python scripts/system_verify.py` then `python scripts/verify_cross.py` must
+  pass (published claims, authority pin, seeds, zero free parameters, Lean +
+  Mathlib). Do not merge or commit if either fails.
 - Never bypass hooks (`--no-verify`) or discard unfamiliar in-progress files.
 - Preserve user-edited files; never fold them into unrelated commits.
 
