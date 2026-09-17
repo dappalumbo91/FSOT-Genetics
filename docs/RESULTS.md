@@ -125,26 +125,52 @@ Hop-1 / hop-2 (which class lights):
 | auxin | ABCB19 | 0 | **TIR1** |
 | calvin / PSII | CML9 | 0 | **psbA** |
 
-Light seed lights the light transcription job (PIF3). Calvin seed stays on PSII. Auxin seed goes to TIR1/IAA. Stomatal channels (SLAC1) are almost unlit on this PPI graph (hop-2 ~0.001 from both ABA and light) — kinase→channel is often phosphorylation, not a binary IntAct edge. We do not invent that edge.
+Light seed lights the light transcription job (PIF3). Calvin seed stays on PSII. Auxin seed goes to TIR1/IAA. Stomatal channels (SLAC1) are almost unlit on this PPI graph (hop-2 ~0.002 from ABA) — kinase→channel is often phosphorylation, not a binary IntAct edge. We do not invent that edge.
+
+Live UniProt gene-name audit of the class table (taxid 3702 reviewed). Dropped wrong accessions (same class as wheat *acT2* / PHOT1 Q2V2M9):
+
+| Was labeled | Wrong acc | Live gene | Correct acc |
+|-------------|-----------|-----------|-------------|
+| PHOT1 | Q2V2M9 | human FHOD3 | **O48963** |
+| PHYA | P42497 | PHYD | **P14712** |
+| PIF3 | Q495N3 | human SLC36A3 | **O80536** |
+| PYR1 | Q8VZS9 | FZR1 | **O49686** |
+| PYL4 | Q8S8E3 | PYL6 | **O80920** |
+| ABI2 | P25042 | yeast ROX1 | **O04719** |
+| SLAC1 | Q9FLV9 | SLAH3 | **Q9LD83** |
+| KAT1 | Q39153 | MYB13 | **Q39128** |
+| GORK | Q94KI8 | TPC1 | **Q94A76** |
+
+Hops re-run after the fix: same split (PIF3 / PHYB / ABI1 / TIR1 / psbA). OST1 is UniProt gene *SRK2E* (synonym OST1) — kept.
 
 Source: `data/plant_signal_boot.json`.
 
-Proteins that sit on those seeds (`python scripts/plant_signal_product.py`):
+Proteins on that class table (`python scripts/plant_signal_product.py`). Close-homolog floor 1/φ. Not a connectome.
 
 | Gene | UniProt | Template | id | cov | Mode |
 |------|---------|----------|---:|----:|------|
-| *PHOT1* | **O48963** | 5HZI | 0.61 | 0.46 | leftover map (id &lt; 1/φ). Q2V2M9 was human FHOD3 — dropped |
+| *PHOT1* | O48963 | 5HZI | 0.61 | 0.46 | leftover (id &lt; 1/φ). LOV1 **2Z6C** / LOV2 **4HHD** id 1.00 |
+| *PHOT2* | P93025 | 5HZK | 0.60 | 0.49 | leftover |
+| *PHYA* | P14712 | 8IFF | **1.00** | 0.77 | product |
 | *PHYB* | P14713 | 7RZW | **1.00** | 0.74 | product |
 | *CRY1* | Q43125 | 1U3C | **1.00** | 0.71 | product |
-| *PIF3* | Q495N3 | 9V3V | **0.69** | 0.89 | product |
-| *OST1* | Q940H6 | 3UC4 | **0.99** | 0.81 | product |
+| *CRY2* | Q96524 | 6K8K | **0.99** | 0.80 | product |
+| *UVR8* | Q9FN03 | 8GQE | **1.00** | 0.88 | product; **not on IntAct hops** |
+| *PIF3* | O80536 | — | — | — | **no_measured_map** (old 9V3V was human SLC36A3) |
+| *HY5* | O24646 | — | — | — | **no_measured_map** |
+| *OST1* | Q940H6 | 3UC4 | **0.99** | 0.81 | product (gene SRK2E) |
+| *PYR1* | O49686 | 3ZVU | **0.99** | 0.95 | product |
+| *PYL4* | O80920 | 8AY6 | 0.55 | 0.89 | not close-homolog |
 | *ABI1* | P49597 | 3NMN | **1.00** | 0.64 | product |
+| *ABI2* | O04719 | 3UJK | **1.00** | 0.70 | product |
+| *SLAC1* | Q9LD83 | 8J0J | **1.00** | 0.68 | product; hop-2 still unlit |
+| *KAT1* | Q39128 | 6V1X | **1.00** | 0.66 | product |
+| *GORK* | Q94A76 | 9J0X | **1.00** | 0.84 | product |
 | *PIN1* | Q9C6B8 | 7Y9T | **1.00** | 0.61 | product |
 | *TIR1* | Q570C0 | 2P1N | **1.00** | 0.96 | product |
+| *ARF5* | P93024 | — | — | — | **no_measured_map** |
 
-*PHOT1* live UniProt is **O48963** (Phototropin-1, 996 aa). Q2V2M9 is human FHOD3 formin — wrong accession, dropped (same class of miss as wheat *acT2*). Full-chain leftover map 5HZI (id 0.61 &lt; 1/φ, cov 0.46). Per-domain crystals (`python scripts/plant_signal_domains.py`): LOV1 205–301 **2Z6C** id 1.00; LOV2 485–577 **4HHD** id 1.00; kinase 665–952 4L3J id 0.55 (not close-homolog). Inter-domain pose is not claimed.
-
-*UVR8* Q9FN03 is missing from the IntAct photoreceptor hop. Crystal product **8GQE** id 1.00 / cov 0.88 — not a license to invent a PPI edge.
+A crystal on SLAC1 is not an IntAct edge. UVR8 product is not a hop seed. Inter-domain PHOT1 pose is not claimed.
 
 Source: `data/plant_signal_product.json`, `data/plant_signal_domains.json`.
 

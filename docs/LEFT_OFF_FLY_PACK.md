@@ -1,20 +1,13 @@
-# Genetics plant panel (fly pack is a separate system)
+# Genetics plant panel
 
-Fly experiment folder stays on its own pin. Do not copy Genetics `D1D38A` over it.
+Fly pack is a separate system. Do not copy Genetics D1D38A over it.
 
-## Plant findings (this repo)
+## This commit
 
-IntAct hops unchanged (gene-symbol class match already used real PHOT1 O48963 on the graph).
+Live UniProt audit of the signaling class table. Several accessions were the wrong gene (human/yeast/paralog). Fixed; hops re-run; product panel expanded.
 
-Product accession bug: Q2V2M9 is **human FHOD3**, not Arabidopsis PHOT1. Fixed to **O48963**.
+Hops unchanged in split: photoreceptor → PIF3; ABA → ABI1; auxin → TIR1; calvin → psbA. SLAC1 still unlit.
 
-| Item | Result |
-|------|--------|
-| PHOT1 O48963 full chain | leftover 5HZI id 0.61 cov 0.46 (below close-homolog 1/φ) |
-| PHOT1 LOV1 205–301 | **2Z6C** id 1.00 |
-| PHOT1 LOV2 485–577 | **4HHD** id 1.00 |
-| PHOT1 kinase 665–952 | 4L3J id 0.55 — not close-homolog |
-| UVR8 Q9FN03 | **8GQE** id 1.00 / 0.88; still missing from IntAct hops |
-| SLAC1 | still ~0.001 — do not invent a phospho edge |
+Product: PIF3 O80536 / HY5 / ARF5 `no_measured_map`. PHOT1/PHOT2 leftover. PYL4 id 0.55 not close-homolog. SLAC1 has crystal 8J0J — still not a PPI edge.
 
-Not a plant connectome. Inter-domain PHOT1 pose is not a claimed fold.
+Not a plant connectome.

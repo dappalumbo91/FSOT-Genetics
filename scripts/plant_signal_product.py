@@ -25,13 +25,25 @@ OUT_GIT = ROOT / "data" / "plant_signal_product.json"
 
 PANEL = [
     {"symbol": "PHOT1", "uniprot": "O48963", "sits_on": "blue-light phototropin", "system": "light receptor"},
+    {"symbol": "PHOT2", "uniprot": "P93025", "sits_on": "blue-light phototropin", "system": "light receptor"},
     {"symbol": "PHYB", "uniprot": "P14713", "sits_on": "red-light phytochrome", "system": "light receptor"},
+    {"symbol": "PHYA", "uniprot": "P14712", "sits_on": "far-red phytochrome", "system": "light receptor"},
     {"symbol": "CRY1", "uniprot": "Q43125", "sits_on": "blue-light cryptochrome", "system": "light receptor"},
-    {"symbol": "PIF3", "uniprot": "Q495N3", "sits_on": "phytochrome-interacting bHLH", "system": "light transcription"},
+    {"symbol": "CRY2", "uniprot": "Q96524", "sits_on": "blue-light cryptochrome", "system": "light receptor"},
+    {"symbol": "UVR8", "uniprot": "Q9FN03", "sits_on": "UV-B receptor (missing from IntAct hops)", "system": "light receptor"},
+    {"symbol": "PIF3", "uniprot": "O80536", "sits_on": "phytochrome-interacting bHLH", "system": "light transcription"},
+    {"symbol": "HY5", "uniprot": "O24646", "sits_on": "bZIP light transcription", "system": "light transcription"},
     {"symbol": "OST1", "uniprot": "Q940H6", "sits_on": "ABA SnRK2 kinase", "system": "ABA / stomata"},
+    {"symbol": "PYR1", "uniprot": "O49686", "sits_on": "ABA receptor PYR/PYL", "system": "ABA / stomata"},
+    {"symbol": "PYL4", "uniprot": "O80920", "sits_on": "ABA receptor PYR/PYL", "system": "ABA / stomata"},
     {"symbol": "ABI1", "uniprot": "P49597", "sits_on": "PP2C ABA phosphatase", "system": "ABA / stomata"},
+    {"symbol": "ABI2", "uniprot": "O04719", "sits_on": "PP2C ABA phosphatase", "system": "ABA / stomata"},
+    {"symbol": "SLAC1", "uniprot": "Q9LD83", "sits_on": "guard-cell anion channel (hop-2 unlit on PPI)", "system": "ABA / stomata"},
+    {"symbol": "KAT1", "uniprot": "Q39128", "sits_on": "guard-cell K+ inward channel", "system": "ABA / stomata"},
+    {"symbol": "GORK", "uniprot": "Q94A76", "sits_on": "guard-cell K+ outward channel", "system": "ABA / stomata"},
     {"symbol": "PIN1", "uniprot": "Q9C6B8", "sits_on": "auxin efflux carrier", "system": "auxin transport"},
     {"symbol": "TIR1", "uniprot": "Q570C0", "sits_on": "auxin F-box receptor", "system": "auxin receptor"},
+    {"symbol": "ARF5", "uniprot": "P93024", "sits_on": "auxin response factor MP", "system": "auxin transcription"},
 ]
 
 
