@@ -99,12 +99,46 @@ Named UniProt gene is the measured recover when UniRef50 of chloroplast *rbcL*/*
 
 Source: `data/plant_homolog.json`.
 
+### Plant information graph (not a connectome)
+
+Plants do not use synapses. The measured equivalent is experimental protein–protein interactions.
+
+`python scripts/plant_signal.py` — IntAct PSICQUIC *Arabidopsis* (taxid 3702), physical edges only. **8,329** proteins, **39,664** undirected edges. Same residual \(r = 1+|S|\cdot P_{\mathrm{NEW}}\) as the animal graphs.
+
+Hop-1 / hop-2 (which class lights):
+
+| Seed | hop-1 top | hop-1 `light_tf` | hop-2 top |
+|------|-----------|-----------------:|-----------|
+| photoreceptor | **PIF3** | **1.00** | PHYB |
+| ABA | **ABI1** | 0 | PYL9 |
+| auxin | ABCB19 | 0 | **TIR1** |
+| calvin / PSII | CML9 | 0 | **psbA** |
+
+Light seed lights the light transcription job (PIF3). Calvin seed stays on PSII. Auxin seed goes to TIR1/IAA. Stomatal channels (SLAC1) are almost unlit on this PPI graph (hop-2 ~0.001 from both ABA and light) — kinase→channel is often phosphorylation, not a binary IntAct edge. We do not invent that edge.
+
+Source: `data/plant_signal_boot.json`.
+
+Proteins that sit on those seeds (`python scripts/plant_signal_product.py`):
+
+| Gene | UniProt | Template | id | cov | Mode |
+|------|---------|----------|---:|----:|------|
+| *PHOT1* | Q2V2M9 | — | — | — | **no_measured_map** |
+| *PHYB* | P14713 | 7RZW | **1.00** | 0.74 | product |
+| *CRY1* | Q43125 | 1U3C | **1.00** | 0.71 | product |
+| *PIF3* | Q495N3 | 9V3V | **0.69** | 0.89 | product |
+| *OST1* | Q940H6 | 3UC4 | **0.99** | 0.81 | product |
+| *ABI1* | P49597 | 3NMN | **1.00** | 0.64 | product |
+| *PIN1* | Q9C6B8 | 7Y9T | **1.00** | 0.61 | product |
+| *TIR1* | Q570C0 | 2P1N | **1.00** | 0.96 | product |
+
+*PHOT1* has no measured homolog structure — Rg + secondary only. Not bulk MDS. Source: `data/plant_signal_product.json`.
+
 ## What this is capable of
 
 | Can | Cannot |
 |-----|--------|
 | Product Cα when a homolog exists (0.13 Å freeze) | Orphan 3-D at AlphaFold grade |
-| Residual hops on a **measured** synapse graph | Invent a bee / mosquito / plant connectome |
+| Residual hops on a **measured** synapse graph, or on **measured** plant PPIs | Invent a bee / mosquito / plant connectome |
 | Point a clade-restricted 1:1 at the mapped residual job | Treat a genome as synapses |
 | Same law on animals and plants (proteins) | Skip VNC and call a fly brain a whole animal |
 

@@ -1,0 +1,1658 @@
+{
+  "product": "Arabidopsis IntAct physical PPI \u2192 residual hops (not a connectome)",
+  "pin": "D1D38A",
+  "free_parameters": 0,
+  "law": "S=K(T1+T2+T3); r=1+|S|\u00b7P_NEW Biochemistry on measured PPI edges",
+  "not": "Not a plant connectome. Edges are experimental IntAct physical interactions (taxid 3702), not synapses or invented plasmodesmata.",
+  "authority": "IntAct PSICQUIC species:3702 MITAB 2.5; physical only; both ends Arabidopsis",
+  "residual_Biochemistry": 1.091958932349586,
+  "n_nodes": 8329,
+  "n_undirected_edges": 39664,
+  "n_intact_rows": 58740,
+  "n_physical_reports": 55198,
+  "programs": [
+    {
+      "seed": "photoreceptor",
+      "n_seed": 7,
+      "seed_accessions": [
+        "O48963",
+        "P14712",
+        "P14713",
+        "P42497",
+        "P93025",
+        "Q43125",
+        "Q96524"
+      ],
+      "seed_on_graph": [
+        "PHOT1",
+        "PHYA",
+        "PHYB",
+        "PHYA",
+        "PHOT2",
+        "CRY1",
+        "CRY2"
+      ],
+      "seed_missing": [
+        "UVR8"
+      ],
+      "trace": [
+        {
+          "hop": 0,
+          "l1": 0.9999999999999998,
+          "n_active": 0,
+          "stomata_channel": 0.0,
+          "light_tf": 0.0,
+          "auxin_transport": 0.0,
+          "photoreceptor": 0.9999999999999998,
+          "aba_kinase": 0.0,
+          "calvin": 0.0,
+          "mass_by_class": {
+            "photoreceptor": 0.9999999999999998,
+            "unlabeled": 0.0,
+            "calvin": 0.0,
+            "aba_phosphatase": 0.0,
+            "light_tf": 0.0,
+            "aba_receptor": 0.0,
+            "psii": 0.0,
+            "auxin_tf": 0.0,
+            "stomata_channel": 0.0,
+            "auxin_receptor": 0.0,
+            "aba_kinase": 0.0,
+            "auxin_transport": 0.0
+          },
+          "top": [
+            {
+              "uniprot": "Q96524",
+              "gene": "CRY2",
+              "class": "photoreceptor",
+              "a": 0.14285714285714285
+            },
+            {
+              "uniprot": "Q43125",
+              "gene": "CRY1",
+              "class": "photoreceptor",
+              "a": 0.14285714285714285
+            },
+            {
+              "uniprot": "P93025",
+              "gene": "PHOT2",
+              "class": "photoreceptor",
+              "a": 0.14285714285714285
+            },
+            {
+              "uniprot": "P42497",
+              "gene": "PHYA",
+              "class": "photoreceptor",
+              "a": 0.14285714285714285
+            },
+            {
+              "uniprot": "P14713",
+              "gene": "PHYB",
+              "class": "photoreceptor",
+              "a": 0.14285714285714285
+            },
+            {
+              "uniprot": "P14712",
+              "gene": "PHYA",
+              "class": "photoreceptor",
+              "a": 0.14285714285714285
+            },
+            {
+              "uniprot": "O48963",
+              "gene": "PHOT1",
+              "class": "photoreceptor",
+              "a": 0.14285714285714285
+            }
+          ]
+        },
+        {
+          "hop": 1,
+          "l1": 4.1111111111101355,
+          "n_active": 1,
+          "stomata_channel": 0.0,
+          "light_tf": 0.9999999999997625,
+          "auxin_transport": 0.0,
+          "photoreceptor": 0.740740740740565,
+          "aba_kinase": 0.0,
+          "calvin": 0.0,
+          "mass_by_class": {
+            "unlabeled": 2.3703703703698085,
+            "light_tf": 0.9999999999997625,
+            "photoreceptor": 0.740740740740565,
+            "calvin": 0.0,
+            "aba_phosphatase": 0.0,
+            "aba_receptor": 0.0,
+            "psii": 0.0,
+            "auxin_tf": 0.0,
+            "stomata_channel": 0.0,
+            "auxin_receptor": 0.0,
+            "aba_kinase": 0.0,
+            "auxin_transport": 0.0
+          },
+          "top": [
+            {
+              "uniprot": "O80536",
+              "gene": "PIF3",
+              "class": "light_tf",
+              "a": 0.9999999999997625
+            },
+            {
+              "uniprot": "P42498",
+              "gene": "PHYE",
+              "class": "unlabeled",
+              "a": 0.3333333333332542
+            },
+            {
+              "uniprot": "P14713",
+              "gene": "PHYB",
+              "class": "photoreceptor",
+              "a": 0.3333333333332542
+            },
+            {
+              "uniprot": "P14714",
+              "gene": "PHYC",
+              "class": "unlabeled",
+              "a": 0.2592592592591977
+            },
+            {
+              "uniprot": "P43254",
+              "gene": "COP1",
+              "class": "unlabeled",
+              "a": 0.2592592592591977
+            },
+            {
+              "uniprot": "P42497",
+              "gene": "PHYA",
+              "class": "photoreceptor",
+              "a": 0.22222222222216947
+            },
+            {
+              "uniprot": "Q9SWI1",
+              "gene": "PKS1",
+              "class": "unlabeled",
+              "a": 0.18518518518514124
+            },
+            {
+              "uniprot": "Q8W2F3",
+              "gene": "PIF4",
+              "class": "unlabeled",
+              "a": 0.18518518518514124
+            }
+          ]
+        },
+        {
+          "hop": 2,
+          "l1": 5.520119225037057,
+          "n_active": 1,
+          "stomata_channel": 0.0014903129657227474,
+          "light_tf": 0.40089418777941904,
+          "auxin_transport": 0.0,
+          "photoreceptor": 1.7362146050670006,
+          "aba_kinase": 0.0,
+          "calvin": 0.0,
+          "mass_by_class": {
+            "unlabeled": 3.371087928464847,
+            "photoreceptor": 1.7362146050670006,
+            "light_tf": 0.40089418777941904,
+            "auxin_tf": 0.0074515648286137375,
+            "auxin_receptor": 0.0029806259314454947,
+            "stomata_channel": 0.0014903129657227474,
+            "calvin": 0.0,
+            "aba_phosphatase": 0.0,
+            "aba_receptor": 0.0,
+            "psii": 0.0,
+            "aba_kinase": 0.0,
+            "auxin_transport": 0.0
+          },
+          "top": [
+            {
+              "uniprot": "P14713",
+              "gene": "PHYB",
+              "class": "photoreceptor",
+              "a": 0.9999999999999633
+            },
+            {
+              "uniprot": "P14712",
+              "gene": "PHYA",
+              "class": "photoreceptor",
+              "a": 0.42175856929953753
+            },
+            {
+              "uniprot": "O80536",
+              "gene": "PIF3",
+              "class": "light_tf",
+              "a": 0.34873323397912287
+            },
+            {
+              "uniprot": "Q9FE22",
+              "gene": "HFR1",
+              "class": "unlabeled",
+              "a": 0.33681073025334096
+            },
+            {
+              "uniprot": "Q8GZM7",
+              "gene": "PIF1",
+              "class": "unlabeled",
+              "a": 0.3040238450074405
+            },
+            {
+              "uniprot": "P42497",
+              "gene": "PHYA",
+              "class": "photoreceptor",
+              "a": 0.19523099850967995
+            },
+            {
+              "uniprot": "Q9SYX2",
+              "gene": "SPA1",
+              "class": "unlabeled",
+              "a": 0.18628912071534343
+            },
+            {
+              "uniprot": "Q8W2F3",
+              "gene": "PIF4",
+              "class": "unlabeled",
+              "a": 0.16989567809239325
+            }
+          ]
+        },
+        {
+          "hop": 3,
+          "l1": 10.641970387243365,
+          "n_active": 1,
+          "stomata_channel": 0.000854214123006804,
+          "light_tf": 1.0239179954441555,
+          "auxin_transport": 0.0,
+          "photoreceptor": 0.9763097949885763,
+          "aba_kinase": 0.0,
+          "calvin": 0.0,
+          "mass_by_class": {
+            "unlabeled": 8.606093394077297,
+            "light_tf": 1.0239179954441555,
+            "photoreceptor": 0.9763097949885763,
+            "auxin_tf": 0.022949886104782807,
+            "auxin_receptor": 0.006150341685648989,
+            "aba_receptor": 0.0035876993166285764,
+            "aba_phosphatase": 0.002107061503416783,
+            "stomata_channel": 0.000854214123006804,
+            "calvin": 0.0,
+            "psii": 0.0,
+            "aba_kinase": 0.0,
+            "auxin_transport": 0.0
+          },
+          "top": [
+            {
+              "uniprot": "O80536",
+              "gene": "PIF3",
+              "class": "light_tf",
+              "a": 0.999999999999965
+            },
+            {
+              "uniprot": "P43254",
+              "gene": "COP1",
+              "class": "unlabeled",
+              "a": 0.4144077448747009
+            },
+            {
+              "uniprot": "P14713",
+              "gene": "PHYB",
+              "class": "photoreceptor",
+              "a": 0.4144077448747007
+            },
+            {
+              "uniprot": "P42497",
+              "gene": "PHYA",
+              "class": "photoreceptor",
+              "a": 0.26788154897493366
+            },
+            {
+              "uniprot": "Q8GZM7",
+              "gene": "PIF1",
+              "class": "unlabeled",
+              "a": 0.25871298405466064
+            },
+            {
+              "uniprot": "P42498",
+              "gene": "PHYE",
+              "class": "unlabeled",
+              "a": 0.22089977220955945
+            },
+            {
+              "uniprot": "P14714",
+              "gene": "PHYC",
+              "class": "unlabeled",
+              "a": 0.2193052391799467
+            },
+            {
+              "uniprot": "Q9FE22",
+              "gene": "HFR1",
+              "class": "unlabeled",
+              "a": 0.21685649202732726
+            }
+          ]
+        },
+        {
+          "hop": 11,
+          "l1": 30.071757827833444,
+          "n_active": 16,
+          "stomata_channel": 3.8789300072477124e-05,
+          "light_tf": 0.0015039283340177343,
+          "auxin_transport": 6.095412663059566e-05,
+          "photoreceptor": 0.006459613395335494,
+          "aba_kinase": 0.00010282154856973827,
+          "calvin": 0.00013712596559492762,
+          "mass_by_class": {
+            "unlabeled": 29.800878380488953,
+            "auxin_tf": 0.18895184344448993,
+            "auxin_receptor": 0.049459001220955125,
+            "aba_receptor": 0.01753546894140764,
+            "aba_phosphatase": 0.006549022164725599,
+            "photoreceptor": 0.006459613395335494,
+            "light_tf": 0.0015039283340177343,
+            "calvin": 0.00013712596559492762,
+            "aba_kinase": 0.00010282154856973827,
+            "psii": 8.087890252286983e-05,
+            "auxin_transport": 6.095412663059566e-05,
+            "stomata_channel": 3.8789300072477124e-05
+          },
+          "top": [
+            {
+              "uniprot": "P93830",
+              "gene": "IAA17",
+              "class": "unlabeled",
+              "a": 0.9999999999999947
+            },
+            {
+              "uniprot": "Q38822",
+              "gene": "IAA3",
+              "class": "unlabeled",
+              "a": 0.969758822526719
+            },
+            {
+              "uniprot": "Q38828",
+              "gene": "IAA10",
+              "class": "unlabeled",
+              "a": 0.9363831132431429
+            },
+            {
+              "uniprot": "O24409",
+              "gene": "IAA19",
+              "class": "unlabeled",
+              "a": 0.9339016619973782
+            },
+            {
+              "uniprot": "Q9XFM0",
+              "gene": "IAA28",
+              "class": "unlabeled",
+              "a": 0.92911909731065
+            },
+            {
+              "uniprot": "P49677",
+              "gene": "IAA1",
+              "class": "unlabeled",
+              "a": 0.9134790130315614
+            },
+            {
+              "uniprot": "O24407",
+              "gene": "IAA16",
+              "class": "unlabeled",
+              "a": 0.8810612380163627
+            },
+            {
+              "uniprot": "P49678",
+              "gene": "IAA2",
+              "class": "unlabeled",
+              "a": 0.8452181248623446
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "seed": "aba",
+      "n_seed": 5,
+      "seed_accessions": [
+        "O49686",
+        "O80920",
+        "Q8S8E3",
+        "Q8VZS9",
+        "Q940H6"
+      ],
+      "seed_on_graph": [
+        "PYR1",
+        "PYL4",
+        "PYL4",
+        "PYR1",
+        "OST1"
+      ],
+      "seed_missing": [],
+      "trace": [
+        {
+          "hop": 0,
+          "l1": 1.0,
+          "n_active": 0,
+          "stomata_channel": 0.0,
+          "light_tf": 0.0,
+          "auxin_transport": 0.0,
+          "photoreceptor": 0.0,
+          "aba_kinase": 0.2,
+          "calvin": 0.0,
+          "mass_by_class": {
+            "aba_receptor": 0.8,
+            "aba_kinase": 0.2,
+            "unlabeled": 0.0,
+            "calvin": 0.0,
+            "aba_phosphatase": 0.0,
+            "light_tf": 0.0,
+            "photoreceptor": 0.0,
+            "psii": 0.0,
+            "auxin_tf": 0.0,
+            "stomata_channel": 0.0,
+            "auxin_receptor": 0.0,
+            "auxin_transport": 0.0
+          },
+          "top": [
+            {
+              "uniprot": "Q940H6",
+              "gene": "OST1",
+              "class": "aba_kinase",
+              "a": 0.2
+            },
+            {
+              "uniprot": "Q8VZS9",
+              "gene": "PYR1",
+              "class": "aba_receptor",
+              "a": 0.2
+            },
+            {
+              "uniprot": "Q8S8E3",
+              "gene": "PYL4",
+              "class": "aba_receptor",
+              "a": 0.2
+            },
+            {
+              "uniprot": "O80920",
+              "gene": "PYL4",
+              "class": "aba_receptor",
+              "a": 0.2
+            },
+            {
+              "uniprot": "O49686",
+              "gene": "PYR1",
+              "class": "aba_receptor",
+              "a": 0.2
+            }
+          ]
+        },
+        {
+          "hop": 1,
+          "l1": 7.148148148146937,
+          "n_active": 2,
+          "stomata_channel": 0.0,
+          "light_tf": 0.0,
+          "auxin_transport": 0.0,
+          "photoreceptor": 0.0,
+          "aba_kinase": 0.0,
+          "calvin": 0.0,
+          "mass_by_class": {
+            "unlabeled": 5.888888888887889,
+            "aba_phosphatase": 1.2592592592590457,
+            "calvin": 0.0,
+            "light_tf": 0.0,
+            "photoreceptor": 0.0,
+            "aba_receptor": 0.0,
+            "psii": 0.0,
+            "auxin_tf": 0.0,
+            "stomata_channel": 0.0,
+            "auxin_receptor": 0.0,
+            "aba_kinase": 0.0,
+            "auxin_transport": 0.0
+          },
+          "top": [
+            {
+              "uniprot": "P49597",
+              "gene": "ABI1",
+              "class": "aba_phosphatase",
+              "a": 0.9999999999998304
+            },
+            {
+              "uniprot": "Q9CAJ0",
+              "gene": "HAB1",
+              "class": "unlabeled",
+              "a": 0.7037037037035844
+            },
+            {
+              "uniprot": "Q9LNW3",
+              "gene": "AIP1",
+              "class": "unlabeled",
+              "a": 0.33333333333327686
+            },
+            {
+              "uniprot": "Q9LT89",
+              "gene": "TCP19",
+              "class": "unlabeled",
+              "a": 0.33333333333327686
+            },
+            {
+              "uniprot": "P49598",
+              "gene": "PP2CA",
+              "class": "unlabeled",
+              "a": 0.29629629629624604
+            },
+            {
+              "uniprot": "O04719",
+              "gene": "ABI2",
+              "class": "aba_phosphatase",
+              "a": 0.25925925925921534
+            },
+            {
+              "uniprot": "Q9ZW21",
+              "gene": "",
+              "class": "unlabeled",
+              "a": 0.22222222222218457
+            },
+            {
+              "uniprot": "Q9LNP9",
+              "gene": "HAB2",
+              "class": "unlabeled",
+              "a": 0.18518518518515378
+            }
+          ]
+        },
+        {
+          "hop": 2,
+          "l1": 19.618159203979502,
+          "n_active": 5,
+          "stomata_channel": 0.0012437810945273254,
+          "light_tf": 0.0,
+          "auxin_transport": 0.0037313432835819763,
+          "photoreceptor": 0.0,
+          "aba_kinase": 0.14925373134327907,
+          "calvin": 0.0,
+          "mass_by_class": {
+            "unlabeled": 17.52363184079528,
+            "aba_receptor": 1.9315920398009359,
+            "aba_kinase": 0.14925373134327907,
+            "aba_phosphatase": 0.008706467661691275,
+            "auxin_transport": 0.0037313432835819763,
+            "stomata_channel": 0.0012437810945273254,
+            "calvin": 0.0,
+            "light_tf": 0.0,
+            "photoreceptor": 0.0,
+            "psii": 0.0,
+            "auxin_tf": 0.0,
+            "auxin_receptor": 0.0
+          },
+          "top": [
+            {
+              "uniprot": "Q84MC7",
+              "gene": "PYL9",
+              "class": "unlabeled",
+              "a": 0.9999999999999691
+            },
+            {
+              "uniprot": "Q8S8E3",
+              "gene": "PYL4",
+              "class": "aba_receptor",
+              "a": 0.7748756218905232
+            },
+            {
+              "uniprot": "Q9FLB1",
+              "gene": "PYL5",
+              "class": "unlabeled",
+              "a": 0.7325870646765944
+            },
+            {
+              "uniprot": "Q9FGM1",
+              "gene": "PYL8",
+              "class": "unlabeled",
+              "a": 0.6815920398009742
+            },
+            {
+              "uniprot": "O49686",
+              "gene": "PYR1",
+              "class": "aba_receptor",
+              "a": 0.6368159203979906
+            },
+            {
+              "uniprot": "Q8H1R0",
+              "gene": "PYL10",
+              "class": "unlabeled",
+              "a": 0.5422885572139138
+            },
+            {
+              "uniprot": "O80920",
+              "gene": "PYL4",
+              "class": "aba_receptor",
+              "a": 0.48880597014923893
+            },
+            {
+              "uniprot": "Q1ECF1",
+              "gene": "PYL7",
+              "class": "unlabeled",
+              "a": 0.4527363184079465
+            }
+          ]
+        },
+        {
+          "hop": 3,
+          "l1": 23.935664238318008,
+          "n_active": 3,
+          "stomata_channel": 0.004408148113776549,
+          "light_tf": 0.0036193216092060094,
+          "auxin_transport": 0.0002784093545543084,
+          "photoreceptor": 0.001461649111410119,
+          "aba_kinase": 0.000649621827293386,
+          "calvin": 0.0005568187091086167,
+          "mass_by_class": {
+            "unlabeled": 22.514129274743226,
+            "aba_phosphatase": 1.3574776112477147,
+            "aba_receptor": 0.023015173309822827,
+            "auxin_tf": 0.018375017400584354,
+            "auxin_receptor": 0.011553988214003795,
+            "stomata_channel": 0.004408148113776549,
+            "light_tf": 0.0036193216092060094,
+            "photoreceptor": 0.001461649111410119,
+            "aba_kinase": 0.000649621827293386,
+            "calvin": 0.0005568187091086167,
+            "auxin_transport": 0.0002784093545543084,
+            "psii": 0.00013920467727715418
+          },
+          "top": [
+            {
+              "uniprot": "P49597",
+              "gene": "ABI1",
+              "class": "aba_phosphatase",
+              "a": 0.9999999999999829
+            },
+            {
+              "uniprot": "Q9CAJ0",
+              "gene": "HAB1",
+              "class": "unlabeled",
+              "a": 0.7061621270474567
+            },
+            {
+              "uniprot": "Q9LNW3",
+              "gene": "AIP1",
+              "class": "unlabeled",
+              "a": 0.6558860377708579
+            },
+            {
+              "uniprot": "Q9ZW21",
+              "gene": "",
+              "class": "unlabeled",
+              "a": 0.5715744048999949
+            },
+            {
+              "uniprot": "Q9LT89",
+              "gene": "TCP19",
+              "class": "unlabeled",
+              "a": 0.45415525961671527
+            },
+            {
+              "uniprot": "Q9C9L2",
+              "gene": "TCP15",
+              "class": "unlabeled",
+              "a": 0.3974525544058219
+            },
+            {
+              "uniprot": "O04719",
+              "gene": "ABI2",
+              "class": "aba_phosphatase",
+              "a": 0.35747761124773186
+            },
+            {
+              "uniprot": "Q9S7W5",
+              "gene": "TCP13",
+              "class": "unlabeled",
+              "a": 0.33991462113126464
+            }
+          ]
+        },
+        {
+          "hop": 11,
+          "l1": 30.44729985748429,
+          "n_active": 16,
+          "stomata_channel": 4.397877267366269e-05,
+          "light_tf": 0.001642477463087927,
+          "auxin_transport": 7.779943917170022e-05,
+          "photoreceptor": 0.006472910184134867,
+          "aba_kinase": 0.00012419182676329908,
+          "calvin": 0.00015929418719795208,
+          "mass_by_class": {
+            "unlabeled": 30.174034726195167,
+            "auxin_tf": 0.18866502318334624,
+            "auxin_receptor": 0.049689234387992144,
+            "aba_receptor": 0.01871913694320917,
+            "aba_phosphatase": 0.007578545149596742,
+            "photoreceptor": 0.006472910184134867,
+            "light_tf": 0.001642477463087927,
+            "calvin": 0.00015929418719795208,
+            "aba_kinase": 0.00012419182676329908,
+            "psii": 9.25397519811727e-05,
+            "auxin_transport": 7.779943917170022e-05,
+            "stomata_channel": 4.397877267366269e-05
+          },
+          "top": [
+            {
+              "uniprot": "P93830",
+              "gene": "IAA17",
+              "class": "unlabeled",
+              "a": 0.9999999999999947
+            },
+            {
+              "uniprot": "Q38822",
+              "gene": "IAA3",
+              "class": "unlabeled",
+              "a": 0.9688103683291468
+            },
+            {
+              "uniprot": "Q38828",
+              "gene": "IAA10",
+              "class": "unlabeled",
+              "a": 0.9355820497497759
+            },
+            {
+              "uniprot": "O24409",
+              "gene": "IAA19",
+              "class": "unlabeled",
+              "a": 0.9327737592754045
+            },
+            {
+              "uniprot": "Q9XFM0",
+              "gene": "IAA28",
+              "class": "unlabeled",
+              "a": 0.9279958359541326
+            },
+            {
+              "uniprot": "P49677",
+              "gene": "IAA1",
+              "class": "unlabeled",
+              "a": 0.9124616611095916
+            },
+            {
+              "uniprot": "O24407",
+              "gene": "IAA16",
+              "class": "unlabeled",
+              "a": 0.8800554180106104
+            },
+            {
+              "uniprot": "P49678",
+              "gene": "IAA2",
+              "class": "unlabeled",
+              "a": 0.8441599856247517
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "seed": "auxin",
+      "n_seed": 3,
+      "seed_accessions": [
+        "Q570C0",
+        "Q9C6B8",
+        "Q9SL42"
+      ],
+      "seed_on_graph": [
+        "TIR1",
+        "PIN1",
+        "PIN1"
+      ],
+      "seed_missing": [],
+      "trace": [
+        {
+          "hop": 0,
+          "l1": 1.0,
+          "n_active": 0,
+          "stomata_channel": 0.0,
+          "light_tf": 0.0,
+          "auxin_transport": 0.6666666666666666,
+          "photoreceptor": 0.0,
+          "aba_kinase": 0.0,
+          "calvin": 0.0,
+          "mass_by_class": {
+            "auxin_transport": 0.6666666666666666,
+            "auxin_receptor": 0.3333333333333333,
+            "unlabeled": 0.0,
+            "calvin": 0.0,
+            "aba_phosphatase": 0.0,
+            "light_tf": 0.0,
+            "photoreceptor": 0.0,
+            "aba_receptor": 0.0,
+            "psii": 0.0,
+            "auxin_tf": 0.0,
+            "stomata_channel": 0.0,
+            "aba_kinase": 0.0
+          },
+          "top": [
+            {
+              "uniprot": "Q9SL42",
+              "gene": "PIN1",
+              "class": "auxin_transport",
+              "a": 0.3333333333333333
+            },
+            {
+              "uniprot": "Q9C6B8",
+              "gene": "PIN1",
+              "class": "auxin_transport",
+              "a": 0.3333333333333333
+            },
+            {
+              "uniprot": "Q570C0",
+              "gene": "TIR1",
+              "class": "auxin_receptor",
+              "a": 0.3333333333333333
+            }
+          ]
+        },
+        {
+          "hop": 1,
+          "l1": 8.714285714282294,
+          "n_active": 3,
+          "stomata_channel": 0.0,
+          "light_tf": 0.0,
+          "auxin_transport": 0.0,
+          "photoreceptor": 0.0,
+          "aba_kinase": 0.0,
+          "calvin": 0.0,
+          "mass_by_class": {
+            "unlabeled": 8.714285714282292,
+            "calvin": 0.0,
+            "aba_phosphatase": 0.0,
+            "light_tf": 0.0,
+            "photoreceptor": 0.0,
+            "aba_receptor": 0.0,
+            "psii": 0.0,
+            "auxin_tf": 0.0,
+            "stomata_channel": 0.0,
+            "auxin_receptor": 0.0,
+            "aba_kinase": 0.0,
+            "auxin_transport": 0.0
+          },
+          "top": [
+            {
+              "uniprot": "Q9LJX0",
+              "gene": "ABCB19",
+              "class": "unlabeled",
+              "a": 0.9999999999996075
+            },
+            {
+              "uniprot": "Q9FHW7",
+              "gene": "SKP1B",
+              "class": "unlabeled",
+              "a": 0.9999999999996075
+            },
+            {
+              "uniprot": "Q39255",
+              "gene": "SKP1A",
+              "class": "unlabeled",
+              "a": 0.9999999999996075
+            },
+            {
+              "uniprot": "Q38825",
+              "gene": "IAA7",
+              "class": "unlabeled",
+              "a": 0.5714285714283472
+            },
+            {
+              "uniprot": "O82794",
+              "gene": "AGL24",
+              "class": "unlabeled",
+              "a": 0.5714285714283472
+            },
+            {
+              "uniprot": "Q93Z00",
+              "gene": "TCP14",
+              "class": "unlabeled",
+              "a": 0.4285714285712604
+            },
+            {
+              "uniprot": "Q9LQF0",
+              "gene": "TCP23",
+              "class": "unlabeled",
+              "a": 0.4285714285712604
+            },
+            {
+              "uniprot": "Q9SU81",
+              "gene": "",
+              "class": "unlabeled",
+              "a": 0.4285714285712604
+            }
+          ]
+        },
+        {
+          "hop": 2,
+          "l1": 49.36024844720302,
+          "n_active": 6,
+          "stomata_channel": 0.0,
+          "light_tf": 0.0,
+          "auxin_transport": 0.5093167701863153,
+          "photoreceptor": 0.012422360248446717,
+          "aba_kinase": 0.0,
+          "calvin": 0.0,
+          "mass_by_class": {
+            "unlabeled": 47.6832298136625,
+            "auxin_receptor": 0.9999999999999603,
+            "auxin_transport": 0.5093167701863153,
+            "auxin_tf": 0.13664596273291388,
+            "aba_receptor": 0.018633540372670072,
+            "photoreceptor": 0.012422360248446717,
+            "calvin": 0.0,
+            "aba_phosphatase": 0.0,
+            "light_tf": 0.0,
+            "psii": 0.0,
+            "stomata_channel": 0.0,
+            "aba_kinase": 0.0
+          },
+          "top": [
+            {
+              "uniprot": "Q570C0",
+              "gene": "TIR1",
+              "class": "auxin_receptor",
+              "a": 0.9999999999999603
+            },
+            {
+              "uniprot": "Q94BT6",
+              "gene": "ADO1",
+              "class": "unlabeled",
+              "a": 0.6583850931676759
+            },
+            {
+              "uniprot": "O24409",
+              "gene": "IAA19",
+              "class": "unlabeled",
+              "a": 0.6273291925465593
+            },
+            {
+              "uniprot": "Q9XFM0",
+              "gene": "IAA28",
+              "class": "unlabeled",
+              "a": 0.6211180124223359
+            },
+            {
+              "uniprot": "P49678",
+              "gene": "IAA2",
+              "class": "unlabeled",
+              "a": 0.6211180124223358
+            },
+            {
+              "uniprot": "O04197",
+              "gene": "COI1",
+              "class": "unlabeled",
+              "a": 0.6211180124223357
+            },
+            {
+              "uniprot": "Q9SKK0",
+              "gene": "EBF1",
+              "class": "unlabeled",
+              "a": 0.6149068322981124
+            },
+            {
+              "uniprot": "Q9C5X0",
+              "gene": "IAA34",
+              "class": "unlabeled",
+              "a": 0.6024844720496658
+            }
+          ]
+        },
+        {
+          "hop": 3,
+          "l1": 39.20915700977015,
+          "n_active": 14,
+          "stomata_channel": 0.00039763690070438167,
+          "light_tf": 0.00630538513974091,
+          "auxin_transport": 0.002726653033401474,
+          "photoreceptor": 0.006134969325153318,
+          "aba_kinase": 0.0,
+          "calvin": 0.0009656896159963555,
+          "mass_by_class": {
+            "unlabeled": 38.92399454669356,
+            "auxin_tf": 0.1761531470120411,
+            "auxin_receptor": 0.04930697568734334,
+            "aba_receptor": 0.028970688479890663,
+            "aba_phosphatase": 0.013803680981594964,
+            "light_tf": 0.00630538513974091,
+            "photoreceptor": 0.006134969325153318,
+            "auxin_transport": 0.002726653033401474,
+            "calvin": 0.0009656896159963555,
+            "psii": 0.0003976369007043817,
+            "stomata_channel": 0.00039763690070438167,
+            "aba_kinase": 0.0
+          },
+          "top": [
+            {
+              "uniprot": "P93830",
+              "gene": "IAA17",
+              "class": "unlabeled",
+              "a": 0.9999999999999917
+            },
+            {
+              "uniprot": "Q38822",
+              "gene": "IAA3",
+              "class": "unlabeled",
+              "a": 0.9166098613951292
+            },
+            {
+              "uniprot": "Q38828",
+              "gene": "IAA10",
+              "class": "unlabeled",
+              "a": 0.8754260395364611
+            },
+            {
+              "uniprot": "Q9XFM0",
+              "gene": "IAA28",
+              "class": "unlabeled",
+              "a": 0.8678141331515484
+            },
+            {
+              "uniprot": "P49677",
+              "gene": "IAA1",
+              "class": "unlabeled",
+              "a": 0.8580436264485264
+            },
+            {
+              "uniprot": "O24409",
+              "gene": "IAA19",
+              "class": "unlabeled",
+              "a": 0.8408884344467087
+            },
+            {
+              "uniprot": "O24407",
+              "gene": "IAA16",
+              "class": "unlabeled",
+              "a": 0.8099295614632965
+            },
+            {
+              "uniprot": "P49678",
+              "gene": "IAA2",
+              "class": "unlabeled",
+              "a": 0.7626107702794749
+            }
+          ]
+        },
+        {
+          "hop": 11,
+          "l1": 30.070477589952382,
+          "n_active": 16,
+          "stomata_channel": 3.876758999522996e-05,
+          "light_tf": 0.001499765172880715,
+          "auxin_transport": 6.132158826135731e-05,
+          "photoreceptor": 0.006450089667935645,
+          "aba_kinase": 0.0001031607269200847,
+          "calvin": 0.00013773547021542405,
+          "mass_by_class": {
+            "unlabeled": 29.799564044933923,
+            "auxin_tf": 0.18894314194806322,
+            "auxin_receptor": 0.0494646269558178,
+            "aba_receptor": 0.017560640736446455,
+            "aba_phosphatase": 0.006573158926756509,
+            "photoreceptor": 0.006450089667935645,
+            "light_tf": 0.001499765172880715,
+            "calvin": 0.00013773547021542405,
+            "aba_kinase": 0.0001031607269200847,
+            "psii": 8.11362352793582e-05,
+            "auxin_transport": 6.132158826135731e-05,
+            "stomata_channel": 3.876758999522996e-05
+          },
+          "top": [
+            {
+              "uniprot": "P93830",
+              "gene": "IAA17",
+              "class": "unlabeled",
+              "a": 0.9999999999999947
+            },
+            {
+              "uniprot": "Q38822",
+              "gene": "IAA3",
+              "class": "unlabeled",
+              "a": 0.9697371862862302
+            },
+            {
+              "uniprot": "Q38828",
+              "gene": "IAA10",
+              "class": "unlabeled",
+              "a": 0.9363655054037191
+            },
+            {
+              "uniprot": "O24409",
+              "gene": "IAA19",
+              "class": "unlabeled",
+              "a": 0.9338753770351197
+            },
+            {
+              "uniprot": "Q9XFM0",
+              "gene": "IAA28",
+              "class": "unlabeled",
+              "a": 0.9290946021982152
+            },
+            {
+              "uniprot": "P49677",
+              "gene": "IAA1",
+              "class": "unlabeled",
+              "a": 0.9134538351877092
+            },
+            {
+              "uniprot": "O24407",
+              "gene": "IAA16",
+              "class": "unlabeled",
+              "a": 0.8810372899232394
+            },
+            {
+              "uniprot": "P49678",
+              "gene": "IAA2",
+              "class": "unlabeled",
+              "a": 0.8451948691232308
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "seed": "calvin",
+      "n_seed": 2,
+      "seed_accessions": [
+        "O03042",
+        "P83755"
+      ],
+      "seed_on_graph": [
+        "rbcL",
+        "psbA"
+      ],
+      "seed_missing": [],
+      "trace": [
+        {
+          "hop": 0,
+          "l1": 1.0,
+          "n_active": 0,
+          "stomata_channel": 0.0,
+          "light_tf": 0.0,
+          "auxin_transport": 0.0,
+          "photoreceptor": 0.0,
+          "aba_kinase": 0.0,
+          "calvin": 0.5,
+          "mass_by_class": {
+            "calvin": 0.5,
+            "psii": 0.5,
+            "unlabeled": 0.0,
+            "aba_phosphatase": 0.0,
+            "light_tf": 0.0,
+            "photoreceptor": 0.0,
+            "aba_receptor": 0.0,
+            "auxin_tf": 0.0,
+            "stomata_channel": 0.0,
+            "auxin_receptor": 0.0,
+            "aba_kinase": 0.0,
+            "auxin_transport": 0.0
+          },
+          "top": [
+            {
+              "uniprot": "P83755",
+              "gene": "psbA",
+              "class": "psii",
+              "a": 0.5
+            },
+            {
+              "uniprot": "O03042",
+              "gene": "rbcL",
+              "class": "calvin",
+              "a": 0.5
+            }
+          ]
+        },
+        {
+          "hop": 1,
+          "l1": 5.999999999994505,
+          "n_active": 3,
+          "stomata_channel": 0.0,
+          "light_tf": 0.0,
+          "auxin_transport": 0.0,
+          "photoreceptor": 0.0,
+          "aba_kinase": 0.0,
+          "calvin": 0.0,
+          "mass_by_class": {
+            "unlabeled": 5.999999999994505,
+            "calvin": 0.0,
+            "aba_phosphatase": 0.0,
+            "light_tf": 0.0,
+            "photoreceptor": 0.0,
+            "aba_receptor": 0.0,
+            "psii": 0.0,
+            "auxin_tf": 0.0,
+            "stomata_channel": 0.0,
+            "auxin_receptor": 0.0,
+            "aba_kinase": 0.0,
+            "auxin_transport": 0.0
+          },
+          "top": [
+            {
+              "uniprot": "Q9S744",
+              "gene": "CML9",
+              "class": "unlabeled",
+              "a": 0.9999999999990842
+            },
+            {
+              "uniprot": "P59220",
+              "gene": "CAM7",
+              "class": "unlabeled",
+              "a": 0.9999999999990842
+            },
+            {
+              "uniprot": "P25854",
+              "gene": "CAM1",
+              "class": "unlabeled",
+              "a": 0.9999999999990842
+            },
+            {
+              "uniprot": "Q8LBP4",
+              "gene": "ALB3",
+              "class": "unlabeled",
+              "a": 0.4999999999995421
+            },
+            {
+              "uniprot": "Q03509",
+              "gene": "CAM6",
+              "class": "unlabeled",
+              "a": 0.4999999999995421
+            },
+            {
+              "uniprot": "Q39237",
+              "gene": "TGA1",
+              "class": "unlabeled",
+              "a": 0.4999999999995421
+            },
+            {
+              "uniprot": "P30187",
+              "gene": "CML10",
+              "class": "unlabeled",
+              "a": 0.4999999999995421
+            },
+            {
+              "uniprot": "P25071",
+              "gene": "CML12",
+              "class": "unlabeled",
+              "a": 0.4999999999995421
+            }
+          ]
+        },
+        {
+          "hop": 2,
+          "l1": 107.31249999998772,
+          "n_active": 24,
+          "stomata_channel": 0.0,
+          "light_tf": 0.0,
+          "auxin_transport": 0.0,
+          "photoreceptor": 0.0,
+          "aba_kinase": 0.0,
+          "calvin": 0.12499999999998569,
+          "mass_by_class": {
+            "unlabeled": 106.18749999998707,
+            "psii": 0.9999999999998855,
+            "calvin": 0.12499999999998569,
+            "aba_phosphatase": 0.0,
+            "light_tf": 0.0,
+            "photoreceptor": 0.0,
+            "aba_receptor": 0.0,
+            "auxin_tf": 0.0,
+            "stomata_channel": 0.0,
+            "auxin_receptor": 0.0,
+            "aba_kinase": 0.0,
+            "auxin_transport": 0.0
+          },
+          "top": [
+            {
+              "uniprot": "P83755",
+              "gene": "psbA",
+              "class": "psii",
+              "a": 0.9999999999998855
+            },
+            {
+              "uniprot": "Q2V359",
+              "gene": "SAUR70",
+              "class": "unlabeled",
+              "a": 0.9999999999998855
+            },
+            {
+              "uniprot": "P55737",
+              "gene": "HSP90-2",
+              "class": "unlabeled",
+              "a": 0.9999999999998855
+            },
+            {
+              "uniprot": "Q9SSF8",
+              "gene": "CPK30",
+              "class": "unlabeled",
+              "a": 0.9374999999998926
+            },
+            {
+              "uniprot": "Q9LZP8",
+              "gene": "BZIP53",
+              "class": "unlabeled",
+              "a": 0.9374999999998926
+            },
+            {
+              "uniprot": "Q9LDI3",
+              "gene": "CIPK24",
+              "class": "unlabeled",
+              "a": 0.9374999999998926
+            },
+            {
+              "uniprot": "Q9SUP6",
+              "gene": "WRKY53",
+              "class": "unlabeled",
+              "a": 0.8749999999998999
+            },
+            {
+              "uniprot": "O22763",
+              "gene": "BZIP10",
+              "class": "unlabeled",
+              "a": 0.8749999999998999
+            }
+          ]
+        },
+        {
+          "hop": 3,
+          "l1": 34.90519877675803,
+          "n_active": 5,
+          "stomata_channel": 0.0,
+          "light_tf": 0.003822629969418918,
+          "auxin_transport": 0.0030581039755351344,
+          "photoreceptor": 0.0,
+          "aba_kinase": 0.0,
+          "calvin": 0.0,
+          "mass_by_class": {
+            "unlabeled": 34.80198776758378,
+            "aba_phosphatase": 0.04587155963302702,
+            "aba_receptor": 0.02293577981651351,
+            "auxin_receptor": 0.01529051987767567,
+            "auxin_tf": 0.00611620795107027,
+            "psii": 0.006116207951070269,
+            "light_tf": 0.003822629969418918,
+            "auxin_transport": 0.0030581039755351344,
+            "calvin": 0.0,
+            "photoreceptor": 0.0,
+            "stomata_channel": 0.0,
+            "aba_kinase": 0.0
+          },
+          "top": [
+            {
+              "uniprot": "P25854",
+              "gene": "CAM1",
+              "class": "unlabeled",
+              "a": 0.9999999999999889
+            },
+            {
+              "uniprot": "P59220",
+              "gene": "CAM7",
+              "class": "unlabeled",
+              "a": 0.8868501529051891
+            },
+            {
+              "uniprot": "Q9S744",
+              "gene": "CML9",
+              "class": "unlabeled",
+              "a": 0.8425076452599295
+            },
+            {
+              "uniprot": "Q03509",
+              "gene": "CAM6",
+              "class": "unlabeled",
+              "a": 0.8042813455657406
+            },
+            {
+              "uniprot": "P30187",
+              "gene": "CML10",
+              "class": "unlabeled",
+              "a": 0.7125382262996868
+            },
+            {
+              "uniprot": "B9DGI8",
+              "gene": "BZIP63",
+              "class": "unlabeled",
+              "a": 0.5848623853210947
+            },
+            {
+              "uniprot": "P25071",
+              "gene": "CML12",
+              "class": "unlabeled",
+              "a": 0.5435779816513705
+            },
+            {
+              "uniprot": "O23320",
+              "gene": "CML8",
+              "class": "unlabeled",
+              "a": 0.4961773700305758
+            }
+          ]
+        },
+        {
+          "hop": 11,
+          "l1": 30.99701171806761,
+          "n_active": 16,
+          "stomata_channel": 6.907331233984758e-05,
+          "light_tf": 0.0018122099890928898,
+          "auxin_transport": 0.00010551848645073554,
+          "photoreceptor": 0.006498513228608013,
+          "aba_kinase": 0.00015460484522073016,
+          "calvin": 0.00018674407210348407,
+          "mass_by_class": {
+            "unlabeled": 30.721423039975633,
+            "auxin_tf": 0.18826353263242238,
+            "auxin_receptor": 0.04998458512011758,
+            "aba_receptor": 0.020301313637670695,
+            "aba_phosphatase": 0.008100656667314252,
+            "photoreceptor": 0.006498513228608013,
+            "light_tf": 0.0018122099890928898,
+            "calvin": 0.00018674407210348407,
+            "aba_kinase": 0.00015460484522073016,
+            "psii": 0.00011192610093110062,
+            "auxin_transport": 0.00010551848645073554,
+            "stomata_channel": 6.907331233984758e-05
+          },
+          "top": [
+            {
+              "uniprot": "P93830",
+              "gene": "IAA17",
+              "class": "unlabeled",
+              "a": 0.9999999999999947
+            },
+            {
+              "uniprot": "Q38822",
+              "gene": "IAA3",
+              "class": "unlabeled",
+              "a": 0.9674108388676511
+            },
+            {
+              "uniprot": "Q38828",
+              "gene": "IAA10",
+              "class": "unlabeled",
+              "a": 0.9344032751440646
+            },
+            {
+              "uniprot": "O24409",
+              "gene": "IAA19",
+              "class": "unlabeled",
+              "a": 0.9311892777590065
+            },
+            {
+              "uniprot": "Q9XFM0",
+              "gene": "IAA28",
+              "class": "unlabeled",
+              "a": 0.9263579980855738
+            },
+            {
+              "uniprot": "P49677",
+              "gene": "IAA1",
+              "class": "unlabeled",
+              "a": 0.9109852337592584
+            },
+            {
+              "uniprot": "O24407",
+              "gene": "IAA16",
+              "class": "unlabeled",
+              "a": 0.8786668919771284
+            },
+            {
+              "uniprot": "P49678",
+              "gene": "IAA2",
+              "class": "unlabeled",
+              "a": 0.8426181365538928
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "compare": {
+    "hop_1": {
+      "photoreceptor": {
+        "stomata_channel": 0.0,
+        "light_tf": 0.9999999999997625,
+        "auxin_transport": 0.0,
+        "n_active": 1,
+        "top": {
+          "uniprot": "O80536",
+          "gene": "PIF3",
+          "class": "light_tf",
+          "a": 0.9999999999997625
+        }
+      },
+      "aba": {
+        "stomata_channel": 0.0,
+        "light_tf": 0.0,
+        "auxin_transport": 0.0,
+        "n_active": 2,
+        "top": {
+          "uniprot": "P49597",
+          "gene": "ABI1",
+          "class": "aba_phosphatase",
+          "a": 0.9999999999998304
+        }
+      },
+      "auxin": {
+        "stomata_channel": 0.0,
+        "light_tf": 0.0,
+        "auxin_transport": 0.0,
+        "n_active": 3,
+        "top": {
+          "uniprot": "Q9LJX0",
+          "gene": "ABCB19",
+          "class": "unlabeled",
+          "a": 0.9999999999996075
+        }
+      },
+      "calvin": {
+        "stomata_channel": 0.0,
+        "light_tf": 0.0,
+        "auxin_transport": 0.0,
+        "n_active": 3,
+        "top": {
+          "uniprot": "Q9S744",
+          "gene": "CML9",
+          "class": "unlabeled",
+          "a": 0.9999999999990842
+        }
+      }
+    },
+    "hop_2": {
+      "photoreceptor": {
+        "stomata_channel": 0.0014903129657227474,
+        "light_tf": 0.40089418777941904,
+        "auxin_transport": 0.0,
+        "n_active": 1,
+        "top": {
+          "uniprot": "P14713",
+          "gene": "PHYB",
+          "class": "photoreceptor",
+          "a": 0.9999999999999633
+        }
+      },
+      "aba": {
+        "stomata_channel": 0.0012437810945273254,
+        "light_tf": 0.0,
+        "auxin_transport": 0.0037313432835819763,
+        "n_active": 5,
+        "top": {
+          "uniprot": "Q84MC7",
+          "gene": "PYL9",
+          "class": "unlabeled",
+          "a": 0.9999999999999691
+        }
+      },
+      "auxin": {
+        "stomata_channel": 0.0,
+        "light_tf": 0.0,
+        "auxin_transport": 0.5093167701863153,
+        "n_active": 6,
+        "top": {
+          "uniprot": "Q570C0",
+          "gene": "TIR1",
+          "class": "auxin_receptor",
+          "a": 0.9999999999999603
+        }
+      },
+      "calvin": {
+        "stomata_channel": 0.0,
+        "light_tf": 0.0,
+        "auxin_transport": 0.0,
+        "n_active": 24,
+        "top": {
+          "uniprot": "P83755",
+          "gene": "psbA",
+          "class": "psii",
+          "a": 0.9999999999998855
+        }
+      }
+    },
+    "hop_3": {
+      "photoreceptor": {
+        "stomata_channel": 0.000854214123006804,
+        "light_tf": 1.0239179954441555,
+        "auxin_transport": 0.0,
+        "n_active": 1,
+        "top": {
+          "uniprot": "O80536",
+          "gene": "PIF3",
+          "class": "light_tf",
+          "a": 0.999999999999965
+        }
+      },
+      "aba": {
+        "stomata_channel": 0.004408148113776549,
+        "light_tf": 0.0036193216092060094,
+        "auxin_transport": 0.0002784093545543084,
+        "n_active": 3,
+        "top": {
+          "uniprot": "P49597",
+          "gene": "ABI1",
+          "class": "aba_phosphatase",
+          "a": 0.9999999999999829
+        }
+      },
+      "auxin": {
+        "stomata_channel": 0.00039763690070438167,
+        "light_tf": 0.00630538513974091,
+        "auxin_transport": 0.002726653033401474,
+        "n_active": 14,
+        "top": {
+          "uniprot": "P93830",
+          "gene": "IAA17",
+          "class": "unlabeled",
+          "a": 0.9999999999999917
+        }
+      },
+      "calvin": {
+        "stomata_channel": 0.0,
+        "light_tf": 0.003822629969418918,
+        "auxin_transport": 0.0030581039755351344,
+        "n_active": 5,
+        "top": {
+          "uniprot": "P25854",
+          "gene": "CAM1",
+          "class": "unlabeled",
+          "a": 0.9999999999999889
+        }
+      }
+    }
+  },
+  "cache": "D:\\FlyWire_Connectome\\plants\\intact\\arabidopsis_intact.mitab25.txt"
+}
