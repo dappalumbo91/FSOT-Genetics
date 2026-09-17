@@ -32,9 +32,10 @@ pub fn check() {
     assert!(4292u32 < 166016u32); // larva_mech_gt_olf
     assert!(745u32 < 77442u32); // worm_male_sex_gt_herm
     assert_eq!(6u32, 6u32); // plant_arabidopsis_folded
-    assert_eq!(12u32, 12u32); // plant_rice_maize_folded
-    assert_eq!(0u32, 0u32); // plant_rice_maize_miss
+    assert_eq!(24u32, 24u32); // plant_crop_folded
+    assert_eq!(0u32, 0u32); // plant_crop_miss
     assert!(618u32 <= 741u32); // plant_min_id_close
+    assert_eq!(24u32, 24u32); // plant_crop_n
     assert!(0u32 < 453u32); // worm_cells
     assert!(0u32 < 205u32); // ciona_cells
     assert!(0u32 < 1720u32); // platynereis_cells

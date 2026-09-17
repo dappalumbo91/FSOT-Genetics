@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Arabidopsis panel → rice / maize measured homologs → product Cα.
+"""Arabidopsis panel → crop genomes measured homologs → product Cα.
 
-Same product rule as animals: fold only with a measured homolog. Plants have
-genomes and crystals, not a fly-class EM connectome. Do not invent synapses.
+Rice, maize, soybean, wheat. Same product rule as animals: fold only with a
+measured homolog. Plants have genomes and crystals, not a fly-class EM
+connectome. Do not invent synapses.
 
   python scripts/plant_homolog.py
   python scripts/plant_homolog.py --resolve-only
@@ -23,6 +24,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from fsot_predict import main as predict_main  # noqa: E402
 from homolog_correspondence import (  # noqa: E402
     _MIN_LEN_FRAC,
+    _PHI,
     _ensembl_id,
     _gene_name,
     _get_json,
@@ -54,6 +56,20 @@ TAXA = [
         "taxid": 4577,
         "taxid_fallback": None,
         "proteome": "UP000007305",
+    },
+    {
+        "organism": "Glycine max",
+        "short": "soybean",
+        "taxid": 3847,
+        "taxid_fallback": None,
+        "proteome": "UP000008827",
+    },
+    {
+        "organism": "Triticum aestivum",
+        "short": "wheat",
+        "taxid": 4565,
+        "taxid_fallback": None,
+        "proteome": "UP000019116",
     },
 ]
 
@@ -175,12 +191,38 @@ def _search_with_fallback(
     used = int(tx["taxid"])
     hits = _search_taxon(query_core, used)
     hit = _pick_plant_hit(hits, symbol=symbol, min_length=min_length, src_len=src_len)
+    if hit and not _usable_hit(hit, symbol, src_len):
+        hit = None
     if hit or not tx.get("taxid_fallback"):
         return hit, hits, used
     used = int(tx["taxid_fallback"])
     hits = _search_taxon(query_core, used)
     hit = _pick_plant_hit(hits, symbol=symbol, min_length=min_length, src_len=src_len)
+    if hit and not _usable_hit(hit, symbol, src_len):
+        hit = None
     return hit, hits, used
+
+
+def _usable_hit(hit: dict[str, Any], symbol: str, src_len: int) -> bool:
+    """Drop empty-name fragments (wheat acT2 442 aa, soybean Soy115 336 aa)."""
+    n = _len_of(hit)
+    if n < int(round(src_len * _MIN_LEN_FRAC)):
+        return False
+    if n > int(round(src_len * _PHI)):
+        return False
+    pname = _protein_name(hit).lower()
+    gn = _norm_gene(_gene_name(hit))
+    if _is_reviewed(hit) and n >= int(round(src_len * 0.9)):
+        return True
+    if "actin" in pname:
+        return True
+    if "chlorophyll" in pname or "cellulose synthase" in pname:
+        return True
+    if "glyceraldehyde" in pname:
+        return True
+    if gn == _norm_gene(symbol) and pname:
+        return True
+    return bool(pname)
 
 
 def _named_gene_search(
@@ -191,14 +233,17 @@ def _named_gene_search(
     # Exact gene symbol only. Stem wildcards pick the wrong CESA/LHCB paralog.
     queries = [f"gene:{symbol}"]
     if symbol.upper() == "ACT2":
-        queries.append("gene:ACT1")
+        # Maize ACT1; soybean SAC1 (reviewed actin-1).
+        queries.extend(["gene:ACT1", "gene:SAC1"])
     if _norm_gene(symbol).startswith("LHCB1"):
-        # CAB1 / CAB1R is the UniProt gene for LHCII type I in grasses.
-        queries.extend(["gene:CAB1", "gene:CAB1R"])
+        # CAB1 / CAB1R grasses; LHCB1-* / CAB2 / CAB3 soybean LHCII type I.
+        queries.extend(["gene:LHCB1*", "gene:CAB1", "gene:CAB1R", "gene:CAB2", "gene:CAB3"])
     for q in queries:
         hit, hits, used = _search_with_fallback(
             q, tx, symbol=symbol, min_length=min_length, src_len=src_len
         )
+        if hit and not _usable_hit(hit, symbol, src_len):
+            hit = None
         if hit:
             gn = _norm_gene(_gene_name(hit))
             want = _norm_gene(symbol)
@@ -358,13 +403,13 @@ def resolve() -> dict[str, Any]:
     FASTA.write_text("".join(fasta_chunks), encoding="utf-8")
     print(f"  wrote {FASTA}", flush=True)
     return {
-        "product": "Arabidopsis panel → rice/maize measured homolog → FSOT product Cα",
+        "product": "Arabidopsis panel → rice/maize/soybean/wheat measured homolog → FSOT product Cα",
         "pin": "D1D38A",
         "free_parameters": 0,
         "law": "S=K(T1+T2+T3); product Cα only where a measured homolog exists",
         "not": (
-            "Not a plant connectome. Rice and maize have genomes and crystals. "
-            "No fly-class EM wiring diagram. Predict proteins, not invented synapses."
+            "Not a plant connectome. Rice, maize, soybean, and wheat have genomes "
+            "and crystals. No fly-class EM wiring diagram. Predict proteins, not invented synapses."
         ),
         "source_organism": "Arabidopsis thaliana",
         "source_taxid": 3702,

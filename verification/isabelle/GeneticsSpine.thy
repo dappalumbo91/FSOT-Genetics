@@ -44,10 +44,11 @@ definition larva_olf_vs_mech_rhs :: nat where "larva_olf_vs_mech_rhs = 166016"
 definition worm_herm_vs_male_sex :: nat where "worm_herm_vs_male_sex = 745"
 definition worm_herm_vs_male_sex_rhs :: nat where "worm_herm_vs_male_sex_rhs = 77442"
 definition plant_arabidopsis_folded :: nat where "plant_arabidopsis_folded = 6"
-definition plant_rice_maize_folded :: nat where "plant_rice_maize_folded = 12"
-definition plant_rice_maize_miss :: nat where "plant_rice_maize_miss = 0"
+definition plant_crop_folded :: nat where "plant_crop_folded = 24"
+definition plant_crop_miss :: nat where "plant_crop_miss = 0"
 definition plant_min_id :: nat where "plant_min_id = 618"
 definition plant_min_id_rhs :: nat where "plant_min_id_rhs = 741"
+definition plant_crop_n :: nat where "plant_crop_n = 24"
 definition worm_cells :: nat where "worm_cells = 0"
 definition worm_cells_rhs :: nat where "worm_cells_rhs = 453"
 definition ciona_cells :: nat where "ciona_cells = 0"
@@ -154,14 +155,17 @@ lemma ok_worm_male_sex_gt_herm: "worm_herm_vs_male_sex < worm_herm_vs_male_sex_r
 lemma ok_plant_arabidopsis_folded: "plant_arabidopsis_folded = 6"
   unfolding plant_arabidopsis_folded_def by simp
 
-lemma ok_plant_rice_maize_folded: "plant_rice_maize_folded = 12"
-  unfolding plant_rice_maize_folded_def by simp
+lemma ok_plant_crop_folded: "plant_crop_folded = 24"
+  unfolding plant_crop_folded_def by simp
 
-lemma ok_plant_rice_maize_miss: "plant_rice_maize_miss = 0"
-  unfolding plant_rice_maize_miss_def by simp
+lemma ok_plant_crop_miss: "plant_crop_miss = 0"
+  unfolding plant_crop_miss_def by simp
 
 lemma ok_plant_min_id_close: "plant_min_id <= plant_min_id_rhs"
   unfolding plant_min_id_def plant_min_id_rhs_def by simp
+
+lemma ok_plant_crop_n: "plant_crop_n = 24"
+  unfolding plant_crop_n_def by simp
 
 lemma ok_worm_cells: "worm_cells < worm_cells_rhs"
   unfolding worm_cells_def worm_cells_rhs_def by simp

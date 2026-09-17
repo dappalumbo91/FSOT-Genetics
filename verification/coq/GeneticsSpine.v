@@ -40,10 +40,11 @@ Definition larva_olf_vs_mech_rhs := 166016.
 Definition worm_herm_vs_male_sex := 745.
 Definition worm_herm_vs_male_sex_rhs := 77442.
 Definition plant_arabidopsis_folded := 6.
-Definition plant_rice_maize_folded := 12.
-Definition plant_rice_maize_miss := 0.
+Definition plant_crop_folded := 24.
+Definition plant_crop_miss := 0.
 Definition plant_min_id := 618.
 Definition plant_min_id_rhs := 741.
+Definition plant_crop_n := 24.
 Definition worm_cells := 0.
 Definition worm_cells_rhs := 453.
 Definition ciona_cells := 0.
@@ -150,13 +151,16 @@ Proof. reflexivity. Qed.
 Lemma ok_plant_arabidopsis_folded : plant_arabidopsis_folded = 6.
 Proof. reflexivity. Qed.
 
-Lemma ok_plant_rice_maize_folded : plant_rice_maize_folded = 12.
+Lemma ok_plant_crop_folded : plant_crop_folded = 24.
 Proof. reflexivity. Qed.
 
-Lemma ok_plant_rice_maize_miss : plant_rice_maize_miss = 0.
+Lemma ok_plant_crop_miss : plant_crop_miss = 0.
 Proof. reflexivity. Qed.
 
 Lemma ok_plant_min_id_close : Nat.leb plant_min_id plant_min_id_rhs = true.
+Proof. reflexivity. Qed.
+
+Lemma ok_plant_crop_n : plant_crop_n = 24.
 Proof. reflexivity. Qed.
 
 Lemma ok_worm_cells : Nat.ltb worm_cells worm_cells_rhs = true.

@@ -42,10 +42,11 @@ let larva_olf_vs_mech_rhs : nat = 166016
 let worm_herm_vs_male_sex : nat = 745
 let worm_herm_vs_male_sex_rhs : nat = 77442
 let plant_arabidopsis_folded : nat = 6
-let plant_rice_maize_folded : nat = 12
-let plant_rice_maize_miss : nat = 0
+let plant_crop_folded : nat = 24
+let plant_crop_miss : nat = 0
 let plant_min_id : nat = 618
 let plant_min_id_rhs : nat = 741
+let plant_crop_n : nat = 24
 let worm_cells : nat = 0
 let worm_cells_rhs : nat = 453
 let ciona_cells : nat = 0
@@ -90,9 +91,10 @@ let _ = assert (banc_olf_vs_jo < banc_olf_vs_jo_rhs)
 let _ = assert (larva_olf_vs_mech < larva_olf_vs_mech_rhs)
 let _ = assert (worm_herm_vs_male_sex < worm_herm_vs_male_sex_rhs)
 let _ = assert (plant_arabidopsis_folded = 6)
-let _ = assert (plant_rice_maize_folded = 12)
-let _ = assert (plant_rice_maize_miss = 0)
+let _ = assert (plant_crop_folded = 24)
+let _ = assert (plant_crop_miss = 0)
 let _ = assert (plant_min_id <= plant_min_id_rhs)
+let _ = assert (plant_crop_n = 24)
 let _ = assert (worm_cells < worm_cells_rhs)
 let _ = assert (ciona_cells < ciona_cells_rhs)
 let _ = assert (platynereis_cells < platynereis_cells_rhs)

@@ -47,10 +47,11 @@ def larvaOlfVsMechRhs : Nat := 166016
 def wormHermVsMaleSex : Nat := 745
 def wormHermVsMaleSexRhs : Nat := 77442
 def plantArabidopsisFolded : Nat := 6
-def plantRiceMaizeFolded : Nat := 12
-def plantRiceMaizeMiss : Nat := 0
+def plantCropFolded : Nat := 24
+def plantCropMiss : Nat := 0
 def plantMinId : Nat := 618
 def plantMinIdRhs : Nat := 741
+def plantCropN : Nat := 24
 def wormCells : Nat := 0
 def wormCellsRhs : Nat := 453
 def cionaCells : Nat := 0
@@ -126,11 +127,13 @@ theorem okWormMaleSexGtHerm : wormHermVsMaleSex < wormHermVsMaleSexRhs := by dec
 
 theorem okPlantArabidopsisFolded : plantArabidopsisFolded = 6 := by decide
 
-theorem okPlantRiceMaizeFolded : plantRiceMaizeFolded = 12 := by decide
+theorem okPlantCropFolded : plantCropFolded = 24 := by decide
 
-theorem okPlantRiceMaizeMiss : plantRiceMaizeMiss = 0 := by decide
+theorem okPlantCropMiss : plantCropMiss = 0 := by decide
 
 theorem okPlantMinIdClose : plantMinId ≤ plantMinIdRhs := by decide
+
+theorem okPlantCropN : plantCropN = 24 := by decide
 
 theorem okWormCells : wormCells < wormCellsRhs := by decide
 
