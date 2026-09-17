@@ -54,6 +54,17 @@ Independent sexes, same split:
 
 JO hop-1 peaks on **DNg29** (male and BANC). Olfactory stays at antennal-lobe LNs (`il3LN6` / `v2LN30`). Larva: mechanosensory hop-2 **DN-VNC 16.6** vs olfactory **0.43**.
 
+Independent EM volume, no VNC — neuPrint hemibrain:v1.2.1 typed neurons including cropped Leaves (compact GCS dump drops JO). Same residual, **unsigned** (no predictedNt). Score **descending**, not vnc_motor. DNg29 is not in this cut.
+
+`python scripts/hemibrain_connectome.py` → `data/hemibrain_connectome_boot.json`
+
+| Seed | n | hop-2 `descending` | hop-1 top |
+|------|--:|-------------------:|-----------|
+| JO (`JO-A/B/C`) | 78 | **2.68** | **Giant Fiber** |
+| olfactory (`ORN_*`) | 2577 | **0.072** | antennal-lobe LN `lLN2T_c` |
+
+Same split: JO lights a descending escape neuron; olfactory stays in the AL LN leftover. Do not mix 2.68 descending with 7.77 vnc_motor — different effector pools.
+
 Whole-animal: worm (both sexes) sensory → command interneuron → muscle NMJ; Ciona MGIN; Platynereis prototroch.
 
 ## 4. When the 1:1 is blank, math points at the mapped job
