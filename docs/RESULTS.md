@@ -3,7 +3,7 @@
 Pin `D1D38A`. Law \(S = K(T_1+T_2+T_3)\). **0 free parameters.**  
 Data stays on `D:\FlyWire_Connectome` (not git). Do not mix product Å with hop mass.
 
-Full claim inventory + re-run: `docs/SYSTEM_VERIFY.md`. Last stamp: `python scripts/system_verify.py` **52/52**; gauntlet **overall_ok** (42 obligations).
+Full claim inventory + re-run: `docs/SYSTEM_VERIFY.md`. Last stamp: `python scripts/system_verify.py` **245/245**; gauntlet **overall_ok** (42 obligations). The 52-check stamp was freeze+hops only.
 
 ## 1. Protein product (accuracy that is Å)
 
@@ -181,13 +181,104 @@ Source: `data/plant_signal_product.json`, `data/plant_signal_domains.json`.
 | Can | Cannot |
 |-----|--------|
 | Product Cα when a homolog exists (0.13 Å freeze) | Orphan 3-D at AlphaFold grade |
+| AF3-class jobs at the named ChemLink (DNA, metal, SC, H, ligand, PPI) | Invent contacts or a from-sequence AF clone |
 | Residual hops on a **measured** synapse graph, or on **measured** plant PPIs | Invent a bee / mosquito / plant connectome |
 | Point a clade-restricted 1:1 at the mapped residual job | Treat a genome as synapses |
 | Same law on animals and plants (proteins) | Skip VNC and call a fly brain a whole animal |
+| Variant / PGx concordance on public labels (research) | A diagnosis, prescription, or FDA device |
+| Zig/Lean/Haskell/Rust/Coq/Isabelle/F*/TLA+ on the same pin | Treating 1.14 Å fair-cap or 13.6 Å bulk as the product |
 
-## 6. System verify + multi-prover stamp
+## 6. AF3-class coverage
 
-`python scripts/system_verify.py` → `data/system_verify.json`. **52/52** published claims vs live JSON + engine.
+`python scripts/bench_af_coverage.py` → `data/af_coverage.json`. **17/17** jobs. Same pin, 0 free parameters, measured homolog except the eval PDB. Details: `docs/AF_COVERAGE.md`.
+
+| Job | Number |
+|-----|-------:|
+| Monomer (freeze) | **0.13 Å** vs AF 0.47 |
+| p53–DNA protein / C1′ | **0.013** / **0.016** |
+| CAII Zn site / SOD1 metal | **0.061** / **0.26** |
+| tRNA C1′ / modified C1′ | **0.68** / **0.93** |
+| Neutron H (961/962) | **1.01** |
+| Hb dimer / iface / tetramer | **0.45** / **0.17** / **0.51** |
+| SC centroids / heavy | **0.41** / **1.01** |
+| Glycan / phospho | **0.56** / **0.77** |
+| Antibody CDR / H+L pair | **0.93** / **1.03** |
+| U1A prot / RNA seed | **0.23** / **0.28** |
+| Trypsin–BEN ligand site | **0.60** |
+| Joint `predict_system` | CA **0.013** · SC **0.016** · DNA **0.016** |
+
+## 7. Medical / variant (disclosure required)
+
+Not a device. `docs/EXPERIMENTAL_DISCLOSURE.md`, `docs/MEDICAL_PLATFORM.md`.
+
+| Bench | Live |
+|-------|------|
+| Experimental PGx | **10/10** |
+| Variant panel | 8 genes, 35 drivers, recall@75% **1.0** |
+| Wet-lab structure | 14/15 · FSOT median **2.06 Å** vs AF **4.82** · beats AF 8 — **not the 0.13 freeze** |
+| Wet-lab variants | pathogenic recall **1.0**; benign-like still called damaging (**honest miss**) |
+| Reality margin | 19/19 · median **1.17 Å** vs target 2.5 |
+| Domain-split | SOD1 **0.29** / HBB **0.30**; TP53 4 domains, inter-domain pose not freeze |
+| Catalog | TP53, KRAS, EGFR, BRAF, CFTR, SOD1, HBB, BRCA1 |
+
+Fair-cap / fuse-era (`medical_stress_suite.json` fuse **1.16 Å**, bulk 16–17 Å) and M1 authority (`ok=False`, **1.14 Å** at cap 0.95) stay on the honesty wall.
+
+## 8. Language stack and engine identities
+
+| Layer | Stamp |
+|-------|-------|
+| Zig ↔ Python | **PASS** 22/22 (`data/parity_zig_python.json`) |
+| ChemLink \(D_{\mathrm{eff}}\) | 8 / 8 / 9 / 9 / 7 / 14 / 13 |
+| Dimensionality | FSOT participation **9.10** vs native **2.53**; base law **25**; neg-eigen mass **0.20** |
+| SMILES | 116 records; \(P_{\mathrm{NEW}}\) matches pin |
+| Leftover / close-homolog | \(1/\varphi^2\), \(1/\varphi\) |
+| Product identity cap | **1.0** (0.95 is a handicap bench) |
+
+Haskell ChemLink/Contact, Lean ChemLink + ZeroFreeParams, Rust `fsot_protein`, Zig host/kernel, Coq/Isabelle/F*/TLA+ spines: present and gauntlet-stamped. `docs/LANGUAGE_STACK.md`.
+
+## 9. Walking proteins and organism join
+
+Named cell on a measured graph → UniProt → product Cα. No MDS fly-protein brain.
+
+`data/fly_walking_product.json`: **Gad1, nan, iav, nompC**. nompC template **5VKQ** identity **0.97**.
+
+Walking observer (`fly_behavior_flow.json`) hop-2 descending: mechanosensory **23.84** / JO **16.55** / olfactory **0.245**. Odor rest is **no afferent seed**. Courtship / sleep / aggression seed Male CNS 165,122 with measured fru/dsx / ER-FB-LNv / pC1 — not invented fight neurons.
+
+`organism_product_join.json`: 4 walking folds + 6 new folds. `male_cns_genetics_on_cells.json`: fru_high **2611**, dsx_high **138**, receptorType **752**. Fly Cell Atlas bodyId join does not exist — do not invent one.
+
+Worm whole-animal: hermaphrodite **453** cells, male **575**; hop-2 sex-specific mass lights in the male (**6.85**) and stays dark in the hermaphrodite (**0.07**).
+
+## 10. Field, F12, RCSB — labeled correctly
+
+| Stamp | Number | Label |
+|-------|--------|-------|
+| Field stress | **49/49 PASS** | deploy gate |
+| F12 SS candidate | macro **0.58** vs **0.34** | development; `production_enabled=False` |
+| Kaggle F12 | 6,483 chains, gates passed | **frozen** (`docs/BIOHUB_FREEZE.md`) |
+| Distogram Pearson | **0.61** (n=5) | contact ranking |
+| RCSB oriented F19 | pair-distance delta **0**, gate passed | chirality |
+| RCSB template holdout | 60 chains / 54 covered / cap **0.95** / best **2.20 Å** | not the freeze |
+| RCSB live API bulk | ~11 Å | orphan path |
+| MSA dual-mode | CA drift **0.0012 Å** | MSA is data |
+
+## 11. Honesty walls (verified as not the product)
+
+| Stamp | Number |
+|-------|--------|
+| ChemLink / UniRef bulk | **~13.57 Å** |
+| Sequence-only vs AF | FSOT **13.94 Å**, **0/8** wins |
+| M1 authority cap 0.95 | `ok=False`, **1.14 Å** |
+| Residual-template | **6.77 Å** |
+| Error-margin diagnostic | **8.59 Å** |
+| Biohub GEFF inventory | 199 videos, **back burner** |
+
+Do not cross-cite product **0.13 Å** · AF **0.47 Å** · wet-lab **2.06 Å** · fair-cap **1.14 Å** · bulk **13.6 Å**.
+
+## 12. System verify + multi-prover stamp
+
+`python scripts/system_verify.py` → `data/system_verify.json`. **245/245** live claims vs JSON + engine (was 52 when only freeze+hops were wired).
+
+`python scripts/verify_cross.py` → pin D1D38A, 0 free parameters, Lean chem-link. **PASS.**
 
 `python verification/run_cross_proof.py` → `data/cross_proof_report.json`. **42** obligations (13 engine, 29 measured). **overall_ok = true.** Does not inherit the hub report.
 
@@ -202,4 +293,4 @@ Source: `data/plant_signal_product.json`, `data/plant_signal_domains.json`.
 | Rust f64 kernel | PASS |
 | TLA+ TLC routing | PASS |
 
-Labeled archive: `docs/VERIFIED_SOLVES.md`. Biohub/Kaggle stay frozen (`docs/BIOHUB_FREEZE.md`).
+Labeled archive: `docs/VERIFIED_SOLVES.md`. Biohub/Kaggle stay frozen (`docs/BIOHUB_FREEZE.md`). Fly pack (`C:\Users\damia\Desktop\fsot fly nuron net`, pin AEB2AD) is a separate system — this stamp is Genetics only.

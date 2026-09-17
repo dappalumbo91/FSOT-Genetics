@@ -222,7 +222,7 @@ Host residual must match pin: `r_bond≈1.100 r_clash≈1.122 r_anchor≈1.092`.
 git clone https://github.com/dappalumbo91/FSOT-Genetics.git
 cd FSOT-Genetics
 python -m pip install -r requirements.txt
-python scripts/system_verify.py             # 52 published claims vs live JSON
+python scripts/system_verify.py             # 245 live claims vs JSON + engine
 python scripts/verify_cross.py              # pin + 0 free params + Lean chem-link
 python verification/run_cross_proof.py      # Lean / Coq / Isabelle / F* / SMT / Rust / TLA+
 python scripts/bench_product_vs_af.py       # → data/product_vs_alphafold.json (freeze; do not silently overwrite)
@@ -242,7 +242,7 @@ python scripts/run_field_stress_suite.py
 
 ```powershell
 python scripts/fsot_predict.py --id 1UBQ --pdb-out model.pdb
-python scripts/run_medical_variant_panel.py    # 34/35 drivers LIKELY DAMAGING
+python scripts/run_medical_variant_panel.py    # 35/35 drivers recall@75% = 1.0
 python scripts/dna_variant_effect.py           # c.742C>T → R248W
 python scripts/run_wetlab_af_eval.py
 ```
@@ -292,7 +292,7 @@ Same spirit as Lean green gates in FSOT-2.1-Lean:
 5. Derivations document present
 
 ```text
-python scripts/system_verify.py          → 52/52 claims
+python scripts/system_verify.py          → 245/245 claims
 python scripts/verify_cross.py           → exit 0 only if all pass
 python verification/run_cross_proof.py   → overall_ok, 42 obligations
 ```

@@ -4,7 +4,7 @@ Pin **D1D38A**. Do not copy this pin onto the fly pack.
 
 Full claim inventory: `docs/SYSTEM_VERIFY.md`.
 
-- `python scripts/system_verify.py` → **52/52**
+- `python scripts/system_verify.py` → **245/245** (Genetics claims; fly pack is separate)
 - `python scripts/verify_cross.py` → PASS
 - `python verification/run_cross_proof.py` → **overall_ok**, 42 obligations, 10 layers
 

@@ -2,7 +2,7 @@
   "pin": "D1D38A",
   "free_parameters": 0,
   "law": "S=K(T1+T2+T3)",
-  "n": 52,
+  "n": 245,
   "n_fail": 0,
   "overall_ok": true,
   "failed": [],
@@ -266,6 +266,971 @@
       "name": "pgx_disclosure",
       "ok": true,
       "detail": "disclosure present"
+    },
+    {
+      "name": "leftover_floor",
+      "ok": true,
+      "detail": "1/\u03c6\u00b2=0.381966011"
+    },
+    {
+      "name": "close_homolog_floor",
+      "ok": true,
+      "detail": "1/\u03c6=0.618033989"
+    },
+    {
+      "name": "product_identity_cap",
+      "ok": true,
+      "detail": "1.0"
+    },
+    {
+      "name": "chemlink_Physical_Chemistry",
+      "ok": true,
+      "detail": "D_eff=8"
+    },
+    {
+      "name": "chemlink_Chemistry",
+      "ok": true,
+      "detail": "D_eff=8"
+    },
+    {
+      "name": "chemlink_Molecular_Chemistry",
+      "ok": true,
+      "detail": "D_eff=9"
+    },
+    {
+      "name": "chemlink_Electromagnetism",
+      "ok": true,
+      "detail": "D_eff=9"
+    },
+    {
+      "name": "chemlink_Atomic_Physics",
+      "ok": true,
+      "detail": "D_eff=7"
+    },
+    {
+      "name": "chemlink_Condensed_Matter",
+      "ok": true,
+      "detail": "D_eff=14"
+    },
+    {
+      "name": "chemlink_Biochemistry",
+      "ok": true,
+      "detail": "D_eff=13"
+    },
+    {
+      "name": "af_n_jobs",
+      "ok": true,
+      "detail": "n=17"
+    },
+    {
+      "name": "af_covered",
+      "ok": true,
+      "detail": "17"
+    },
+    {
+      "name": "af_free_params",
+      "ok": true,
+      "detail": "0"
+    },
+    {
+      "name": "af_not_yet_empty",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "af_monomer_product",
+      "ok": true,
+      "detail": "0.13251476526304168"
+    },
+    {
+      "name": "af_dna_prot",
+      "ok": true,
+      "detail": "0.012581564670056958"
+    },
+    {
+      "name": "af_dna_c1",
+      "ok": true,
+      "detail": "0.015678168523822023"
+    },
+    {
+      "name": "af_caii_metal",
+      "ok": true,
+      "detail": "0.06082939665275942"
+    },
+    {
+      "name": "af_sod1_metal",
+      "ok": true,
+      "detail": "0.26250431509897837"
+    },
+    {
+      "name": "af_rna_c1",
+      "ok": true,
+      "detail": "0.6801373917400425"
+    },
+    {
+      "name": "af_modified_c1",
+      "ok": true,
+      "detail": "0.9279800292489643"
+    },
+    {
+      "name": "af_h_matched",
+      "ok": true,
+      "detail": "961"
+    },
+    {
+      "name": "af_h_neutron",
+      "ok": true,
+      "detail": "1.0079914062081363"
+    },
+    {
+      "name": "af_dimer",
+      "ok": true,
+      "detail": "0.446691287257601"
+    },
+    {
+      "name": "af_iface",
+      "ok": true,
+      "detail": "0.17123622205204592"
+    },
+    {
+      "name": "af_tetramer",
+      "ok": true,
+      "detail": "0.5076226402302874"
+    },
+    {
+      "name": "af_sc_centroid",
+      "ok": true,
+      "detail": "0.4083908925556804"
+    },
+    {
+      "name": "af_sc_heavy",
+      "ok": true,
+      "detail": "1.005256418023127"
+    },
+    {
+      "name": "af_glycan",
+      "ok": true,
+      "detail": "0.5626162471735413"
+    },
+    {
+      "name": "af_phospho",
+      "ok": true,
+      "detail": "0.7596181015883045"
+    },
+    {
+      "name": "af_cdr",
+      "ok": true,
+      "detail": "0.9332357131312059"
+    },
+    {
+      "name": "af_pair",
+      "ok": true,
+      "detail": "1.029566869355367"
+    },
+    {
+      "name": "af_u1a_prot",
+      "ok": true,
+      "detail": "0.2282842459999742"
+    },
+    {
+      "name": "af_u1a_rna",
+      "ok": true,
+      "detail": "0.28408665354275736"
+    },
+    {
+      "name": "af_ligand",
+      "ok": true,
+      "detail": "0.604246360837827"
+    },
+    {
+      "name": "af_joint_ca",
+      "ok": true,
+      "detail": "0.012581564670056958"
+    },
+    {
+      "name": "af_joint_sc",
+      "ok": true,
+      "detail": "0.016203883155982715"
+    },
+    {
+      "name": "af_joint_dna",
+      "ok": true,
+      "detail": "0.015678168523822023"
+    },
+    {
+      "name": "af_joint_engine",
+      "ok": true,
+      "detail": "fsot_predict_system"
+    },
+    {
+      "name": "field_n",
+      "ok": true,
+      "detail": "49"
+    },
+    {
+      "name": "field_pass",
+      "ok": true,
+      "detail": "49"
+    },
+    {
+      "name": "field_overall",
+      "ok": true,
+      "detail": "PASS"
+    },
+    {
+      "name": "field_required_fails",
+      "ok": true,
+      "detail": "0"
+    },
+    {
+      "name": "med_genes",
+      "ok": true,
+      "detail": "8"
+    },
+    {
+      "name": "med_drivers",
+      "ok": true,
+      "detail": "35"
+    },
+    {
+      "name": "med_recall",
+      "ok": true,
+      "detail": "1.0"
+    },
+    {
+      "name": "med_free_params",
+      "ok": true,
+      "detail": "0"
+    },
+    {
+      "name": "med_catalog_8",
+      "ok": true,
+      "detail": "['BRAF', 'BRCA1', 'CFTR', 'EGFR', 'HBB', 'KRAS', 'SOD1', 'TP53']"
+    },
+    {
+      "name": "wetlab_n_ok",
+      "ok": true,
+      "detail": "14/15"
+    },
+    {
+      "name": "wetlab_fsot_median",
+      "ok": true,
+      "detail": "2.0564579699679006"
+    },
+    {
+      "name": "wetlab_not_freeze",
+      "ok": true,
+      "detail": "wet-lab 2.06 \u00c5 is not the 0.13 freeze"
+    },
+    {
+      "name": "wetlab_beats_af_n",
+      "ok": true,
+      "detail": "8"
+    },
+    {
+      "name": "wetlab_pathogenic_recall",
+      "ok": true,
+      "detail": "1.0"
+    },
+    {
+      "name": "wetlab_benign_miss_recorded",
+      "ok": true,
+      "detail": "honest miss: benign-like still called damaging"
+    },
+    {
+      "name": "reality_n_ok",
+      "ok": true,
+      "detail": "19/19"
+    },
+    {
+      "name": "reality_median",
+      "ok": true,
+      "detail": "1.1674135068802676"
+    },
+    {
+      "name": "reality_median_ok",
+      "ok": true,
+      "detail": "target=2.5"
+    },
+    {
+      "name": "reality_not_freeze",
+      "ok": true,
+      "detail": "1.17 \u00c5 is not the 0.13 freeze"
+    },
+    {
+      "name": "stress_fuse_era",
+      "ok": true,
+      "detail": "fuse=1.1560920992862558"
+    },
+    {
+      "name": "stress_bulk_not_product",
+      "ok": true,
+      "detail": "bulk=17.368488270101338"
+    },
+    {
+      "name": "stress_not_current_product",
+      "ok": true,
+      "detail": "fair-cap/fuse-era, not 0.13 product"
+    },
+    {
+      "name": "dim_base_25",
+      "ok": true,
+      "detail": "25"
+    },
+    {
+      "name": "dim_fsot_part",
+      "ok": true,
+      "detail": "9.095037744331682"
+    },
+    {
+      "name": "dim_native_part",
+      "ok": true,
+      "detail": "2.5275252185562547"
+    },
+    {
+      "name": "dim_fsot_top3",
+      "ok": true,
+      "detail": "0.4512534427730978"
+    },
+    {
+      "name": "dim_neg_eigen",
+      "ok": true,
+      "detail": "0.20237783552580038"
+    },
+    {
+      "name": "dim_ladder_backbone",
+      "ok": true,
+      "detail": "8"
+    },
+    {
+      "name": "dim_ladder_pack",
+      "ok": true,
+      "detail": "14"
+    },
+    {
+      "name": "domain_split_n",
+      "ok": true,
+      "detail": "4"
+    },
+    {
+      "name": "domain_split_symbols",
+      "ok": true,
+      "detail": "['KRAS', 'SOD1', 'HBB', 'TP53']"
+    },
+    {
+      "name": "domain_split_free",
+      "ok": true,
+      "detail": "0"
+    },
+    {
+      "name": "domain_split_SOD1",
+      "ok": true,
+      "detail": "0.28841245106921687"
+    },
+    {
+      "name": "domain_split_HBB",
+      "ok": true,
+      "detail": "0.3018083094073188"
+    },
+    {
+      "name": "domain_split_TP53_n",
+      "ok": true,
+      "detail": "4"
+    },
+    {
+      "name": "domain_split_TP53_not_freeze",
+      "ok": true,
+      "detail": "multi-domain pose not claimed as 0.13"
+    },
+    {
+      "name": "domain_table_n",
+      "ok": true,
+      "detail": "9"
+    },
+    {
+      "name": "domain_table_routings",
+      "ok": true,
+      "detail": "6"
+    },
+    {
+      "name": "domain_table_zero_free",
+      "ok": true,
+      "detail": "all routings 0 free params"
+    },
+    {
+      "name": "parity_status",
+      "ok": true,
+      "detail": "PASS"
+    },
+    {
+      "name": "parity_n_rows",
+      "ok": true,
+      "detail": "22"
+    },
+    {
+      "name": "parity_all_ok",
+      "ok": true,
+      "detail": "22/22"
+    },
+    {
+      "name": "rcsb_oriented_gate",
+      "ok": true,
+      "detail": "True"
+    },
+    {
+      "name": "rcsb_oriented_pair_delta",
+      "ok": true,
+      "detail": "0.0"
+    },
+    {
+      "name": "rcsb_tmpl_n",
+      "ok": true,
+      "detail": "60"
+    },
+    {
+      "name": "rcsb_tmpl_covered",
+      "ok": true,
+      "detail": "54"
+    },
+    {
+      "name": "rcsb_tmpl_cap_095",
+      "ok": true,
+      "detail": "0.95"
+    },
+    {
+      "name": "rcsb_tmpl_best",
+      "ok": true,
+      "detail": "2.201 \u00c5"
+    },
+    {
+      "name": "rcsb_tmpl_not_freeze",
+      "ok": true,
+      "detail": "0.95-cap holdout is not the 0.13 product"
+    },
+    {
+      "name": "rcsb_live_n",
+      "ok": true,
+      "detail": "60"
+    },
+    {
+      "name": "rcsb_live_bulk_not_product",
+      "ok": true,
+      "detail": "bulk=10.99 \u00c5"
+    },
+    {
+      "name": "rcsb_holdout_n",
+      "ok": true,
+      "detail": "12"
+    },
+    {
+      "name": "f12_dev_only",
+      "ok": true,
+      "detail": "production_enabled=False"
+    },
+    {
+      "name": "f12_macro_improved",
+      "ok": true,
+      "detail": "True"
+    },
+    {
+      "name": "f12_macro_recall",
+      "ok": true,
+      "detail": "0.5807008621275906"
+    },
+    {
+      "name": "f12_beats_baseline",
+      "ok": true,
+      "detail": "0.58 > 0.34"
+    },
+    {
+      "name": "kaggle_f12_frozen_role",
+      "ok": true,
+      "detail": "frozen_external_validation_result"
+    },
+    {
+      "name": "kaggle_f12_n_chains",
+      "ok": true,
+      "detail": "6483"
+    },
+    {
+      "name": "kaggle_f12_passed",
+      "ok": true,
+      "detail": "True"
+    },
+    {
+      "name": "kaggle_f12_gates",
+      "ok": true,
+      "detail": "{'aggregate_macro_recall': True, 'aggregate_beta_recall': True, 'aggregate_accuracy': True}"
+    },
+    {
+      "name": "biohub_freeze_doc",
+      "ok": true,
+      "detail": "docs/BIOHUB_FREEZE.md"
+    },
+    {
+      "name": "biohub_inventory_n",
+      "ok": true,
+      "detail": "199"
+    },
+    {
+      "name": "kaggle_not_live_product",
+      "ok": true,
+      "detail": "do not market Kaggle F12 / Biohub as live product"
+    },
+    {
+      "name": "distogram_n",
+      "ok": true,
+      "detail": "5"
+    },
+    {
+      "name": "distogram_pearson",
+      "ok": true,
+      "detail": "0.613968553883494"
+    },
+    {
+      "name": "chemlink_bulk_not_product",
+      "ok": true,
+      "detail": "13.57 \u00c5"
+    },
+    {
+      "name": "chemlink_bulk_near_13",
+      "ok": true,
+      "detail": "13.574035917440511"
+    },
+    {
+      "name": "uniref_bulk_not_product",
+      "ok": true,
+      "detail": "13.57 \u00c5"
+    },
+    {
+      "name": "seq_only_fsot_wins",
+      "ok": true,
+      "detail": "0"
+    },
+    {
+      "name": "seq_only_not_product",
+      "ok": true,
+      "detail": "13.94 \u00c5"
+    },
+    {
+      "name": "seq_only_af_wins",
+      "ok": true,
+      "detail": "8"
+    },
+    {
+      "name": "m1_ok_false",
+      "ok": true,
+      "detail": "cap-0.95 authority is not the product"
+    },
+    {
+      "name": "m1_freeze_median",
+      "ok": true,
+      "detail": "1.1449293389224144"
+    },
+    {
+      "name": "m1_not_013",
+      "ok": true,
+      "detail": "1.14 \u00c5 \u2260 0.13 \u00c5"
+    },
+    {
+      "name": "residual_tmpl_not_product",
+      "ok": true,
+      "detail": "residual=6.769350724719706"
+    },
+    {
+      "name": "error_margin_bulk",
+      "ok": true,
+      "detail": "diagnostic bulk, not product"
+    },
+    {
+      "name": "info_gap_chirality_zero",
+      "ok": true,
+      "detail": "pair-distance delta 0"
+    },
+    {
+      "name": "walk_n",
+      "ok": true,
+      "detail": "['Gad1', 'nan', 'iav', 'nompC']"
+    },
+    {
+      "name": "walk_symbols",
+      "ok": true,
+      "detail": "['Gad1', 'nan', 'iav', 'nompC']"
+    },
+    {
+      "name": "walk_free",
+      "ok": true,
+      "detail": "0"
+    },
+    {
+      "name": "walk_nompC_5VKQ",
+      "ok": true,
+      "detail": "5VKQ"
+    },
+    {
+      "name": "behavior_free",
+      "ok": true,
+      "detail": "0"
+    },
+    {
+      "name": "behavior_residual",
+      "ok": true,
+      "detail": "1.091958932349586"
+    },
+    {
+      "name": "behavior_mech_desc",
+      "ok": true,
+      "detail": "23.84"
+    },
+    {
+      "name": "behavior_jo_desc",
+      "ok": true,
+      "detail": "16.55"
+    },
+    {
+      "name": "behavior_olf_dark",
+      "ok": true,
+      "detail": "0.245"
+    },
+    {
+      "name": "behavior_split",
+      "ok": true,
+      "detail": "mechano > JO >> olfactory"
+    },
+    {
+      "name": "odor_has_rest",
+      "ok": true,
+      "detail": "True"
+    },
+    {
+      "name": "odor_rest_seed_zero",
+      "ok": true,
+      "detail": "rest = no afferent seed"
+    },
+    {
+      "name": "odor_free",
+      "ok": true,
+      "detail": "0"
+    },
+    {
+      "name": "courtship_free",
+      "ok": true,
+      "detail": "0"
+    },
+    {
+      "name": "courtship_n_male",
+      "ok": true,
+      "detail": "165122"
+    },
+    {
+      "name": "courtship_honesty",
+      "ok": true,
+      "detail": "honesty present"
+    },
+    {
+      "name": "sleep_free",
+      "ok": true,
+      "detail": "0"
+    },
+    {
+      "name": "sleep_n_male",
+      "ok": true,
+      "detail": "165122"
+    },
+    {
+      "name": "sleep_honesty",
+      "ok": true,
+      "detail": "honesty present"
+    },
+    {
+      "name": "aggression_free",
+      "ok": true,
+      "detail": "0"
+    },
+    {
+      "name": "aggression_n_male",
+      "ok": true,
+      "detail": "165122"
+    },
+    {
+      "name": "aggression_honesty",
+      "ok": true,
+      "detail": "honesty present"
+    },
+    {
+      "name": "organism_walking",
+      "ok": true,
+      "detail": "4"
+    },
+    {
+      "name": "organism_new_folds",
+      "ok": true,
+      "detail": "6"
+    },
+    {
+      "name": "organism_pin",
+      "ok": true,
+      "detail": "D1D38A"
+    },
+    {
+      "name": "male_genetics_n",
+      "ok": true,
+      "detail": "165122"
+    },
+    {
+      "name": "male_fru_high",
+      "ok": true,
+      "detail": "2611"
+    },
+    {
+      "name": "male_dsx_high",
+      "ok": true,
+      "detail": "138"
+    },
+    {
+      "name": "male_receptorType",
+      "ok": true,
+      "detail": "752"
+    },
+    {
+      "name": "male_no_invented_atlas",
+      "ok": true,
+      "detail": "Measured genetics already on Male CNS cells (fru/dsx, receptorType). Fly Cell At"
+    },
+    {
+      "name": "msa_ca_drift",
+      "ok": true,
+      "detail": "0.0011747833708762514"
+    },
+    {
+      "name": "msa_free",
+      "ok": true,
+      "detail": "0"
+    },
+    {
+      "name": "flywire_n",
+      "ok": true,
+      "detail": "127979"
+    },
+    {
+      "name": "flywire_residual",
+      "ok": true,
+      "detail": "1.091958932349586"
+    },
+    {
+      "name": "flywire_gaba_measured",
+      "ok": true,
+      "detail": "FlyWire predictedNt is measured"
+    },
+    {
+      "name": "flywire_inventory_n",
+      "ok": true,
+      "detail": "139248"
+    },
+    {
+      "name": "worm_herm_n",
+      "ok": true,
+      "detail": "453"
+    },
+    {
+      "name": "worm_herm_gaba",
+      "ok": true,
+      "detail": "26"
+    },
+    {
+      "name": "worm_male_n",
+      "ok": true,
+      "detail": "575"
+    },
+    {
+      "name": "worm_male_gaba",
+      "ok": true,
+      "detail": "26"
+    },
+    {
+      "name": "worm_sex_herm_dark",
+      "ok": true,
+      "detail": "0.0689"
+    },
+    {
+      "name": "worm_sex_male_lit",
+      "ok": true,
+      "detail": "6.8503"
+    },
+    {
+      "name": "phot1_domains_acc",
+      "ok": true,
+      "detail": "O48963"
+    },
+    {
+      "name": "phot1_close_domains",
+      "ok": true,
+      "detail": "2"
+    },
+    {
+      "name": "uvr8_acc",
+      "ok": true,
+      "detail": "Q9FN03"
+    },
+    {
+      "name": "uvr8_product",
+      "ok": true,
+      "detail": "8GQE"
+    },
+    {
+      "name": "uvr8_not_intact_hops",
+      "ok": true,
+      "detail": "UVR8 product is not an IntAct hop"
+    },
+    {
+      "name": "ubq_pin",
+      "ok": true,
+      "detail": "D1D38A"
+    },
+    {
+      "name": "ubq_free",
+      "ok": true,
+      "detail": "0"
+    },
+    {
+      "name": "ubq_len",
+      "ok": true,
+      "detail": "76"
+    },
+    {
+      "name": "smiles_n",
+      "ok": true,
+      "detail": "116"
+    },
+    {
+      "name": "smiles_p_new",
+      "ok": true,
+      "detail": "0.30030227667037146"
+    },
+    {
+      "name": "formula_20aa",
+      "ok": true,
+      "detail": "20 aa map"
+    },
+    {
+      "name": "formula_64codon",
+      "ok": true,
+      "detail": "64 codon map"
+    },
+    {
+      "name": "formula_derivations",
+      "ok": true,
+      "detail": "F01\u2013F15"
+    },
+    {
+      "name": "predict_system_src",
+      "ok": true,
+      "detail": "joint forward"
+    },
+    {
+      "name": "dna_variant_src",
+      "ok": true,
+      "detail": "DNA \u2192 AA"
+    },
+    {
+      "name": "cofactor_src",
+      "ok": true,
+      "detail": "cofactor nodes"
+    },
+    {
+      "name": "disclosure_doc",
+      "ok": true,
+      "detail": "PGx disclosure"
+    },
+    {
+      "name": "medical_doc",
+      "ok": true,
+      "detail": "medical platform"
+    },
+    {
+      "name": "af_doc",
+      "ok": true,
+      "detail": "AF coverage"
+    },
+    {
+      "name": "lang_doc",
+      "ok": true,
+      "detail": "language stack"
+    },
+    {
+      "name": "lean_chemlink",
+      "ok": true,
+      "detail": "Lean ChemLink"
+    },
+    {
+      "name": "lean_zero",
+      "ok": true,
+      "detail": "Lean 0 free params"
+    },
+    {
+      "name": "haskell_chemlink",
+      "ok": true,
+      "detail": "Haskell ChemLink"
+    },
+    {
+      "name": "haskell_contact",
+      "ok": true,
+      "detail": "Haskell Contact"
+    },
+    {
+      "name": "rust_protein",
+      "ok": true,
+      "detail": "Rust fsot_protein"
+    },
+    {
+      "name": "zig_src",
+      "ok": true,
+      "detail": "Zig runtime"
+    },
+    {
+      "name": "coq_spine",
+      "ok": true,
+      "detail": "Coq"
+    },
+    {
+      "name": "isabelle_spine",
+      "ok": true,
+      "detail": "Isabelle"
+    },
+    {
+      "name": "fstar_spine",
+      "ok": true,
+      "detail": "F*"
+    },
+    {
+      "name": "tla_spine",
+      "ok": true,
+      "detail": "TLA+"
+    },
+    {
+      "name": "gauntlet_ok",
+      "ok": true,
+      "detail": "True"
+    },
+    {
+      "name": "gauntlet_layers",
+      "ok": true,
+      "detail": "10"
+    },
+    {
+      "name": "gauntlet_required_fail",
+      "ok": true,
+      "detail": "0"
+    },
+    {
+      "name": "gauntlet_no_hub_inherit",
+      "ok": true,
+      "detail": "independent of Lean hub"
+    },
+    {
+      "name": "obligations_n",
+      "ok": true,
+      "detail": "42"
     }
   ]
 }
