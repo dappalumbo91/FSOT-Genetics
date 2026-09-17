@@ -15,4 +15,4 @@ Hemibrain hops recorded: `data/hemibrain_connectome_boot.json` (JO hop-2 descend
 
 Signaling product: 7 folded, **PHOT1 Q2V2M9 `no_measured_map`**. PIF3 identity 0.69 ≥ 1/φ.
 
-Next here: re-stamp gauntlet (`python verification/run_cross_proof.py`). Do not invent plant synapses or plasmodesmata.
+Gauntlet re-stamped on **e0e3994**: overall_ok=true, 42 obligations, 10 layers. Do not invent plant synapses or plasmodesmata. PHOT1 still `no_measured_map`.
