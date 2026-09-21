@@ -1,0 +1,410 @@
+{
+  "product": "FSOT system map for chains without a full measured structure",
+  "pin": "D1D38A",
+  "free_parameters": 0,
+  "law": "S=K(T1+T2+T3)",
+  "close_homolog": 0.6180339887498948,
+  "residual_Biochemistry": 1.091958932349586,
+  "biochem_D_eff": 13,
+  "not": "Not a docked complex. Not a 13 \u00c5 MDS fill. Partner edges are IntAct counts. Domain C\u03b1 only if identity \u2265 1/\u03c6.",
+  "proteins": [
+    {
+      "symbol": "PIF3",
+      "uniprot": "O80536",
+      "length": 524,
+      "full_chain": "no_measured_map",
+      "rg_target_A": 23.053661132840997,
+      "secondary_head": "ECEEHEEHEHHHHEHCHHCHHCCCCHCHHHHEHEHHCHECHHCHCCHC",
+      "n_close_domains": 0,
+      "close_residues": 0,
+      "product_fraction": 0.0,
+      "domains": [
+        {
+          "pfam": "PF00010",
+          "name": "Helix-loop-helix DNA-binding domain",
+          "start": 346,
+          "end": 393,
+          "length": 48,
+          "source": "template_physics",
+          "template_pdb": "4ATK",
+          "template_identity": 0.5217391304347826,
+          "template_coverage": 0.9583333333333334,
+          "close_homolog": false,
+          "interface": {
+            "domain": "Electromagnetism",
+            "D_eff": 9,
+            "role": "no_measured_map",
+            "residual": 1.155816497181492
+          }
+        }
+      ],
+      "measured_partners": [
+        {
+          "uniprot": "P14713",
+          "gene": "PHYB",
+          "class": "photoreceptor",
+          "n_reports": 18,
+          "chem_link": "tertiary_biochem",
+          "domain": "Biochemistry",
+          "D_eff": 13
+        },
+        {
+          "uniprot": "P14712",
+          "gene": "PHYA",
+          "class": "photoreceptor",
+          "n_reports": 8,
+          "chem_link": "tertiary_biochem",
+          "domain": "Biochemistry",
+          "D_eff": 13
+        },
+        {
+          "uniprot": "Q8GZM7",
+          "gene": "PIF1",
+          "class": "unlabeled",
+          "n_reports": 6,
+          "chem_link": "tertiary_biochem",
+          "domain": "Biochemistry",
+          "D_eff": 13
+        },
+        {
+          "uniprot": "Q9FE22",
+          "gene": "HFR1",
+          "class": "unlabeled",
+          "n_reports": 6,
+          "chem_link": "tertiary_biochem",
+          "domain": "Biochemistry",
+          "D_eff": 13
+        },
+        {
+          "uniprot": "Q8W2F3",
+          "gene": "PIF4",
+          "class": "unlabeled",
+          "n_reports": 3,
+          "chem_link": "tertiary_biochem",
+          "domain": "Biochemistry",
+          "D_eff": 13
+        },
+        {
+          "uniprot": "O82343",
+          "gene": "",
+          "class": "unlabeled",
+          "n_reports": 1,
+          "chem_link": "tertiary_biochem",
+          "domain": "Biochemistry",
+          "D_eff": 13
+        },
+        {
+          "uniprot": "P14714",
+          "gene": "PHYC",
+          "class": "unlabeled",
+          "n_reports": 1,
+          "chem_link": "tertiary_biochem",
+          "domain": "Biochemistry",
+          "D_eff": 13
+        },
+        {
+          "uniprot": "P42497",
+          "gene": "PHYD",
+          "class": "unlabeled",
+          "n_reports": 1,
+          "chem_link": "tertiary_biochem",
+          "domain": "Biochemistry",
+          "D_eff": 13
+        }
+      ],
+      "on_intact_graph": true
+    },
+    {
+      "symbol": "HY5",
+      "uniprot": "O24646",
+      "length": 168,
+      "full_chain": "no_measured_map",
+      "rg_target_A": 16.050472316190948,
+      "secondary_head": "EHHHHHCCEHHCCECCCCHHCCCCHCHEHEHHCEHCCHHEHHHCHECC",
+      "n_close_domains": 1,
+      "close_residues": 62,
+      "product_fraction": 0.36904761904761907,
+      "domains": [
+        {
+          "pfam": "PF00170",
+          "name": "bZIP transcription factor",
+          "start": 86,
+          "end": 147,
+          "length": 62,
+          "source": "template_physics",
+          "template_pdb": "2OQQ",
+          "template_identity": 0.9743589743589743,
+          "template_coverage": 0.6290322580645161,
+          "close_homolog": true,
+          "interface": {
+            "domain": "Electromagnetism",
+            "D_eff": 9,
+            "role": "dna_observer",
+            "residual": 1.155816497181492
+          }
+        }
+      ],
+      "measured_partners": [
+        {
+          "uniprot": "A8MS70",
+          "gene": "HYH",
+          "class": "unlabeled",
+          "n_reports": 5,
+          "chem_link": "tertiary_biochem",
+          "domain": "Biochemistry",
+          "D_eff": 13
+        },
+        {
+          "uniprot": "P43254",
+          "gene": "COP1",
+          "class": "unlabeled",
+          "n_reports": 5,
+          "chem_link": "tertiary_biochem",
+          "domain": "Biochemistry",
+          "D_eff": 13
+        },
+        {
+          "uniprot": "O82617",
+          "gene": "BBX23",
+          "class": "unlabeled",
+          "n_reports": 4,
+          "chem_link": "tertiary_biochem",
+          "domain": "Biochemistry",
+          "D_eff": 13
+        },
+        {
+          "uniprot": "Q9LQZ7",
+          "gene": "BBX21",
+          "class": "unlabeled",
+          "n_reports": 4,
+          "chem_link": "tertiary_biochem",
+          "domain": "Biochemistry",
+          "D_eff": 13
+        },
+        {
+          "uniprot": "Q0IGM7",
+          "gene": "BBX20",
+          "class": "unlabeled",
+          "n_reports": 3,
+          "chem_link": "tertiary_biochem",
+          "domain": "Biochemistry",
+          "D_eff": 13
+        },
+        {
+          "uniprot": "Q9SID1",
+          "gene": "BBX25",
+          "class": "unlabeled",
+          "n_reports": 3,
+          "chem_link": "tertiary_biochem",
+          "domain": "Biochemistry",
+          "D_eff": 13
+        },
+        {
+          "uniprot": "Q9SYM2",
+          "gene": "BBX22",
+          "class": "unlabeled",
+          "n_reports": 3,
+          "chem_link": "tertiary_biochem",
+          "domain": "Biochemistry",
+          "D_eff": 13
+        },
+        {
+          "uniprot": "A0A178VQX8",
+          "gene": "",
+          "class": "unlabeled",
+          "n_reports": 2,
+          "chem_link": "tertiary_biochem",
+          "domain": "Biochemistry",
+          "D_eff": 13
+        }
+      ],
+      "on_intact_graph": true
+    },
+    {
+      "symbol": "ARF5",
+      "uniprot": "P93024",
+      "length": 902,
+      "full_chain": "no_measured_map",
+      "rg_target_A": 27.404465080366865,
+      "secondary_head": "EEHCECHHHCHEHHCHEHHCCCHEHHHHCHCHEEHHEHEEHCHCCHHH",
+      "n_close_domains": 3,
+      "close_residues": 281,
+      "product_fraction": 0.311529933481153,
+      "domains": [
+        {
+          "pfam": "PF02362",
+          "name": "B3 DNA binding domain",
+          "start": 158,
+          "end": 260,
+          "length": 103,
+          "source": "template_physics",
+          "template_pdb": "4LDU",
+          "template_identity": 1.0,
+          "template_coverage": 1.0,
+          "close_homolog": true,
+          "interface": {
+            "domain": "Electromagnetism",
+            "D_eff": 9,
+            "role": "dna_observer",
+            "residual": 1.155816497181492
+          }
+        },
+        {
+          "pfam": "PF06507",
+          "name": "Auxin response factor ancillary domain",
+          "start": 307,
+          "end": 389,
+          "length": 83,
+          "source": "template_raw",
+          "template_pdb": "4LDU",
+          "template_identity": 1.0,
+          "template_coverage": 1.0,
+          "close_homolog": true,
+          "interface": {
+            "domain": "Biochemistry",
+            "D_eff": 13,
+            "role": "measured_domain",
+            "residual": 1.091958932349586
+          }
+        },
+        {
+          "pfam": "PF02309",
+          "name": "AUX/IAA family",
+          "start": 785,
+          "end": 879,
+          "length": 95,
+          "source": "template_raw",
+          "template_pdb": "4CHK",
+          "template_identity": 1.0,
+          "template_coverage": 0.9157894736842105,
+          "close_homolog": true,
+          "interface": {
+            "domain": "Biochemistry",
+            "D_eff": 13,
+            "role": "measured_domain",
+            "residual": 1.091958932349586
+          }
+        }
+      ],
+      "measured_partners": [
+        {
+          "uniprot": "O24409",
+          "gene": "IAA19",
+          "class": "unlabeled",
+          "n_reports": 4,
+          "chem_link": "tertiary_biochem",
+          "domain": "Biochemistry",
+          "D_eff": 13
+        },
+        {
+          "uniprot": "P49677",
+          "gene": "IAA1",
+          "class": "unlabeled",
+          "n_reports": 4,
+          "chem_link": "tertiary_biochem",
+          "domain": "Biochemistry",
+          "D_eff": 13
+        },
+        {
+          "uniprot": "Q38830",
+          "gene": "IAA12",
+          "class": "unlabeled",
+          "n_reports": 4,
+          "chem_link": "tertiary_biochem",
+          "domain": "Biochemistry",
+          "D_eff": 13
+        },
+        {
+          "uniprot": "Q38831",
+          "gene": "IAA13",
+          "class": "unlabeled",
+          "n_reports": 3,
+          "chem_link": "tertiary_biochem",
+          "domain": "Biochemistry",
+          "D_eff": 13
+        },
+        {
+          "uniprot": "Q38832",
+          "gene": "IAA14",
+          "class": "unlabeled",
+          "n_reports": 3,
+          "chem_link": "tertiary_biochem",
+          "domain": "Biochemistry",
+          "D_eff": 13
+        },
+        {
+          "uniprot": "Q9LV27",
+          "gene": "LST8-1",
+          "class": "unlabeled",
+          "n_reports": 3,
+          "chem_link": "tertiary_biochem",
+          "domain": "Biochemistry",
+          "D_eff": 13
+        },
+        {
+          "uniprot": "O24408",
+          "gene": "IAA18",
+          "class": "unlabeled",
+          "n_reports": 2,
+          "chem_link": "tertiary_biochem",
+          "domain": "Biochemistry",
+          "D_eff": 13
+        },
+        {
+          "uniprot": "P93830",
+          "gene": "IAA17",
+          "class": "unlabeled",
+          "n_reports": 2,
+          "chem_link": "tertiary_biochem",
+          "domain": "Biochemistry",
+          "D_eff": 13
+        }
+      ],
+      "on_intact_graph": true
+    }
+  ],
+  "insect_sequence_hits": [
+    {
+      "source": "mec-4",
+      "uniprot": "A0A7M7M0G9",
+      "organism": "Apis mellifera",
+      "length": 369,
+      "full_chain": "no_measured_map",
+      "n_close_domains": 0,
+      "domains": [
+        {
+          "name": "Amiloride-sensitive sodium channel",
+          "start": 2,
+          "end": 359,
+          "template_pdb": null,
+          "template_identity": null,
+          "template_coverage": null,
+          "close_homolog": false,
+          "source": "no_measured_map"
+        }
+      ],
+      "why": "No close measured map on the full chain. A domain crystal is product only at identity \u2265 1/\u03c6. The live gentle-touch protein on the fly graph is nompC (5VKQ). Do not transfer a distant DEG/ENaC crystal onto mec-4."
+    },
+    {
+      "source": "mec-4",
+      "uniprot": "D6WYQ4",
+      "organism": "Tribolium castaneum",
+      "length": 464,
+      "full_chain": "no_measured_map",
+      "n_close_domains": 0,
+      "domains": [
+        {
+          "name": "Amiloride-sensitive sodium channel",
+          "start": 11,
+          "end": 429,
+          "template_pdb": null,
+          "template_identity": null,
+          "template_coverage": null,
+          "close_homolog": false,
+          "source": "no_measured_map"
+        }
+      ],
+      "why": "No close measured map on the full chain. A domain crystal is product only at identity \u2265 1/\u03c6. The live gentle-touch protein on the fly graph is nompC (5VKQ). Do not transfer a distant DEG/ENaC crystal onto mec-4."
+    }
+  ]
+}

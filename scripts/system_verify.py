@@ -541,6 +541,41 @@ def main() -> int:
         all((orph.get(s) or {}).get("full_chain") == "no_measured_map" for s in ("PIF3", "HY5", "ARF5")),
         "domain maps are not a full-chain fold",
     )
+    osm = load("orphan_system_map.json")
+    by_sym = {p.get("symbol"): p for p in osm.get("proteins") or []}
+    pif = by_sym.get("PIF3") or {}
+    hy5 = by_sym.get("HY5") or {}
+    arf = by_sym.get("ARF5") or {}
+    pif_phyb = next((x for x in pif.get("measured_partners") or [] if x.get("gene") == "PHYB"), {})
+    hy5_cop1 = next((x for x in hy5.get("measured_partners") or [] if x.get("gene") == "COP1"), {})
+    arf_iaa = [x for x in arf.get("measured_partners") or [] if str(x.get("gene") or "").startswith("IAA")]
+    pif_dom = ((pif.get("domains") or [{}])[0]).get("interface") or {}
+    hy5_dom = ((hy5.get("domains") or [{}])[0]).get("interface") or {}
+    rec("pif3_phyb_reports", int(pif_phyb.get("n_reports") or 0) == 18, str(pif_phyb.get("n_reports")))
+    rec("pif3_product_fraction", float(pif.get("product_fraction", 1)) == 0.0, "no close domain")
+    rec(
+        "pif3_hlh_unmapped",
+        pif_dom.get("role") == "no_measured_map" and int(pif_dom.get("D_eff") or 0) == 9,
+        "HLH is Electromagnetism, no close crystal",
+    )
+    rec("hy5_cop1_reports", int(hy5_cop1.get("n_reports") or 0) == 5, str(hy5_cop1.get("n_reports")))
+    rec(
+        "hy5_bzip_observer",
+        hy5_dom.get("role") == "dna_observer" and int(hy5_dom.get("D_eff") or 0) == 9,
+        "bZIP DNA observer",
+    )
+    rec("arf5_iaa_edges", len(arf_iaa) >= 4, str([x.get("gene") for x in arf_iaa]))
+    rec(
+        "orphan_residual",
+        near(float(osm.get("residual_Biochemistry") or 0), r, 1e-9),
+        str(osm.get("residual_Biochemistry")),
+    )
+    insects = osm.get("insect_sequence_hits") or []
+    rec(
+        "mec4_insects_unmapped",
+        len(insects) == 2 and all(int(x.get("n_close_domains") or 0) == 0 for x in insects),
+        "bee and beetle DEG/ENaC domains have no close crystal",
+    )
 
     ubq = load("fsot_predict_ubq.json")
     rec("ubq_pin", str(ubq.get("authority_pin") or "") == PIN, str(ubq.get("authority_pin")))

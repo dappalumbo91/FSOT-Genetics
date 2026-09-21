@@ -2,7 +2,7 @@
   "pin": "D1D38A",
   "free_parameters": 0,
   "law": "S=K(T1+T2+T3)",
-  "n": 251,
+  "n": 259,
   "n_fail": 0,
   "overall_ok": true,
   "failed": [],
@@ -1111,6 +1111,46 @@
       "name": "orphan_full_chain_unclaimed",
       "ok": true,
       "detail": "domain maps are not a full-chain fold"
+    },
+    {
+      "name": "pif3_phyb_reports",
+      "ok": true,
+      "detail": "18"
+    },
+    {
+      "name": "pif3_product_fraction",
+      "ok": true,
+      "detail": "no close domain"
+    },
+    {
+      "name": "pif3_hlh_unmapped",
+      "ok": true,
+      "detail": "HLH is Electromagnetism, no close crystal"
+    },
+    {
+      "name": "hy5_cop1_reports",
+      "ok": true,
+      "detail": "5"
+    },
+    {
+      "name": "hy5_bzip_observer",
+      "ok": true,
+      "detail": "bZIP DNA observer"
+    },
+    {
+      "name": "arf5_iaa_edges",
+      "ok": true,
+      "detail": "['IAA19', 'IAA1', 'IAA12', 'IAA13', 'IAA14', 'IAA18', 'IAA17']"
+    },
+    {
+      "name": "orphan_residual",
+      "ok": true,
+      "detail": "1.091958932349586"
+    },
+    {
+      "name": "mec4_insects_unmapped",
+      "ok": true,
+      "detail": "bee and beetle DEG/ENaC domains have no close crystal"
     },
     {
       "name": "ubq_pin",

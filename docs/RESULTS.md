@@ -3,7 +3,7 @@
 Pin `D1D38A`. Law \(S = K(T_1+T_2+T_3)\). **0 free parameters.**  
 Data stays on `D:\FlyWire_Connectome` (not git). Do not mix product Å with hop mass.
 
-Full claim inventory + re-run: `docs/SYSTEM_VERIFY.md`. Last stamp: `python scripts/system_verify.py` **251/251**; gauntlet **overall_ok** (42 obligations). The 52-check stamp was freeze+hops only.
+Full claim inventory + re-run: `docs/SYSTEM_VERIFY.md`. Last stamp: `python scripts/system_verify.py` **259/259**; gauntlet **overall_ok** (42 obligations). The 52-check stamp was freeze+hops only.
 
 ## 1. Protein product (accuracy that is Å)
 
@@ -18,6 +18,15 @@ Same-data homolog Cα vs eval PDB. Source: `docs/PRODUCT_FREEZE.md`, `data/produ
 Product requires a measured homolog. No map → `no_measured_map` (Rg + secondary only). We do not invent coordinates.
 
 A full chain can still hide a crystallized domain. ARF5 (902 aa) and HY5 were full-chain orphans; their domains are measured maps. PIF3’s HLH hit (4ATK, identity 0.52) is below 1/φ and stays off the product. A sequence with no map at all is still not an AlphaFold-grade coordinate set: coevolution contacts move RNase A from 13.81 Å to 13.38 Å and ubiquitin from 10.86 Å to 10.93 Å.
+
+The unmapped chains are still placed on the systems they actually touch (`data/orphan_system_map.json`). Edges are IntAct report counts. The residual on those edges is Biochemistry, \(D_{\mathrm{eff}}=13\). A DNA-binding domain with a close crystal is an Electromagnetism observer, \(D_{\mathrm{eff}}=9\). No docked complex is invented.
+
+| Chain | Measured partners | What has coordinates |
+|-------|-------------------|----------------------|
+| PIF3 | PHYB **18**, PHYA **8** | none (product fraction 0) |
+| HY5 | HYH **5**, COP1 **5** | bZIP **2OQQ**, 62/168 residues |
+| ARF5 | IAA19, IAA1, IAA12, **4** reports each | B3 and ancillary **4LDU**, AUX/IAA **4CHK**, 281/902 residues |
+| Bee / beetle mec-4 | no close DEG/ENaC crystal | none. Fly gentle touch stays nompC **5VKQ** |
 
 ## 2. Cross-species homologs of residual-mass genes
 
@@ -303,7 +312,7 @@ Do not cross-cite product freeze **0.13 Å** · medical panel **0.26 Å** · AF 
 
 ## 12. System verify + multi-prover stamp
 
-`python scripts/system_verify.py` → `data/system_verify.json`. **251/251** live claims vs JSON + engine (was 52 when only freeze+hops were wired).
+`python scripts/system_verify.py` → `data/system_verify.json`. **259/259** live claims vs JSON + engine (was 52 when only freeze+hops were wired).
 
 `python scripts/verify_cross.py` → pin D1D38A, 0 free parameters, Lean chem-link. **PASS.**
 

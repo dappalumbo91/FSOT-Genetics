@@ -8,7 +8,7 @@ python scripts/verify_cross.py           # pin, seeds, formula path, Lean chem-l
 python verification/run_cross_proof.py   # Lean / Coq / Isabelle / F* / SMT / Rust / TLA+
 ```
 
-Last full run: `data/system_verify.json` **overall_ok=true**, n=251, fail=0.  
+Last full run: `data/system_verify.json` **overall_ok=true**, n=259, fail=0.  
 Gauntlet: `data/cross_proof_report.json` **overall_ok=true**, 42 obligations, 10 layers.
 
 Does **not** re-fold the 10-protein product freeze (that JSON is the freeze).  
@@ -73,7 +73,7 @@ The previous 52-check stamp only covered freeze + hop splits. This file is the f
 | Arabidopsis metabolic | **6/6** product | `plant_product.json` |
 | Crop homologs | **24/24**, miss **0** | `plant_homolog.json` |
 | Plant IntAct graph | 8,329 nodes, 39,664 edges; light → PIF3; SLAC1 unlit | `plant_signal_boot.json` |
-| Plant signaling product | 20 genes. Full chain: PIF3/HY5/ARF5 `no_measured_map`. Domains: ARF5 **3/3** close; HY5 bZIP **2OQQ**; PIF3 HLH **not** close | `plant_signal_product.json`, `plant_signal_domains.json` |
+| Plant signaling product | 20 genes. Full chain: PIF3/HY5/ARF5 `no_measured_map`. Domains: ARF5 **3/3** close; HY5 bZIP **2OQQ**; PIF3 HLH **not** close. Interactions: PIF3–PHYB 18 reports, HY5–COP1 5, ARF5–IAA. Bee/beetle mec-4 DEG/ENaC: no close crystal | `plant_signal_domains.json`, `orphan_system_map.json` |
 | PHOT1 domains | O48963; LOV1/LOV2 close-homolog; kinase not; pose not claimed | `plant_signal_domains.json` |
 | UVR8 | Q9FN03 / 8GQE product; **not** on IntAct hops | `plant_signal_domains.json` |
 
