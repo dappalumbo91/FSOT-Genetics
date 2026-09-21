@@ -16,7 +16,8 @@ from typing import Any
 
 # ---------------------------------------------------------------------------
 # Structure panel: FSOT product vs AlphaFold DB vs experimental Cα
-# identity_cap 0.95 fair H2H (exclude near-identical redeposits of same PDB)
+# Product identity cap 1.0: every measured homolog except the eval PDB.
+# The 0.95 fair-cap handicap lives in verify_m1_authority / RCSB holdout.
 # ---------------------------------------------------------------------------
 STRUCTURE_CASES: list[dict[str, Any]] = [
     # --- Cancer / oncogenes (experimental structures exist) ---

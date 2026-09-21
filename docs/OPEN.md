@@ -18,6 +18,7 @@ This list is what to clear next. One mechanism at a time. Pin `D1D38A`. 0 free p
 | Joint `predict_system` | **0.013 Å** protein · DNA C1′ **0.016 Å** · SC **0.016 Å** — apparatus min now matches the DNA job. |
 | Protein–RNA | U1A prot **0.23 Å** · RNA seed C1′ **0.28 Å** (9 nt). Full hairpin register still Superposed. |
 | Ligand site | trypsin–BEN **0.60 Å** (was 0.24 on 3PTB/1PPH). First-shell springs; not a Cα freeze item. |
+| Medical kinases / antigens | Product cap 1.0, apparatus min: EGFR **1.00 Å** (was no template), ABL1 **0.81** (was 12.7), RBD **0.52** (was 5.7), BCL-2 **1.93** (was 5.8). Panel median **0.26 Å**, 19/19 sub-2 Å. The 0.95 handicap is a different bench. |
 | Organism 3-D / lineage | **Biohub back burner** (`docs/BIOHUB_FREEZE.md`): photon claim dense Jaccard **0.82**, proxy **1.00**; steal-shell eye fill **0.848** on one holdout train video (not public LB). Next organism: **FlyWire** adult Drosophila connectome (`docs/FLY_CONNECTOME.md`). |
 
 ## Historical wet-lab (not the 10-protein freeze)

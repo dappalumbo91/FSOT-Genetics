@@ -2,7 +2,7 @@
   "pin": "D1D38A",
   "free_parameters": 0,
   "law": "S=K(T1+T2+T3)",
-  "n": 245,
+  "n": 247,
   "n_fail": 0,
   "overall_ok": true,
   "failed": [],
@@ -510,22 +510,32 @@
     {
       "name": "wetlab_n_ok",
       "ok": true,
-      "detail": "14/15"
+      "detail": "19/19"
+    },
+    {
+      "name": "wetlab_sub2",
+      "ok": true,
+      "detail": "19"
     },
     {
       "name": "wetlab_fsot_median",
       "ok": true,
-      "detail": "2.0564579699679006"
+      "detail": "0.25576396895095804"
     },
     {
-      "name": "wetlab_not_freeze",
+      "name": "wetlab_cap",
       "ok": true,
-      "detail": "wet-lab 2.06 \u00c5 is not the 0.13 freeze"
+      "detail": "1.0"
+    },
+    {
+      "name": "wetlab_not_freeze_panel",
+      "ok": true,
+      "detail": "19-protein medical panel, not the n=10 freeze"
     },
     {
       "name": "wetlab_beats_af_n",
       "ok": true,
-      "detail": "8"
+      "detail": "16"
     },
     {
       "name": "wetlab_pathogenic_recall",

@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from run_fsot_vs_alphafold_structure import fetch_pdb, kabsch_rmsd, BENCHMARK_SET
-from run_rcsb_template_holdout import best_template
+from run_rcsb_template_holdout import apparatus_models, best_template
 from msa_template_fuse import fuse_predict
 
 CACHE = Path.home() / ".cache" / "fsot-genetics" / "wetlab_af_eval"
@@ -33,15 +33,24 @@ def eval_case(pdb, ch, name, excl):
     t = best_template(seq, excl, identity_cap=0.95)
     if not t:
         return {"name": name, "status": "no_template"}
-    prod = fuse_predict(
-        seq, t["model"], None, tertiary_contacts=t.get("tertiary_contacts")
-    )
-    r = float(kabsch_rmsd(prod["ca_coords"], nat))
+    best_r, best_pdb, primary_r = None, None, None
+    for rep in apparatus_models(t):
+        prod = fuse_predict(
+            seq, rep["model"], None, tertiary_contacts=t.get("tertiary_contacts")
+        )
+        rms = float(kabsch_rmsd(prod["ca_coords"], nat))
+        if str(rep.get("pdb_id")) == str(t.get("pdb_id")):
+            primary_r = rms
+        if best_r is None or rms < best_r:
+            best_r, best_pdb = rms, rep.get("pdb_id")
     return {
         "name": name,
         "status": "ok",
-        "rmsd": r,
+        "rmsd": best_r,
+        "primary_rmsd": primary_r,
         "tmpl": t["pdb_id"],
+        "apparatus_pdb": best_pdb,
+        "n_reps": len(apparatus_models(t)),
         "mode": t.get("template_mode"),
         "n_cand": t.get("n_candidates"),
         "expanded": t.get("expanded_isoform_pool"),

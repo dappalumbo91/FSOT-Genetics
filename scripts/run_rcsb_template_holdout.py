@@ -589,18 +589,24 @@ def collect_template_candidates(
     )
 
     def _ingest(pdb_ids: list[str], *, budget: int | None) -> None:
-        n = 0
+        n_eligible = 0
         for pdb in pdb_ids:
             if pdb == exclude_pdb.upper() or pdb in seen:
                 continue
-            if budget is not None and n >= budget:
+            if budget is not None and n_eligible >= budget:
                 break
             seen.add(pdb)
-            n += 1
             try:
                 text = fetch_template_pdb(pdb)
             except Exception:
                 continue
+            # One entry can hold the query protein and a partner (antibody,
+            # peptide, other fold). Identity above the cap means this entry
+            # is a same-protein redeposit. Do not keep the partner chain,
+            # and do not spend the homolog budget on the redeposit.
+            chain_hits: list[dict] = []
+            over_cap = False
+            ensemble = pdb_is_ensemble(text)
             for chain in chains_of(text):
                 try:
                     tseq, tcoords = parse_pdb_ca(text, chain)
@@ -616,19 +622,17 @@ def collect_template_candidates(
                 ) / len(pairs)
                 coverage = len(pairs) / len(sequence)
                 coverage_t = len(pairs) / len(tseq)
-                if identity > identity_cap or identity < MIN_IDENTITY:
+                if identity > identity_cap:
+                    over_cap = True
                     continue
-                if not coverage_ok(coverage, coverage_t):
+                if identity < MIN_IDENTITY or not coverage_ok(coverage, coverage_t):
                     continue
                 model = build_from_template(len(sequence), tcoords, pairs)
                 if not model_is_sane(model, len(sequence), identity=identity):
                     continue
-                # Data eligibility only: id × coverage (alignment observables).
-                # Ranking is residual-at-interface energy — NOT free geometric scores.
-                score_data = coverage * identity
-                out.append(
+                chain_hits.append(
                     {
-                        "score": score_data,
+                        "score": coverage * identity,
                         "pdb_id": pdb,
                         "chain": chain,
                         "model": model,
@@ -638,9 +642,13 @@ def collect_template_candidates(
                         "pairs": pairs,
                         "tcoords": tcoords,
                         "tmpl_len": len(tseq),
-                        "ensemble": pdb_is_ensemble(text),
+                        "ensemble": ensemble,
                     }
                 )
+            if over_cap or not chain_hits:
+                continue
+            n_eligible += 1
+            out.append(max(chain_hits, key=lambda c: float(c["score"])))
 
     # UniRef100 = identical sequence. That is the same apparatus, not a
     # homolog page. Do not truncate it with MAX_TEMPLATE_PDBS (3CLN sat
@@ -1076,6 +1084,31 @@ def multi_template_build_residual(
         for qi in range(last + 1, n):
             coord[qi] = coord[qi - 1] + CA_CA * step
     return coord - coord.mean(axis=0)
+
+
+def apparatus_models(template: dict) -> list[dict]:
+    """Primary measured map plus trit_not collapses.
+
+    Evaluation scores the minimum over these maps. Residual energy must
+    not drop DFG-in for DFG-out, or one crystal observation for another.
+    """
+    reps: list[dict] = []
+    seen: set[str] = set()
+
+    def add(pdb_id: object, model: object) -> None:
+        if model is None:
+            return
+        key = str(pdb_id or id(model))
+        if key in seen:
+            return
+        seen.add(key)
+        reps.append({"pdb_id": pdb_id, "model": model})
+
+    add(template.get("pdb_id"), template.get("model"))
+    for rep in template.get("state_reps") or []:
+        add(rep.get("pdb_id"), rep.get("model"))
+    add(template.get("flip_pdb"), template.get("flip_model"))
+    return reps
 
 
 def best_template(sequence: str, exclude_pdb: str, identity_cap: float = IDENTITY_CAP) -> dict | None:

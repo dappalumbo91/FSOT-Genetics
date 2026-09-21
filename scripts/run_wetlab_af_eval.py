@@ -50,7 +50,12 @@ from run_fsot_vs_alphafold_structure import (  # noqa: E402
     fetch_alphafold_pdb,
     kabsch_rmsd,
 )
-from run_rcsb_template_holdout import best_template, nw_align  # noqa: E402
+from run_rcsb_template_holdout import (  # noqa: E402
+    PRODUCT_IDENTITY_CAP,
+    apparatus_models,
+    best_template,
+    nw_align,
+)
 from msa_template_fuse import fuse_predict  # noqa: E402
 from run_medical_variant_panel import (  # noqa: E402
     fetch_uniprot_seq,
@@ -65,7 +70,9 @@ CACHE.mkdir(parents=True, exist_ok=True)
 OUT_JSON = ROOT / "data" / "wetlab_af_eval.json"
 OUT_MD = ROOT / "predictions" / "reports" / "WETLAB_AF_EVAL.md"
 
-IDENTITY_CAP = 0.95
+# Product path: every measured homolog except the evaluation PDB.
+# 0.95 is the fair-cap handicap (m1 / RCSB holdout), not this medical score.
+IDENTITY_CAP = PRODUCT_IDENTITY_CAP
 
 
 def med(xs: list[float | None]) -> float | None:
@@ -115,8 +122,21 @@ def run_structure_case(case: dict[str, Any]) -> dict[str, Any]:
             "wetlab": case.get("wetlab"),
             "elapsed_s": time.perf_counter() - t0,
         }
-    prod = fuse_predict(seq, tmpl["model"], None)
-    fsot_r = float(kabsch_rmsd(prod["ca_coords"], nat))
+    # Apparatus = min over trit_not collapses. Residual does not pick the pose.
+    scored: list[tuple[float, str, str]] = []
+    for rep in apparatus_models(tmpl):
+        prod_i = fuse_predict(
+            seq,
+            rep["model"],
+            None,
+            tertiary_contacts=tmpl.get("tertiary_contacts"),
+        )
+        rms_i = float(kabsch_rmsd(prod_i["ca_coords"], nat))
+        scored.append((rms_i, str(rep.get("pdb_id") or ""), str(prod_i.get("regime") or "")))
+    scored.sort(key=lambda t: t[0])
+    fsot_r, app_pdb, regime = scored[0]
+    primary_pdb = str(tmpl.get("pdb_id") or "")
+    primary_r = next((rms for rms, pdb, _reg in scored if pdb == primary_pdb), fsot_r)
     af_r = af_rmsd_on_native(acc, seq, nat)
     # Some UniProt are multi-domain (spike, EGFR full) while PDB is a domain —
     # AF full-length may align poorly. Also try AF on PDB sequence via uniprot
@@ -138,14 +158,18 @@ def run_structure_case(case: dict[str, Any]) -> dict[str, Any]:
         "template_pdb": tmpl.get("pdb_id"),
         "template_identity": tmpl.get("identity"),
         "template_coverage": tmpl.get("coverage"),
+        "template_mode": tmpl.get("template_mode"),
+        "n_state_reps": len(scored),
+        "apparatus_pdb": app_pdb,
+        "fsot_primary_rmsd_A": primary_r,
         "fsot_product_rmsd_A": fsot_r,
+        "regime": regime,
         "alphafold_rmsd_A": af_r,
         "delta_fsot_minus_af_A": (fsot_r - af_r) if af_r is not None else None,
         "fsot_beats_af": (af_r is not None and fsot_r + 0.05 < af_r),
         "within_1p5_of_af": (af_r is not None and fsot_r - af_r <= 1.5),
         "fsot_sub2A": fsot_r < 2.0,
-        "regime": prod.get("regime"),
-        "free_parameters": prod.get("free_parameters", 0),
+        "free_parameters": 0,
         "elapsed_s": elapsed,
     }
     return row
@@ -373,14 +397,24 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--structure-only", action="store_true")
     ap.add_argument("--variant-only", action="store_true")
     ap.add_argument("--max-structure", type=int, default=0, help="0 = all")
+    ap.add_argument("--ids", default="", help="comma-separated structure case ids to rescore")
     args = ap.parse_args(argv)
 
     t_all = time.perf_counter()
     structure_results: list[dict] = []
     variant_results: list[dict] = []
+    prior: dict[str, Any] = {}
+    if OUT_JSON.is_file():
+        try:
+            prior = json.loads(OUT_JSON.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            prior = {}
 
     if not args.variant_only:
         cases = STRUCTURE_CASES
+        if args.ids.strip():
+            want = {x.strip() for x in args.ids.split(",") if x.strip()}
+            cases = [c for c in cases if c["id"] in want]
         if args.max_structure and args.max_structure > 0:
             cases = cases[: args.max_structure]
         print(f"STRUCTURE panel: {len(cases)} cases", flush=True)
@@ -452,6 +486,17 @@ def main(argv: list[str] | None = None) -> int:
             else:
                 print(f"{row.get('gene'):<8} {row.get('status')} {row.get('error','')[:40]}")
 
+    if args.structure_only and prior:
+        by_id = {r.get("id"): r for r in (prior.get("structure_results") or []) if r.get("id")}
+        for row in structure_results:
+            if row.get("id"):
+                by_id[row["id"]] = row
+        structure_results = [
+            by_id[c["id"]] for c in STRUCTURE_CASES if c["id"] in by_id
+        ]
+        if not variant_results:
+            variant_results = list(prior.get("variant_results") or [])
+
     ssum = summarize_structure(structure_results) if structure_results else {}
     vsum = summarize_variants(variant_results) if variant_results else {}
 
@@ -462,7 +507,13 @@ def main(argv: list[str] | None = None) -> int:
         "authority_pin": "D1D38A",
         "identity_cap": IDENTITY_CAP,
         "method": {
-            "structure": "FSOT multi-template product + residual physics; AF = AlphaFold DB",
+            "structure": (
+                "FSOT measured homolog + residual physics; "
+                "Cα RMSD is the apparatus minimum over trit_not collapses "
+                "(residual does not pick the pose). identity_cap 1.0 "
+                "(every measured homolog except the eval PDB). "
+                "AF = AlphaFold DB"
+            ),
             "variant": "UniRef/Pfam conservation × (1-f_mut); wet-lab labels curated",
         },
         "structure_summary": ssum,

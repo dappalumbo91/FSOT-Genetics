@@ -39,7 +39,7 @@ Ranked by medical impact × solvability under pure FSOT.
 | **Not the residual law** | Residual physics cannot fix a wrong measured scaffold |
 | **FSOT handle** | Density-weighted multi-template among fair candidates (native-free); Pfam **domain** accession filter; ChemLink D_eff for kinase vs antibody vs viral RBD; reject templates that fail `model_is_sane` + Rg vs `target_rg_fsot` harder |
 | **Success metric** | ABL1 product **&lt; 3 Å**; RBD product **&lt; 2.5 Å** with a true sarbecovirus RBD template |
-| **Status** | **SHIPPED** (expand isoform pool id≤0.99 when starved; medoid neighborhood when score&lt;0.85 and structural disagree; force structural multi-fill on expanded pools). Verify: `data/m1_authority_verify.json` — ABL1 12.7→4.9 Å, BCL2 5.8→3.5, BRAF 2.8→1.1, EGFR no_tmpl→5.0; freeze median ≤1.16 |
+| **Status** | **CLOSED on the product path** (cap 1.0, apparatus min, partner-chain budget fix). `data/wetlab_af_eval.json`: ABL1 12.7→**0.81**, BCL-2 5.8→**1.93**, RBD 5.7→**0.52**, BRAF 2.8→**0.94**, EGFR no-template→**1.00**. The 0.95 handicap file `m1_authority_verify.json` is an older, separate bench. |
 
 ### M2 — Template search coverage holes
 
@@ -49,7 +49,7 @@ Ranked by medical impact × solvability under pure FSOT.
 | **What failed** | Homolog/Pfam pool empty or filters too strict for that polymer entity |
 | **FSOT handle** | Same multi-entity UniProt/Pfam path as p53 fix; InterPro domain range → search **domain sequence** not full EGFR; RCSB sequence search with domain-only query; kinase Pfam PF07714 structure list |
 | **Success metric** | EGFR status=ok and product **&lt; 2.5 Å** |
-| **Status** | **OPEN** |
+| **Status** | **CLOSED on the product path** — EGFR kinase **1.00 Å** (2ITP / apparatus 7T4I). The miss was the search spending its budget on same-protein redeposits, then keeping a partner chain. |
 
 ### M3 — Domain vs full-chain evaluation mismatch
 

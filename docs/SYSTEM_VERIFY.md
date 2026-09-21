@@ -8,7 +8,7 @@ python scripts/verify_cross.py           # pin, seeds, formula path, Lean chem-l
 python verification/run_cross_proof.py   # Lean / Coq / Isabelle / F* / SMT / Rust / TLA+
 ```
 
-Last full run: `data/system_verify.json` **overall_ok=true**, n=245, fail=0.  
+Last full run: `data/system_verify.json` **overall_ok=true**, n=247, fail=0.  
 Gauntlet: `data/cross_proof_report.json` **overall_ok=true**, 42 obligations, 10 layers.
 
 Does **not** re-fold the 10-protein product freeze (that JSON is the freeze).  
@@ -84,12 +84,12 @@ The previous 52-check stamp only covered freeze + hop splits. This file is the f
 | Experimental PGx | **10/10** concordant | `experimental_pgx.json` |
 | Variant panel | 8 genes / 35 drivers / recall@75% **1.0** | `medical_variant_panel.json` |
 | Gene catalog | TP53 KRAS EGFR BRAF CFTR SOD1 HBB BRCA1 | `scripts/medical_gene_catalog.py` |
-| Wet-lab AF eval | 14/15 structure; FSOT median **2.06** vs AF **4.82**; beats AF **8**; pathogenic recall **1.0**; benign-like miss **recorded** | `wetlab_af_eval.json` |
+| Wet-lab product panel | **19/19** sub-2 Å; median **0.26** vs AF **3.98**; beats AF **16/16** with an AF model. Cap **1.0** + apparatus min. EGFR **1.00** (was no template). ABL1 **0.81** (was 12.7). RBD **0.52** (was 5.7). Pathogenic recall **1.0**; benign-like miss **recorded** | `wetlab_af_eval.json` |
 | Reality margin | 19/19 · median **1.17 Å** vs target 2.5 | `reality_margin_eval.json` |
 | DNA → AA | `dna_variant_effect.py` | scripts |
 | Domain-split | KRAS/SOD1/HBB/TP53; SOD1 **0.29** / HBB **0.30**; TP53 4 domains, pose not freeze | `domain_split_eval.json` |
 
-Wet-lab **2.06 Å** and reality **1.17 Å** are **not** the 0.13 freeze. Do not collapse them.
+The medical panel median **0.26 Å** is the same product law on 19 wet-lab chains, not the 10-protein freeze **0.13 Å**. Reality **1.17 Å** and the 0.95-cap handicap (**1.14 Å**) stay separate. Do not collapse them.
 
 ### Language stack / engine identities
 
@@ -148,4 +148,4 @@ No invented Fly Cell Atlas join.
 - Biohub / Kaggle as a live competition product (frozen: `docs/BIOHUB_FREEZE.md`)
 - Clinical / FDA device (experimental disclosure only)
 - Inter-domain PHOT1 pose; IntAct phosphorylation as a fake edge
-- Treating 0.95-cap **1.14 Å**, wet-lab **2.06 Å**, or bulk **13.6 Å** as the 0.13 freeze
+- Treating the medical-panel **0.26 Å**, the 0.95-cap **1.14 Å**, or bulk **13.6 Å** as the 10-protein **0.13** freeze

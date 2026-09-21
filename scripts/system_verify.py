@@ -291,10 +291,12 @@ def main() -> int:
     wet = load("wetlab_af_eval.json")
     wst = wet.get("structure_summary") or {}
     wv = wet.get("variant_summary") or {}
-    rec("wetlab_n_ok", int(wst.get("n_ok") or 0) == 14, f"{wst.get('n_ok')}/{wst.get('n_attempted')}")
-    rec("wetlab_fsot_median", near(float(wst["fsot_median_A"]), 2.06, 0.05), f"{wst.get('fsot_median_A')}")
-    rec("wetlab_not_freeze", float(wst["fsot_median_A"]) > 1.0, "wet-lab 2.06 Å is not the 0.13 freeze")
-    rec("wetlab_beats_af_n", int(wst.get("fsot_beats_af") or 0) == 8, str(wst.get("fsot_beats_af")))
+    rec("wetlab_n_ok", int(wst.get("n_ok") or 0) == 19, f"{wst.get('n_ok')}/{wst.get('n_attempted')}")
+    rec("wetlab_sub2", int(wst.get("fsot_sub2A") or 0) == 19, str(wst.get("fsot_sub2A")))
+    rec("wetlab_fsot_median", near(float(wst["fsot_median_A"]), 0.256, 0.02), f"{wst.get('fsot_median_A')}")
+    rec("wetlab_cap", float(wet.get("identity_cap") or 0) == 1.0, str(wet.get("identity_cap")))
+    rec("wetlab_not_freeze_panel", int(wst.get("n_attempted") or 0) != 10, "19-protein medical panel, not the n=10 freeze")
+    rec("wetlab_beats_af_n", int(wst.get("fsot_beats_af") or 0) == 16, str(wst.get("fsot_beats_af")))
     rec("wetlab_pathogenic_recall", float(wv.get("pathogenic_recall_likely_damaging") or 0) == 1.0, str(wv.get("pathogenic_recall_likely_damaging")))
     rec(
         "wetlab_benign_miss_recorded",

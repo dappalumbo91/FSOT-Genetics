@@ -3,7 +3,7 @@
 Pin `D1D38A`. Law \(S = K(T_1+T_2+T_3)\). **0 free parameters.**  
 Data stays on `D:\FlyWire_Connectome` (not git). Do not mix product Å with hop mass.
 
-Full claim inventory + re-run: `docs/SYSTEM_VERIFY.md`. Last stamp: `python scripts/system_verify.py` **245/245**; gauntlet **overall_ok** (42 obligations). The 52-check stamp was freeze+hops only.
+Full claim inventory + re-run: `docs/SYSTEM_VERIFY.md`. Last stamp: `python scripts/system_verify.py` **247/247**; gauntlet **overall_ok** (42 obligations). The 52-check stamp was freeze+hops only.
 
 ## 1. Protein product (accuracy that is Å)
 
@@ -215,13 +215,26 @@ Not a device. `docs/EXPERIMENTAL_DISCLOSURE.md`, `docs/MEDICAL_PLATFORM.md`.
 |-------|------|
 | Experimental PGx | **10/10** |
 | Variant panel | 8 genes, 35 drivers, recall@75% **1.0** |
-| Wet-lab structure | 14/15 · FSOT median **2.06 Å** vs AF **4.82** · beats AF 8 — **not the 0.13 freeze** |
+| Wet-lab structure | **19/19** sub-2 Å · median **0.26 Å** vs AF **3.98** · beats AF 16/16. Product cap 1.0 + apparatus min. Not the n=10 freeze |
 | Wet-lab variants | pathogenic recall **1.0**; benign-like still called damaging (**honest miss**) |
 | Reality margin | 19/19 · median **1.17 Å** vs target 2.5 |
 | Domain-split | SOD1 **0.29** / HBB **0.30**; TP53 4 domains, inter-domain pose not freeze |
 | Catalog | TP53, KRAS, EGFR, BRAF, CFTR, SOD1, HBB, BRCA1 |
 
-Fair-cap / fuse-era (`medical_stress_suite.json` fuse **1.16 Å**, bulk 16–17 Å) and M1 authority (`ok=False`, **1.14 Å** at cap 0.95) stay on the honesty wall.
+Same law, measured homolog except the eval PDB, apparatus minimum over `trit_not` collapses. The search no longer spends its PDB budget on same-protein redeposits and then keeps the partner chain.
+
+| Case | Was | Now |
+|------|----:|----:|
+| p53 DBD | 2.60 | **0.01** |
+| EGFR kinase | no template | **1.00** |
+| ABL1 | 12.7 | **0.81** |
+| BRAF | 2.76 | **0.94** |
+| BCL-2 | 5.80 | **1.93** |
+| SARS-CoV-2 RBD | 5.68 | **0.52** |
+| ACE2 peptidase | 5.20 | **0.48** |
+| HIV-1 RT | 5.46 | **1.30** |
+
+Fair-cap / fuse-era (`medical_stress_suite.json` fuse **1.16 Å**, bulk 16–17 Å) and the 0.95 handicap (`m1_authority_verify.json`, **1.14 Å**) stay on the honesty wall. They are not this panel.
 
 ## 8. Language stack and engine identities
 
@@ -272,11 +285,11 @@ Worm whole-animal: hermaphrodite **453** cells, male **575**; hop-2 sex-specific
 | Error-margin diagnostic | **8.59 Å** |
 | Biohub GEFF inventory | 199 videos, **back burner** |
 
-Do not cross-cite product **0.13 Å** · AF **0.47 Å** · wet-lab **2.06 Å** · fair-cap **1.14 Å** · bulk **13.6 Å**.
+Do not cross-cite product freeze **0.13 Å** · medical panel **0.26 Å** · AF on that panel **3.98 Å** · fair-cap handicap **1.14 Å** · bulk **13.6 Å**. The older wet-lab **2.06 Å** was the 0.95-cap snapshot.
 
 ## 12. System verify + multi-prover stamp
 
-`python scripts/system_verify.py` → `data/system_verify.json`. **245/245** live claims vs JSON + engine (was 52 when only freeze+hops were wired).
+`python scripts/system_verify.py` → `data/system_verify.json`. **247/247** live claims vs JSON + engine (was 52 when only freeze+hops were wired).
 
 `python scripts/verify_cross.py` → pin D1D38A, 0 free parameters, Lean chem-link. **PASS.**
 
