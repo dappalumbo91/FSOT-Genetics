@@ -44,7 +44,8 @@ Hub copy of the protocol: Lean `docs/CASP_CAMEO_BLIND_PROTOCOL.md`.
 
 ## Anti-goals (do not “fix” these)
 
-- Grinding 3-D MDS bulk toward AlphaFold. Backbone is unobserved; pairwise contacts underdetermine a Cα fold. That path is **retired as a product** (`no_measured_map`). F01–F15 formulas (CA_CA, Rg target, secondary) stay — they still feed the measured product.
+- Grinding 3-D MDS bulk toward AlphaFold. Backbone is unobserved; pairwise contacts underdetermine a Cα fold. Fresh check (`scripts/test_coevolution_fold.py`): ubiquitin bulk **10.86 Å**, coevolution contacts **10.93 Å**; RNase A bulk **13.81 Å**, coevolution **13.38 Å**. MSA-as-data does not close the orphan coordinate gap. That path stays **retired as a product** (`no_measured_map`). F01–F15 formulas stay — they still feed the measured product.
+- Calling a remote domain map product when identity is below 1/φ. PIF3 HLH 4ATK is **0.52**.
 - Residual picking DFG-in vs DFG-out.
 - Bond-idealizing intact crystals.
 - Geometric shotgun (medoid-all, invented contacts).

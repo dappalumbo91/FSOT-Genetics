@@ -3,7 +3,7 @@
 Pin `D1D38A`. Law \(S = K(T_1+T_2+T_3)\). **0 free parameters.**  
 Data stays on `D:\FlyWire_Connectome` (not git). Do not mix product Å with hop mass.
 
-Full claim inventory + re-run: `docs/SYSTEM_VERIFY.md`. Last stamp: `python scripts/system_verify.py` **247/247**; gauntlet **overall_ok** (42 obligations). The 52-check stamp was freeze+hops only.
+Full claim inventory + re-run: `docs/SYSTEM_VERIFY.md`. Last stamp: `python scripts/system_verify.py` **251/251**; gauntlet **overall_ok** (42 obligations). The 52-check stamp was freeze+hops only.
 
 ## 1. Protein product (accuracy that is Å)
 
@@ -16,6 +16,8 @@ Same-data homolog Cα vs eval PDB. Source: `docs/PRODUCT_FREEZE.md`, `data/produ
 | Bulk / no measured map | ~13.6 Å — **not the product** |
 
 Product requires a measured homolog. No map → `no_measured_map` (Rg + secondary only). We do not invent coordinates.
+
+A full chain can still hide a crystallized domain. ARF5 (902 aa) and HY5 were full-chain orphans; their domains are measured maps. PIF3’s HLH hit (4ATK, identity 0.52) is below 1/φ and stays off the product. A sequence with no map at all is still not an AlphaFold-grade coordinate set: coevolution contacts move RNase A from 13.81 Å to 13.38 Å and ubiquitin from 10.86 Å to 10.93 Å.
 
 ## 2. Cross-species homologs of residual-mass genes
 
@@ -158,8 +160,8 @@ Proteins on that class table (`python scripts/plant_signal_product.py`). Close-h
 | *CRY1* | Q43125 | 1U3C | **1.00** | 0.71 | product |
 | *CRY2* | Q96524 | 6K8K | **0.99** | 0.80 | product |
 | *UVR8* | Q9FN03 | 8GQE | **1.00** | 0.88 | product; **not on IntAct hops** |
-| *PIF3* | O80536 | — | — | — | **no_measured_map** (old 9V3V was human SLC36A3) |
-| *HY5* | O24646 | — | — | — | **no_measured_map** |
+| *PIF3* | O80536 | — | — | — | full chain **no_measured_map**. HLH 4ATK id **0.52** (below 1/φ; not product) |
+| *HY5* | O24646 | 2OQQ | **0.97** | 0.63 | bZIP domain only. Full chain still no map |
 | *OST1* | Q940H6 | 3UC4 | **0.99** | 0.81 | product (gene SRK2E) |
 | *PYR1* | O49686 | 3ZVU | **0.99** | 0.95 | product |
 | *PYL4* | O80920 | 8AY6 | 0.55 | 0.89 | not close-homolog |
@@ -170,7 +172,7 @@ Proteins on that class table (`python scripts/plant_signal_product.py`). Close-h
 | *GORK* | Q94A76 | 9J0X | **1.00** | 0.84 | product |
 | *PIN1* | Q9C6B8 | 7Y9T | **1.00** | 0.61 | product |
 | *TIR1* | Q570C0 | 2P1N | **1.00** | 0.96 | product |
-| *ARF5* | P93024 | — | — | — | **no_measured_map** |
+| *ARF5* | P93024 | 4LDU / 4CHK | **1.00** | 1.00 / 0.92 | B3, ancillary, AUX/IAA domains. Full-chain pose not claimed |
 
 A crystal on SLAC1 is not an IntAct edge. UVR8 product is not a hop seed. Inter-domain PHOT1 pose is not claimed.
 
@@ -184,7 +186,7 @@ Same law on every organism. Competitive when a measured homolog exists. Not comp
 |------------|----------------|-------------------|
 | Human protein / variant | Medical panel median **0.26 Å** vs AF **3.98 Å** (19/19 sub-2 Å). Drivers recalled. P72R demoted by measured allele frequency. | Wins on this panel when the crystal exists. AF still covers sequences with no homolog; that path here is `no_measured_map` (~13.6 Å bulk). |
 | Animal | Fly, worm, Ciona, Platynereis, larva, hemibrain: residual hops on measured synapses. Named proteins (nompC, Gad1) get product Cα. | Not a second AlphaFold. The graph is the measurement. |
-| Plant | Arabidopsis + rice, maize, soybean, wheat product Cα. IntAct physical PPI is the information graph (8,329 nodes). | Same protein law. Not an invented plant connectome. |
+| Plant | Arabidopsis + rice, maize, soybean, wheat product Cα. IntAct physical PPI is the information graph (8,329 nodes). ARF5 domains **4LDU/4CHK** id 1.00. HY5 bZIP **2OQQ** id 0.97. PIF3 HLH stays below 1/φ. | Same protein law. Not an invented plant connectome. |
 
 ## What this is capable of
 
@@ -301,7 +303,7 @@ Do not cross-cite product freeze **0.13 Å** · medical panel **0.26 Å** · AF 
 
 ## 12. System verify + multi-prover stamp
 
-`python scripts/system_verify.py` → `data/system_verify.json`. **247/247** live claims vs JSON + engine (was 52 when only freeze+hops were wired).
+`python scripts/system_verify.py` → `data/system_verify.json`. **251/251** live claims vs JSON + engine (was 52 when only freeze+hops were wired).
 
 `python scripts/verify_cross.py` → pin D1D38A, 0 free parameters, Lean chem-link. **PASS.**
 

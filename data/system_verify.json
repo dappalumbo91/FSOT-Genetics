@@ -2,7 +2,7 @@
   "pin": "D1D38A",
   "free_parameters": 0,
   "law": "S=K(T1+T2+T3)",
-  "n": 247,
+  "n": 251,
   "n_fail": 0,
   "overall_ok": true,
   "failed": [],
@@ -1091,6 +1091,26 @@
       "name": "uvr8_not_intact_hops",
       "ok": true,
       "detail": "UVR8 product is not an IntAct hop"
+    },
+    {
+      "name": "pif3_hlh_not_close",
+      "ok": true,
+      "detail": "4ATK id=0.5217391304347826"
+    },
+    {
+      "name": "hy5_bzip_2OQQ",
+      "ok": true,
+      "detail": "id=0.9743589743589743 cov=0.6290322580645161"
+    },
+    {
+      "name": "arf5_domains_close",
+      "ok": true,
+      "detail": "B3/ancillary 4LDU, AUX/IAA 4CHK"
+    },
+    {
+      "name": "orphan_full_chain_unclaimed",
+      "ok": true,
+      "detail": "domain maps are not a full-chain fold"
     },
     {
       "name": "ubq_pin",

@@ -8,7 +8,7 @@ python scripts/verify_cross.py           # pin, seeds, formula path, Lean chem-l
 python verification/run_cross_proof.py   # Lean / Coq / Isabelle / F* / SMT / Rust / TLA+
 ```
 
-Last full run: `data/system_verify.json` **overall_ok=true**, n=247, fail=0.  
+Last full run: `data/system_verify.json` **overall_ok=true**, n=251, fail=0.  
 Gauntlet: `data/cross_proof_report.json` **overall_ok=true**, 42 obligations, 10 layers.
 
 Does **not** re-fold the 10-protein product freeze (that JSON is the freeze).  
@@ -25,7 +25,7 @@ The previous 52-check stamp only covered freeze + hop splits. This file is the f
 |-------|---------------|-------------|--------|
 | Product Cα (same-data homolog) | Å vs eval PDB | median **0.13** vs AF **0.47** (n=10, 10/10 beat AF, 10/10 sub-2 Å) | `data/product_vs_alphafold.json` |
 | Identity cap on the product path | cap | **1.0** (`PRODUCT_IDENTITY_CAP`) | `scripts/run_rcsb_template_holdout.py` |
-| Orphan / no map | not Å product | `no_measured_map` (Rg + secondary). Bulk ~13.6 Å is retired MDS | freeze |
+| Orphan / no map | not Å product | `no_measured_map` (Rg + secondary). Coevolution contacts: ubiquitin **10.93 Å**, RNase **13.38 Å**. Not deployed | `scripts/test_coevolution_fold.py` |
 | Joint forward | one call | `predict_system()` p53 CA **0.013** / SC **0.016** / DNA C1′ **0.016** | `af_coverage.json` `joint_forward` |
 
 ### AF3-class coverage (named ChemLink, not invented contacts)
@@ -73,7 +73,7 @@ The previous 52-check stamp only covered freeze + hop splits. This file is the f
 | Arabidopsis metabolic | **6/6** product | `plant_product.json` |
 | Crop homologs | **24/24**, miss **0** | `plant_homolog.json` |
 | Plant IntAct graph | 8,329 nodes, 39,664 edges; light → PIF3; SLAC1 unlit | `plant_signal_boot.json` |
-| Plant signaling product | 20 genes; PIF3/HY5/ARF5 `no_measured_map` | `plant_signal_product.json` |
+| Plant signaling product | 20 genes. Full chain: PIF3/HY5/ARF5 `no_measured_map`. Domains: ARF5 **3/3** close; HY5 bZIP **2OQQ**; PIF3 HLH **not** close | `plant_signal_product.json`, `plant_signal_domains.json` |
 | PHOT1 domains | O48963; LOV1/LOV2 close-homolog; kinase not; pose not claimed | `plant_signal_domains.json` |
 | UVR8 | Q9FN03 / 8GQE product; **not** on IntAct hops | `plant_signal_domains.json` |
 

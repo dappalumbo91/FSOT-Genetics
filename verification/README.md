@@ -22,7 +22,7 @@ Expect `data/cross_proof_report.json` → `overall_ok: true`.
 | **A** | Pin D1D38A, 0 free params, φ, leftover `1/φ²`, close-homolog `1/φ`, 7 chem-link D_eff, observer (backbone unobserved), F13 gate = 7 | Lean Mathlib + Nat catalog |
 | **B** | Product median 0.13 Å < AF 0.47 Å; hop splits (JO/VNC light motor, olfactory does not); insect homologs 26/1 miss; plants 6+24; analog pointer; measured graphs nonempty | live `data/*.json` |
 
-Full live-JSON inventory (AF coverage, medical, language stack, RCSB, fly walking, honesty walls) is `python scripts/system_verify.py` → **247** checks, `docs/SYSTEM_VERIFY.md`. Layer B does not replace that inventory.
+Full live-JSON inventory (AF coverage, medical, language stack, RCSB, fly walking, honesty walls) is `python scripts/system_verify.py` → **251** checks, `docs/SYSTEM_VERIFY.md`. Layer B does not replace that inventory.
 
 Layer B triangulates **exported numeric gates**, not a re-derivation of FlyWire pixels from type theory.
 

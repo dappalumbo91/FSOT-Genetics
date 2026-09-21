@@ -131,6 +131,61 @@ def main() -> int:
         flush=True,
     )
 
+    # Full-chain orphans. A crystallized domain is a measured map.
+    # Inter-domain pose stays unclaimed. No 13 Å MDS fill.
+    orphans = {}
+    for symbol, acc in (("PIF3", "O80536"), ("HY5", "O24646"), ("ARF5", "P93024")):
+        print(f"{symbol} {acc} orphan domain search", flush=True)
+        oseq = _seq(acc, seqs)
+        odoms = fetch_interpro_domains(acc)
+        print(f"  n={len(oseq)} interpro={len(odoms)}", flush=True)
+        for d in odoms:
+            print(f"    {d.pfam} {d.name} {d.start}-{d.end}", flush=True)
+        oasm = assemble_domains(oseq, odoms, exclude_pdb="XXXX", identity_cap=1.0)
+        rows = []
+        n_close = 0
+        for d in oasm.get("domains") or []:
+            ident = d.get("template_identity")
+            cov = d.get("template_coverage")
+            close = bool(d.get("template_pdb") and ident is not None and float(ident) >= CLOSE)
+            if close:
+                n_close += 1
+            rows.append(
+                {
+                    "pfam": d.get("pfam"),
+                    "name": d.get("name"),
+                    "start": d.get("start"),
+                    "end": d.get("end"),
+                    "length": d.get("length"),
+                    "source": d.get("source"),
+                    "template_pdb": d.get("template_pdb"),
+                    "template_identity": ident,
+                    "template_coverage": cov,
+                    "close_homolog": close,
+                }
+            )
+            print(
+                f"  {d.get('name')} {d.get('start')}-{d.get('end')} "
+                f"tmpl={d.get('template_pdb')} id={ident} cov={cov} "
+                f"{'close' if close else d.get('source')}",
+                flush=True,
+            )
+        joint = oasm.get("joint_template") or {}
+        orphans[symbol] = {
+            "uniprot": acc,
+            "length": len(oseq),
+            "full_chain": "no_measured_map",
+            "n_domains": len(odoms),
+            "n_close_homolog_domains": n_close,
+            "joint_template": joint or None,
+            "domains": rows,
+            "note": (
+                "Full chain had no measured map. Domain crystals are product "
+                "only at identity ≥ 1/φ. Inter-domain pose is not claimed. "
+                "Uncovered spans stay no_measured_map, not a bulk MDS fold."
+            ),
+        }
+
     report = {
         "product": "Plant signaling domain product (not a connectome)",
         "pin": "D1D38A",
@@ -149,7 +204,8 @@ def main() -> int:
             "note": "Full-chain leftover map 5HZI id 0.61 (<1/φ) cov 0.46. Domain crystals: LOV2 4HHD id 1.00. Kinase 4L3J id 0.55 is not close-homolog. Inter-domain pose not claimed.",
         },
         "UVR8": uvr,
-        "not": "Not plant synapses. Not a 13 Å MDS PHOT1 brain.",
+        "orphans": orphans,
+        "not": "Not plant synapses. Not a 13 Å MDS fold of an orphan chain.",
     }
     OUT_GIT.write_text(json.dumps(report, indent=2), encoding="utf-8")
     print(f"  wrote {OUT_GIT}", flush=True)

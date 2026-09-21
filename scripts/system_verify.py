@@ -516,6 +516,31 @@ def main() -> int:
     rec("uvr8_acc", (pdom.get("UVR8") or {}).get("uniprot") == "Q9FN03", str((pdom.get("UVR8") or {}).get("uniprot")))
     rec("uvr8_product", (pdom.get("UVR8") or {}).get("template_pdb") == "8GQE", str((pdom.get("UVR8") or {}).get("template_pdb")))
     rec("uvr8_not_intact_hops", (pdom.get("UVR8") or {}).get("on_intact_graph") is False, "UVR8 product is not an IntAct hop")
+    orph = pdom.get("orphans") or {}
+    pif_d = (((orph.get("PIF3") or {}).get("domains") or [{}])[0])
+    hy5_d = (((orph.get("HY5") or {}).get("domains") or [{}])[0])
+    arf_ds = (orph.get("ARF5") or {}).get("domains") or []
+    rec(
+        "pif3_hlh_not_close",
+        pif_d.get("template_pdb") == "4ATK" and float(pif_d.get("template_identity") or 1) < CLOSE,
+        f"4ATK id={pif_d.get('template_identity')}",
+    )
+    rec(
+        "hy5_bzip_2OQQ",
+        hy5_d.get("template_pdb") == "2OQQ" and float(hy5_d.get("template_identity") or 0) >= CLOSE,
+        f"id={hy5_d.get('template_identity')} cov={hy5_d.get('template_coverage')}",
+    )
+    rec(
+        "arf5_domains_close",
+        int((orph.get("ARF5") or {}).get("n_close_homolog_domains") or 0) == 3
+        and {d.get("template_pdb") for d in arf_ds} == {"4LDU", "4CHK"},
+        "B3/ancillary 4LDU, AUX/IAA 4CHK",
+    )
+    rec(
+        "orphan_full_chain_unclaimed",
+        all((orph.get(s) or {}).get("full_chain") == "no_measured_map" for s in ("PIF3", "HY5", "ARF5")),
+        "domain maps are not a full-chain fold",
+    )
 
     ubq = load("fsot_predict_ubq.json")
     rec("ubq_pin", str(ubq.get("authority_pin") or "") == PIN, str(ubq.get("authority_pin")))

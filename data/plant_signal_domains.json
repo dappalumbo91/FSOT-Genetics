@@ -65,5 +65,100 @@
     "template_coverage": 0.8772727272727273,
     "pdb": "D:\\FlyWire_Connectome\\plants\\product\\UVR8_Q9FN03.pdb"
   },
-  "not": "Not plant synapses. Not a 13 \u00c5 MDS PHOT1 brain."
+  "orphans": {
+    "PIF3": {
+      "uniprot": "O80536",
+      "length": 524,
+      "full_chain": "no_measured_map",
+      "n_domains": 1,
+      "n_close_homolog_domains": 0,
+      "joint_template": null,
+      "domains": [
+        {
+          "pfam": "PF00010",
+          "name": "Helix-loop-helix DNA-binding domain",
+          "start": 346,
+          "end": 393,
+          "length": 48,
+          "source": "template_physics",
+          "template_pdb": "4ATK",
+          "template_identity": 0.5217391304347826,
+          "template_coverage": 0.9583333333333334,
+          "close_homolog": false
+        }
+      ],
+      "note": "Full chain had no measured map. Domain crystals are product only at identity \u2265 1/\u03c6. Inter-domain pose is not claimed. Uncovered spans stay no_measured_map, not a bulk MDS fold."
+    },
+    "HY5": {
+      "uniprot": "O24646",
+      "length": 168,
+      "full_chain": "no_measured_map",
+      "n_domains": 1,
+      "n_close_homolog_domains": 1,
+      "joint_template": null,
+      "domains": [
+        {
+          "pfam": "PF00170",
+          "name": "bZIP transcription factor",
+          "start": 86,
+          "end": 147,
+          "length": 62,
+          "source": "template_physics",
+          "template_pdb": "2OQQ",
+          "template_identity": 0.9743589743589743,
+          "template_coverage": 0.6290322580645161,
+          "close_homolog": true
+        }
+      ],
+      "note": "Full chain had no measured map. Domain crystals are product only at identity \u2265 1/\u03c6. Inter-domain pose is not claimed. Uncovered spans stay no_measured_map, not a bulk MDS fold."
+    },
+    "ARF5": {
+      "uniprot": "P93024",
+      "length": 902,
+      "full_chain": "no_measured_map",
+      "n_domains": 3,
+      "n_close_homolog_domains": 3,
+      "joint_template": null,
+      "domains": [
+        {
+          "pfam": "PF02362",
+          "name": "B3 DNA binding domain",
+          "start": 158,
+          "end": 260,
+          "length": 103,
+          "source": "template_physics",
+          "template_pdb": "4LDU",
+          "template_identity": 1.0,
+          "template_coverage": 1.0,
+          "close_homolog": true
+        },
+        {
+          "pfam": "PF06507",
+          "name": "Auxin response factor ancillary domain",
+          "start": 307,
+          "end": 389,
+          "length": 83,
+          "source": "template_raw",
+          "template_pdb": "4LDU",
+          "template_identity": 1.0,
+          "template_coverage": 1.0,
+          "close_homolog": true
+        },
+        {
+          "pfam": "PF02309",
+          "name": "AUX/IAA family",
+          "start": 785,
+          "end": 879,
+          "length": 95,
+          "source": "template_raw",
+          "template_pdb": "4CHK",
+          "template_identity": 1.0,
+          "template_coverage": 0.9157894736842105,
+          "close_homolog": true
+        }
+      ],
+      "note": "Full chain had no measured map. Domain crystals are product only at identity \u2265 1/\u03c6. Inter-domain pose is not claimed. Uncovered spans stay no_measured_map, not a bulk MDS fold."
+    }
+  },
+  "not": "Not plant synapses. Not a 13 \u00c5 MDS fold of an orphan chain."
 }
