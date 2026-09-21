@@ -19,6 +19,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from trinary_syntax import dna_to_aa, codon_primary  # noqa: E402
 from run_fsot_vs_alphafold_structure import fetch_pdb  # noqa: E402
+from run_medical_variant_panel import call_variant  # noqa: E402
 from variant_conservation import conservation_profile, resnums  # noqa: E402
 
 CACHE = Path.home() / ".cache" / "fsot-genetics" / "af_headtohead"
@@ -33,6 +34,8 @@ VARIANTS = [
     (273, "CGT", 1, "A", "c.818G>A"),   # R273H DNA-contact
     (282, "CGG", 0, "T", "c.844C>T"),   # R282W structural
     (248, "CGG", 2, "A", "c.744G>A"),   # R248R synonymous control (CGG->CGA, still Arg)
+    # P72R rs1042522. gnomAD global AF 0.46 ≥ 1/φ³ → common_polymorphism.
+    (72, "CCC", 1, "G", "c.215C>G", 0.46),
 ]
 
 
@@ -67,7 +70,9 @@ def main() -> int:
     var_scores = np.array(var_scores)
 
     print(f"TP53 variant interpreter  (Pfam {pfam}, MSA {nrows} seqs)\n")
-    for pos, wt_codon, cpos, alt, hgvs in VARIANTS:
+    for row in VARIANTS:
+        pos, wt_codon, cpos, alt, hgvs = row[:5]
+        pop_af = row[5] if len(row) > 5 else None
         mut_codon, wt_aa, mut_aa, kind = classify(wt_codon, cpos, alt)
         tag = f"{wt_aa}{pos}{mut_aa if mut_aa != wt_aa else '='}"
         line = (f"{hgvs:<10} {wt_codon}->{mut_codon}  trit{list(codon_primary(wt_codon))}->"
@@ -77,8 +82,17 @@ def main() -> int:
             fm = freq[i].get(mut_aa, 0.0) if i < len(freq) else 0.0
             imp = cons[i] * (1.0 - fm)
             pct = float((var_scores < imp).mean()) * 100
-            call = "LIKELY DAMAGING" if pct >= 75 else ("uncertain" if pct >= 40 else "likely tolerated")
+            call = call_variant(
+                kind="missense",
+                coverage_ok=True,
+                cons=float(cons[i]),
+                f_mut=float(fm),
+                pct=pct,
+                pop_af=pop_af,
+            )
             line += f"  | conservation={cons[i]:.2f} impact-pctile={pct:.0f}% -> {call}"
+        elif kind == "missense":
+            line += "  | residue is outside this experimental chain"
         elif kind == "synonymous (silent)":
             line += "  | no AA change -> likely benign"
         print(line)

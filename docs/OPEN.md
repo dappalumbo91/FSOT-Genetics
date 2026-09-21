@@ -23,11 +23,11 @@ This list is what to clear next. One mechanism at a time. Pin `D1D38A`. 0 free p
 
 ## Historical wet-lab (not the 10-protein freeze)
 
-See `docs/MECHANISM_GAP_MAP.md` (historical wet-lab ledger — not the freeze scoreboard). Still open there: EGFR coverage, vaccine-antigen domain scope, CASP/CAMEO blind. P72R specificity is **closed** (`common_polymorphism`).
+See `docs/MECHANISM_GAP_MAP.md` (historical wet-lab ledger — not the freeze scoreboard). EGFR coverage and the kinase/antigen poses are closed on the product path. Still open: CASP/CAMEO blind, and BCL-2 at the NMR ensemble floor (**1.90 Å**). P72R specificity is **closed** (`common_polymorphism`).
 
 Medical expansion: `docs/MEDICAL_PLATFORM.md`. Experimental PGx: **10/10** (`scripts/bench_experimental_pgx.py`, disclosure required).
 
-- **P72R** → `common_polymorphism` (pop AF ≥ 1/φ³).
+- **P72R** → `common_polymorphism` on the full UniProt sequence (pop AF 0.46 ≥ 1/φ³). The 1TUP crystal does not contain residue 72.
 - **HBB E122Q** (Hb D-Punjab) is not a failed driver: mid-conservation, α1β1 interface, compound-sickle apparatus. Catalog role is `context_dependent`. Solo call stays `uncertain`. PGx: `on_ppi_site` on 1A3N B121.
 
 ## CASP / CAMEO blind (OPEN — Grok Build owns the run)

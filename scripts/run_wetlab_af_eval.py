@@ -205,7 +205,14 @@ def run_variant_case(case: dict[str, Any], profile_cache: dict) -> dict[str, Any
     wt_mismatch = seq[pos - 1] != case["wt"] and case["mut"] != "*"
     try:
         scored = score_missense(
-            seq, pos, case["wt"], case["mut"], bag["cons"], bag["freq"], bag["bg"]
+            seq,
+            pos,
+            case["wt"],
+            case["mut"],
+            bag["cons"],
+            bag["freq"],
+            bag["bg"],
+            pop_af=case.get("pop_af"),
         )
     except Exception as e:
         return {**case, "status": "score_fail", "error": str(e)}
@@ -497,6 +504,9 @@ def main(argv: list[str] | None = None) -> int:
         if not variant_results:
             variant_results = list(prior.get("variant_results") or [])
 
+    if args.variant_only and prior and not structure_results:
+        structure_results = list(prior.get("structure_results") or [])
+
     ssum = summarize_structure(structure_results) if structure_results else {}
     vsum = summarize_variants(variant_results) if variant_results else {}
 
@@ -514,7 +524,11 @@ def main(argv: list[str] | None = None) -> int:
                 "(every measured homolog except the eval PDB). "
                 "AF = AlphaFold DB"
             ),
-            "variant": "UniRef/Pfam conservation × (1-f_mut); wet-lab labels curated",
+            "variant": (
+                "UniRef/Pfam conservation × (1-f_mut); "
+                "population AF ≥ 1/φ³ demotes a damaging call to common_polymorphism. "
+                "Wet-lab labels are curated data, not fitted weights."
+            ),
         },
         "structure_summary": ssum,
         "variant_summary": vsum,

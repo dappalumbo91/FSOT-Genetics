@@ -84,7 +84,7 @@ The previous 52-check stamp only covered freeze + hop splits. This file is the f
 | Experimental PGx | **10/10** concordant | `experimental_pgx.json` |
 | Variant panel | 8 genes / 35 drivers / recall@75% **1.0** | `medical_variant_panel.json` |
 | Gene catalog | TP53 KRAS EGFR BRAF CFTR SOD1 HBB BRCA1 | `scripts/medical_gene_catalog.py` |
-| Wet-lab product panel | **19/19** sub-2 Å; median **0.26** vs AF **3.98**; beats AF **16/16** with an AF model. Cap **1.0** + apparatus min. EGFR **1.00** (was no template). ABL1 **0.81** (was 12.7). RBD **0.52** (was 5.7). Pathogenic recall **1.0**; benign-like miss **recorded** | `wetlab_af_eval.json` |
+| Wet-lab product panel | **19/19** sub-2 Å; median **0.26** vs AF **3.98**; beats AF **16/16** with an AF model. Cap **1.0** + apparatus min. EGFR **1.00**, ABL1 **0.81**, RBD **0.52**, HIV-RT **0.85**, BCL-2 **1.90** (NMR floor). Pathogenic recall **1.0**. P72R `common_polymorphism` | `wetlab_af_eval.json` |
 | Reality margin | 19/19 · median **1.17 Å** vs target 2.5 | `reality_margin_eval.json` |
 | DNA → AA | `dna_variant_effect.py` | scripts |
 | Domain-split | KRAS/SOD1/HBB/TP53; SOD1 **0.29** / HBB **0.30**; TP53 4 domains, pose not freeze | `domain_split_eval.json` |

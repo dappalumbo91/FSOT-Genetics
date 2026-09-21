@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-09-21T21:52:44.947546+00:00",
-  "elapsed_s": 1469.0074757999973,
+  "generated_at": "2026-09-21T22:34:16.685924+00:00",
+  "elapsed_s": 994.669347499992,
   "free_parameters": 0,
   "authority_pin": "D1D38A",
   "identity_cap": 1.0,
   "method": {
     "structure": "FSOT measured homolog + residual physics; C\u03b1 RMSD is the apparatus minimum over trit_not collapses (residual does not pick the pose). identity_cap 1.0 (every measured homolog except the eval PDB). AF = AlphaFold DB",
-    "variant": "UniRef/Pfam conservation \u00d7 (1-f_mut); wet-lab labels curated"
+    "variant": "UniRef/Pfam conservation \u00d7 (1-f_mut); population AF \u2265 1/\u03c6\u00b3 demotes a damaging call to common_polymorphism. Wet-lab labels are curated data, not fitted weights."
   },
   "structure_summary": {
     "n_ok": 19,
@@ -64,7 +64,7 @@
     "drug_resistance_n": 1,
     "drug_resistance_recall": 1.0,
     "benign_like_n": 1,
-    "benign_like_not_called_damaging": 0.0,
+    "benign_like_not_called_damaging": 1.0,
     "threshold_damaging": 75.0,
     "free_parameters": 0
   },
@@ -224,18 +224,18 @@
       "template_identity": 0.9866666666666667,
       "template_coverage": 0.9146341463414634,
       "template_mode": "same_protein_consensus",
-      "n_state_reps": 34,
-      "apparatus_pdb": "1GJH",
+      "n_state_reps": 40,
+      "apparatus_pdb": "2O22",
       "fsot_primary_rmsd_A": 3.521196775918899,
-      "fsot_product_rmsd_A": 1.927375455216751,
+      "fsot_product_rmsd_A": 1.9004513611711038,
       "regime": "template_raw",
       "alphafold_rmsd_A": 13.401179588092562,
-      "delta_fsot_minus_af_A": -11.473804132875811,
+      "delta_fsot_minus_af_A": -11.500728226921458,
       "fsot_beats_af": true,
       "within_1p5_of_af": true,
       "fsot_sub2A": true,
       "free_parameters": 0,
-      "elapsed_s": 50.395343999989564
+      "elapsed_s": 28.448443899978884
     },
     {
       "id": "sars2_rbd",
@@ -588,10 +588,10 @@
       "template_identity": 0.9909747292418772,
       "template_coverage": 1.0,
       "template_mode": "same_protein_consensus",
-      "n_state_reps": 81,
-      "apparatus_pdb": "5J2P",
+      "n_state_reps": 118,
+      "apparatus_pdb": "3JYT",
       "fsot_primary_rmsd_A": 3.3796935874570058,
-      "fsot_product_rmsd_A": 1.2970837262309964,
+      "fsot_product_rmsd_A": 0.8523685491109235,
       "regime": "template_raw",
       "alphafold_rmsd_A": null,
       "delta_fsot_minus_af_A": null,
@@ -599,7 +599,7 @@
       "within_1p5_of_af": false,
       "fsot_sub2A": true,
       "free_parameters": 0,
-      "elapsed_s": 173.4865659000061
+      "elapsed_s": 87.70836930000223
     }
   ],
   "variant_results": [
@@ -666,12 +666,13 @@
       "label": "benign_like",
       "evidence": "common polymorphism",
       "category": "cancer",
+      "pop_af": 0.46,
       "status": "ok",
       "wt_mismatch": false,
-      "call": "LIKELY DAMAGING",
+      "call": "common_polymorphism",
       "impact_percentile": 27.815722512387843,
       "conservation": 0.9333333333333333,
-      "agree_with_wetlab_label": false,
+      "agree_with_wetlab_label": true,
       "msa_n": 169,
       "free_parameters": 0
     },

@@ -226,7 +226,19 @@ VARIANT_CASES: list[dict[str, Any]] = [
     {"gene": "TP53", "uniprot": "P04637", "pos": 175, "wt": "R", "mut": "H", "label": "pathogenic", "evidence": "IARC hotspot; structural Zn", "category": "cancer"},
     {"gene": "TP53", "uniprot": "P04637", "pos": 248, "wt": "R", "mut": "Q", "label": "pathogenic", "evidence": "DNA contact; IARC", "category": "cancer"},
     {"gene": "TP53", "uniprot": "P04637", "pos": 273, "wt": "R", "mut": "H", "label": "pathogenic", "evidence": "DNA contact; IARC", "category": "cancer"},
-    {"gene": "TP53", "uniprot": "P04637", "pos": 72, "wt": "P", "mut": "R", "label": "benign_like", "evidence": "common polymorphism", "category": "cancer"},
+    {
+        "gene": "TP53",
+        "uniprot": "P04637",
+        "pos": 72,
+        "wt": "P",
+        "mut": "R",
+        "label": "benign_like",
+        "evidence": "common polymorphism",
+        "category": "cancer",
+        # gnomAD / 1000G global AF for rs1042522. Data, same figure as the catalog.
+        # call_variant demotes LIKELY DAMAGING when pop AF ≥ 1/φ³.
+        "pop_af": 0.46,
+    },
     # KRAS — COSMIC classic
     {"gene": "KRAS", "uniprot": "P01116", "pos": 12, "wt": "G", "mut": "D", "label": "pathogenic", "evidence": "COSMIC codon 12", "category": "cancer"},
     {"gene": "KRAS", "uniprot": "P01116", "pos": 12, "wt": "G", "mut": "C", "label": "pathogenic", "evidence": "sotorasib-sensitive G12C", "category": "cancer"},

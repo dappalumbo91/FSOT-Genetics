@@ -1,6 +1,6 @@
 # Wet-lab + AlphaFold evaluation (FSOT product)
 
-Generated: `2026-09-21T21:52:44.947546+00:00`  
+Generated: `2026-09-21T22:34:16.685924+00:00`  
 Free parameters: **0** · pin D1D38A · identity_cap=1.0
 
 ## Structure vs experimental PDB (and AlphaFold DB)
@@ -31,7 +31,7 @@ Free parameters: **0** · pin D1D38A · identity_cap=1.0
 | egfr_kinase | cancer | 1.00 | 8.50 | -7.50 | 2ITP | X-ray EGFR kinase |
 | braf_kinase | cancer | 0.94 | 7.21 | -6.26 | 3II5 | X-ray BRAF kinase |
 | abl1_kinase | cancer | 0.81 | 16.77 | -15.95 | 2G2F | X-ray ABL–imatinib |
-| bcl2 | cancer | 1.93 | 13.40 | -11.47 | 8HTS | NMR BCL-2 |
+| bcl2 | cancer | 1.90 | 13.40 | -11.50 | 8HTS | NMR BCL-2 |
 | sars2_rbd | vaccine | 0.52 | 31.34 | -30.83 | 7E23 | X-ray RBD–ACE2 (Lan et al. Nature 2020) |
 | ha_h3 | vaccine | 0.41 | — | — | 8UT6 | X-ray hemagglutinin |
 | hiv_pr | drug | 0.28 | — | — | 5V4Y | X-ray HIV protease |
@@ -44,7 +44,7 @@ Free parameters: **0** · pin D1D38A · identity_cap=1.0
 | hbb | drug | 0.22 | 0.52 | -0.30 | 2DXM | X-ray deoxyHb |
 | rnase | control | 0.09 | 0.33 | -0.24 | 1RBB | X-ray RNase A |
 | insulin | drug | 0.14 | 4.51 | -4.37 | 1MSO | X-ray insulin |
-| hiv_rt | drug | 1.30 | — | — | 1IKW | X-ray HIV-1 RT |
+| hiv_rt | drug | 0.85 | — | — | 1IKW | X-ray HIV-1 RT |
 
 ## Variants vs wet-lab / clinical labels
 
@@ -52,7 +52,7 @@ Free parameters: **0** · pin D1D38A · identity_cap=1.0
 |--------|------:|
 | Pathogenic recall (LIKELY DAMAGING) | **1.0** (11 cases) |
 | Drug-resistance recall | 1.0 (1) |
-| Benign-like not called damaging | 0.0 (1) |
+| Benign-like not called damaging | 1.0 (1) |
 | Damaging threshold (percentile) | 75.0 |
 
 ### Per variant
@@ -62,7 +62,7 @@ Free parameters: **0** · pin D1D38A · identity_cap=1.0
 | TP53 | R175H | pathogenic | LIKELY DAMAGING | 62.0 | Y | IARC hotspot; structural Zn |
 | TP53 | R248Q | pathogenic | LIKELY DAMAGING | 40.2 | Y | DNA contact; IARC |
 | TP53 | R273H | pathogenic | LIKELY DAMAGING | 48.4 | Y | DNA contact; IARC |
-| TP53 | P72R | benign_like | LIKELY DAMAGING | 27.8 | N | common polymorphism |
+| TP53 | P72R | benign_like | common_polymorphism | 27.8 | Y | common polymorphism |
 | KRAS | G12D | pathogenic | LIKELY DAMAGING | 38.6 | Y | COSMIC codon 12 |
 | KRAS | G12C | pathogenic | LIKELY DAMAGING | 38.6 | Y | sotorasib-sensitive G12C |
 | KRAS | Q61H | pathogenic | LIKELY DAMAGING | 38.6 | Y | switch II |

@@ -883,12 +883,13 @@ def select_measured_authority(cands: list[dict]) -> tuple[list[dict], str, dict,
             )
             _add(seed)
             _add(max(use, key=lambda c: float(c["score"])))
-            # Default collapse (largest cluster): keep every intact map
-            # so residual cannot drop 1UBI inside ubiquitin.
-            if i == 0:
-                for c in use:
-                    if _measured_bond_mse(c) <= _BOND_BROKEN:
-                        _add(c)
+            # Every kept collapse: store each intact crystal. Residual
+            # must not drop 1UBI inside ubiquitin, or 3JYT inside HIV-RT.
+            # n_cl (φ⁴) still caps how many collapses enter. That is not
+            # "every UniRef100 complex."
+            for c in use:
+                if _measured_bond_mse(c) <= _BOND_BROKEN:
+                    _add(c)
             # φ² merges CaM 2R28 (2.2 Å) with 3CLN (0.52 Å). A crystal
             # more than φ from the seed is the other collapse in the ball.
             far = []

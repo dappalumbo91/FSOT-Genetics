@@ -299,9 +299,9 @@ def main() -> int:
     rec("wetlab_beats_af_n", int(wst.get("fsot_beats_af") or 0) == 16, str(wst.get("fsot_beats_af")))
     rec("wetlab_pathogenic_recall", float(wv.get("pathogenic_recall_likely_damaging") or 0) == 1.0, str(wv.get("pathogenic_recall_likely_damaging")))
     rec(
-        "wetlab_benign_miss_recorded",
-        float(wv.get("benign_like_not_called_damaging", 1)) == 0.0,
-        "honest miss: benign-like still called damaging",
+        "wetlab_p72r_demoted",
+        float(wv.get("benign_like_not_called_damaging", 0)) == 1.0,
+        "P72R pop AF ≥ 1/φ³ → common_polymorphism",
     )
 
     reality = load("reality_margin_eval.json")

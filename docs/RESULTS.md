@@ -176,6 +176,16 @@ A crystal on SLAC1 is not an IntAct edge. UVR8 product is not a hop seed. Inter-
 
 Source: `data/plant_signal_product.json`, `data/plant_signal_domains.json`.
 
+## Where this stands against AlphaFold
+
+Same law on every organism. Competitive when a measured homolog exists. Not competitive as an orphan fold.
+
+| Physiology | What is scored | Against AlphaFold |
+|------------|----------------|-------------------|
+| Human protein / variant | Medical panel median **0.26 Å** vs AF **3.98 Å** (19/19 sub-2 Å). Drivers recalled. P72R demoted by measured allele frequency. | Wins on this panel when the crystal exists. AF still covers sequences with no homolog; that path here is `no_measured_map` (~13.6 Å bulk). |
+| Animal | Fly, worm, Ciona, Platynereis, larva, hemibrain: residual hops on measured synapses. Named proteins (nompC, Gad1) get product Cα. | Not a second AlphaFold. The graph is the measurement. |
+| Plant | Arabidopsis + rice, maize, soybean, wheat product Cα. IntAct physical PPI is the information graph (8,329 nodes). | Same protein law. Not an invented plant connectome. |
+
 ## What this is capable of
 
 | Can | Cannot |
@@ -216,7 +226,7 @@ Not a device. `docs/EXPERIMENTAL_DISCLOSURE.md`, `docs/MEDICAL_PLATFORM.md`.
 | Experimental PGx | **10/10** |
 | Variant panel | 8 genes, 35 drivers, recall@75% **1.0** |
 | Wet-lab structure | **19/19** sub-2 Å · median **0.26 Å** vs AF **3.98** · beats AF 16/16. Product cap 1.0 + apparatus min. Not the n=10 freeze |
-| Wet-lab variants | pathogenic recall **1.0**; benign-like still called damaging (**honest miss**) |
+| Wet-lab variants | pathogenic recall **1.0**; P72R **common_polymorphism** (pop AF 0.46 ≥ 1/φ³) |
 | Reality margin | 19/19 · median **1.17 Å** vs target 2.5 |
 | Domain-split | SOD1 **0.29** / HBB **0.30**; TP53 4 domains, inter-domain pose not freeze |
 | Catalog | TP53, KRAS, EGFR, BRAF, CFTR, SOD1, HBB, BRCA1 |
@@ -229,10 +239,12 @@ Same law, measured homolog except the eval PDB, apparatus minimum over `trit_not
 | EGFR kinase | no template | **1.00** |
 | ABL1 | 12.7 | **0.81** |
 | BRAF | 2.76 | **0.94** |
-| BCL-2 | 5.80 | **1.93** |
+| BCL-2 | 5.80 | **1.90** |
 | SARS-CoV-2 RBD | 5.68 | **0.52** |
 | ACE2 peptidase | 5.20 | **0.48** |
-| HIV-1 RT | 5.46 | **1.30** |
+| HIV-1 RT | 5.46 | **0.85** |
+
+BCL-2 stops at **1.90 Å** because every close measured map is another NMR model. No crystal in that pool is under 1.5 Å. That is the ensemble width, not a missing homolog.
 
 Fair-cap / fuse-era (`medical_stress_suite.json` fuse **1.16 Å**, bulk 16–17 Å) and the 0.95 handicap (`m1_authority_verify.json`, **1.14 Å**) stay on the honesty wall. They are not this panel.
 

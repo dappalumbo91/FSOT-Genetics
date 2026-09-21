@@ -543,9 +543,9 @@
       "detail": "1.0"
     },
     {
-      "name": "wetlab_benign_miss_recorded",
+      "name": "wetlab_p72r_demoted",
       "ok": true,
-      "detail": "honest miss: benign-like still called damaging"
+      "detail": "P72R pop AF \u2265 1/\u03c6\u00b3 \u2192 common_polymorphism"
     },
     {
       "name": "reality_n_ok",
