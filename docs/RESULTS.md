@@ -1,7 +1,7 @@
 # What FSOT-Genetics actually does (live results)
 
 Pin `D1D38A`. Law \(S = K(T_1+T_2+T_3)\). **0 free parameters.**  
-Data stays on `D:\FlyWire_Connectome` (not git). Do not mix product Å with hop mass.
+Data stays on `<local folder, not included in repo: FlyWire_Connectome>` (not git). Do not mix product Å with hop mass.
 
 Full claim inventory + re-run: `docs/SYSTEM_VERIFY.md`. Last stamp: `python scripts/system_verify.py` **259/259**; gauntlet **overall_ok** (42 obligations). The 52-check stamp was freeze+hops only.
 
@@ -329,4 +329,4 @@ Do not cross-cite product freeze **0.13 Å** · medical panel **0.26 Å** · AF 
 | Rust f64 kernel | PASS |
 | TLA+ TLC routing | PASS |
 
-Labeled archive: `docs/VERIFIED_SOLVES.md`. Biohub/Kaggle stay frozen (`docs/BIOHUB_FREEZE.md`). Fly pack (`C:\Users\damia\Desktop\fsot fly nuron net`, pin AEB2AD) is a separate system — this stamp is Genetics only.
+Labeled archive: `docs/VERIFIED_SOLVES.md`. Biohub/Kaggle stay frozen (`docs/BIOHUB_FREEZE.md`). Fly pack (`<local folder, not included in repo: fsot fly nuron net>`, pin AEB2AD) is a separate system — this stamp is Genetics only.

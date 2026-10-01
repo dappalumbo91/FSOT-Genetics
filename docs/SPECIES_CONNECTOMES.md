@@ -36,7 +36,7 @@ Genome / genetics: FlyBase complete; ~14k protein-coding genes; UniProt proteome
 
 *C. elegans* is the only animal where **every cell is named, the lineage is complete, the genome is complete, and neurons synapse onto named muscles**. That is closer to a molecular recreation than the fly brain dump, at 300 neurons instead of 140k.
 
-Cook 2019 hermaphrodite chemical graph (on `D:\FlyWire_Connectome\C_elegans`, not git):
+Cook 2019 hermaphrodite chemical graph (on `<local folder, not included in repo: FlyWire_Connectome/C_elegans>`, not git):
 
 | Class | n |
 |-------|--:|
@@ -156,7 +156,7 @@ Fold those with the **existing protein product** (measured homologs). Do not MDS
 
 `python scripts/banc_connectome.py`
 
-Bates et al. *Nature* 2026. Files on `D:\FlyWire_Connectome\banc` (GCS `compiled_data/banc_888/`, Dataverse 10.7910/DVN/7WTH1N). 175,401 neurons after dropping glia/trachea, 13.5 M edges, 21,300 GABA (predicted transmitter). `vnc_motor` = measured `super_class=motor` ∩ `region=ventral_nerve_cord`.
+Bates et al. *Nature* 2026. Files on `<local folder, not included in repo: FlyWire_Connectome/banc>` (GCS `compiled_data/banc_888/`, Dataverse 10.7910/DVN/7WTH1N). 175,401 neurons after dropping glia/trachea, 13.5 M edges, 21,300 GABA (predicted transmitter). `vnc_motor` = measured `super_class=motor` ∩ `region=ventral_nerve_cord`.
 
 Hop-2 `vnc_motor` (same split as Male CNS):
 
@@ -194,7 +194,7 @@ First pass: **23 measured, 7 misses.** The seven were a sieve, not seven missing
 | nompC Tribolium | UniProt is split fragments (244 aa). **NCBI Gene 662890 / TC012313 / XP_015838654.2 (1741 aa)** is named nompC; UniParc `UPI0030FF3C31`, **not in UniProtKB**. Kim 2014 RNAi `dsnompC` is lethal at eclosion. Recovered as `ncbi_gene_named`. |
 | mec-4 Anopheles | **True 1:1 miss.** UniRef50/90 of mec-4 is **Nematoda only**. Insect DEG/ENaC is the *ppk* expansion (~26 genes in *An. gambiae*); 29/30 have no OrthoDB xref. The one tagged (AGAP010146) is fly **ppk17**, not mec-4. AGAP011610 (DIOPT-best to fly *ppk*) sits in an **Anopheles-only** UniRef50 Pickpocket cluster. Fly *ppk* vs worm mec-4 is **~18%**. Worm ALM touch is mec-4; fly walking/JO on the live graphs is **nompC TRPN** (already folded in Anopheles at 85%). Do not pick a random ppk as mec-4. |
 
-Bee nompC folds on 5VKQ at **81%** identity. *mec-4* bee/beetle: sequence homolog, **no measured structure map**. Source: `data/homolog_correspondence.json`. Sequences on `D:\FlyWire_Connectome\homologs` (not git).
+Bee nompC folds on 5VKQ at **81%** identity. *mec-4* bee/beetle: sequence homolog, **no measured structure map**. Source: `data/homolog_correspondence.json`. Sequences on `<local folder, not included in repo: FlyWire_Connectome/homologs>` (not git).
 
 ## Anti-goals
 

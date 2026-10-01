@@ -77,8 +77,8 @@ python scripts/run_msa_augmented_fold.py --msa path\to\family.sto --seq ...
 Local databases (optional):
 
 ```powershell
-$env:FSOT_JACKHMMER_DB = "D:\dbs\uniref90"
-$env:FSOT_HHBLITS_DB   = "D:\dbs\uniclust30"
+$env:FSOT_JACKHMMER_DB = "<local folder, not included in repo: dbs/uniref90>"
+$env:FSOT_HHBLITS_DB   = "<local folder, not included in repo: dbs/uniclust30>"
 ```
 
 ## Relation to existing scripts

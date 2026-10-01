@@ -104,7 +104,7 @@ p53 DNA-binding is **not** an orphan on the current product (0.01 Å via 1TSR). 
 ## Commands
 
 ```powershell
-cd C:\Users\damia\Desktop\FSOT-Genetics
+cd FSOT-Genetics
 python scripts/verify_cross.py
 python scripts/bench_product_vs_af.py
 python scripts/bench_af_coverage.py
