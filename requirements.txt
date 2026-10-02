@@ -1,2 +1,3 @@
 mpmath
 numpy
+scipy>=1.11
