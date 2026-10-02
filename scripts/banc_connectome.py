@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """BANC female brain + VNC residual boot — measured graph.
 
-Bates et al. Nature 2026. Files on D:\\FlyWire_Connectome\\banc (not git):
+Bates et al. Nature 2026. Files on $FLY_ROOT/banc (not git):
 
   banc_888_meta.feather
   banc_888_edgelist_simple_v3.feather
@@ -18,6 +18,18 @@ Drop glia / trachea / not_a_neuron. 0 free parameters.
 """
 from __future__ import annotations
 
+import os as _os
+from pathlib import Path as _Path
+
+_REPO_ROOT = _Path(__file__).resolve().parents[1]
+
+
+def _fsot_local_path(env, default):
+    """Local path outside the repo: $env if set, else a path relative to the repo root."""
+    _v = _os.environ.get(env, "").strip()
+    return _Path(_v) if _v else _REPO_ROOT / default
+
+
 import json
 import sys
 from pathlib import Path
@@ -31,7 +43,7 @@ sys.path.insert(0, str(ROOT / "vendor"))
 
 from fly_connectome import residual_cascade, seed_indices  # noqa: E402
 
-BANC = Path(r"D:\FlyWire_Connectome\banc")
+BANC = _fsot_local_path('FLY_ROOT', 'data_external/fly') / 'banc'
 META = BANC / "banc_888_meta.feather"
 EDGES = BANC / "banc_888_edgelist_simple_v3.feather"
 

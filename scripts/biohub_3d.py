@@ -13,6 +13,18 @@ the molecular-scale observer. Same pin, same residual law. 0 free params.
 """
 from __future__ import annotations
 
+import os as _os
+from pathlib import Path as _Path
+
+_REPO_ROOT = _Path(__file__).resolve().parents[1]
+
+
+def _fsot_local_path(env, default):
+    """Local path outside the repo: $env if set, else a path relative to the repo root."""
+    _v = _os.environ.get(env, "").strip()
+    return _Path(_v) if _v else _REPO_ROOT / default
+
+
 import json
 import sys
 from pathlib import Path
@@ -27,7 +39,7 @@ sys.path.insert(0, str(ROOT / "vendor"))
 import fsot_compute as fc  # noqa: E402
 from full_scalar_law import residual_scale  # noqa: E402
 
-BIOHUB_ROOT = Path(r"D:\Kaggle_Biohub_Data")
+BIOHUB_ROOT = _fsot_local_path('KAGGLE_BIOHUB_DATA', 'data_external/kaggle_biohub')
 TRAIN = BIOHUB_ROOT / "train"
 TEST = BIOHUB_ROOT / "test"
 # Light-sheet voxel (COMPETITION_SPEC / GEFF axis scale)

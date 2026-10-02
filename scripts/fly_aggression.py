@@ -2,7 +2,7 @@
 """Measured fly aggression observer → FSOT residual boot.
 
 Gao et al. eLife 13:RP104212. Files on
-D:\\FlyWire_Connectome\\behavior\\aggression (not git).
+$FLY_ROOT/behavior/aggression (not git).
 
   fig4 video 1 — pC1SS2>CsChrimson, red-light overlay is the published
                  stimulus marker (like the odor green dot). Four wells.

@@ -3,7 +3,7 @@
 
 Álvarez-Salvado et al. eLife 37815 Video 1 (MPEG-4). Four walking flies,
 ACV 10% pulse marked by a green overlay at the top of the frame. Files
-stay on D:\\FlyWire_Connectome\\behavior\\odor (not git).
+stay on $FLY_ROOT/behavior/odor (not git).
 
 Observer (not a trained pose net):
   green overlay  → odor on (1/φ of max green-excess)

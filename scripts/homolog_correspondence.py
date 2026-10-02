@@ -8,9 +8,21 @@ invent a bee, mosquito, or beetle wiring diagram.
   python scripts/homolog_correspondence.py
   python scripts/homolog_correspondence.py --resolve-only
 
-Sequences stay on D:\\FlyWire_Connectome\\homologs (not git).
+Sequences stay on $FLY_ROOT/homologs (not git).
 """
 from __future__ import annotations
+
+import os as _os
+from pathlib import Path as _Path
+
+_REPO_ROOT = _Path(__file__).resolve().parents[1]
+
+
+def _fsot_local_path(env, default):
+    """Local path outside the repo: $env if set, else a path relative to the repo root."""
+    _v = _os.environ.get(env, "").strip()
+    return _Path(_v) if _v else _REPO_ROOT / default
+
 
 import json
 import sys
@@ -30,8 +42,8 @@ _PHI = float(fc.PHI)
 # Leftover coverage analog: hit shorter than source/φ² is a fragment, not a homolog.
 _MIN_LEN_FRAC = 1.0 / (_PHI ** 2)
 
-OUT_D = Path(r"D:\FlyWire_Connectome\homologs\product")
-FASTA = Path(r"D:\FlyWire_Connectome\homologs\homologs.fasta")
+OUT_D = _fsot_local_path('FLY_ROOT', 'data_external/fly') / 'homologs' / 'product'
+FASTA = _fsot_local_path('FLY_ROOT', 'data_external/fly') / 'homologs' / 'homologs.fasta'
 OUT_GIT = ROOT / "data" / "homolog_correspondence.json"
 
 # Residual-mass proteins already on the live fly/worm graphs.

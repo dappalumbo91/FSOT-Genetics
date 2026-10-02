@@ -9,6 +9,18 @@ videos. Claim path stays 0 free params.
 """
 from __future__ import annotations
 
+import os as _os
+from pathlib import Path as _Path
+
+_REPO_ROOT = _Path(__file__).resolve().parents[1]
+
+
+def _fsot_local_path(env, default):
+    """Local path outside the repo: $env if set, else a path relative to the repo root."""
+    _v = _os.environ.get(env, "").strip()
+    return _Path(_v) if _v else _REPO_ROOT / default
+
+
 import json
 import random
 import sys
@@ -32,7 +44,7 @@ from biohub_3d import (  # noqa: E402
 from _eye_relay import CELLMOT, FT_WEIGHTS, UNET_ROOT, _wire_cellmot  # noqa: E402
 
 HOLD = {"6bba_09961292", "44b6_0113de3b"}
-OUT = Path(r"D:\Kaggle_Biohub_Data\_fsot_eye_cache\correspondence")
+OUT = _fsot_local_path('KAGGLE_BIOHUB_DATA', 'data_external/kaggle_biohub') / '_fsot_eye_cache' / 'correspondence'
 DOWNSAMPLE = (1, 4, 4)
 VOX_UM = 1.625  # after XY stride 4
 

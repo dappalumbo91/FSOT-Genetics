@@ -69,3 +69,6 @@ verification/tla/states/
 # Field pack zips (rebuild with scripts/build_field_pack.py)
 dist/
 
+
+# Local external data (see FSOT_* env vars); never committed
+data_external/

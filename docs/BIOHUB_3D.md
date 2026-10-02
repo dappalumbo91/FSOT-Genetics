@@ -5,9 +5,9 @@ This repo **reads** it.
 
 | Asset | Where | What |
 |-------|--------|------|
-| Kaggle Biohub train/test | `D:\Kaggle_Biohub_Data` (~85 GB) | 3D+time light-sheet volumes (OME-Zarr) + sparse GEFF tracks |
-| Existing competition code | `C:\Users\damia\biohub-fsot-unet` | U-Net + FSOT linker (junction → `D:\`) |
-| Zebrahub public tracks | `I:\FSOT-Physical-Archive\05_Zebrahub-Development` | ~46 M cell detections, 5 DaXi embryos |
+| Kaggle Biohub train/test | `<local folder, not included in repo: Kaggle_Biohub_Data>` (~85 GB) | 3D+time light-sheet volumes (OME-Zarr) + sparse GEFF tracks |
+| Existing competition code | `<local folder, not included in repo: biohub-fsot-unet>` | U-Net + FSOT linker (junction → `<local drive>`) |
+| Zebrahub public tracks | `<local folder, not included in repo: FSOT-Physical-Archive/05_Zebrahub-Development>` | ~46 M cell detections, 5 DaXi embryos |
 | Lean scalar panel | FSOT-2.1-Lean `zebrafish_cell_tracking_panel` | 0.022% residual — **not** a 3-D RMSD |
 
 Competition: [Biohub – Cell Tracking During Development](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development).
@@ -100,7 +100,7 @@ What held: **native product stays the graph**. Isolated eye leftover farther tha
 
 The FT net already knew the leftover: isolated ghosts sit at sigmoid **0.002**; the 24 native-miss GT fills sit at **0.999**. Ranking fill by photons put the silenced field back — that was the regression. Gate and rank by the trained field (≥ 1/φ) : dense Jaccard 0.835. Then fine-tune the eye on other train videos (hold out dense + proxy) with a steal-shell annulus around each labeled cell (NMS..φ⁵, target 0). Correspondence fill: dense **0.848 / 0.848** (TP 1589 / FN 282) at \(T_{\mathrm{true}}\). Proxy is already over the estimate, so it still receives no extra blobs and stays **1.00**. That 0.848 is this train video’s adj edge Jaccard, not public LB Final. Claim path is still photons. Apparatus: `scripts/_eye_relay.py`, `scripts/_eye_correspondence_train.py`.
 
-### Variety panel (existing 199 train GEFFs on `D:\` — no extra download)
+### Variety panel (existing 199 train GEFFs on `<local drive>` — no extra download)
 
 Caches stay on the game drive (`_fsot_detect_cache`, `_fsot_eye_cache`). Test is already 4 volumes (full submit set). Native find **0.96 is not universal**.
 
@@ -140,6 +140,6 @@ Dense leftover after leftover-yield: **333 FN** on the photon claim (Jaccard 0.8
 Re-centroid of the same peaks in a φ⁴ window (nucleus / first-pass scale) **failed**: find 0.96→0.92, product-find 0.95→0.88, Jaccard 0.82→0.67. The 7–8 µm shell is not an under-read of the same blob — a larger first moment merges the neighbor NMS already split. That is the free-parameter disconnect in numbers, not a missing radius.
 
 1. Stream one time-point from the OME-Zarr (pixel 3-D) for a viewer — still no copy of the dump.  
-2. Join Zebrahub gene-expression tracks on `I:\` to Danio UniProt → product Cα on the same embryo.  
+2. Join Zebrahub gene-expression tracks on `<local drive>` to Danio UniProt → product Cα on the same embryo.  
 3. Leave U-Net training in `biohub-fsot-unet`; this repo stays the genetics / 3-D *reader*. If the net is used, it is the eye (activation field), not the reported center.  
-4. Competition climb: steal-shell fill is **0.848** on held-out dense, **0.47–0.75** on other densities. Low-contrast videos need the eye (native find 0.10). Do not Final until public > 0.848. No extra Kaggle download — 199 train + 4 test already on `D:\`.
+4. Competition climb: steal-shell fill is **0.848** on held-out dense, **0.47–0.75** on other densities. Low-contrast videos need the eye (native find 0.10). Do not Final until public > 0.848. No extra Kaggle download — 199 train + 4 test already on `<local drive>`.

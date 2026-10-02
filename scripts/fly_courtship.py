@@ -3,7 +3,7 @@
 
 Pan et al. PLOS ONE 10.1371/journal.pone.0021144 Movie S1: solitary
 male UAS-dTrpA1 / fru-GAL4 at 29 °C. Wing extension, abdomen bending,
-copulation attempts. File on D:\\FlyWire_Connectome\\behavior\\courtship
+copulation attempts. File on $FLY_ROOT/behavior/courtship
 (not git).
 
 Observer (not a trained pose net):

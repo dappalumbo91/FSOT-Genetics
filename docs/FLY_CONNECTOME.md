@@ -1,6 +1,6 @@
 # Fly connectome — measured organism graph
 
-**Data is not in this git repo.** It stays on the game drive: `D:\FlyWire_Connectome`.
+**Data is not in this git repo.** It stays on the game drive: `<local folder, not included in repo: FlyWire_Connectome>`.
 
 Same pin `D1D38A`. Same law as Biohub and the protein product: **measured coordinates and measured edges are authority**. Residual scales the interface. We do not invent a 13 Å MDS brain or train a net to hallucinate synapses.
 
@@ -12,9 +12,9 @@ Adult *Drosophila melanogaster* is the first animal with a complete brain-scale 
 |----------|------|------------|
 | FlyWire FAFB v783 | 139,255 neurons, ~50 M chemical synapses, 8,453 cell types | annotations TSV (small); proofread connections ~0.85 GB; full synapses 9.5 GB |
 | Schlegel et al. 2024 | superclass, hemilineage, neurotransmitter, soma xyz, VFB/FBbt | GitHub `flyconnectome/flywire_annotations` |
-| Male CNS v1.0 | **165,122 traced** (brain + VNC), 25.6 M edges | Berg et al. *Cell* 2026-09-03; on `D:\FlyWire_Connectome\male_cns` |
-| BANC v888 | **175,401** neurons (glia dropped), 13.5 M edges, female brain+VNC intact neck | Bates et al. *Nature* 2026; on `D:\FlyWire_Connectome\banc`; live `scripts/banc_connectome.py` |
-| neuPrint hemibrain:v1.2.1 | **22,704** typed (incl. cropped Leaves), 3.44 M edges; no VNC | Scheffer et al. *eLife* 2020; cache `D:\FlyWire_Connectome\hemibrain`; live `scripts/hemibrain_connectome.py` |
+| Male CNS v1.0 | **165,122 traced** (brain + VNC), 25.6 M edges | Berg et al. *Cell* 2026-09-03; on `<local folder, not included in repo: FlyWire_Connectome/male_cns>` |
+| BANC v888 | **175,401** neurons (glia dropped), 13.5 M edges, female brain+VNC intact neck | Bates et al. *Nature* 2026; on `<local folder, not included in repo: FlyWire_Connectome/banc>`; live `scripts/banc_connectome.py` |
+| neuPrint hemibrain:v1.2.1 | **22,704** typed (incl. cropped Leaves), 3.44 M edges; no VNC | Scheffer et al. *eLife* 2020; cache `<local folder, not included in repo: FlyWire_Connectome/hemibrain>`; live `scripts/hemibrain_connectome.py` |
 
 Paper: Dorkenwald et al., *Nature* **634**, 124–138 (2024). Annotations: Schlegel et al., *Nature* **634**, 139–152 (2024). Portal: [codex.flywire.ai](https://codex.flywire.ai/) (sign-in). Open dumps: GitHub annotations + [Zenodo 10676866](https://zenodo.org/records/10676866).
 
@@ -24,7 +24,7 @@ Voxel of the EM volume: **4 × 4 × 40 nm** (anchor/soma columns in the annotati
 
 `python scripts/fly_connectome.py --inventory`
 
-First live read (2026-09-07), table on `D:\FlyWire_Connectome` (31.7 MB TSV, not git):
+First live read (2026-09-07), table on `<local folder, not included in repo: FlyWire_Connectome>` (31.7 MB TSV, not git):
 
 | Item | Number |
 |------|-------:|
@@ -44,7 +44,7 @@ Source: `data/fly_connectome_inventory.json`. Voxel 4 × 4 × 40 nm. Paper count
 
 `python scripts/fly_connectome.py --boot --seed sensory`
 
-Proofread connections (~852 MB, Zenodo 10676866) on `D:\FlyWire_Connectome`. Edge weight = **measured synapse count**. GABA outgoing is inhibitory (predicted transmitter on the presynaptic cell). Hop count = leftover φ⁵. Each hop is rescaled to the observer max (half-max analog). Biochemistry residual scales the interface.
+Proofread connections (~852 MB, Zenodo 10676866) on `<local folder, not included in repo: FlyWire_Connectome>`. Edge weight = **measured synapse count**. GABA outgoing is inhibitory (predicted transmitter on the presynaptic cell). Hop count = leftover φ⁵. Each hop is rescaled to the observer max (half-max analog). Biochemistry residual scales the interface.
 
 First boot (v630 public connections, 3.79 M edges, 127,979 neurons; v783 Zenodo 504’d):
 
@@ -65,7 +65,7 @@ This is signal on the measured graph. It is **not** a trained RNN, not inner spe
 
 `python scripts/fly_behavior.py`
 
-Harvard Dataverse [doi:10.7910/DVN/BBNPYX](https://doi.org/10.7910/DVN/BBNPYX) tethered walking on a spherical treadmill. Files stay on `D:\FlyWire_Connectome\behavior` (not git). 3-D leg keypoints are the observer — not a trained pose net. cam-0 mp4 is corroboration only.
+Harvard Dataverse [doi:10.7910/DVN/BBNPYX](https://doi.org/10.7910/DVN/BBNPYX) tethered walking on a spherical treadmill. Files stay on `<local folder, not included in repo: FlyWire_Connectome/behavior>` (not git). 3-D leg keypoints are the observer — not a trained pose net. cam-0 mp4 is corroboration only.
 
 | Trial | Frames | s | Tarsus MAD+φ on | Paint | Bouts | Whole clip walking |
 |-------|-------:|--:|----------------:|------:|------:|:-------------------|
@@ -77,7 +77,7 @@ Gate = median + φ·MAD on 6-leg tarsus speed. Tighten to φ² if paint > 1/φ (
 
 cam-0 frame-diff Jaccard vs tarsus gate is ~0.12. One camera is not 6-leg 3-D. Keypoints stay authority.
 
-Dryad Pratt freely-walking CSV and the Y-maze zip on `D:\` are auth stubs (56–92 bytes), not data.
+Dryad Pratt freely-walking CSV and the Y-maze zip on `<local drive>` are auth stubs (56–92 bytes), not data.
 
 ### Residual boot on the walking program
 
@@ -119,7 +119,7 @@ Loop that ran: **video + 3-D tarsus → walking is on → seed mechanosensory / 
 
 `python scripts/banc_connectome.py`
 
-Bates et al. *Nature* 2026. v888 meta + edgelist_simple_v3 on `D:\FlyWire_Connectome\banc` (GCS public). **175,401** neurons after dropping glia/trachea, **13,542,180** edges, **21,300** GABA. `vnc_motor` = `super_class=motor` ∩ VNC region (measured, not invented).
+Bates et al. *Nature* 2026. v888 meta + edgelist_simple_v3 on `<local folder, not included in repo: FlyWire_Connectome/banc>` (GCS public). **175,401** neurons after dropping glia/trachea, **13,542,180** edges, **21,300** GABA. `vnc_motor` = `super_class=motor` ∩ VNC region (measured, not invented).
 
 | Program | n seed | Hop 2 vnc_motor | Hop 1 peak |
 |---------|-------:|----------------:|------------|
@@ -134,7 +134,7 @@ Same split as Male CNS on the other sex, intact neck. Source: `data/banc_connect
 
 `python scripts/fly_odor.py`
 
-Harvard tethered-walk clips never rest. Álvarez-Salvado et al. *eLife* 7:e37815 Video 1 does: four walking flies, **ACV 10% pulse**, green overlay at the top of the frame. MPEG-4 on `D:\FlyWire_Connectome\behavior\odor` (not git). Dryad kinematics zip is 6.94 GB and was not downloaded. GitHub is LabVIEW / MATLAB, not CSV.
+Harvard tethered-walk clips never rest. Álvarez-Salvado et al. *eLife* 7:e37815 Video 1 does: four walking flies, **ACV 10% pulse**, green overlay at the top of the frame. MPEG-4 on `<local folder, not included in repo: FlyWire_Connectome/behavior/odor>` (not git). Dryad kinematics zip is 6.94 GB and was not downloaded. GitHub is LabVIEW / MATLAB, not CSV.
 
 Observer (not a trained pose net): green-excess ≥ observer-max / φ = odor on; MAD+φ on chamber frame-diff = motion on; four lanes ≥ observer-max / φ of column mean.
 
@@ -151,7 +151,7 @@ Olfactory hop 1 peaks on **il3LN6** (antennal lobe). Hop-2 vnc_motor ≈ 0. Rest
 
 `python scripts/fly_courtship.py`
 
-Pan et al. *PLOS ONE* 2011 Movie S1: solitary male **UAS-dTrpA1 / fru-GAL4** at 29 °C (wing extension, abdomen bending, copulation attempts). MOV on `D:\FlyWire_Connectome\behavior\courtship` (not git). Leftover dark CC inside the arena (drop components ≥ max/φ) is the fly — not a trained pose net. MAD+φ on frame-diff energy and fly Rg.
+Pan et al. *PLOS ONE* 2011 Movie S1: solitary male **UAS-dTrpA1 / fru-GAL4** at 29 °C (wing extension, abdomen bending, copulation attempts). MOV on `<local folder, not included in repo: FlyWire_Connectome/behavior/courtship>` (not git). Leftover dark CC inside the arena (drop components ≥ max/φ) is the fly — not a trained pose net. MAD+φ on frame-diff energy and fly Rg.
 
 | | |
 |--|--|
@@ -176,7 +176,7 @@ TN1 hits **hg3 MN** at hop 1 — song/flight motor on this dump. pC1 stays in th
 
 `python scripts/fly_aggression.py`
 
-Gao et al. *eLife* 13:RP104212. MPEG-4 on `D:\FlyWire_Connectome\behavior\aggression` (not git).
+Gao et al. *eLife* 13:RP104212. MPEG-4 on `<local folder, not included in repo: FlyWire_Connectome/behavior/aggression>` (not git).
 
 - **fig4 video 1** — *pC1SS2>CsChrimson*. Red “Light ON” overlay is the published stimulus (same cut as the odor green dot: observer-max / φ). 596 / 1,888 frames, **19.87 s** pulse. Four wells.
 - **fig1 video 1** — Canton-S G14 males tussling. 1,487 live frames, MAD+φ motion 286 (paint 0.192).
@@ -198,7 +198,7 @@ pC1 / dsx / male-specific load **descending**, not song MNs. TN1 is the courtshi
 
 `python scripts/fly_sleep.py`
 
-TriKinetics DAM2 IR beam counts (rethomics/damr monitor M064). File on `D:\FlyWire_Connectome\behavior\sleep` (not git). 30 live channels, 3,443 one-minute bins, 12:12 LD from the light column.
+TriKinetics DAM2 IR beam counts (rethomics/damr monitor M064). File on `<local folder, not included in repo: FlyWire_Connectome/behavior/sleep>` (not git). 30 live channels, 3,443 one-minute bins, 12:12 LD from the light column.
 
 The field’s **5-minute** sleep cut is not used. Inactive = zero beam counts. Sleep = consecutive zeros longer than MAD+φ of length-weighted bout durations (leftover consolidated immobility).
 
@@ -224,7 +224,7 @@ Sleep seeds stay in the central complex and do **not** light the walking command
 
 `python scripts/larva_connectome.py --boot`
 
-Winding et al. *Science* 2023. 2,952 neurons, 110,677 chemical edges. Unsigned (NT not in this dump). Files on `D:\FlyWire_Connectome\larva`.
+Winding et al. *Science* 2023. 2,952 neurons, 110,677 chemical edges. Unsigned (NT not in this dump). Files on `<local folder, not included in repo: FlyWire_Connectome/larva>`.
 
 | Program | n seed | Hop 2 DN-VNC | Hop 2 DN-SEZ | Hop 1 peak |
 |---------|-------:|-------------:|-------------:|------------|
@@ -246,7 +246,7 @@ Other animals that are actually mapped: `docs/SPECIES_CONNECTOMES.md`. Only thre
 
 First pass missed *iav* and *nompC*: query-coverage 0.65 vetoed a fully-used Inactive chain (cov_t 0.99, cov_q 0.59), and a globular Rg window vetoed elongated 5VKQ. Leftover floor 1/φ² + close-homolog (id ≥ 1/φ) keeps the measured map. Front door now uses product identity cap 1.0 (not the 0.95 H2H handicap).
 
-PDBs on `D:\FlyWire_Connectome\male_cns\product`.
+PDBs on `<local folder, not included in repo: FlyWire_Connectome/male_cns/product>`.
 
 Cell → gene → product on both live graphs (`data/organism_product_join.json`):
 

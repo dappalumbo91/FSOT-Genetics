@@ -8,9 +8,21 @@ class light?
 
   python scripts/plant_signal.py
 
-MITAB cache on D:\\FlyWire_Connectome\\plants\\intact (not git).
+MITAB cache on $FLY_ROOT/plants/intact (not git).
 """
 from __future__ import annotations
+
+import os as _os
+from pathlib import Path as _Path
+
+_REPO_ROOT = _Path(__file__).resolve().parents[1]
+
+
+def _fsot_local_path(env, default):
+    """Local path outside the repo: $env if set, else a path relative to the repo root."""
+    _v = _os.environ.get(env, "").strip()
+    return _Path(_v) if _v else _REPO_ROOT / default
+
 
 import json
 import re
@@ -34,7 +46,7 @@ _PHI = float(fc.PHI)
 _R_BIO = residual_scale(abs(float(fc.domain_scalar("Biochemistry"))))
 _UA = "FSOT-Genetics plant signal (mailto:local)"
 
-CACHE = Path(r"D:\FlyWire_Connectome\plants\intact\arabidopsis_intact.mitab25.txt")
+CACHE = _fsot_local_path('FLY_ROOT', 'data_external/fly') / 'plants' / 'intact' / 'arabidopsis_intact.mitab25.txt'
 OUT_GIT = ROOT / "data" / "plant_signal_boot.json"
 PSICQUIC = (
     "https://www.ebi.ac.uk/Tools/webservices/psicquic/intact/webservices/"

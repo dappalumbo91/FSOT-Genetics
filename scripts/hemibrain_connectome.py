@@ -10,9 +10,21 @@ No VNC in this volume. Report descending, not vnc_motor.
 DNg29 is absent (whole-CNS type; not in the hemibrain cut).
 Neuron properties have no predictedNt — unsigned residual, no invented GABA.
 
-Data cache on D:\\FlyWire_Connectome\\hemibrain (not git). 0 free parameters.
+Data cache on $FLY_ROOT/hemibrain (not git). 0 free parameters.
 """
 from __future__ import annotations
+
+import os as _os
+from pathlib import Path as _Path
+
+_REPO_ROOT = _Path(__file__).resolve().parents[1]
+
+
+def _fsot_local_path(env, default):
+    """Local path outside the repo: $env if set, else a path relative to the repo root."""
+    _v = _os.environ.get(env, "").strip()
+    return _Path(_v) if _v else _REPO_ROOT / default
+
 
 import json
 import re
@@ -31,7 +43,7 @@ sys.path.insert(0, str(ROOT / "vendor"))
 
 from fly_connectome import residual_cascade, seed_indices  # noqa: E402
 
-CACHE = Path(r"D:\FlyWire_Connectome\hemibrain")
+CACHE = _fsot_local_path('FLY_ROOT', 'data_external/fly') / 'hemibrain'
 NEURON_FEA = CACHE / "neuprint_v1_2_1_typed_neurons.feather"
 EDGE_FEA = CACHE / "neuprint_v1_2_1_typed_edges.feather"
 NEUPRINT = "https://neuprint.janelia.org/api/custom/custom"

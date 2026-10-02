@@ -263,7 +263,7 @@ scripts/multi_system.py          AF3 jobs: DNA/RNA/metal/PPI/SC/PTM/H
 scripts/bench_af_coverage.py     coverage scoreboard
 scripts/trinary_syntax.py        7-trit opcodes + codon syntax
 scripts/fsot_structure_engine.py F01–F15 formulas (Rg / secondary)
-scripts/biohub_3d.py             read Biohub GEFF 3-D tracks (data on D:\)
+scripts/biohub_3d.py             read Biohub GEFF 3-D tracks (data on <local drive>)
 formulas/                        F01–F15 derivations + trinary maps
 zig/                             host + freestanding QEMU runtime
 crates/                          codon_core, fsot_core, fsot_protein (Rust)

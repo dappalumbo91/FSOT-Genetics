@@ -3,7 +3,7 @@
 
 Cook et al. 2019 SI5 chemical graphs live on the game drive:
 
-  D:\\FlyWire_Connectome\\C_elegans\\SI5.xlsx
+  $FLY_ROOT/C_elegans/SI5.xlsx
 
 Sheets: hermaphrodite chemical, male chemical. Named neurons AND named
 muscles on the same synaptic graph. Seed sensory → residual hops →
@@ -18,6 +18,18 @@ guessed type. SI5 typo SENSOSRY → SENSORY.
 Same pin as the fly boot. 0 free parameters. Not a thought.
 """
 from __future__ import annotations
+
+import os as _os
+from pathlib import Path as _Path
+
+_REPO_ROOT = _Path(__file__).resolve().parents[1]
+
+
+def _fsot_local_path(env, default):
+    """Local path outside the repo: $env if set, else a path relative to the repo root."""
+    _v = _os.environ.get(env, "").strip()
+    return _Path(_v) if _v else _REPO_ROOT / default
+
 
 import json
 import sys
@@ -34,7 +46,7 @@ sys.path.insert(0, str(ROOT / "vendor"))
 import fsot_compute as fc  # noqa: E402
 from full_scalar_law import residual_scale  # noqa: E402
 
-WORM_ROOT = Path(r"D:\FlyWire_Connectome\C_elegans")
+WORM_ROOT = _fsot_local_path('FLY_ROOT', 'data_external/fly') / 'C_elegans'
 CHEM = WORM_ROOT / "hermaphrodite_chemical_corrected"
 SI5 = WORM_ROOT / "SI5.xlsx"
 

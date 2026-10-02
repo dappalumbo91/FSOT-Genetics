@@ -8,9 +8,21 @@ connectome. Do not invent synapses.
   python scripts/plant_homolog.py
   python scripts/plant_homolog.py --resolve-only
 
-Sequences on D:\\FlyWire_Connectome\\plants\\homologs (not git).
+Sequences on $FLY_ROOT/plants/homologs (not git).
 """
 from __future__ import annotations
+
+import os as _os
+from pathlib import Path as _Path
+
+_REPO_ROOT = _Path(__file__).resolve().parents[1]
+
+
+def _fsot_local_path(env, default):
+    """Local path outside the repo: $env if set, else a path relative to the repo root."""
+    _v = _os.environ.get(env, "").strip()
+    return _Path(_v) if _v else _REPO_ROOT / default
+
 
 import json
 import sys
@@ -36,8 +48,8 @@ from homolog_correspondence import (  # noqa: E402
 )
 from plant_product import PANEL  # noqa: E402
 
-OUT_D = Path(r"D:\FlyWire_Connectome\plants\homologs\product")
-FASTA = Path(r"D:\FlyWire_Connectome\plants\homologs\plant_homologs.fasta")
+OUT_D = _fsot_local_path('FLY_ROOT', 'data_external/fly') / 'plants' / 'homologs' / 'product'
+FASTA = _fsot_local_path('FLY_ROOT', 'data_external/fly') / 'plants' / 'homologs' / 'plant_homologs.fasta'
 OUT_GIT = ROOT / "data" / "plant_homolog.json"
 
 # Japonica (39947) is the reviewed rice proteome. Species-level 4530 is fallback
