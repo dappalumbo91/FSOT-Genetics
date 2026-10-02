@@ -3,7 +3,7 @@
 
 Annotations live on the game drive, not in git:
 
-  D:\\FlyWire_Connectome
+  $FLY_ROOT
 
   python scripts/fly_connectome.py --inventory
 
@@ -11,6 +11,18 @@ Same pin as protein product and Biohub: measured soma/anchor coordinates
 and measured types/transmitters. Residual does not invent synapses.
 """
 from __future__ import annotations
+
+import os as _os
+from pathlib import Path as _Path
+
+_REPO_ROOT = _Path(__file__).resolve().parents[1]
+
+
+def _fsot_local_path(env, default):
+    """Local path outside the repo: $env if set, else a path relative to the repo root."""
+    _v = _os.environ.get(env, "").strip()
+    return _Path(_v) if _v else _REPO_ROOT / default
+
 
 import json
 import sys
@@ -28,7 +40,7 @@ sys.path.insert(0, str(ROOT / "vendor"))
 import fsot_compute as fc  # noqa: E402
 from full_scalar_law import residual_scale  # noqa: E402
 
-FLY_ROOT = Path(r"D:\FlyWire_Connectome")
+FLY_ROOT = _fsot_local_path('FLY_ROOT', 'data_external/fly')
 ANN_URL = (
     "https://raw.githubusercontent.com/flyconnectome/flywire_annotations/"
     "main/supplemental_files/Supplemental_file1_neuron_annotations.tsv"

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Platynereis dumerilii 3-day larva — measured whole-body graph.
 
-Verasztó et al. eLife 2025. Files on D:\\FlyWire_Connectome\\Platynereis
+Verasztó et al. eLife 2025. Files on $FLY_ROOT/Platynereis
 (GitHub JekelyLab/Platynereis_3D_connectome_2024).
 
 Cell-level chemical adjacency (synapse counts). Transmitter is mostly
@@ -11,6 +11,18 @@ motor / muscle / ciliary effectors.
 Same pin as fly, worm, Ciona. 0 free parameters.
 """
 from __future__ import annotations
+
+import os as _os
+from pathlib import Path as _Path
+
+_REPO_ROOT = _Path(__file__).resolve().parents[1]
+
+
+def _fsot_local_path(env, default):
+    """Local path outside the repo: $env if set, else a path relative to the repo root."""
+    _v = _os.environ.get(env, "").strip()
+    return _Path(_v) if _v else _REPO_ROOT / default
+
 
 import json
 import sys
@@ -27,7 +39,7 @@ sys.path.insert(0, str(ROOT / "vendor"))
 import fsot_compute as fc  # noqa: E402
 from full_scalar_law import residual_scale  # noqa: E402
 
-PLAT = Path(r"D:\FlyWire_Connectome\Platynereis")
+PLAT = _fsot_local_path('FLY_ROOT', 'data_external/fly') / 'Platynereis'
 _PHI = float(fc.PHI)
 _R_BIO = residual_scale(abs(float(fc.domain_scalar("Biochemistry"))))
 

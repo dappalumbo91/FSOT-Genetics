@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Male CNS (brain + VNC) residual boot — measured graph.
 
-Berg et al. Cell 2026. Files on D:\\FlyWire_Connectome\\male_cns (not git):
+Berg et al. Cell 2026. Files on $FLY_ROOT/male_cns (not git):
 
   body-annotations-male-cns-v1.0-minconf-0.5.feather
   body-neurotransmitters-male-cns-v1.0.feather

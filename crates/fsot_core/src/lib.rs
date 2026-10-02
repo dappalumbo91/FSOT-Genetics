@@ -1,7 +1,7 @@
 //! FSOT 2.0 — Complete Computational Engine (Rust port).
 //!
-//! Mirrors `c:\Users\damia\Desktop\FSOT NeuroLab\fsot_compute.py` and
-//! `c:\Users\damia\Desktop\FSOT SMILES Lab\fsot_compute.py` exactly,
+//! Mirrors `$FSOT_LOCAL_DATA/FSOT NeuroLab/fsot_compute.py` and
+//! `$FSOT_LOCAL_DATA/FSOT SMILES Lab\fsot_compute.py` exactly,
 //! using `f64` (≈15 decimal digits) instead of mpmath's 50-digit precision.
 //!
 //! Structure mirrors the Python original section-for-section:

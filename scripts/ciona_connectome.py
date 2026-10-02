@@ -2,7 +2,7 @@
 """Ciona intestinalis larval CNS — measured chordate graph.
 
 Ryan, Lu & Meinertzhagen 2016 (eLife). Netzschleuder dump on
-D:\\FlyWire_Connectome\\Ciona. 205 nodes (177 CNS + muscle / periphery),
+$FLY_ROOT/Ciona. 205 nodes (177 CNS + muscle / periphery),
 2,903 directed edges, weight = contact depth (µm).
 
 Synaptic sign is NOT annotated in this dump. Residual hops are unsigned
@@ -11,6 +11,18 @@ Synaptic sign is NOT annotated in this dump. Residual hops are unsigned
 Same pin, 0 free parameters. Not a thought.
 """
 from __future__ import annotations
+
+import os as _os
+from pathlib import Path as _Path
+
+_REPO_ROOT = _Path(__file__).resolve().parents[1]
+
+
+def _fsot_local_path(env, default):
+    """Local path outside the repo: $env if set, else a path relative to the repo root."""
+    _v = _os.environ.get(env, "").strip()
+    return _Path(_v) if _v else _REPO_ROOT / default
+
 
 import json
 import re
@@ -28,7 +40,7 @@ sys.path.insert(0, str(ROOT / "vendor"))
 import fsot_compute as fc  # noqa: E402
 from full_scalar_law import residual_scale  # noqa: E402
 
-CIONA = Path(r"D:\FlyWire_Connectome\Ciona\graph")
+CIONA = _fsot_local_path('FLY_ROOT', 'data_external/fly') / 'Ciona' / 'graph'
 _PHI = float(fc.PHI)
 _R_BIO = residual_scale(abs(float(fc.domain_scalar("Biochemistry"))))
 

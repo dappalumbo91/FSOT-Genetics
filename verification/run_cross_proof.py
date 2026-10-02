@@ -11,6 +11,18 @@ Layers (use if present; missing optional tools SKIP, present-and-fail FAIL):
 """
 from __future__ import annotations
 
+import os as _os
+from pathlib import Path as _Path
+
+_REPO_ROOT = _Path(__file__).resolve().parents[1]
+
+
+def _fsot_local_path(env, default):
+    """Local path outside the repo: $env if set, else a path relative to the repo root."""
+    _v = _os.environ.get(env, "").strip()
+    return _Path(_v) if _v else _REPO_ROOT / default
+
+
 import json
 import os
 import shutil
@@ -21,7 +33,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "verification"))
 REPORT = ROOT / "data" / "cross_proof_report.json"
-HUB = Path(r"C:\Users\damia\Desktop\FSOT-2.1-Lean")
+HUB = _fsot_local_path('FSOT_2_1_LEAN_ROOT', '../FSOT-2.1-Lean')
 ISA_HOME = Path(r"C:\Users\damia\Desktop\Isabelle2025-2")
 FSTAR_HOME = Path(os.environ.get("FSTAR_HOME") or r"I:\FSOT-Physical-Archive\07_Portable-Toolchain\fstar")
 

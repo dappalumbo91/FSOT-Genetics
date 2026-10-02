@@ -10,6 +10,18 @@ fold it only if a measured homolog exists. Not a connectome.
 """
 from __future__ import annotations
 
+import os as _os
+from pathlib import Path as _Path
+
+_REPO_ROOT = _Path(__file__).resolve().parents[1]
+
+
+def _fsot_local_path(env, default):
+    """Local path outside the repo: $env if set, else a path relative to the repo root."""
+    _v = _os.environ.get(env, "").strip()
+    return _Path(_v) if _v else _REPO_ROOT / default
+
+
 import json
 import sys
 from pathlib import Path
@@ -24,8 +36,8 @@ from domain_split_assemble import (  # noqa: E402
 from fsot_predict import main as predict_main  # noqa: E402
 from plant_product import _fetch_fasta, _parse_fasta  # noqa: E402
 
-OUT_D = Path(r"D:\FlyWire_Connectome\plants\product")
-FASTA = Path(r"D:\FlyWire_Connectome\plants\arabidopsis_signal.fasta")
+OUT_D = _fsot_local_path('FLY_ROOT', 'data_external/fly') / 'plants' / 'product'
+FASTA = _fsot_local_path('FLY_ROOT', 'data_external/fly') / 'plants' / 'arabidopsis_signal.fasta'
 OUT_GIT = ROOT / "data" / "plant_signal_domains.json"
 PHI = (1.0 + 5.0 ** 0.5) / 2.0
 CLOSE = 1.0 / PHI

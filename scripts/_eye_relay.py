@@ -8,6 +8,18 @@ leftover-yield linker. Identity intensity is native photons.
 """
 from __future__ import annotations
 
+import os as _os
+from pathlib import Path as _Path
+
+_REPO_ROOT = _Path(__file__).resolve().parents[1]
+
+
+def _fsot_local_path(env, default):
+    """Local path outside the repo: $env if set, else a path relative to the repo root."""
+    _v = _os.environ.get(env, "").strip()
+    return _Path(_v) if _v else _REPO_ROOT / default
+
+
 import json
 import sys
 from pathlib import Path
@@ -38,11 +50,9 @@ from biohub_3d import (  # noqa: E402
     read_geff,
 )
 
-UNET_ROOT = Path(r"C:\Users\damia\biohub-fsot-unet")
+UNET_ROOT = _fsot_local_path('FSOT_LOCAL_DATA', 'data_external/local') / 'biohub-fsot-unet'
 CELLMOT = UNET_ROOT / "vendor" / "kaggle-cell-tracking-competition"
-FT_WEIGHTS = Path(
-    r"D:\Kaggle_Biohub_Data\cellmot\cellmot-ft-detector-biohub\edge_predictor_best.pth"
-)
+FT_WEIGHTS = _fsot_local_path('KAGGLE_BIOHUB_DATA', 'data_external/kaggle_biohub') / 'cellmot' / 'cellmot-ft-detector-biohub' / 'edge_predictor_best.pth'
 EYE_CACHE = BIOHUB_ROOT / "_fsot_eye_cache"
 CORR_WEIGHTS = EYE_CACHE / "correspondence" / "edge_predictor_correspondence.pth"
 CORR_BALL_WEIGHTS = (

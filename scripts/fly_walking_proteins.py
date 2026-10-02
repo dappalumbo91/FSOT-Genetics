@@ -9,6 +9,18 @@ secondary only). 0 free parameters. Sequences from UniProt on D:.
 """
 from __future__ import annotations
 
+import os as _os
+from pathlib import Path as _Path
+
+_REPO_ROOT = _Path(__file__).resolve().parents[1]
+
+
+def _fsot_local_path(env, default):
+    """Local path outside the repo: $env if set, else a path relative to the repo root."""
+    _v = _os.environ.get(env, "").strip()
+    return _Path(_v) if _v else _REPO_ROOT / default
+
+
 import json
 import sys
 from pathlib import Path
@@ -18,8 +30,8 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from fsot_predict import main as predict_main  # noqa: E402
 
-FASTA = Path(r"D:\FlyWire_Connectome\male_cns\fly_walking_proteins.fasta")
-OUT_D = Path(r"D:\FlyWire_Connectome\male_cns\product")
+FASTA = _fsot_local_path('FLY_ROOT', 'data_external/fly') / 'male_cns' / 'fly_walking_proteins.fasta'
+OUT_D = _fsot_local_path('FLY_ROOT', 'data_external/fly') / 'male_cns' / 'product'
 OUT_GIT = ROOT / "data" / "fly_walking_product.json"
 
 GENES = [

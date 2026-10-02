@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Drosophila first-instar larva brain — measured CNS graph.
 
-Winding et al. Science 2023. Files on D:\\FlyWire_Connectome\\larva
+Winding et al. Science 2023. Files on $FLY_ROOT/larva
 (GitHub brain-networks/larval-drosophila-connectome Supplementary-Data-S1).
 
 ~2,952 neurons, all-all synapse counts. Cell types from the paper
@@ -11,6 +11,18 @@ this dump — unsigned residual, no invented GABA.
 Same pin as adult fly, worm, Ciona, Platynereis. 0 free parameters.
 """
 from __future__ import annotations
+
+import os as _os
+from pathlib import Path as _Path
+
+_REPO_ROOT = _Path(__file__).resolve().parents[1]
+
+
+def _fsot_local_path(env, default):
+    """Local path outside the repo: $env if set, else a path relative to the repo root."""
+    _v = _os.environ.get(env, "").strip()
+    return _Path(_v) if _v else _REPO_ROOT / default
+
 
 import json
 import sys
@@ -27,7 +39,7 @@ sys.path.insert(0, str(ROOT / "vendor"))
 import fsot_compute as fc  # noqa: E402
 from full_scalar_law import residual_scale  # noqa: E402
 
-LARVA = Path(r"D:\FlyWire_Connectome\larva\Supplementary-Data-S1")
+LARVA = _fsot_local_path('FLY_ROOT', 'data_external/fly') / 'larva' / 'Supplementary-Data-S1'
 _PHI = float(fc.PHI)
 _R_BIO = residual_scale(abs(float(fc.domain_scalar("Biochemistry"))))
 

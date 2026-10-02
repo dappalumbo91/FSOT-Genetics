@@ -8,6 +8,18 @@ hops actually land on. Not a connectome.
 """
 from __future__ import annotations
 
+import os as _os
+from pathlib import Path as _Path
+
+_REPO_ROOT = _Path(__file__).resolve().parents[1]
+
+
+def _fsot_local_path(env, default):
+    """Local path outside the repo: $env if set, else a path relative to the repo root."""
+    _v = _os.environ.get(env, "").strip()
+    return _Path(_v) if _v else _REPO_ROOT / default
+
+
 import json
 import sys
 import urllib.request
@@ -19,8 +31,8 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from fsot_predict import main as predict_main  # noqa: E402
 from plant_product import _fetch_fasta, _parse_fasta  # noqa: E402
 
-OUT_D = Path(r"D:\FlyWire_Connectome\plants\product")
-FASTA = Path(r"D:\FlyWire_Connectome\plants\arabidopsis_signal.fasta")
+OUT_D = _fsot_local_path('FLY_ROOT', 'data_external/fly') / 'plants' / 'product'
+FASTA = _fsot_local_path('FLY_ROOT', 'data_external/fly') / 'plants' / 'arabidopsis_signal.fasta'
 OUT_GIT = ROOT / "data" / "plant_signal_product.json"
 
 PANEL = [

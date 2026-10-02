@@ -2,7 +2,7 @@
 """Measured fly sleep observer → FSOT residual boot.
 
 TriKinetics DAM2 beam-break counts (rethomics/damr example monitor M064).
-File on D:\\FlyWire_Connectome\\behavior\\sleep (not git). 12:12 LD from the
+File on $FLY_ROOT/behavior/sleep (not git). 12:12 LD from the
 light column. 2-minute bins.
 
 Observer (not the field's free 5-minute cut):
