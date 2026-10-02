@@ -244,6 +244,19 @@ mod codon_core_tests {
         assert_eq!(cgt.secondary, [0, 0, -1]);
     }
 
+    /// Cross-language test vector (TRIT_SPEC §3): RNA U maps exactly like T.
+    /// The Zig twin (zig/src/trit.zig selfTest) checks the same AUG -> (+1,-1,+1).
+    #[test]
+    fn rna_u_matches_t_cross_language_vector() {
+        let aug = encode_codon(*b"AUG");
+        assert_eq!(aug.primary, [1, -1, 1]);
+        assert_eq!(aug.secondary, [1, -1, 0]);
+        assert_eq!(aug, encode_codon(*b"ATG"));
+        assert_eq!(encode_codon(*b"aug"), aug);
+        // canonical codon pack (code = t+1, primary + 27*secondary)
+        assert_eq!(pack_codon(aug), 317);
+    }
+
     #[test]
     fn pack_is_unique_for_64_codons() {
         let bases = [b'A', b'C', b'G', b'T'];
