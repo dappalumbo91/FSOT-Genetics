@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "FSOT-Genetics: Closed-form genetics and protein structure under Fluid Spacetime Omni-Theory"
+authors:
+  - family-names: Palumbo
+    given-names: Damian Arthur
+repository-code: "https://github.com/dappalumbo91/FSOT-Genetics"
+license: Apache-2.0
+date-released: "2026-08-17"
+abstract: >-
+  Genetics and protein-structure formula branch of FSOT (formulas F01-F15),
+  zero free parameters and no trained weights, with a head-to-head comparison
+  against AlphaFold. Derived from the FSOT-2.1-Lean hub.
+keywords: [fsot, genetics, protein-structure, bioinformatics]
+references:
+  - type: software
+    title: "FSOT-2.1-Lean"
+    authors:
+      - family-names: Palumbo
+        given-names: Damian Arthur
+    url: "https://github.com/dappalumbo91/FSOT-2.1-Lean"
