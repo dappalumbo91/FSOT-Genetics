@@ -1,0 +1,14 @@
+FSOT-Genetics
+Copyright 2026 Damian Arthur Palumbo
+
+This product is the FSOT genetics and protein structure formula branch:
+zero free parameters, F01-F15 closed forms, and an AlphaFold head-to-head
+comparison (not a neural net).
+
+This repository is part of the FSOT (Fluid Spacetime Omni-Theory) family.
+Theory authority is vendor/fsot_compute.py in
+https://github.com/dappalumbo91/FSOT-2.1-Lean (pin AEB2AD), also by
+Damian Arthur Palumbo and licensed under the Apache License 2.0.
+
+Rust crate dependencies (not bundled, fetched by Cargo; see Cargo.toml)
+remain under their own licenses.
