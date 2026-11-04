@@ -1,5 +1,7 @@
 # FSOT-Genetics
 
+[![CI](https://github.com/dappalumbo91/FSOT-Genetics/actions/workflows/ci.yml/badge.svg)](https://github.com/dappalumbo91/FSOT-Genetics/actions/workflows/ci.yml) [![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
+
 **Closed-form genetics and protein structure under Fluid Space-Time Omni Theory (FSOT).**  
 Zero free parameters. No trained weights. No neural-network claim path.
 
